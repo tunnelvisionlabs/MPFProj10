@@ -1,0 +1,1633 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ThreatModelDocument xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DocumentVersion>
+    <DocumentVersionMajor>1</DocumentVersionMajor>
+    <DocumentVersionMinor>1</DocumentVersionMinor>
+  </DocumentVersion>
+  <ThreatModel>
+    <Guid>01bb7657-2d3f-485e-96bc-9308d9cb2a99</Guid>
+    <HasValidSqlId>false</HasValidSqlId>
+    <Id>0</Id>
+    <Inactive>false</Inactive>
+    <MaxDreadRating>10.00</MaxDreadRating>
+    <MinDreadRating>0</MinDreadRating>
+    <Name>Microsoft.VisualStudio.ProjectSupport</Name>
+    <Product />
+    <Description>Microsoft.VisualStudio.ProjectSupport is also known as Managed Project Framework (MPF) is a part of Microsoft Visual Studio SDK and is shipped as part of IronPython project system sample
+
+MPF is a basement for all custom project type. All custom project types need to implement "almost" the same behaviour as VS Core project system do (like C#, VB or J#). Project system is a "glue" piece that defines VS user interaction for specific project type.
+The project system in general consists of many internal sub-components:
+
+1. A project factory. 
+2. An implementation of a hierarchy and its associated file/folder nodes, including provisions for source code control, designer interaction, etc. 
+3. Provisions for dynamic generation of code at design-time and dynamic compilation of said code (SingleFileGenerator support).
+4. Build system interaction. 
+4. Initialization of a design-time build engine. 
+5. Debugger interaction, including provision for a F5 hosting process. 
+6. Reference management. 
+7. Property persistence. 
+8. Provisions for project upgrade from previous versions. 
+9. DTE extensibility automation. 
+10. An abstraction for project persistence media. 
+11. A “component services package” with the following sub-components:
+a) Add web reference dialog.
+b) Enumeration of references installed on the system. 
+12. VSLangProj interfaces based automation
+
+The MPF has a basic implementation of the above functionality, which could be overwritten by any concrete project system which is based on MPF. The purpose of this threat model is to show interaction between the major basic components in the project system based on MPF and the external world, and to explore any threats specific to those components as well as general threats that result from the design of the project system and/or other components within the Visual Studio IDE. 
+
+In addition to this Project System sample threat model, several other "VS Core" threat models exist in the project space. These more specific documents explore specific portions of the project system in greater detail:
+Related to the project system is the concept of solutions. The solutions threat model is covered in a separate document as well. All "VS Core" Project threat models can be accessed from http://vsproject/documentation.aspx.
+
+Important thing that MPF does not validate input from other VS packages if it happens, because it trusts them (only Admin can install package)
+MPF also can get input from AddIns. This input is not validated as well, because of the same reason</Description>
+    <Participants>hkjersga, yurib, kberes, valeryb, olehoyer, pcodato</Participants>
+    <Owner>
+      <Guid>d50e9009-3305-413d-a278-16e2056c920d</Guid>
+      <UserName>yurib</UserName>
+      <UserDomain>EUROPE</UserDomain>
+      <NameInDb>yurib</NameInDb>
+    </Owner>
+    <Version>1.00</Version>
+    <History />
+    <UseScenarios>
+      <UseScenario>
+        <Guid>f84ec692-c004-4349-b8e8-e4896cf16a59</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Description>VS Package based on MPF is loaded into VS Process
+
+VS Package which uses MPF as basement is loaded when user creates new project in VS or loading existing from template/project file of this package project type</Description>
+      </UseScenario>
+      <UseScenario>
+        <Guid>559de329-39e1-4e90-801b-922c90d15f7a</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Description>VS Package based on MPF is used by VS IDE or other packages
+
+When VS user experience call for example to draw Solution Explorer or for doing Build, etc 
+It actualy calls to the interfaces implented by the VS Package. This implementation could be specific to the VS Package as well as could be general for MPF</Description>
+      </UseScenario>
+      <UseScenario>
+        <Guid>cea25b1e-039f-4077-815a-593d373f1843</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <Description>DeployScenario: MPF is included as source code into VS Package and does not have separate assembly
+
+MPF is released as source code (VS SDK sample). Any VS Package which depends on MPF could include MPF as source code.</Description>
+      </UseScenario>
+      <UseScenario>
+        <Guid>f01eaa9c-7597-4f24-9e6c-3c2a3c97c3c0</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>4</Id>
+        <Inactive>false</Inactive>
+        <Description>DeployScenario: MPF is referenced as separate assembly by the VS Package
+
+MPF is released as source code (VS SDK sample). 
+MPF consumer compiled MPF as separate assembly and added reference from VS Package assembly to the MPF assembly
+MPF assembly is signed with the same product key as VS Package (or not signed at all).
+MPF has InternalVisibleTo attribute for VS Package assembly to make internal members accessible</Description>
+      </UseScenario>
+      <UseScenario>
+        <Guid>f16aad33-0955-4f3c-bdba-004b201c11ed</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>5</Id>
+        <Inactive>false</Inactive>
+        <Description>DeployScenario: MPF is placed in ANY location on developer machine (There is no requirement to place MPF into the specific location)
+
+MPF as part of VS Package assembly (included as source code) or as separate assembly could be placed at any location on developer machine. VS finds it based on the Location registry key which is created during VS Package installation.
+If MPF is deployed as separate assembly it is up to VS Package assembly to find MPF from the installation location
+
+It is responsibility of implementer setup program to install all parts of project package to the ACLs protected location</Description>
+      </UseScenario>
+    </UseScenarios>
+    <ExternalDependencies>
+      <ExternalDependency>
+        <Guid>7167f4bd-5121-45a1-a9d5-7a76af1bc25b</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Description>VS SKU Standard or higher
+
+It includes Shell packages.
+Also interops:
+Shell.Interop
+Shell.Interop.80
+Shell.Interop.90
+
+It includes LanguageServices
+MPF refers LanguageServices interfaces, not implementation. It helps impementers of project systems with languages</Description>
+        <SignedOff>false</SignedOff>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+      </ExternalDependency>
+      <ExternalDependency>
+        <Guid>a83084e6-a444-4bcc-8f2a-afbfc3d2fd28</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <Description>VS Core Package loader</Description>
+        <SignedOff>false</SignedOff>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+      </ExternalDependency>
+      <ExternalDependency>
+        <Guid>de348261-4f73-49a4-a288-4846ae144e59</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Description>.NET Framework 2.0
+Using .NET Framework for memory operations enables memory protection with no additional efforts</Description>
+        <SignedOff>false</SignedOff>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+      </ExternalDependency>
+    </ExternalDependencies>
+    <ImplementationAssumptions>
+      <ImplementationAssumption>
+        <Guid>c18811ce-d57c-4ed4-98fd-453d354234bd</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Description>[TODO(valeryb)]: Please check that this assumption is removed for Orcas
+Implementer's project system installation is done by user with admin priviliges</Description>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+        <SignedOff>false</SignedOff>
+      </ImplementationAssumption>
+      <ImplementationAssumption>
+        <Guid>e1df50a3-3de1-4f74-b071-97523c45d783</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Description>MPF should implement design time checks of project files, like C#/VB project packages do
+For example if project file has &lt;OutDir&gt; pointing to C:\Windows project system should make a warning.
+</Description>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+        <SignedOff>false</SignedOff>
+      </ImplementationAssumption>
+    </ImplementationAssumptions>
+    <ExternalSecurityNotes>
+      <ExternalSecurityNote>
+        <Guid>9298ad79-6fe4-4545-a978-3b55ad93d903</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Description>Debugging of unknown projects is inherently insecure.
+
+Users should not debug unknown projects because there is no way for the project system to prevent running of malicious code. Debug in Zone may be used as a way to mitigate this risk; however,</Description>
+      </ExternalSecurityNote>
+      <ExternalSecurityNote>
+        <Guid>dcbe65e4-7e1a-4893-b348-b7d6e6a5e765</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <Description>Editing of project files in design view causes code to be run
+
+Opening files in the designer is inherently insecure because code that is present in InitializeComponent() may be executed. Even if there is no harmful-looking code in InitializeComponent(), the harmful code may be present in the constructors of components that are created while running InitializeComponent().</Description>
+      </ExternalSecurityNote>
+      <ExternalSecurityNote>
+        <Guid>725d494a-3710-418e-afff-f3d3cf62aa26</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>4</Id>
+        <Inactive>false</Inactive>
+        <Description>Building a project which project system is based on MPF may expose the user to running unknown or unauthorized tasks or other code
+
+The build process is fully customizable through MSBuild. As such, a project file may specify either malicious pre- or post-build steps, or it may specify that malicious tasks be run during the build process</Description>
+      </ExternalSecurityNote>
+      <ExternalSecurityNote>
+        <Guid>5de7c62f-6164-4908-a9d2-913e19a59064</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>6</Id>
+        <Inactive>false</Inactive>
+        <Description>If MPF is released as assembly it should be signed to prevent its tampering</Description>
+      </ExternalSecurityNote>
+    </ExternalSecurityNotes>
+    <InternalSecurityNotes>
+      <InternalSecurityNote>
+        <Guid>ce18d9be-f3ba-4050-90ce-e3ac2663ea95</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Description>MPF does not check any input from shell components and other VS Packages</Description>
+      </InternalSecurityNote>
+      <InternalSecurityNote>
+        <Guid>0e11c14d-daba-4ca8-84d1-62745003e2ee</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Description>It is assumed that the Visual Studio process hosting the VS Package is trusted, so no threat modeling is done for all of the interactions between the Visual Studio platform and other VS Packages in VS.</Description>
+      </InternalSecurityNote>
+      <InternalSecurityNote>
+        <Guid>22cd8ae9-803f-4471-8d70-cf80935ca387</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <Description>MPF has some code which is still using native memory function (.NET wrappers, like Marshal object). That should cause analysis of threats specific to unmanaged memory operations</Description>
+      </InternalSecurityNote>
+    </InternalSecurityNotes>
+    <EntryPoints>
+      <EntryPoint>
+        <Guid>65d53a26-add5-44a8-8e7c-e9fabfc230fc</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <IdPath>1</IdPath>
+        <Name>Package-loaded objects (Extenders)</Name>
+        <Description>Some features of Visual Studio allow for custom code to be loaded from within a VS-built package. These typically load some other COM object</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>33759386-4fe1-4432-b588-28f598c14c57</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>cdc5e338-509b-4d09-a1f0-e568ddced1d7</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <IdPath>3</IdPath>
+        <Name>Internal shell packages</Name>
+        <Description>Any IVsXXXX interface is theoretically accessible to any component within the shell. Furthermore, any entity within Visual Studio can use automation methods to interface with the project system. 
+
+The assumption is that any internal shell packages are safe components, since admin rights are required in order to install them</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>a020ed8f-34fd-4072-9661-f19df95f5a4e</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>4</Id>
+        <Inactive>false</Inactive>
+        <IdPath>4</IdPath>
+        <Name>MSBuild</Name>
+        <Description>MSBuild primarily interacts with the project system through VB, C#, and J# compiler host objects</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>9e1369d8-a2a8-409f-8708-f8b9e4e50ddb</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>5</Id>
+        <Inactive>false</Inactive>
+        <IdPath>5</IdPath>
+        <Name>Visual designers</Name>
+        <Description>90% of visual designers use project automation methods only, as that has been the “advertised” way for designers to access the project system. However, Visual Designers also use IVsProjectResources and IVsProjectSpecialFiles interfaces off of the project hierarchy
+[TODO: Should we have it separated from internal shell packages? Entry point seems the same IVsXXX interfaces]</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>10c4fb81-5fa6-45c6-89f8-0f40944235b4</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>6</Id>
+        <Inactive>false</Inactive>
+        <IdPath>6</IdPath>
+        <Name>Solution Explorer</Name>
+        <Description>The user may perform various file operations from within the Solution Explorer. They may also invoke commands such as build, debug, etc</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>418b45bd-aeac-47e1-99e9-f641ecf216b2</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>7</Id>
+        <Inactive>false</Inactive>
+        <IdPath>7</IdPath>
+        <Name>Project property pages</Name>
+        <Description>Using the property pages is the primary method for the user to change the value of project properties</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>0a5abb5c-338e-41af-8407-86f7eca735c6</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>8</Id>
+        <Inactive>false</Inactive>
+        <IdPath>8</IdPath>
+        <Name>Project file</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+          <guid>4bd15925-f3b9-4bfe-bb05-78ffbab205f0</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>cdb8b293-376c-4069-baae-e48d63930cd6</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>9</Id>
+        <Inactive>false</Inactive>
+        <IdPath>9</IdPath>
+        <Name>Package based on MPF</Name>
+        <Description>Implementer package</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>33759386-4fe1-4432-b588-28f598c14c57</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>c6959521-6f20-4833-ad87-688035396a8f</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>10</Id>
+        <Inactive>false</Inactive>
+        <IdPath>10</IdPath>
+        <Name>Interfaces possibly used by external entities:Project Hierarchy and Its Associated Interfaces. </Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>8d9d1428-eb73-4122-bdeb-3e99899c7196</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>11</Id>
+        <Inactive>false</Inactive>
+        <IdPath>11</IdPath>
+        <Name>Interfaces possibly used by external entities:Designer Support Interfaces</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>c8a140e8-bf00-4b28-9838-f5e6e43b730e</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>12</Id>
+        <Inactive>false</Inactive>
+        <IdPath>12</IdPath>
+        <Name>Interfaces possibly used by external entities:Build System Support Interfaces</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>c2bb123c-0dc5-4eba-872f-4c804f52ad0e</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>13</Id>
+        <Inactive>false</Inactive>
+        <IdPath>13</IdPath>
+        <Name>Interfaces possibly used by external entities:Project Factory and Upgrade</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>c7c5ee07-a61a-4b23-9ce9-c9bf5031cac0</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>14</Id>
+        <Inactive>false</Inactive>
+        <IdPath>14</IdPath>
+        <Name>Interfaces possibly used by external entities:Hosting Process Support</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>b25f7f5f-2880-44ef-949f-722b0ee4f868</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>15</Id>
+        <Inactive>false</Inactive>
+        <IdPath>15</IdPath>
+        <Name>Interfaces possibly used by external entities:Configuration manager interfaces.</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>b6bc64aa-bc79-46c0-b3f4-009ea03dd98d</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>16</Id>
+        <Inactive>false</Inactive>
+        <IdPath>16</IdPath>
+        <Name>Interfaces possibly used by external entities:Property Browsing Implementation on various objects</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>f9b9ca1d-1884-4068-91c7-8139861ed9d9</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>17</Id>
+        <Inactive>false</Inactive>
+        <IdPath>17</IdPath>
+        <Name>Interfaces possibly used by external entities:Project automation interfaces</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>47b92817-6bb1-4eb2-81c5-543fa5e3f4db</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>18</Id>
+        <Inactive>false</Inactive>
+        <IdPath>18</IdPath>
+        <Name>Interfaces possibly used by external entities:Component Services Package.</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>2d0d208d-a024-4d72-8816-fd9b1b6abc9e</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>19</Id>
+        <Inactive>false</Inactive>
+        <IdPath>19</IdPath>
+        <Name>Interfaces possibly used by external entities:Project persistence package</Name>
+        <Description />
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+      <EntryPoint>
+        <Guid>ba9a3a9e-89f6-4a8d-9937-48ceed0ccc3a</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <IdPath>2</IdPath>
+        <Name>Clipboard</Name>
+        <Description>VS Core works with clipboard and gives clipboard to us. Unsafe data could pass into MPF Solution nodes drag/drop implemenation</Description>
+        <ChildEntryPoints />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </EntryPoint>
+    </EntryPoints>
+    <TrustLevels>
+      <TrustLevel>
+        <Guid>33759386-4fe1-4432-b588-28f598c14c57</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Name>Administrator</Name>
+        <Description>Adminstrators have full privileges to write to the registry, file system, and to run any code.</Description>
+      </TrustLevel>
+      <TrustLevel>
+        <Guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Name>MPF ProjectSystem User</Name>
+        <Description>Developer who is using project system based on MPF</Description>
+      </TrustLevel>
+      <TrustLevel>
+        <Guid>4bd15925-f3b9-4bfe-bb05-78ffbab205f0</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <Name>WriteAccess attacker</Name>
+        <Description>Attacker who has access to project file or other prject artifacts of MPF based project system, but not to the UI (it differes him from User trust level)</Description>
+      </TrustLevel>
+    </TrustLevels>
+    <ThreatTargets>
+      <ThreatTarget>
+        <Guid>7ef2b940-3796-46d7-b4cf-7267c74acdda</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <IdPath>1</IdPath>
+        <Name>MPF based project system's project artifacts</Name>
+        <Description>Project file, pdb file, project items (vary based on concrete project system implementation)</Description>
+        <ChildThreatTargets />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+          <guid>4bd15925-f3b9-4bfe-bb05-78ffbab205f0</guid>
+        </TrustLevelGuids>
+      </ThreatTarget>
+      <ThreatTarget>
+        <Guid>971f47c1-9bb3-47f2-a511-63dee58caef2</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <IdPath>3</IdPath>
+        <Name>MPF Project system user's priviliges and resources accessed by him</Name>
+        <Description>The priviliges of local Reporting VS Developer includes all his ability to execute code or access data
+It definetly also includes ability to generate file (developer file, generated file, model assembly, assembly caches, etc.)</Description>
+        <ChildThreatTargets />
+        <TrustLevelGuids>
+          <guid>b9d66d26-0f60-49e7-bfe2-2b3e5db77313</guid>
+        </TrustLevelGuids>
+      </ThreatTarget>
+    </ThreatTargets>
+    <DFDs>
+      <DFD>
+        <Guid>69ef2d2f-bd74-4955-b822-d95ed940660d</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Name>Managed Project Framework</Name>
+        <Level>-1</Level>
+        <Description>Describes MPF connections with implementer project system, Visual Studio, project files</Description>
+        <AlternateDfd>0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7/CQAGAAAAAAAAAAAAAAABAAAAAgAAAAAAAAAA
+EAAABQAAAAEAAAD+////AAAAAAMAAAD/////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////9
+/////v//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////1IA
+bwBvAHQAIABFAG4AdAByAHkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAWAAUA////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+/v///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///////////////wAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////
+////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUgBv
+AG8AdAAgAEUAbgB0AHIAeQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAABYABQD//////////wIAAAAUGgIAAAAAAMAAAAAAAABGAAAAAAAAAAAAAAAAoFAB0qq9xwEG
+AAAAQAQAAAAAAABWAGkAcwBpAG8ARABvAGMAdQBtAGUAbgB0AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAHAACAf////8EAAAA/////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAkAAACWqwAAAAAAAAUAUwB1AG0AbQBhAHIAeQBJAG4AZgBvAHIAbQBhAHQA
+aQBvAG4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAIBAQAAAAMAAAD/////AAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQAAAAABAAAAAAAABQBEAG8AYwB1AG0AZQBuAHQA
+UwB1AG0AbQBhAHIAeQBJAG4AZgBvAHIAbQBhAHQAaQBvAG4AAAAAAAAAAAAAADgAAgH/////////
+//////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAzAIAAAAAAAD/////
+/////wQAAAD9/////v////7///8HAAAACAAAAP7///8KAAAACwAAAAwAAAANAAAADgAAAA8AAAAQ
+AAAAEQAAABIAAAATAAAAFAAAABUAAAAWAAAAFwAAABgAAAAZAAAAGgAAABsAAAAcAAAAHQAAAB4A
+AAAfAAAAIAAAACEAAAAiAAAAIwAAACQAAAAlAAAAJgAAACcAAAAoAAAAKQAAACoAAAArAAAALAAA
+AC0AAAAuAAAALwAAADAAAAAxAAAAMgAAADMAAAA0AAAANQAAADYAAAA3AAAAOAAAADkAAAA6AAAA
+OwAAADwAAAA9AAAAPgAAAD8AAABAAAAAQQAAAEIAAABDAAAARAAAAEUAAABGAAAARwAAAEgAAABJ
+AAAASgAAAEsAAABMAAAATQAAAE4AAABPAAAAUAAAAFEAAABSAAAAUwAAAFQAAABVAAAAVgAAAFcA
+AABYAAAAWQAAAFoAAABbAAAAXAAAAF0AAABeAAAA/v//////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////1YAaQBz
+AGkAbwBJAG4AZgBvAHIAbQBhAHQAaQBvAG4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAiAAIA////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ABwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///////////////wAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////
+////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v///wIA
+AAADAAAABAAAAAUAAAAGAAAABwAAAAgAAAAJAAAACgAAAAsAAAAMAAAA/v///w4AAAAPAAAAEAAA
+AP7/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////+/wAABAAC
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+/v8AAAUCAgAAAAAAAAAAAAAAAAAAAAAAAgAAAALVzdWcLhsQk5cIACss+a5EAAAABdXN1ZwuGxCT
+lwgAKyz5rkwCAAAIAgAACwAAAAEAAABgAAAAAgAAAGgAAAAOAAAAdAAAAA8AAACAAAAAFwAAAJQA
+AAALAAAAnAAAABAAAACkAAAAEwAAAKwAAAAWAAAAtAAAAA0AAAC8AAAADAAAANABAAACAAAA5AQA
+AB4AAAAEAAAAAAAAAB4AAAAEAAAAAAAAAB4AAAAMAAAATWljcm9zb2Z0AAAAAwAAAAAADAALAAAA
+AAAAAAsAAAAAAAAACwAAAAAAAAALAAAAAAAAAB4QAAANAAAACAAAAFBhZ2UtMQBOFAAAAEV4dGVy
+bmFsIGludGVyYWN0b3IAEAAAAERhdGEgcHJvY2VzcwByYWMMAAAARGF0YSBzdG9yZQBzFAAAAER5
+bmFtaWMgY29ubmVjdG9yAHIAEAAAAFRydXN0IEJvdW5kYXJ5AG8YAAAARXh0ZXJuYWwgaW50ZXJh
+Y3Rvci44AHIADAAAAERhdGEgRmxvdwBudBAAAABEYXRhIHN0b3JlLjEwAGFjEAAAAERhdGEgRmxv
+dy4xMQAAYWMQAAAARGF0YSBGbG93LjEyAABhYxAAAABEYXRhIEZsb3cuMTMAAGFjGAAAAEV4dGVy
+bmFsIGludGVyYWN0b3IuMTQAAAwQAAAEAAAAHgAAAAgAAABQYWdlcwAAAAMAAAABAAAAHgAAAAgA
+AABNYXN0ZXJzAAMAAAAMAAAAgAAAAAQAAAAAAAAAKAAAAAEAAABgAAAAAgAAAGgAAAADAAAAdAAA
+AAIAAAACAAAADgAAAF9QSURfTElOS0JBU0UAAwAAABUAAABfVlBJRF9BTFRFUk5BVEVOQU1FUwAA
+AgAAAOQEAABBAAAAAgAAAAAAAAAeAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v8AAAUCAgAAAAAAAAAAAAAAAAAAAAAAAQAAAOCF
+n/L5T2gQq5EIACsns9kwAAAA0AAAAAkAAAABAAAAUAAAAAIAAABYAAAAAwAAAGQAAAAEAAAAcAAA
+AAUAAACIAAAABgAAAJQAAAAHAAAAoAAAAAgAAACsAAAADQAAAMQAAAACAAAA5AQAAB4AAAAEAAAA
+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
+AAAAAAAAAAAAAAAAAAAAAAAA</AlternateDfd>
+        <UseAlternateDfd>true</UseAlternateDfd>
+        <ImageFileName />
+        <Base64Image />
+        <ImageSize>
+          <Width>0</Width>
+          <Height>0</Height>
+        </ImageSize>
+        <ScaleToImageSize>
+          <Width>0</Width>
+          <Height>0</Height>
+        </ScaleToImageSize>
+        <DrawingType>VisioDfd</DrawingType>
+      </DFD>
+    </DFDs>
+    <Threats>
+      <Threat>
+        <Guid>c8a5a651-5c78-4b31-8048-dc63d532f24a</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>1</Id>
+        <Inactive>false</Inactive>
+        <Name>Attacker tampers project to have his target executed at build time to modify resources accessible by MPF project system user or perform actions on his behalf</Name>
+        <Description>An attacker can run code at build time - by providing legitimate user with tampered project file, for example by including &lt;PreBuild&gt; and &lt;PostBuild target&gt;</Description>
+        <History />
+        <Stride>
+          <Guid>7ef1611b-0b8f-491b-bc18-4d5cc0bf71ea</Guid>
+          <HasValidSqlId>false</HasValidSqlId>
+          <Id>0</Id>
+          <Inactive>false</Inactive>
+          <Spoofing>false</Spoofing>
+          <Tampering>true</Tampering>
+          <Repudiation>false</Repudiation>
+          <InformationDisclosure>false</InformationDisclosure>
+          <DenialOfService>false</DenialOfService>
+          <ElevationOfPrivilege>true</ElevationOfPrivilege>
+        </Stride>
+        <Dread>
+          <Guid>ff629e5f-601e-483f-ab33-a0e9865b9cc5</Guid>
+          <HasValidSqlId>false</HasValidSqlId>
+          <Id>0</Id>
+          <Inactive>false</Inactive>
+          <DamagePotential>0</DamagePotential>
+          <Reproducibility>0</Reproducibility>
+          <Exploitability>0</Exploitability>
+          <AffectedUsers>0</AffectedUsers>
+          <Discoverability>0</Discoverability>
+          <Rating>0</Rating>
+        </Dread>
+        <Mitigated>true</Mitigated>
+        <MitigationExplanation>Attacker could not access more, than legitimate user which build the project can access.
+Project templates for example are protected by Administrator/Power user ACLs. Do not run/build project under those accounts</MitigationExplanation>
+        <SignedOff>false</SignedOff>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+        <Vulnerabilities />
+        <ThreatTargetGuids>
+          <guid>7ef2b940-3796-46d7-b4cf-7267c74acdda</guid>
+          <guid>971f47c1-9bb3-47f2-a511-63dee58caef2</guid>
+        </ThreatTargetGuids>
+        <EntryPointGuids>
+          <guid>0a5abb5c-338e-41af-8407-86f7eca735c6</guid>
+        </EntryPointGuids>
+        <MitigatingUseScenarioGuids />
+        <MitigatingExternalDependencyGuids />
+        <MitigatingExternalSecurityNoteGuids>
+          <guid>725d494a-3710-418e-afff-f3d3cf62aa26</guid>
+        </MitigatingExternalSecurityNoteGuids>
+      </Threat>
+      <Threat>
+        <Guid>4a9bb6e1-dfa3-4064-9d69-efdb27fbb268</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>2</Id>
+        <Inactive>false</Inactive>
+        <Name>Attacker tampers project file to have his target executed at design time to elevate own privilges</Name>
+        <Description>Attacker inserts his target into project file which is opened by legitimate user. By doing that attacker elevating his priviliges to the legitimate user level and has his code executed. 
+This threat could happen just by openening project file</Description>
+        <History />
+        <Stride>
+          <Guid>b8ab7f60-80bb-4145-bfdd-a1dec354ed3d</Guid>
+          <HasValidSqlId>false</HasValidSqlId>
+          <Id>0</Id>
+          <Inactive>false</Inactive>
+          <Spoofing>false</Spoofing>
+          <Tampering>false</Tampering>
+          <Repudiation>false</Repudiation>
+          <InformationDisclosure>false</InformationDisclosure>
+          <DenialOfService>false</DenialOfService>
+          <ElevationOfPrivilege>true</ElevationOfPrivilege>
+        </Stride>
+        <Dread>
+          <Guid>5e0bf95c-1c1c-4249-9653-1bde4cb4292d</Guid>
+          <HasValidSqlId>false</HasValidSqlId>
+          <Id>0</Id>
+          <Inactive>false</Inactive>
+          <DamagePotential>0</DamagePotential>
+          <Reproducibility>0</Reproducibility>
+          <Exploitability>0</Exploitability>
+          <AffectedUsers>0</AffectedUsers>
+          <Discoverability>0</Discoverability>
+          <Rating>0</Rating>
+        </Dread>
+        <Mitigated>false</Mitigated>
+        <MitigationExplanation>Concrete project package/MPF detects malicious entries in the project file and warns user by popping up message box.
+
+This threat is limited to the abilities of legitimate user. To reduce attack surface it is recommended to not open project under Administrator account</MitigationExplanation>
+        <SignedOff>false</SignedOff>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+        <Vulnerabilities />
+        <ThreatTargetGuids>
+          <guid>7ef2b940-3796-46d7-b4cf-7267c74acdda</guid>
+          <guid>971f47c1-9bb3-47f2-a511-63dee58caef2</guid>
+        </ThreatTargetGuids>
+        <EntryPointGuids>
+          <guid>0a5abb5c-338e-41af-8407-86f7eca735c6</guid>
+        </EntryPointGuids>
+        <MitigatingUseScenarioGuids />
+        <MitigatingExternalDependencyGuids />
+        <MitigatingExternalSecurityNoteGuids />
+      </Threat>
+      <Threat>
+        <Guid>fcea7057-86f4-4adb-ba88-a77505bd70bc</Guid>
+        <HasValidSqlId>false</HasValidSqlId>
+        <Id>3</Id>
+        <Inactive>false</Inactive>
+        <Name>Attacker replaces referenced assembly on UNC location</Name>
+        <Description>Rogue referenced assemblies may run with more elevated permissions
+
+Further Analysis of Threats
+Copying of Built Outputs from UNC to Local Paths
+The steps below allow run-time execution of an assembly with elevated privileges if, and only if, the output directory is on the local machine: 
+
+A malicious assembly must be placed somewhere on the LAN. 
+The user must open a project that has the malicious assembly referenced. This can happen one of two ways: either receive the project as an email (egg. a worm proliferating through the network), or opening a project that someone else modified to have the bad reference. Furthermore: 
+The malicious assembly must not be on the user’s machine. 
+In the project file, the HintPath for the malicious assembly must be set to the UNC location of the assembly.
+3. The malicious assembly could be a user control, in which case it would run at design-time. Or, it could be a regular reference, in which case it would execute at F5 time. 
+
+In addition, designers shadow-copy referenced assemblies onto the local machine, even if the project is being built to a UNC path. This could lead to elevation of privilege issues (see the design-time code execution threat analysis sheet), because evidence is not preserved when assemblies are executed from the local machine. BrianPe investigated this issue in Everett, but probably not much was done in that timeframe to remedy this threat. 
+
+A malicious reference might be copied to run at design time (egg. user control). The user control could access the user’s file system and tamper with data. A malicious reference will run with local machine privileges as opposed to network privileges. An assembly, if malicious, can run with elevated privileges and install worms, viruses, etc. We will always copy references to the local bin directory. This is because such references are not in the GAC by default. Although this is fairly easy to exploit in devenv.exe, it requires that a malicious reference be placed somewhere on a UNC share within a LAN. See “attack techniques” below. 
+
+The issue is limited to three types of attacks: an insider attack, an insecure LAN, or an intelligent Internet worm. Probably 70% of our users are corporate users that have a LAN. Note that this issue requires a LAN; it’s not reproducible via the Internet. This is fairly easy to discover. We publish how we do CopyLocal by default. The user would need to put the following information together: (a) assemblies from a UNC path run with less privilege and (b) assemblies from a UNC path are copied to local output directory thus resulting in a higher privilege. 
+
+This problem is fairly difficult to mitigate. This is because of the inherent Fusion requirements that every component referenced in an exe/dll be placed either in the GAC or in the same directory as the exe/dll. 
+
+One way of mitigating this problem is not to allow projects opened from a UNC path to build to the local machine. However, this technique does not fully mitigate the issue, as it is still possible to send a project file over email. 
+
+Not allowing UNC references is not an option either, as the HintPath mechanism and retrieving references from a UNC path supports certain team development scenarios. One thing that we could do, however, is to put up a warning whenever assemblies from a UNC path are copied to the bin directory</Description>
+        <History />
+        <Stride>
+          <Guid>d2de8c41-4976-4452-8181-024a5b8d1578</Guid>
+          <HasValidSqlId>false</HasValidSqlId>
+          <Id>0</Id>
+          <Inactive>false</Inactive>
+          <Spoofing>false</Spoofing>
+          <Tampering>false</Tampering>
+          <Repudiation>false</Repudiation>
+          <InformationDisclosure>false</InformationDisclosure>
+          <DenialOfService>false</DenialOfService>
+          <ElevationOfPrivilege>true</ElevationOfPrivilege>
+        </Stride>
+        <Dread>
+          <Guid>e6b6ff6d-a150-4c3a-aa3f-1e5c2b95d96d</Guid>
+          <HasValidSqlId>false</HasValidSqlId>
+          <Id>0</Id>
+          <Inactive>false</Inactive>
+          <DamagePotential>0</DamagePotential>
+          <Reproducibility>0</Reproducibility>
+          <Exploitability>0</Exploitability>
+          <AffectedUsers>0</AffectedUsers>
+          <Discoverability>0</Discoverability>
+          <Rating>0</Rating>
+        </Dread>
+        <Mitigated>false</Mitigated>
+        <MitigationExplanation>??? Project package may pop up warning. Do we need implementation assumption for that
+
+User may apply debug in zone. However, debugging of projects is inherently insecure, so the overall risk is “low.”
+
+[TODO(valeryb)] Align with C#/VB reasons for Orcas</MitigationExplanation>
+        <SignedOff>false</SignedOff>
+        <SignedOffDate>0001-01-01T00:00:00.0000000+01:00</SignedOffDate>
+        <Vulnerabilities />
+        <ThreatTargetGuids>
+          <guid>971f47c1-9bb3-47f2-a511-63dee58caef2</guid>
+        </ThreatTargetGuids>
+        <EntryPointGuids>
+          <guid>c6959521-6f20-4833-ad87-688035396a8f</guid>
+          <guid>8d9d1428-eb73-4122-bdeb-3e99899c7196</guid>
+        </EntryPointGuids>
+        <MitigatingUseScenarioGuids />
+        <MitigatingExternalDependencyGuids />
+        <MitigatingExternalSecurityNoteGuids />
+      </Threat>
+    </Threats>
+  </ThreatModel>
+  <Configuration>
+    <NameValuePairs>
+      <NameValuePair>
+        <Name>ShowInactive</Name>
+        <Value xsi:type="xsd:boolean">true</Value>
+      </NameValuePair>
+      <NameValuePair>
+        <Name>AllowMitigationAtThreat</Name>
+        <Value xsi:type="xsd:boolean">true</Value>
+      </NameValuePair>
+    </NameValuePairs>
+  </Configuration>
+  <ProductsAndUsers>
+    <Guid>0f7ceb81-7d4a-435f-9135-94a29f6bab79</Guid>
+    <Users>
+      <User>
+        <Guid>d50e9009-3305-413d-a278-16e2056c920d</Guid>
+        <UserName>yurib</UserName>
+        <UserDomain>EUROPE</UserDomain>
+        <NameInDb>yurib</NameInDb>
+      </User>
+    </Users>
+    <Products />
+    <Name>Database</Name>
+    <DatabaseServer />
+    <DatabaseName />
+    <Changed>true</Changed>
+  </ProductsAndUsers>
+  <TemplateName />
+  <IsTemplate>false</IsTemplate>
+  <ThreatModelLocation />
+</ThreatModelDocument>
