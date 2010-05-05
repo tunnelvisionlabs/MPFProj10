@@ -13,6 +13,7 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectGuid>{F4ADEBDB-CD20-4532-B4E3-FE7424F5369C}</ProjectGuid>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -110,9 +111,15 @@
     <None Include="extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Templates\ProjectItems\MyCustomProject\Class.cs" />
-    <None Include="Templates\Projects\MyCustomProject\AssemblyInfo.cs" />
-    <None Include="Templates\Projects\MyCustomProject\Program.cs" />
+    <Content Include="Templates\ProjectItems\MyCustomProject\Class.cs">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Templates\Projects\MyCustomProject\AssemblyInfo.cs">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Templates\Projects\MyCustomProject\Program.cs">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -126,9 +133,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\MyCustomProjectImageList.bmp" />
     <None Include="source.extension.vsixmanifest" />
-    <Content Include="Templates\Projects\MyCustomProject\MyCustomProject.ico" />
+    <Content Include="Templates\Projects\MyCustomProject\MyCustomProject.ico">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="Key.snk" />
-    <None Include="Templates\Projects\MyCustomProject\MyCustomProject.myproj" />
+    <Content Include="Templates\Projects\MyCustomProject\MyCustomProject.myproj">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -177,31 +188,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <!-- The VS10 Beta1 CreatePkgdef and related attributes do not produce exactly what we need yet, so use the following to fix the pkgdef-->
-  <PropertyGroup>
-    <!-- Don't use Exp hive -->
-    <VSSDKTargetPlatformRegRootSuffix>
-    </VSSDKTargetPlatformRegRootSuffix>
-    <ExtensionsDeploymentSubPath>Microsoft\VisualStudio\$(VSSDKTargetPlatformVersion)$(VSSDKTargetPlatformRegRootSuffix)\Extensions\</ExtensionsDeploymentSubPath>
-    <CopyPkgDefDependsOn>$(CopyPkgDefDependsOn);FixPkgdefTarget</CopyPkgDefDependsOn>
-  </PropertyGroup>
-  <Target Name="FixPkgdefTarget">
-    <FixPkgdef PkgdefPath="$(MSBuildProjectDirectory)\$(IntermediateOutputPath)$(TargetName).pkgdef" />
-  </Target>
-  <UsingTask TaskName="FixPkgdef" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-    <ParameterGroup>
-      <PkgdefPath ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Code Type="Fragment" Language="cs"><![CDATA[
-            // Replace all "$PackageFolder$" with the actual path in the pkgdef
-            String content = File.ReadAllText(PkgdefPath);
-            String dllPath = Path.GetDirectoryName(PkgdefPath);
-            content = content.Replace("$PackageFolder$", dllPath);
-            File.WriteAllText(PkgdefPath, content);
-         ]]></Code>
-    </Task>
-  </UsingTask>
 </Project>
