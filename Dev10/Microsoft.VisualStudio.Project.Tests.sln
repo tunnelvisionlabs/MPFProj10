@@ -34,40 +34,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NestedProject.UnitTests", "Samples\CSharp\NestedProject\UnitTests\NestedProject.UnitTests.csproj", "{C7B55182-723F-4543-B166-EF365F824984}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://vmbgitvstfat25:8080/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Src\\CSharp\\Microsoft.VisualStudio.Project.csproj
-		SccProjectTopLevelParentUniqueName1 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName1 = Src/CSharp
-		SccLocalPath1 = Src\\CSharp
-		SccProjectUniqueName2 = Tests\\IntegrationTests\\Microsoft.VisualStudio.Project.IntegrationTests.csproj
-		SccProjectTopLevelParentUniqueName2 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName2 = Tests/IntegrationTests
-		SccLocalPath2 = Tests\\IntegrationTests
-		SccProjectUniqueName3 = Tests\\UnitTests\\Microsoft.VisualStudio.Project.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName3 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName3 = Tests/UnitTests
-		SccLocalPath3 = Tests\\UnitTests
-		SccProjectUniqueName4 = Samples\\CSharp\\NestedProject\\Src\\NestedProject.csproj
-		SccProjectTopLevelParentUniqueName4 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName4 = Samples/CSharp/NestedProject/Src
-		SccLocalPath4 = Samples\\CSharp\\NestedProject\\Src
-		SccProjectUniqueName5 = Samples\\CSharp\\CustomProject\\Src\\CustomProject.csproj
-		SccProjectTopLevelParentUniqueName5 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName5 = Samples/CSharp/CustomProject/Src
-		SccLocalPath5 = Samples\\CSharp\\CustomProject\\Src
-		SccProjectUniqueName6 = Samples\\CSharp\\CustomProject\\UnitTests\\CustomProject.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName6 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName6 = Samples/CSharp/CustomProject/UnitTests
-		SccLocalPath6 = Samples\\CSharp\\CustomProject\\UnitTests
-		SccProjectUniqueName7 = Samples\\CSharp\\NestedProject\\UnitTests\\NestedProject.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName7 = Microsoft.VisualStudio.Project.Tests.sln
-		SccProjectName7 = Samples/CSharp/NestedProject/UnitTests
-		SccLocalPath7 = Samples\\CSharp\\NestedProject\\UnitTests
-	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Microsoft.VisualStudio.Project.Tests1.vsmdi
 	EndGlobalSection
