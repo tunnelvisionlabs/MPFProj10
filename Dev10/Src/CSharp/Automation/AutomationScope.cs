@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	/// It should be used inside a "using" directive to define the scope of the
 	/// automation function and make sure that the ExitAutomation method is called.
 	/// </summary>
-	internal class AutomationScope : IDisposable
+	public class AutomationScope : IDisposable
 	{
 		private IVsExtensibility3 extensibility;
 		private bool inAutomation;

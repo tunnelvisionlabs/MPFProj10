@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.Project
 	/// <summary>
 	/// Gets registry settings from for a project.
 	/// </summary>
-	internal class RegisteredProjectType
+	public class RegisteredProjectType
 	{
 		private string defaultProjectExtension;
 
@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudio.Project
 
 
 
-		internal string DefaultProjectExtensionValue
+		public string DefaultProjectExtensionValue
 		{
 			get
 			{
@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		internal string WizardTemplatesDirValue
+		public string WizardTemplatesDirValue
 		{
 			get
 			{
@@ -92,7 +92,7 @@ namespace Microsoft.VisualStudio.Project
 		/// 
 		/// You can pass in a string such as: "Windows\Console Application"
 		/// </summary>
-		internal string GetVsTemplateFile(string templateFile)
+		public string GetVsTemplateFile(string templateFile)
 		{
 			// First see if this use the vstemplate model
 			if(!String.IsNullOrEmpty(DefaultProjectExtensionValue))
@@ -124,7 +124,7 @@ namespace Microsoft.VisualStudio.Project
 			return null;
 		}
 
-		internal static RegisteredProjectType CreateRegisteredProjectType(Guid projectTypeGuid)
+		public static RegisteredProjectType CreateRegisteredProjectType(Guid projectTypeGuid)
 		{
 			RegisteredProjectType registederedProjectType = null;
 

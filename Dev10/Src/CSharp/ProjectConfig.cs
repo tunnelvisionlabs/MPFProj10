@@ -87,7 +87,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        protected IList<OutputGroup> OutputGroups
+        public IList<OutputGroup> OutputGroups
         {
             get
             {

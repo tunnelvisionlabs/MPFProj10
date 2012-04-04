@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace Microsoft.VisualStudio.Project
 {
-	internal class CCITracing
+	public class CCITracing
 	{
 		private CCITracing() { }
 
