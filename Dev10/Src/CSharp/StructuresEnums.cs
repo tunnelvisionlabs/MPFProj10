@@ -16,18 +16,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.VisualStudio.Project
 {
-	#region structures
-	[StructLayoutAttribute(LayoutKind.Sequential)]
-	internal struct _DROPFILES
-	{
-		public Int32 pFiles;
-		public Int32 X;
-		public Int32 Y;
-		public Int32 fNC;
-		public Int32 fWide;
-	}
-	#endregion
-
 	#region enums
 
     /// <summary>
@@ -214,17 +202,6 @@ namespace Microsoft.VisualStudio.Project
 		Show,
 		ShowNoActivate,
 		Hide,
-	}
-
-	/// <summary>
-	/// Defines drop types
-	/// </summary>
-	internal enum DropDataType
-	{
-		None,
-		Shell,
-		VsStg,
-		VsRef
 	}
 
 	/// <summary>
