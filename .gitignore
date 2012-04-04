@@ -1,0 +1,5 @@
+# Ignore Visual Studio generated files
+*.user
+*.suo
+obj/
+[Bb]in/
