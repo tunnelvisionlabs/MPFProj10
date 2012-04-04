@@ -21,7 +21,7 @@ namespace Microsoft.VisualStudio.Project
 	/// Class used to identify a source of events of type SinkType.
 	/// </summary>
 	[ComVisible(false)]
-	internal interface IEventSource<SinkType>
+	public interface IEventSource<SinkType>
 		where SinkType : class
 	{
 		void OnSinkAdded(SinkType sink);
@@ -32,11 +32,13 @@ namespace Microsoft.VisualStudio.Project
 	public class ConnectionPointContainer : IConnectionPointContainer
 	{
 		private Dictionary<Guid, IConnectionPoint> connectionPoints;
-		internal ConnectionPointContainer()
+
+		protected internal ConnectionPointContainer()
 		{
 			connectionPoints = new Dictionary<Guid, IConnectionPoint>();
 		}
-		internal void AddEventSource<SinkType>(IEventSource<SinkType> source)
+
+		protected internal void AddEventSource<SinkType>(IEventSource<SinkType> source)
 			where SinkType : class
 		{
 			if(null == source)
