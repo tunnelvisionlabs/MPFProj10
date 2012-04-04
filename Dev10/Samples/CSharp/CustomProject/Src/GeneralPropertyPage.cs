@@ -247,7 +247,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 
 			if (reloadRequired)
 			{
-				if (MessageBox.Show(SR.GetString(SR.ReloadPromptOnTargetFxChanged), SR.GetString(SR.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				if (MessageBox.Show(Resources.GetString(Resources.ReloadPromptOnTargetFxChanged), Resources.GetString(Resources.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
 					this.ProjectMgr.TargetFrameworkMoniker = this.targetFrameworkMoniker;
 				}

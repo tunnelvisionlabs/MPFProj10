@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.Project
     using System.Threading;
     using System.Windows.Forms;
 
-    internal sealed class UIThread : IDisposable
+    public sealed class UIThread : IDisposable
     {
         private WindowsFormsSynchronizationContext synchronizationContext;
 #if DEBUG
@@ -68,7 +68,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets a value indicating whether unit tests are running.
         /// </summary>
-        internal static bool IsUnitTest { get; set; }
+        public static bool IsUnitTest { get; set; }
 
         #region IDisposable Members
         /// <summary>

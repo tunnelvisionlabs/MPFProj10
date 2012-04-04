@@ -171,8 +171,6 @@ namespace Microsoft.VisualStudio.Project
         internal const string Warning = "Warning";
 		internal const string WinExe = "WinExe";
 		internal const string CannotLoadUnknownTargetFrameworkProject = "CannotLoadUnknownTargetFrameworkProject";
-		internal const string ReloadPromptOnTargetFxChanged = "ReloadPromptOnTargetFxChanged";
-		internal const string ReloadPromptOnTargetFxChangedCaption = "ReloadPromptOnTargetFxChangedCaption";
 
 		static SR loader;
 		ResourceManager resources;

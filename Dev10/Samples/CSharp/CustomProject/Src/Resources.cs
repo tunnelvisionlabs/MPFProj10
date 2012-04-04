@@ -47,6 +47,8 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		internal const string TargetFrameworkMonikerDescription = "TargetFrameworkMonikerDescription";
 		internal const string NestedProjectFileAssemblyFilter = "NestedProjectFileAssemblyFilter";
 		//internal const string MsgFailedToLoadTemplateFile = "Failed to add template file to project";
+		internal const string ReloadPromptOnTargetFxChanged = "ReloadPromptOnTargetFxChanged";
+		internal const string ReloadPromptOnTargetFxChangedCaption = "ReloadPromptOnTargetFxChangedCaption";
 		#endregion Constants
 
 		#region Fields

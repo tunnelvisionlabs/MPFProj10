@@ -50,7 +50,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
     /// </summary>
     public class NesteProjectNodeFake : NestedProjectNode
     {
-        protected internal override void ProcessReferences()
+        protected override void ProcessReferences()
         {
             return;
         }

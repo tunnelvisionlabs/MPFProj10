@@ -100,6 +100,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Src\CSharp\Microsoft.VisualStudio.Project.csproj">
+      <Project>{CACB60A9-1E76-4F92-8831-B134A658C695}</Project>
+      <Name>Microsoft.VisualStudio.Project</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Src\CustomProject.csproj">
       <Project>{F4ADEBDB-CD20-4532-B4E3-FE7424F5369C}</Project>
       <Name>CustomProject</Name>

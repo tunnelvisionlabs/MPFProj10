@@ -63,6 +63,9 @@
     <Reference Include="envdte100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="envdte90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -164,8 +167,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <!-- This import the files which makes up the project base classes -->
-  <Import Project="..\..\..\..\Src\CSharp\ProjectBase.Files" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Src\CSharp\Microsoft.VisualStudio.Project.csproj">
+      <Project>{CACB60A9-1E76-4F92-8831-B134A658C695}</Project>
+      <Name>Microsoft.VisualStudio.Project</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <!--
     To specify a different registry root to register your package, uncomment the TargetRegistryRoot

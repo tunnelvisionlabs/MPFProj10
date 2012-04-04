@@ -250,7 +250,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 			if (reloadRequired)
 			{
                 // Make sure the user understands that reloading the project is necessary, but don't interrupt unit tests.
-				if (UIThread.IsUnitTest || MessageBox.Show(SR.GetString(SR.ReloadPromptOnTargetFxChanged), SR.GetString(SR.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				if (UIThread.IsUnitTest || MessageBox.Show(Resources.GetString(Resources.ReloadPromptOnTargetFxChanged), Resources.GetString(Resources.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
 					this.ProjectMgr.TargetFrameworkMoniker = this.targetFrameworkMoniker;
 				}

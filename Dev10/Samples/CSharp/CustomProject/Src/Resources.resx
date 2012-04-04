@@ -180,4 +180,15 @@
   <data name="TargetFrameworkMonikerDescription" xml:space="preserve">
     <value>The version of the Common Language Runtime to use for output assembly.</value>
   </data>
+  <data name="ReloadPromptOnTargetFxChanged" xml:space="preserve">
+    <value>Changing the Target Framework requires that the current project be closed and then reopened.
+Any unsaved changes within the project will be automatically saved.
+
+Changing Target Framework may require manual modification of project files in order to build.
+
+Are you sure you want to change the Target Framework for this project?</value>
+  </data>
+  <data name="ReloadPromptOnTargetFxChangedCaption" xml:space="preserve">
+    <value>Target Framework Change</value>
+  </data>
 </root>

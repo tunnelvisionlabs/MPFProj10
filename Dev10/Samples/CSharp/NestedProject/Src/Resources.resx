@@ -189,4 +189,15 @@
   <data name="MsgFailedToLoadTemplateFile" xml:space="preserve">
     <value>Failed to add template file to project</value>
   </data>
+  <data name="ReloadPromptOnTargetFxChanged" xml:space="preserve">
+    <value>Changing the Target Framework requires that the current project be closed and then reopened.
+Any unsaved changes within the project will be automatically saved.
+
+Changing Target Framework may require manual modification of project files in order to build.
+
+Are you sure you want to change the Target Framework for this project?</value>
+  </data>
+  <data name="ReloadPromptOnTargetFxChangedCaption" xml:space="preserve">
+    <value>Target Framework Change</value>
+  </data>
 </root>

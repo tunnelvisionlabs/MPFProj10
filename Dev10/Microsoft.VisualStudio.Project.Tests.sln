@@ -6,7 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Microsoft.VisualStudio.Project.IntegrationTests.testrunconfig = Microsoft.VisualStudio.Project.IntegrationTests.testrunconfig
 		Microsoft.VisualStudio.Project.Tests1.vsmdi = Microsoft.VisualStudio.Project.Tests1.vsmdi
 		Microsoft.VisualStudio.Project.UnitTests.testrunconfig = Microsoft.VisualStudio.Project.UnitTests.testrunconfig
-		Src\CSharp\ProjectBase.files = Src\CSharp\ProjectBase.files
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{EDA56A56-902F-4221-B1E5-E9FEC8FA3CF4}"
