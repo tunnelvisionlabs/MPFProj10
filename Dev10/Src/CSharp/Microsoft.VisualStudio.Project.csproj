@@ -147,10 +147,10 @@
     <Compile Include="LocalizableProperties.cs" />
     <Compile Include="UIThread.cs" />
     <Compile Include="VisualStudio.Project.cs" />
-    <Compile Include="Misc\ConnectionPointContainer.cs" />
-    <Compile Include="Misc\ExternDll.cs" />
-    <Compile Include="Misc\NativeMethods.cs" />
-    <Compile Include="Misc\UnsafeNativeMethods.cs" />
+    <Compile Include="ConnectionPointContainer.cs" />
+    <Compile Include="ExternDll.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="NestedProjectBuildDependency.cs" />
     <Compile Include="NestedProjectNode.cs" />
     <Compile Include="NodeProperties.cs" />

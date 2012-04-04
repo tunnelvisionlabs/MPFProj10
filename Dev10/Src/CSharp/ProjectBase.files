@@ -69,20 +69,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="$(ProjectBasePath)\Misc\ConnectionPointContainer.cs">
-      <Link>ProjectBase\misc\ConnectionPointContainer.cs</Link>
+    <Compile Include="$(ProjectBasePath)\ConnectionPointContainer.cs">
+      <Link>ProjectBase\ConnectionPointContainer.cs</Link>
       <Visible>true</Visible>
     </Compile>
-    <Compile Include="$(ProjectBasePath)\Misc\ExternDll.cs">
-      <Link>ProjectBase\Misc\ExternDll.cs</Link>
+    <Compile Include="$(ProjectBasePath)\ExternDll.cs">
+      <Link>ProjectBase\ExternDll.cs</Link>
       <Visible>true</Visible>
     </Compile>
-    <Compile Include="$(ProjectBasePath)\Misc\NativeMethods.cs">
-      <Link>ProjectBase\Misc\NativeMethods.cs</Link>
+    <Compile Include="$(ProjectBasePath)\NativeMethods.cs">
+      <Link>ProjectBase\NativeMethods.cs</Link>
       <Visible>true</Visible>
     </Compile>
-    <Compile Include="$(ProjectBasePath)\Misc\UnsafeNativeMethods.cs">
-      <Link>ProjectBase\Misc\UnsafeNativeMethods.cs</Link>
+    <Compile Include="$(ProjectBasePath)\UnsafeNativeMethods.cs">
+      <Link>ProjectBase\UnsafeNativeMethods.cs</Link>
       <Visible>true</Visible>
     </Compile>
 
