@@ -68,7 +68,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				throw new InvalidOperationException();
 			}
-			if(path.Length < 9 || String.Compare(path.Substring(0, 8), "file:///", StringComparison.OrdinalIgnoreCase) != 0)
+			if(path.Length < 9 || !String.Equals(path.Substring(0, 8), "file:///", StringComparison.OrdinalIgnoreCase))
 				path = "file:///" + path; // TODO: does not work with '#' char, see e.g. bug 641942
 			pbstrDeploySourceURL = path;
 			return VSConstants.S_OK;

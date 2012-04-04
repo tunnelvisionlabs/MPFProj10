@@ -55,7 +55,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			foreach(Reference refNode in this)
 			{
-				if(0 == string.Compare(refNode.Name, stringIndex, StringComparison.Ordinal))
+				if(string.Equals(refNode.Name, stringIndex, StringComparison.Ordinal))
 				{
 					return refNode;
 				}
@@ -155,7 +155,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			{
 				if(null != refNode)
 				{
-					if(0 == string.Compare(bstrIdentity, refNode.Identity, StringComparison.Ordinal))
+					if(string.Equals(bstrIdentity, refNode.Identity, StringComparison.Ordinal))
 					{
 						return refNode;
 					}

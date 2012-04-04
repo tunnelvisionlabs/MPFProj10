@@ -235,7 +235,7 @@ namespace Microsoft.VisualStudio.Project
                 if(referenceNode != null)
                 {
                     // We check if the name and guids are the same
-                    if(referenceNode.TypeGuid == this.TypeGuid && String.Compare(referenceNode.Caption, this.Caption, StringComparison.OrdinalIgnoreCase) == 0)
+                    if(referenceNode.TypeGuid == this.TypeGuid && String.Equals(referenceNode.Caption, this.Caption, StringComparison.OrdinalIgnoreCase))
                     {
 						existingReference = referenceNode;
                         return true;
@@ -306,10 +306,10 @@ namespace Microsoft.VisualStudio.Project
             IEnumerable<ProjectItem> comReferences = this.ProjectMgr.BuildProject.GetItems(MsBuildGeneratedItemType.ComReferenceWrappers);
             foreach (ProjectItem reference in comReferences)
             {
-                if(String.Compare(reference.GetMetadataValue(ProjectFileConstants.Guid), this.typeGuid.ToString("B"), StringComparison.OrdinalIgnoreCase) == 0
-                    && String.Compare(reference.GetMetadataValue(ProjectFileConstants.VersionMajor), this.majorVersionNumber, StringComparison.OrdinalIgnoreCase) == 0
-                    && String.Compare(reference.GetMetadataValue(ProjectFileConstants.VersionMinor), this.minorVersionNumber, StringComparison.OrdinalIgnoreCase) == 0
-                    && String.Compare(reference.GetMetadataValue(ProjectFileConstants.Lcid), this.lcid, StringComparison.OrdinalIgnoreCase) == 0)
+                if(String.Equals(reference.GetMetadataValue(ProjectFileConstants.Guid), this.typeGuid.ToString("B"), StringComparison.OrdinalIgnoreCase)
+                    && String.Equals(reference.GetMetadataValue(ProjectFileConstants.VersionMajor), this.majorVersionNumber, StringComparison.OrdinalIgnoreCase)
+                    && String.Equals(reference.GetMetadataValue(ProjectFileConstants.VersionMinor), this.minorVersionNumber, StringComparison.OrdinalIgnoreCase)
+                    && String.Equals(reference.GetMetadataValue(ProjectFileConstants.Lcid), this.lcid, StringComparison.OrdinalIgnoreCase))
                 {
                     string name = reference.EvaluatedInclude;
                     if(Path.IsPathRooted(name))

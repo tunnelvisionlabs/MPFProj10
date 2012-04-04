@@ -224,7 +224,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 				string name = (string)index;
 				foreach(EnvDTE.ProjectItem item in items)
 				{
-					if(String.Compare(item.Name, name, StringComparison.OrdinalIgnoreCase) == 0)
+					if(String.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase))
 					{
 						return item;
 					}

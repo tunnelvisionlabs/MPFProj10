@@ -263,7 +263,7 @@ namespace Microsoft.VisualStudio.Project
                         bool found = false;
                         for(HierarchyNode n = this.FirstChild; n != null && !found; n = n.NextSibling)
                         {
-                            if(String.Compare(n.Caption, node.Caption, StringComparison.OrdinalIgnoreCase) == 0)
+                            if(String.Equals(n.Caption, node.Caption, StringComparison.OrdinalIgnoreCase))
                             {
                                 found = true;
                             }

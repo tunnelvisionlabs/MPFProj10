@@ -1066,7 +1066,7 @@ namespace Microsoft.VisualStudio.Project
 
             // Nothing to do if the name is the same
             string oldFileName = Path.GetFileNameWithoutExtension(this.Url);
-            if (String.Compare(oldFileName, label, StringComparison.Ordinal) == 0)
+            if (String.Equals(oldFileName, label, StringComparison.Ordinal))
             {
                 return VSConstants.S_FALSE;
             }
@@ -1082,7 +1082,7 @@ namespace Microsoft.VisualStudio.Project
             string extension = Path.GetExtension(this.Url);
 
             // Make sure it has the correct extension
-            if (String.Compare(Path.GetExtension(newFile), extension, StringComparison.OrdinalIgnoreCase) != 0)
+            if (!String.Equals(Path.GetExtension(newFile), extension, StringComparison.OrdinalIgnoreCase))
             {
                 newFile += extension;
             }
@@ -1817,7 +1817,7 @@ namespace Microsoft.VisualStudio.Project
                     string tempExtension = Path.GetExtension(name);
                     if (!String.IsNullOrEmpty(tempExtension))
                     {
-                        bool isSameExtension = (String.Compare(tempExtension, extension, StringComparison.OrdinalIgnoreCase) == 0);
+                        bool isSameExtension = String.Equals(tempExtension, extension, StringComparison.OrdinalIgnoreCase);
 
                         if (isSameExtension)
                         {
@@ -1965,7 +1965,7 @@ namespace Microsoft.VisualStudio.Project
             HierarchyNode parent = null;
 
             string dependentOf = item.GetMetadataValue(ProjectFileConstants.DependentUpon);
-            Debug.Assert(String.Compare(dependentOf, key, StringComparison.OrdinalIgnoreCase) != 0, "File dependent upon itself is not valid. Ignoring the DependentUpon metadata");
+            Debug.Assert(!String.Equals(dependentOf, key, StringComparison.OrdinalIgnoreCase), "File dependent upon itself is not valid. Ignoring the DependentUpon metadata");
             if (subitems.ContainsKey(dependentOf))
             {
                 // The parent item is an other subitem, so recurse into this method to add the parent first
@@ -2102,7 +2102,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // Only do the work if this is different to what we had before
-            if (String.Compare(oldValue, propertyValue, StringComparison.Ordinal) != 0)
+            if (!String.Equals(oldValue, propertyValue, StringComparison.Ordinal))
             {
                 // Check out the project file.
                 if (!this.ProjectMgr.QueryEditProjectFile(false))
@@ -2404,7 +2404,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>true if the file is a resx file, otherwise false.</returns>
         public virtual bool IsEmbeddedResource(string fileName)
         {
-            if (String.Compare(Path.GetExtension(fileName), ".ResX", StringComparison.OrdinalIgnoreCase) == 0)
+            if (String.Equals(Path.GetExtension(fileName), ".ResX", StringComparison.OrdinalIgnoreCase))
                 return true;
             return false;
         }
@@ -2557,7 +2557,7 @@ namespace Microsoft.VisualStudio.Project
                 ProjectElement item = null;
                 foreach (MSBuild.ProjectItem folder in buildProject.GetItems(ProjectFileConstants.Folder))
                 {
-                    if (String.Compare(folder.EvaluatedInclude.TrimEnd('\\'), path.TrimEnd('\\'), StringComparison.OrdinalIgnoreCase) == 0)
+                    if (String.Equals(folder.EvaluatedInclude.TrimEnd('\\'), path.TrimEnd('\\'), StringComparison.OrdinalIgnoreCase))
                     {
                         item = new ProjectElement(this, folder, false);
                         break;
@@ -2870,10 +2870,10 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>True = items of this type should be included in the project</returns>
         protected virtual bool IsItemTypeFileType(string type)
         {
-            if (String.Compare(type, BuildAction.Compile.ToString(), StringComparison.OrdinalIgnoreCase) == 0
-                || String.Compare(type, BuildAction.Content.ToString(), StringComparison.OrdinalIgnoreCase) == 0
-                || String.Compare(type, BuildAction.EmbeddedResource.ToString(), StringComparison.OrdinalIgnoreCase) == 0
-                || String.Compare(type, BuildAction.None.ToString(), StringComparison.OrdinalIgnoreCase) == 0)
+            if (String.Equals(type, BuildAction.Compile.ToString(), StringComparison.OrdinalIgnoreCase)
+                || String.Equals(type, BuildAction.Content.ToString(), StringComparison.OrdinalIgnoreCase)
+                || String.Equals(type, BuildAction.EmbeddedResource.ToString(), StringComparison.OrdinalIgnoreCase)
+                || String.Equals(type, BuildAction.None.ToString(), StringComparison.OrdinalIgnoreCase))
                 return true;
 
             // we don't know about this type, so ignore it.
@@ -2885,12 +2885,12 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         protected virtual bool FilterItemTypeToBeAddedToHierarchy(string itemType)
         {
-            return (String.Compare(itemType, ProjectFileConstants.Reference, StringComparison.OrdinalIgnoreCase) == 0
-                    || String.Compare(itemType, ProjectFileConstants.ProjectReference, StringComparison.OrdinalIgnoreCase) == 0
-                    || String.Compare(itemType, ProjectFileConstants.COMReference, StringComparison.OrdinalIgnoreCase) == 0
-                    || String.Compare(itemType, ProjectFileConstants.Folder, StringComparison.OrdinalIgnoreCase) == 0
-                    || String.Compare(itemType, ProjectFileConstants.WebReference, StringComparison.OrdinalIgnoreCase) == 0
-                    || String.Compare(itemType, ProjectFileConstants.WebReferenceFolder, StringComparison.OrdinalIgnoreCase) == 0);
+            return (String.Equals(itemType, ProjectFileConstants.Reference, StringComparison.OrdinalIgnoreCase)
+                    || String.Equals(itemType, ProjectFileConstants.ProjectReference, StringComparison.OrdinalIgnoreCase)
+                    || String.Equals(itemType, ProjectFileConstants.COMReference, StringComparison.OrdinalIgnoreCase)
+                    || String.Equals(itemType, ProjectFileConstants.Folder, StringComparison.OrdinalIgnoreCase)
+                    || String.Equals(itemType, ProjectFileConstants.WebReference, StringComparison.OrdinalIgnoreCase)
+                    || String.Equals(itemType, ProjectFileConstants.WebReferenceFolder, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -3434,7 +3434,7 @@ namespace Microsoft.VisualStudio.Project
                 child.ItemNode.SetMetadata(ProjectFileConstants.DependentUpon, parentNode.ItemNode.GetMetadata(ProjectFileConstants.Include));
 
                 // Make sure to set the HasNameRelation flag on the dependent node if it is related to the parent by name
-                if (!child.HasParentNodeNameRelation && string.Compare(child.GetRelationalName(), parentNode.GetRelationalName(), StringComparison.OrdinalIgnoreCase) == 0)
+                if (!child.HasParentNodeNameRelation && string.Equals(child.GetRelationalName(), parentNode.GetRelationalName(), StringComparison.OrdinalIgnoreCase))
                 {
                     child.HasParentNodeNameRelation = true;
                 }
@@ -3562,7 +3562,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 EnvDTE.Project automationObject = this.GetAutomationObject() as EnvDTE.Project;
                 string currentConfigName = Utilities.GetActiveConfigurationName(automationObject);
-                bool configsAreEqual = String.Compare(currentConfigName, config, StringComparison.OrdinalIgnoreCase) == 0;
+                bool configsAreEqual = String.Equals(currentConfigName, config, StringComparison.OrdinalIgnoreCase);
 
                 if (configsAreEqual)
                 {
@@ -3777,7 +3777,7 @@ namespace Microsoft.VisualStudio.Project
             this.buildProject.SetGlobalProperty(GlobalProperty.Configuration.ToString(), name);
 
             // If the platform is "Any CPU" then it should be set to AnyCPU, since that is the property value in MsBuild terms.
-            if (String.Compare(platform, ConfigProvider.AnyCPUPlatform, StringComparison.Ordinal) == 0)
+            if (String.Equals(platform, ConfigProvider.AnyCPUPlatform, StringComparison.Ordinal))
             {
                 platform = ProjectFileValues.AnyCPU;
             }
@@ -4335,10 +4335,10 @@ namespace Microsoft.VisualStudio.Project
                         if (child.Attributes[ProjectFileConstants.Configuration] != null)
                             configuration = child.Attributes[ProjectFileConstants.Configuration].Value;
 
-                        if (String.Compare(child.Name, ProjectFileConstants.FlavorProperties, StringComparison.OrdinalIgnoreCase) == 0
-                                && String.Compare(guid, flavorGuidString, StringComparison.OrdinalIgnoreCase) == 0
+                        if (String.Equals(child.Name, ProjectFileConstants.FlavorProperties, StringComparison.OrdinalIgnoreCase)
+                                && String.Equals(guid, flavorGuidString, StringComparison.OrdinalIgnoreCase)
                                 && ((String.IsNullOrEmpty(configName) && String.IsNullOrEmpty(configuration))
-                                    || (String.Compare(configuration, configName, StringComparison.OrdinalIgnoreCase) == 0)))
+                                    || (String.Equals(configuration, configName, StringComparison.OrdinalIgnoreCase))))
                         {
                             // we found the matching fragment
                             fragment = child.InnerXml;
@@ -5867,7 +5867,7 @@ namespace Microsoft.VisualStudio.Project
             parentNode.AddChild(node);
 
             // Make sure to set the HasNameRelation flag on the dependent node if it is related to the parent by name
-            if (!node.HasParentNodeNameRelation && string.Compare(node.GetRelationalName(), parentNode.GetRelationalName(), StringComparison.OrdinalIgnoreCase) == 0)
+            if (!node.HasParentNodeNameRelation && string.Equals(node.GetRelationalName(), parentNode.GetRelationalName(), StringComparison.OrdinalIgnoreCase))
             {
                 node.HasParentNodeNameRelation = true;
             }
@@ -5983,10 +5983,10 @@ namespace Microsoft.VisualStudio.Project
         {
             bool changed = false;
             Debug.Assert(sccProjectName != null && sccLocalPath != null && sccAuxPath != null && sccProvider != null);
-            if (String.Compare(sccProjectName, this.sccProjectName, StringComparison.OrdinalIgnoreCase) != 0 ||
-                String.Compare(sccLocalPath, this.sccLocalPath, StringComparison.OrdinalIgnoreCase) != 0 ||
-                String.Compare(sccAuxPath, this.sccAuxPath, StringComparison.OrdinalIgnoreCase) != 0 ||
-                String.Compare(sccProvider, this.sccProvider, StringComparison.OrdinalIgnoreCase) != 0)
+            if (!String.Equals(sccProjectName, this.sccProjectName, StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(sccLocalPath, this.sccLocalPath, StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(sccAuxPath, this.sccAuxPath, StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(sccProvider, this.sccProvider, StringComparison.OrdinalIgnoreCase))
             {
                 changed = true;
                 this.sccProjectName = sccProjectName;

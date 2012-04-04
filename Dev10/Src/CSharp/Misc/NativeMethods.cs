@@ -545,7 +545,7 @@ namespace Microsoft.VisualStudio.Project
 
 				if(uri1 != null && uri1.IsFile && uri2 != null && uri2.IsFile)
 				{
-					return 0 == String.Compare(uri1.LocalPath, uri2.LocalPath, StringComparison.OrdinalIgnoreCase);
+					return String.Equals(uri1.LocalPath, uri2.LocalPath, StringComparison.OrdinalIgnoreCase);
 				}
 
 				return file1 == file2;

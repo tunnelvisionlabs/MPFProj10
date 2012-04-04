@@ -488,7 +488,7 @@ namespace Microsoft.VisualStudio.Project
                 info.fSendStdoutToOutputWindow = 0;
 
                 property = GetConfigurationProperty("EnableUnmanagedDebugging", false);
-                if(property != null && string.Compare(property, "true", StringComparison.OrdinalIgnoreCase) == 0)
+                if(property != null && string.Equals(property, "true", StringComparison.OrdinalIgnoreCase))
                 {
                     //Set the unmanged debugger
                     //TODO change to vsconstant when it is available in VsConstants (guidNativeOnlyEng was the old name, maybe it has got a new name)
@@ -543,7 +543,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 string groupName;
                 group.get_CanonicalName(out groupName);
-                if(String.Compare(groupName, szCanonicalName, StringComparison.OrdinalIgnoreCase) == 0)
+                if(String.Equals(groupName, szCanonicalName, StringComparison.OrdinalIgnoreCase))
                 {
                     ppIVsOutputGroup = group;
                     break;

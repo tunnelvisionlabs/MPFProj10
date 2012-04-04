@@ -165,7 +165,7 @@ namespace Microsoft.VisualStudio.Project
 
 		protected override bool FilterItemTypeToBeAddedToHierarchy(string itemType)
 		{
-			if(String.Compare(itemType, ProjectFileConstants.SubProject, StringComparison.OrdinalIgnoreCase) == 0)
+			if(String.Equals(itemType, ProjectFileConstants.SubProject, StringComparison.OrdinalIgnoreCase))
 			{
 				return true;
 			}
@@ -388,7 +388,7 @@ namespace Microsoft.VisualStudio.Project
 
             foreach (MSBuild.ProjectItem item in this.BuildProject.Items)
 			{
-				if(String.Compare(item.ItemType, ProjectFileConstants.SubProject, StringComparison.OrdinalIgnoreCase) == 0)
+				if(String.Equals(item.ItemType, ProjectFileConstants.SubProject, StringComparison.OrdinalIgnoreCase))
 				{
 					this.nestedProjectElement = new ProjectElement(this, item, false);
 

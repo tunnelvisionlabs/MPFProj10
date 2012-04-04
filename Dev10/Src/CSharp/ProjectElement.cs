@@ -168,7 +168,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="attributeValue">Value to give to the attribute.  Use <c>null</c> to delete the metadata definition.</param>
         public void SetMetadata(string attributeName, string attributeValue)
         {
-            Debug.Assert(String.Compare(attributeName, ProjectFileConstants.Include, StringComparison.OrdinalIgnoreCase) != 0, "Use rename as this won't work");
+            Debug.Assert(!String.Equals(attributeName, ProjectFileConstants.Include, StringComparison.OrdinalIgnoreCase), "Use rename as this won't work");
 
             if(this.IsVirtual)
             {
@@ -212,13 +212,13 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // cannot ask MSBuild for Include, so intercept it and return the corresponding property
-            if(String.Compare(attributeName, ProjectFileConstants.Include, StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(attributeName, ProjectFileConstants.Include, StringComparison.OrdinalIgnoreCase))
             {
                 return item.EvaluatedInclude;
             }
 
             // Build Action is the type, not a property, so intercept this one as well
-            if(String.Compare(attributeName, ProjectFileConstants.BuildAction, StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(attributeName, ProjectFileConstants.BuildAction, StringComparison.OrdinalIgnoreCase))
             {
                 return item.ItemType;
             }
@@ -242,11 +242,11 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // cannot ask MSBuild for Include, so intercept it and return the corresponding property
-            if(String.Compare(attributeName, ProjectFileConstants.Include, StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(attributeName, ProjectFileConstants.Include, StringComparison.OrdinalIgnoreCase))
                 return item.EvaluatedInclude;
 
             // Build Action is the type, not a property, so intercept this one as well
-            if(String.Compare(attributeName, ProjectFileConstants.BuildAction, StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(attributeName, ProjectFileConstants.BuildAction, StringComparison.OrdinalIgnoreCase))
                 return item.ItemType;
 
             return item.GetMetadataValue(attributeName);

@@ -525,7 +525,7 @@ namespace Microsoft.VisualStudio.Project
 				HierarchyNode cursorNode = targetNode;
 				while(cursorNode != null)
 				{
-					if(String.Compare(folder, cursorNode.GetMkDocument(), StringComparison.OrdinalIgnoreCase) == 0)
+					if(String.Equals(folder, cursorNode.GetMkDocument(), StringComparison.OrdinalIgnoreCase))
 						throw new Exception();
 					cursorNode = cursorNode.Parent;
 				}

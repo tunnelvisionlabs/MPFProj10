@@ -801,7 +801,7 @@ namespace Microsoft.VisualStudio.Project
 							if(browseObject is DispatchWrapper)
 								browseObject = ((DispatchWrapper)browseObject).WrappedObject;
 							result = this.ProjectMgr.GetCATIDForType(browseObject.GetType()).ToString("B");
-							if(String.CompareOrdinal(result as string, Guid.Empty.ToString("B")) == 0)
+							if(String.Equals(result as string, Guid.Empty.ToString("B"), StringComparison.Ordinal))
 								result = null;
 						}
 						break;
@@ -815,7 +815,7 @@ namespace Microsoft.VisualStudio.Project
 							if(extObject is DispatchWrapper)
 								extObject = ((DispatchWrapper)extObject).WrappedObject;
 							result = this.ProjectMgr.GetCATIDForType(extObject.GetType()).ToString("B");
-							if(String.CompareOrdinal(result as string, Guid.Empty.ToString("B")) == 0)
+							if(String.Equals(result as string, Guid.Empty.ToString("B"), StringComparison.Ordinal))
 								result = null;
 						}
 						break;
@@ -3126,7 +3126,7 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode result;
 			for(HierarchyNode child = this.firstChild; child != null; child = child.NextSibling)
 			{
-				if(!String.IsNullOrEmpty(child.VirtualNodeName) && String.Compare(child.VirtualNodeName, name, StringComparison.OrdinalIgnoreCase) == 0)
+				if(!String.IsNullOrEmpty(child.VirtualNodeName) && String.Equals(child.VirtualNodeName, name, StringComparison.OrdinalIgnoreCase))
 				{
 					return child;
 				}

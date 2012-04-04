@@ -104,7 +104,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <returns>VSConstants.S_OK, if succeeded</returns>
 		public override int SetEditLabel(string label)
 		{
-			if(String.Compare(Path.GetFileName(this.Url.TrimEnd('\\')), label, StringComparison.Ordinal) == 0)
+			if(String.Equals(Path.GetFileName(this.Url.TrimEnd('\\')), label, StringComparison.Ordinal))
 			{
 				// Label matches current Name
 				return VSConstants.S_OK;
@@ -115,7 +115,7 @@ namespace Microsoft.VisualStudio.Project
 			// Verify that No Directory/file already exists with the new name among current children
 			for(HierarchyNode n = Parent.FirstChild; n != null; n = n.NextSibling)
 			{
-				if(n != this && String.Compare(n.Caption, label, StringComparison.OrdinalIgnoreCase) == 0)
+				if(n != this && String.Equals(n.Caption, label, StringComparison.OrdinalIgnoreCase))
 				{
 					return ShowFileOrFolderAlreadExistsErrorMessage(newPath);
 				}
@@ -354,7 +354,7 @@ namespace Microsoft.VisualStudio.Project
 				oldDir = oldDir.TrimEnd(dummy);
 				string strNewDir = Path.Combine(Path.GetDirectoryName(oldDir), newName);
 
-				if(String.Compare(strNewDir, oldDir, StringComparison.OrdinalIgnoreCase) != 0)
+				if(!String.Equals(strNewDir, oldDir, StringComparison.OrdinalIgnoreCase))
 				{
 					if(Directory.Exists(strNewDir))
 					{
@@ -395,7 +395,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			// Do the rename (note that we only do the physical rename if the leaf name changed)
 			string newPath = Path.Combine(this.Parent.VirtualNodeName, newName);
-			if(String.Compare(Path.GetFileName(VirtualNodeName), newName, StringComparison.Ordinal) != 0)
+			if(!String.Equals(Path.GetFileName(VirtualNodeName), newName, StringComparison.Ordinal))
 			{
 				this.RenameDirectory(Path.Combine(this.ProjectMgr.ProjectFolder, newPath));
 			}

@@ -116,7 +116,7 @@ namespace Microsoft.VisualStudio.Project
                 this.outputs.Add(output);
 
                 // See if it is our key output
-                if(String.Compare(assembly.GetMetadataValue("IsKeyOutput"), true.ToString(), StringComparison.OrdinalIgnoreCase) == 0)
+                if(String.Equals(assembly.GetMetadataValue("IsKeyOutput"), true.ToString(), StringComparison.OrdinalIgnoreCase))
                     keyOutput = output;
             }
 

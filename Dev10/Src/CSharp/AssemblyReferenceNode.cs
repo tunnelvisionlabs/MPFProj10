@@ -266,7 +266,7 @@ namespace Microsoft.VisualStudio.Project
 				if(null != assemblyReferenceNode)
 				{
 					// We will check if the full assemblynames are the same or if the Url of the assemblies is the same.
-					if(String.Compare(assemblyReferenceNode.AssemblyName.FullName, this.assemblyName.FullName, StringComparison.OrdinalIgnoreCase) == 0 ||
+					if(String.Equals(assemblyReferenceNode.AssemblyName.FullName, this.assemblyName.FullName, StringComparison.OrdinalIgnoreCase) ||
 						(shouldCheckPath && NativeMethods.IsSamePath(assemblyReferenceNode.Url, this.Url)))
 					{
 						existingReference = assemblyReferenceNode;
@@ -358,7 +358,7 @@ namespace Microsoft.VisualStudio.Project
             foreach (MSBuild.ProjectItem reference in references)
 			{
 				string fileName = Path.GetFileNameWithoutExtension(reference.EvaluatedInclude);
-				if(String.Compare(fileName, this.assemblyName.Name, StringComparison.OrdinalIgnoreCase) == 0)
+				if(String.Equals(fileName, this.assemblyName.Name, StringComparison.OrdinalIgnoreCase))
 				{
 					// We found it, now set some properties based on this.
 

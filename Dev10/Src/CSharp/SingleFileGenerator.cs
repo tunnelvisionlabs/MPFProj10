@@ -155,7 +155,7 @@ namespace Microsoft.VisualStudio.Project
 					HierarchyNode dependentNode = fileNode.FirstChild;
 					while(dependentNode != null)
 					{
-						if(string.Compare(dependentNode.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon), fileNode.FileName, StringComparison.OrdinalIgnoreCase) == 0)
+						if(string.Equals(dependentNode.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon), fileNode.FileName, StringComparison.OrdinalIgnoreCase))
 						{
 							dependentNodeName = ((FileNode)dependentNode).FileName;
 							break;

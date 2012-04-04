@@ -823,7 +823,7 @@ namespace Microsoft.VisualStudio.Project
         {
             string existingLabel = this.Caption;
 
-            if (String.Compare(existingLabel, label, StringComparison.Ordinal) == 0)
+            if (String.Equals(existingLabel, label, StringComparison.Ordinal))
             {
                 return;
             }

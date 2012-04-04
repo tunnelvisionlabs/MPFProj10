@@ -843,7 +843,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // We verify CLOCK$ outside the regex since for some reason the regex is not matching the clock\\$ added.
-            if(String.Compare(fileNameToVerify, "CLOCK$", StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(fileNameToVerify, "CLOCK$", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -916,7 +916,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             string extension = Path.GetExtension(fileName);
-            return (String.Compare(extension, ".vstemplate", StringComparison.OrdinalIgnoreCase) == 0 || string.Compare(extension, ".vsz", StringComparison.OrdinalIgnoreCase) == 0);
+            return String.Equals(extension, ".vstemplate", StringComparison.OrdinalIgnoreCase) || string.Equals(extension, ".vsz", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

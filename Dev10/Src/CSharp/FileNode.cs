@@ -247,7 +247,7 @@ namespace Microsoft.VisualStudio.Project
 
             for(HierarchyNode n = this.Parent.FirstChild; n != null; n = n.NextSibling)
             {
-                if(n != this && String.Compare(n.Caption, label, StringComparison.OrdinalIgnoreCase) == 0)
+                if(n != this && String.Equals(n.Caption, label, StringComparison.OrdinalIgnoreCase))
                 {
                     //A file or folder with the name '{0}' already exists on disk at this location. Please choose another name.
                     //If this file or folder does not appear in the Solution Explorer, then it is not currently part of your project. To view files which exist on disk, but are not in the project, select Show All Files from the Project menu.
@@ -265,7 +265,7 @@ namespace Microsoft.VisualStudio.Project
 
             // Verify that the file extension is unchanged
             string strRelPath = Path.GetFileName(this.ItemNode.GetMetadata(ProjectFileConstants.Include));
-            if(String.Compare(Path.GetExtension(strRelPath), Path.GetExtension(label), StringComparison.OrdinalIgnoreCase) != 0)
+            if(!String.Equals(Path.GetExtension(strRelPath), Path.GetExtension(label), StringComparison.OrdinalIgnoreCase))
             {
                 // Prompt to confirm that they really want to change the extension of the file
                 string message = SR.GetString(SR.ConfirmExtensionChange, CultureInfo.CurrentUICulture, new string[] { label });
@@ -337,7 +337,7 @@ namespace Microsoft.VisualStudio.Project
             if(NativeMethods.IsSamePath(newName, this.Url))
             {
                 // If this is really a no-op, then nothing to do
-                if(String.Compare(newName, this.Url, StringComparison.Ordinal) == 0)
+                if(String.Equals(newName, this.Url, StringComparison.Ordinal))
                     return VSConstants.S_FALSE;
             }
             else
@@ -345,7 +345,7 @@ namespace Microsoft.VisualStudio.Project
                 // If the renamed file already exists then quit (unless it is the result of the parent having done the move).
                 if(IsFileOnDisk(newName)
                     && (IsFileOnDisk(this.Url)
-                    || String.Compare(Path.GetFileName(newName), Path.GetFileName(this.Url), StringComparison.Ordinal) != 0))
+                    || !String.Equals(Path.GetFileName(newName), Path.GetFileName(this.Url), StringComparison.Ordinal)))
                 {
                     throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.FileCannotBeRenamedToAnExistingFile, CultureInfo.CurrentUICulture), label));
                 }
@@ -705,7 +705,7 @@ namespace Microsoft.VisualStudio.Project
         /// <remarks>While a new node will be used to represent the item, the underlying MSBuild item will be the same and as a result file properties saved in the project file will not be lost.</remarks>
         protected virtual FileNode RenameFileNode(string oldFileName, string newFileName, uint newParentId)
         {
-            if(string.Compare(oldFileName, newFileName, StringComparison.Ordinal) == 0)
+            if(string.Equals(oldFileName, newFileName, StringComparison.Ordinal))
             {
                 // We do not want to rename the same file
                 return null;
@@ -983,7 +983,7 @@ namespace Microsoft.VisualStudio.Project
         {
             //Update the include for this item.
             string include = this.ItemNode.Item.EvaluatedInclude;
-            if(String.Compare(include, newFileName, StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(include, newFileName, StringComparison.OrdinalIgnoreCase))
             {
                 this.ItemNode.Item.Xml.Include = newFileName;
             }

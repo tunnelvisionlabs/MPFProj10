@@ -141,7 +141,7 @@ namespace Microsoft.VisualStudio.Project
 
             foreach(string config in configs)
             {
-                if(String.Compare(config, projectCfgCanonicalName, StringComparison.OrdinalIgnoreCase) == 0)
+                if(String.Equals(config, projectCfgCanonicalName, StringComparison.OrdinalIgnoreCase))
                 {
                     projectCfg = this.GetProjectConfiguration(config);
                     if(projectCfg != null)
@@ -203,7 +203,7 @@ namespace Microsoft.VisualStudio.Project
                         continue;
 
                     // Skip if it isn't the group we want
-                    if(String.Compare(currentConfig.Condition.Trim(), condition, StringComparison.OrdinalIgnoreCase) != 0)
+                    if(!String.Equals(currentConfig.Condition.Trim(), condition, StringComparison.OrdinalIgnoreCase))
                         continue;
 
                     configToClone = currentConfig;
@@ -291,7 +291,7 @@ namespace Microsoft.VisualStudio.Project
             string[] configs = GetPropertiesConditionedOn(ProjectFileConstants.Configuration);
             foreach(string config in configs)
             {
-                if(String.Compare(config, name, StringComparison.OrdinalIgnoreCase) == 0)
+                if(String.Equals(config, name, StringComparison.OrdinalIgnoreCase))
                 {
                     // Create condition of config to remove
                     string condition = String.Format(CultureInfo.InvariantCulture, configString, config);
@@ -485,7 +485,7 @@ namespace Microsoft.VisualStudio.Project
                     continue;
 
                 // Skip if it isn't the group we want
-                if(String.Compare(config.Condition.Trim(), condition, StringComparison.OrdinalIgnoreCase) != 0)
+                if(!String.Equals(config.Condition.Trim(), condition, StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 // Change the name 
@@ -674,7 +674,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>The new name.</returns>
         private static string ConvertPlatformToVsProject(string oldPlatformName)
         {
-            if(String.Compare(oldPlatformName, ProjectFileValues.AnyCPU, StringComparison.OrdinalIgnoreCase) == 0)
+            if(String.Equals(oldPlatformName, ProjectFileValues.AnyCPU, StringComparison.OrdinalIgnoreCase))
             {
                 return AnyCPUPlatform;
             }

@@ -140,7 +140,7 @@ namespace Microsoft.VisualStudio.Project
                     foreach (EnvDTE.Project prj in dte.Solution.Projects)
                     {
                         //Skip this project if it is an umodeled project (unloaded)
-                        if (string.Compare(EnvDTE.Constants.vsProjectKindUnmodeled, prj.Kind, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Equals(EnvDTE.Constants.vsProjectKindUnmodeled, prj.Kind, StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
