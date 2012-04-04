@@ -52,11 +52,9 @@ namespace Microsoft.VisualStudio.Project
 
 		private FORMATETC format;
 
-		private long data;
+		private SafeGlobalAllocHandle data;
 
 		private DATADIR dataDir;
-
-		private bool isDisposed;
 		#endregion
 
 		#region properties
@@ -68,7 +66,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		internal long Data
+		internal SafeGlobalAllocHandle Data
 		{
 			get
 			{
@@ -90,19 +88,14 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The IntPtr is data allocated that should be removed. It is allocated by the ProcessSelectionData method.
 		/// </summary>
-		internal DataCacheEntry(FORMATETC fmt, IntPtr data, DATADIR dir)
+		internal DataCacheEntry(FORMATETC fmt, SafeGlobalAllocHandle data, DATADIR dir)
 		{
 			this.format = fmt;
-			this.data = (long)data;
+			this.data = data;
 			this.dataDir = dir;
 		}
 
 		#region Dispose
-		~DataCacheEntry()
-		{
-			Dispose(false);
-		}
-
 		/// <summary>
 		/// The IDispose interface Dispose method for disposing the object determinastically.
 		/// </summary>
@@ -118,19 +111,13 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="disposing"></param>
 		private void Dispose(bool disposing)
 		{
-			// Everybody can go here.
-			if(!this.isDisposed)
+			if (disposing)
 			{
-				// Synchronize calls to the Dispose simulteniously.
-				lock(Mutex)
+				SafeGlobalAllocHandle handle = this.data;
+				if (handle != null)
 				{
-					if(disposing && this.data != 0)
-					{
-						Marshal.FreeHGlobal((IntPtr)this.data);
-						this.data = 0;
-					}
-
-					this.isDisposed = true;
+					handle.Dispose();
+					data = null;
 				}
 			}
 		}
@@ -141,7 +128,7 @@ namespace Microsoft.VisualStudio.Project
 	/// Unfortunately System.Windows.Forms.IDataObject and
 	/// Microsoft.VisualStudio.OLE.Interop.IDataObject are different...
 	/// </summary>
-	internal sealed class DataObject : IDataObject
+	public sealed class DataObject : IDataObject
 	{
 		#region fields
 		internal const int DATA_S_SAMEFORMATETC = 0x00040130;
@@ -149,13 +136,13 @@ namespace Microsoft.VisualStudio.Project
 		ArrayList entries;
 		#endregion
 
-		internal DataObject()
+		public DataObject()
 		{
 			this.map = new EventSinkCollection();
 			this.entries = new ArrayList();
 		}
 
-		internal void SetData(FORMATETC format, IntPtr data)
+		public void SetData(FORMATETC format, SafeGlobalAllocHandle data)
 		{
 			this.entries.Add(new DataCacheEntry(format, data, DATADIR.DATADIR_SET));
 		}
@@ -163,10 +150,10 @@ namespace Microsoft.VisualStudio.Project
 		#region IDataObject methods
 		int IDataObject.DAdvise(FORMATETC[] e, uint adv, IAdviseSink sink, out uint cookie)
 		{
-            if (e == null)
-            {
-                throw new ArgumentNullException("e");
-            }
+			if (e == null)
+			{
+				throw new ArgumentNullException("e");
+			}
 
 			STATDATA sdata = new STATDATA();
 
@@ -207,6 +194,7 @@ namespace Microsoft.VisualStudio.Project
 			if(fmt == null || fmt.Length < 1)
 				return;
 
+			SafeGlobalAllocHandle copy = null;
 			foreach(DataCacheEntry e in this.entries)
 			{
 				if(e.Format.cfFormat == fmt[0].cfFormat /*|| fmt[0].cfFormat == InternalNativeMethods.CF_HDROP*/)
@@ -214,13 +202,18 @@ namespace Microsoft.VisualStudio.Project
 					retMedium.tymed = e.Format.tymed;
 
 					// Caller must delete the memory.
-					retMedium.unionmember = DragDropHelper.CopyHGlobal(new IntPtr(e.Data));
+					copy = DragDropHelper.CopyHGlobal(e.Data);
+					retMedium.unionmember = copy.DangerousGetHandle();
 					break;
 				}
 			}
 
-			if(m != null && m.Length > 0)
+			if (m != null && m.Length > 0)
+			{
 				m[0] = retMedium;
+				if (copy != null)
+					copy.SetHandleAsInvalid();
+			}
 		}
 
 		void IDataObject.GetDataHere(FORMATETC[] fmt, STGMEDIUM[] m)
@@ -248,12 +241,12 @@ namespace Microsoft.VisualStudio.Project
 	}
 
 	[SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-	internal static class DragDropHelper
+	public static class DragDropHelper
 	{
 #pragma warning disable 414
-		internal static readonly ushort CF_VSREFPROJECTITEMS;
-		internal static readonly ushort CF_VSSTGPROJECTITEMS;
-		internal static readonly ushort CF_VSPROJECTCLIPDESCRIPTOR;
+		public static readonly ushort CF_VSREFPROJECTITEMS;
+		public static readonly ushort CF_VSSTGPROJECTITEMS;
+		public static readonly ushort CF_VSPROJECTCLIPDESCRIPTOR;
 #pragma warning restore 414
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
@@ -357,8 +350,6 @@ namespace Microsoft.VisualStudio.Project
 			return droppedFiles;
 		}
 
-
-
 		public static string GetSourceProjectPath(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject)
 		{
 			string projectPath = null;
@@ -367,26 +358,12 @@ namespace Microsoft.VisualStudio.Project
 			if(QueryGetData(dataObject, ref fmtetc) == VSConstants.S_OK)
 			{
 				STGMEDIUM stgmedium = DragDropHelper.GetData(dataObject, ref fmtetc);
-				if(stgmedium.tymed == (uint)TYMED.TYMED_HGLOBAL)
+				if(stgmedium.tymed == (uint)TYMED.TYMED_HGLOBAL && stgmedium.unionmember != IntPtr.Zero)
 				{
 					// We are releasing the cloned hglobal here.
-					IntPtr dropInfoHandle = stgmedium.unionmember;
-					if(dropInfoHandle != IntPtr.Zero)
+					using (SafeGlobalAllocHandle dropInfoHandle = new SafeGlobalAllocHandle(stgmedium.unionmember, true))
 					{
-						try
-						{
-							string path = GetData(dropInfoHandle);
-
-							// Clone the path that we can release our memory.
-							if(!String.IsNullOrEmpty(path))
-							{
-								projectPath = String.Copy(path);
-							}
-						}
-						finally
-						{
-							Marshal.FreeHGlobal(dropInfoHandle);
-						}
+						projectPath = GetData(dropInfoHandle);
 					}
 				}
 			}
@@ -399,7 +376,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="dropHandle"></param>
 		/// <returns></returns>
-		internal static string GetData(IntPtr dropHandle)
+		internal static string GetData(SafeGlobalAllocHandle dropHandle)
 		{
 			IntPtr data = UnsafeNativeMethods.GlobalLock(dropHandle);
 			try
@@ -415,58 +392,55 @@ namespace Microsoft.VisualStudio.Project
 			{
 				if(data != null)
 				{
-					UnsafeNativeMethods.GlobalUnLock(data);
+					UnsafeNativeMethods.GlobalUnlock(dropHandle);
 				}
 			}
 
 			return null;
 		}
 
-		internal static IntPtr CopyHGlobal(IntPtr data)
+		internal static SafeGlobalAllocHandle CopyHGlobal(SafeGlobalAllocHandle data)
 		{
 			IntPtr src = UnsafeNativeMethods.GlobalLock(data);
-			int size = UnsafeNativeMethods.GlobalSize(data);
-			IntPtr ptr = Marshal.AllocHGlobal(size);
+			UIntPtr size = UnsafeNativeMethods.GlobalSize(data);
+			SafeGlobalAllocHandle ptr = UnsafeNativeMethods.GlobalAlloc(0, size);
 			IntPtr buffer = UnsafeNativeMethods.GlobalLock(ptr);
 
 			try
 			{
-				for(int i = 0; i < size; i++)
-				{
-					byte val = Marshal.ReadByte(new IntPtr((long)src + i));
-
-					Marshal.WriteByte(new IntPtr((long)buffer + i), val);
-				}
+				UnsafeNativeMethods.MoveMemory(buffer, src, size);
 			}
 			finally
 			{
 				if(buffer != IntPtr.Zero)
 				{
-					UnsafeNativeMethods.GlobalUnLock(buffer);
+					UnsafeNativeMethods.GlobalUnlock(ptr);
 				}
 
 				if(src != IntPtr.Zero)
 				{
-					UnsafeNativeMethods.GlobalUnLock(src);
+					UnsafeNativeMethods.GlobalUnlock(data);
 				}
 			}
+
 			return ptr;
 		}
 
-		internal static void CopyStringToHGlobal(string s, IntPtr data, int bufferSize)
+		public static void CopyStringToHGlobal(string s, IntPtr data, int bufferSize)
 		{
-			Int16 nullTerminator = 0;
-			int dwSize = Marshal.SizeOf(nullTerminator);
+			if (s == null)
+				throw new ArgumentNullException("s");
+			if (data == null)
+				throw new ArgumentNullException("data");
+			if (bufferSize < 0)
+				throw new ArgumentOutOfRangeException("bufferSize");
 
-			if((s.Length + 1) * Marshal.SizeOf(s[0]) > bufferSize)
-				throw new System.IO.InternalBufferOverflowException();
-			// IntPtr memory already locked...
-			for(int i = 0, len = s.Length; i < len; i++)
-			{
-				Marshal.WriteInt16(data, i * dwSize, s[i]);
-			}
-			// NULL terminate it
-			Marshal.WriteInt16(new IntPtr((long)data + (s.Length * dwSize)), nullTerminator);
+			byte[] stringData = System.Text.Encoding.Unicode.GetBytes(s);
+			if (bufferSize < stringData.Length + 2)
+				throw new ArgumentException();
+
+			Marshal.Copy(stringData, 0, data, stringData.Length);
+			Marshal.WriteInt16(data, stringData.Length, 0);
 		}
 
 	} // end of dragdrophelper

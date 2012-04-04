@@ -140,12 +140,14 @@
     <Compile Include="FileDocumentManager.cs" />
     <Compile Include="FileNode.cs" />
     <Compile Include="FolderNode.cs" />
+    <Compile Include="GlobalAllocFlags.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HierarchyNode.cs" />
     <Compile Include="IDEBuildLogger.cs" />
     <Compile Include="ImageHandler.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="LocalizableProperties.cs" />
+    <Compile Include="SafeGlobalAllocHandle.cs" />
     <Compile Include="UIThread.cs" />
     <Compile Include="VisualStudio.Project.cs" />
     <Compile Include="ConnectionPointContainer.cs" />

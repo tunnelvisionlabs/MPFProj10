@@ -14,16 +14,26 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.VisualStudio.Project
 {
-	internal static class UnsafeNativeMethods
+	internal static partial class UnsafeNativeMethods
 	{
-		[DllImport(ExternDll.Kernel32, EntryPoint = "GlobalLock", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-		internal static extern IntPtr GlobalLock(IntPtr h);
+		[DllImport(ExternDll.Kernel32, SetLastError = true, EntryPoint = "RtlMoveMemory")]
+		internal static extern void MoveMemory(IntPtr destination, IntPtr source, UIntPtr size);
 
-		[DllImport(ExternDll.Kernel32, EntryPoint = "GlobalUnlock", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-		internal static extern bool GlobalUnLock(IntPtr h);
+		[DllImport(ExternDll.Kernel32, SetLastError = true)]
+		internal static extern SafeGlobalAllocHandle GlobalAlloc(GlobalAllocFlags flags, UIntPtr size);
 
-		[DllImport(ExternDll.Kernel32, EntryPoint = "GlobalSize", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-		internal static extern int GlobalSize(IntPtr h);
+		[DllImport(ExternDll.Kernel32, SetLastError = true)]
+		internal static extern IntPtr GlobalFree(IntPtr handle);
+
+		[DllImport(ExternDll.Kernel32, SetLastError = true)]
+		internal static extern IntPtr GlobalLock(SafeGlobalAllocHandle h);
+
+		[DllImport(ExternDll.Kernel32, SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		internal static extern bool GlobalUnlock(SafeGlobalAllocHandle h);
+
+		[DllImport(ExternDll.Kernel32, SetLastError = true)]
+		internal static extern UIntPtr GlobalSize(SafeGlobalAllocHandle h);
 
 		[DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Unicode)]
 		internal static extern int OleSetClipboard(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject);

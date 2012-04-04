@@ -425,8 +425,8 @@ namespace Microsoft.VisualStudio.Project
 				}
 
 				// Add the project items first.
-				IntPtr ptrToItems = this.PackageSelectionData(sb, false);
-				if(ptrToItems == IntPtr.Zero)
+				SafeGlobalAllocHandle ptrToItems = this.PackageSelectionData(sb, false);
+				if(ptrToItems == null)
 				{
 					return null;
 				}
@@ -436,9 +436,9 @@ namespace Microsoft.VisualStudio.Project
 				dataObject.SetData(fmt, ptrToItems);
 
 				// Now add the project path that sourced data. We just write the project file path.
-				IntPtr ptrToProjectPath = this.PackageSelectionData(new StringBuilder(this.GetMkDocument()), true);
+				SafeGlobalAllocHandle ptrToProjectPath = this.PackageSelectionData(new StringBuilder(this.GetMkDocument()), true);
 
-				if(ptrToProjectPath != IntPtr.Zero)
+				if(ptrToProjectPath != null)
 				{
 					dataObject.SetData(DragDropHelper.CreateFormatEtc(DragDropHelper.CF_VSPROJECTCLIPDESCRIPTOR), ptrToProjectPath);
 				}
@@ -1121,11 +1121,11 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private IntPtr PackageSelectionData(StringBuilder sb, bool addEndFormatDelimiter)
+		private SafeGlobalAllocHandle PackageSelectionData(StringBuilder sb, bool addEndFormatDelimiter)
 		{
 			if(sb == null || sb.ToString().Length == 0 || this.ItemsDraggedOrCutOrCopied.Count == 0)
 			{
-				return IntPtr.Zero;
+				return null;
 			}
 
 			// Double null at end.
@@ -1145,7 +1145,7 @@ namespace Microsoft.VisualStudio.Project
 			Int16 wideChar = 0;
 			int dwChar = Marshal.SizeOf(wideChar);
 			int structSize = dwSize + ((sb.Length + 1) * dwChar);
-			IntPtr ptr = Marshal.AllocHGlobal(structSize);
+			SafeGlobalAllocHandle ptr = UnsafeNativeMethods.GlobalAlloc(0, (UIntPtr)structSize);
 			df.pFiles = dwSize;
 			df.fWide = 1;
 			IntPtr data = IntPtr.Zero;
@@ -1159,7 +1159,7 @@ namespace Microsoft.VisualStudio.Project
 			finally
 			{
 				if(data != IntPtr.Zero)
-					UnsafeNativeMethods.GlobalUnLock(data);
+					UnsafeNativeMethods.GlobalUnlock(ptr);
 			}
 
 			return ptr;
