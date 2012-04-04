@@ -204,11 +204,63 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return vsProject.References as ReferencesEvents;
+				// this can't return null or a NullReferenceException in Microsoft.VisualStudio.Xaml will take down the IDE (VS2010)
+				ReferencesEvents events = vsProject.References as ReferencesEvents;
+				return events ?? EmptyReferencesEvents.Instance;
 			}
 		}
 
 		#endregion
 	}
 
+	public class EmptyReferencesEvents : ConnectionPointContainer, IEventSource<_dispReferencesEvents>, ReferencesEvents
+	{
+		public static readonly EmptyReferencesEvents Instance = new EmptyReferencesEvents();
+
+		public EmptyReferencesEvents()
+		{
+			AddEventSource<_dispReferencesEvents>(this as IEventSource<_dispReferencesEvents>);
+		}
+
+		event _dispReferencesEvents_ReferenceAddedEventHandler _dispReferencesEvents_Event.ReferenceAdded
+		{
+			add
+			{
+			}
+
+			remove
+			{
+			}
+		}
+
+		event _dispReferencesEvents_ReferenceChangedEventHandler _dispReferencesEvents_Event.ReferenceChanged
+		{
+			add
+			{
+			}
+
+			remove
+			{
+			}
+		}
+
+		event _dispReferencesEvents_ReferenceRemovedEventHandler _dispReferencesEvents_Event.ReferenceRemoved
+		{
+			add
+			{
+			}
+
+			remove
+			{
+			}
+		}
+
+		void IEventSource<_dispReferencesEvents>.OnSinkAdded(_dispReferencesEvents sink)
+		{
+		}
+
+		void IEventSource<_dispReferencesEvents>.OnSinkRemoved(_dispReferencesEvents sink)
+		{
+		}
+	}
 }

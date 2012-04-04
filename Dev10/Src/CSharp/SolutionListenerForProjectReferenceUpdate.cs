@@ -112,8 +112,11 @@ namespace Microsoft.VisualStudio.Project
 				foreach(ProjectReferenceNode projectReference in projectReferences)
 				{
 					ProjectNode projectMgr = projectReference.ProjectMgr;
-					IReferenceContainer refContainer = projectMgr.GetReferenceContainer();
 					projectReference.Remove(false);
+
+					IReferenceContainer refContainer = projectMgr.GetReferenceContainer();
+					if (refContainer == null)
+						continue;
 
 					VSCOMPONENTSELECTORDATA selectorData = new VSCOMPONENTSELECTORDATA();
 					selectorData.type = VSCOMPONENTTYPE.VSCOMPONENTTYPE_Project;
@@ -183,12 +186,13 @@ namespace Microsoft.VisualStudio.Project
 					if(provider != null)
 					{
 						IReferenceContainer referenceContainer = provider.GetReferenceContainer();
-
-						Debug.Assert(referenceContainer != null, "Could not found the References virtual node");
-						ProjectReferenceNode projectReferenceNode = GetProjectReferenceOnNodeForHierarchy(referenceContainer.EnumReferences(), inputHierarchy);
-						if(projectReferenceNode != null)
+						if (referenceContainer != null)
 						{
-							projectReferences.Add(projectReferenceNode);
+							ProjectReferenceNode projectReferenceNode = GetProjectReferenceOnNodeForHierarchy(referenceContainer.EnumReferences(), inputHierarchy);
+							if (projectReferenceNode != null)
+							{
+								projectReferences.Add(projectReferenceNode);
+							}
 						}
 					}
 				}
