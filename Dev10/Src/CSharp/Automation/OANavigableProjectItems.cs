@@ -202,6 +202,16 @@ namespace Microsoft.VisualStudio.Project.Automation
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Adds a project item which is a link to a file outside the project directory structure.
+        /// </summary>
+        /// <param name="fileName">The file to be linked to the project.</param>
+        /// <returns>A ProjectItem object.</returns>
+        public virtual EnvDTE.ProjectItem AddFileLink(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
 		/// <summary>
 		/// Get Project Item from index
 		/// </summary>

@@ -3417,7 +3417,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="parentNode">The parent of the new fileNode</param>
         /// <param name="fileName">The file name</param>
-        protected virtual void AddNewFileNodeToHierarchy(HierarchyNode parentNode, string fileName)
+        protected virtual void AddNewFileNodeToHierarchy(HierarchyNode parentNode, string fileName, string linkPath)
         {
             if (parentNode == null)
             {
@@ -3443,6 +3443,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 //Create and add new filenode to the project
                 child = this.CreateFileNode(fileName);
+                child.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
             }
 
             parentNode.AddChild(child);
@@ -4705,16 +4706,10 @@ namespace Microsoft.VisualStudio.Project
             }
             Debug.Assert(n != null, "We should at this point have either a ProjectNode or FolderNode or a FileNode as a container for the new filenodes");
 
-            // handle link and runwizard operations at this point
-            switch (op)
+            if (op == VSADDITEMOPERATION.VSADDITEMOP_RUNWIZARD)
             {
-                case VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE:
-                    // we do not support this right now
-                    throw new NotImplementedException("VSADDITEMOP_LINKTOFILE");
-
-                case VSADDITEMOPERATION.VSADDITEMOP_RUNWIZARD:
-                    result[0] = this.RunWizard(n, itemName, files[0], dlgOwner);
-                    return VSConstants.S_OK;
+                result[0] = this.RunWizard(n, itemName, files[0], dlgOwner);
+                return VSConstants.S_OK;
             }
 
             string[] actualFiles = new string[files.Length];
@@ -4746,6 +4741,7 @@ namespace Microsoft.VisualStudio.Project
                         }
                         break;
                     case VSADDITEMOPERATION.VSADDITEMOP_OPENFILE:
+                    case VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE:
                         {
                             string fileName = Path.GetFileName(file);
                             newFileName = Path.Combine(baseDir, fileName);
@@ -4806,7 +4802,7 @@ namespace Microsoft.VisualStudio.Project
                 }
 
                 // If the file to be added is not in the same path copy it.
-                if (NativeMethods.IsSamePath(file, newFileName) == false)
+                if (op != VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE && NativeMethods.IsSamePath(file, newFileName) == false)
                 {
                     if (!overwrite && File.Exists(newFileName))
                     {
@@ -4854,10 +4850,17 @@ namespace Microsoft.VisualStudio.Project
                 {
                     this.OverwriteExistingItem(child);
                 }
+                else if (op == VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE)
+                {
+                    Url baseUrl = new Url(this.ProjectFolder + Path.DirectorySeparatorChar);
+                    string relativePath = baseUrl.MakeRelative(new Url(file));
+                    string linkPath = baseUrl.MakeRelative(new Url(newFileName));
+                    this.AddNewFileNodeToHierarchy(n, relativePath, linkPath);
+                }
                 else
                 {
                     //Add new filenode/dependentfilenode
-                    this.AddNewFileNodeToHierarchy(n, newFileName);
+                    this.AddNewFileNodeToHierarchy(n, newFileName, null);
                 }
 
                 result[0] = VSADDRESULT.ADDRESULT_Success;
@@ -5851,6 +5854,19 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>Added node</returns>
         private HierarchyNode AddIndependentFileNode(MSBuild.ProjectItem item)
         {
+            // Make sure the item is within the project folder hierarchy. If not, link it.
+            string linkPath = item.GetMetadataValue(ProjectFileConstants.Link);
+            if (String.IsNullOrEmpty(linkPath))
+            {
+                string projectFolder = new Uri(this.ProjectFolder).LocalPath;
+                string itemPath = new Uri(Path.Combine(this.ProjectFolder, item.EvaluatedInclude)).LocalPath;
+                if (!itemPath.StartsWith(projectFolder, StringComparison.OrdinalIgnoreCase))
+                {
+                    linkPath = Path.GetFileName(item.EvaluatedInclude);
+                    item.SetMetadataValue(ProjectFileConstants.Link, linkPath);
+                }
+            }
+
             HierarchyNode currentParent = GetItemParentNode(item);
             return AddFileNodeToNode(item, currentParent);
         }
@@ -5897,6 +5913,9 @@ namespace Microsoft.VisualStudio.Project
         {
             HierarchyNode currentParent = this;
             string strPath = item.EvaluatedInclude;
+            string link = item.GetMetadataValue(ProjectFileConstants.Link);
+            if (!string.IsNullOrEmpty(link))
+                strPath = link;
 
             strPath = Path.GetDirectoryName(strPath);
             if (strPath.Length > 0)

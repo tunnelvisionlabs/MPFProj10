@@ -785,6 +785,15 @@ namespace Microsoft.VisualStudio.Project
 				case __VSHPROPID.VSHPROPID_ExtObject:
 					result = GetAutomationObject();
 					break;
+
+                case __VSHPROPID.VSHPROPID_OverlayIconIndex:
+                    if (this.ItemNode != null)
+                    {
+                        string link = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
+                        if (!string.IsNullOrEmpty(link))
+                            return VSOVERLAYICON.OVERLAYICON_SHORTCUT;
+                    }
+                    break;
 			}
 
 			__VSHPROPID2 id2 = (__VSHPROPID2)propId;
@@ -1225,7 +1234,7 @@ namespace Microsoft.VisualStudio.Project
 			if(addType == HierarchyAddType.AddNewItem)
 				uiFlags = (uint)(__VSADDITEMFLAGS.VSADDITEM_AddNewItems | __VSADDITEMFLAGS.VSADDITEM_SuggestTemplateName | __VSADDITEMFLAGS.VSADDITEM_AllowHiddenTreeView);
 			else
-				uiFlags = (uint)(__VSADDITEMFLAGS.VSADDITEM_AddExistingItems | __VSADDITEMFLAGS.VSADDITEM_AllowMultiSelect | __VSADDITEMFLAGS.VSADDITEM_AllowStickyFilter);
+				uiFlags = (uint)(__VSADDITEMFLAGS.VSADDITEM_AddExistingItems | __VSADDITEMFLAGS.VSADDITEM_AllowMultiSelect | __VSADDITEMFLAGS.VSADDITEM_AllowStickyFilter | __VSADDITEMFLAGS.VSADDITEM_ProjectHandlesLinks);
 
 			ErrorHandler.ThrowOnFailure(addItemDialog.AddProjectItemDlg(this.hierarchyId, ref projectGuid, project, uiFlags, null, null, ref strBrowseLocations, ref strFilter, out iDontShowAgain)); /*&fDontShowAgain*/
 

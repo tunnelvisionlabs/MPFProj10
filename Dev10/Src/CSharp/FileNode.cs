@@ -500,8 +500,17 @@ namespace Microsoft.VisualStudio.Project
             {
                 if((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
                 {
-                    result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
-                    return VSConstants.S_OK;
+                    string linkPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
+                    if (string.IsNullOrEmpty(linkPath))
+                    {
+                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        return VSConstants.S_OK;
+                    }
+                    else
+                    {
+                        result |= QueryStatusResult.NOTSUPPORTED;
+                        return VSConstants.S_OK;
+                    }
                 }
                 if((VsCommands2K)cmd == VsCommands2K.RUNCUSTOMTOOL)
                 {
@@ -555,13 +564,20 @@ namespace Microsoft.VisualStudio.Project
             bool isSamePath = NativeMethods.IsSamePath(newCanonicalDirectoryName, oldCanonicalDirectoryName);
             bool isSameFile = NativeMethods.IsSamePath(newFilePath, this.Url);
 
-            // Currently we do not support if the new directory is located outside the project cone
+			string linkPath = null;
             string projectCannonicalDirecoryName = new Uri(this.ProjectMgr.ProjectFolder).LocalPath;
             projectCannonicalDirecoryName = projectCannonicalDirecoryName.TrimEnd(Path.DirectorySeparatorChar);
             if(!isSamePath && newCanonicalDirectoryName.IndexOf(projectCannonicalDirecoryName, StringComparison.OrdinalIgnoreCase) == -1)
             {
-                errorMessage = String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.LinkedItemsAreNotSupported, CultureInfo.CurrentUICulture), Path.GetFileNameWithoutExtension(newFilePath));
-                throw new InvalidOperationException(errorMessage);
+                // Link the new file into the same location in the project hierarchy it was before.
+                string oldRelPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
+                if (String.IsNullOrEmpty(oldRelPath))
+                {
+                    oldRelPath = this.ItemNode.GetMetadata(ProjectFileConstants.Include);
+                }
+
+                newDirectoryName = Path.GetDirectoryName(oldRelPath);
+                linkPath = Path.Combine(newDirectoryName, Path.GetFileName(newFilePath));
             }
 
             //Get target container
@@ -613,7 +629,8 @@ namespace Microsoft.VisualStudio.Project
                 {
                     // The path of the file is changed or its parent is changed; in both cases we have
                     // to rename the item.
-                    this.RenameFileNode(oldName, newFilePath, targetContainer.ID);
+                    this.RenameFileNode(oldName, newFilePath, linkPath, targetContainer.ID);
+                    this.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
                     OnInvalidateItems(this.Parent);
                 }
             }
@@ -703,7 +720,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="newParentId">The new parent id of the item.</param>
         /// <returns>The newly added FileNode.</returns>
         /// <remarks>While a new node will be used to represent the item, the underlying MSBuild item will be the same and as a result file properties saved in the project file will not be lost.</remarks>
-        protected virtual FileNode RenameFileNode(string oldFileName, string newFileName, uint newParentId)
+        protected virtual FileNode RenameFileNode(string oldFileName, string newFileName, string linkPath, uint newParentId)
         {
             if(string.Equals(oldFileName, newFileName, StringComparison.Ordinal))
             {
@@ -721,7 +738,8 @@ namespace Microsoft.VisualStudio.Project
             file[0] = newFileName;
             VSADDRESULT[] result = new VSADDRESULT[1];
             Guid emptyGuid = Guid.Empty;
-            ErrorHandler.ThrowOnFailure(this.ProjectMgr.AddItemWithSpecific(newParentId, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
+            VSADDITEMOPERATION op = (String.IsNullOrEmpty(linkPath) ? VSADDITEMOPERATION.VSADDITEMOP_OPENFILE : VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE);
+            ErrorHandler.ThrowOnFailure(this.ProjectMgr.AddItemWithSpecific(newParentId, op, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
             FileNode childAdded = this.ProjectMgr.FindChild(newFileName) as FileNode;
             Debug.Assert(childAdded != null, "Could not find the renamed item in the hierarchy");
             // Update the itemid to the newly added.
@@ -743,6 +761,8 @@ namespace Microsoft.VisualStudio.Project
             childAdded.ItemNode.Item.Xml.Include = newInclude;
             if(!string.IsNullOrEmpty(dependentOf))
                 childAdded.ItemNode.SetMetadata(ProjectFileConstants.DependentUpon, dependentOf);
+            if (!string.IsNullOrEmpty(linkPath))
+                childAdded.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
             childAdded.ItemNode.RefreshProperties();
 
             //Update the new document in the RDT.
@@ -823,7 +843,11 @@ namespace Microsoft.VisualStudio.Project
 
         protected override bool CanDeleteItem(__VSDELETEITEMOPERATION deleteOperation)
         {
-            if(deleteOperation == __VSDELETEITEMOPERATION.DELITEMOP_DeleteFromStorage)
+            string linkPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
+            __VSDELETEITEMOPERATION supportedOp = String.IsNullOrEmpty(linkPath) ?
+                __VSDELETEITEMOPERATION.DELITEMOP_DeleteFromStorage : __VSDELETEITEMOPERATION.DELITEMOP_RemoveFromProject;
+
+            if (deleteOperation == supportedOp)
             {
                 return this.ProjectMgr.CanProjectDeleteItems;
             }
@@ -972,7 +996,7 @@ namespace Microsoft.VisualStudio.Project
 
         private FileNode RenameFileNode(string oldFileName, string newFileName)
         {
-            return this.RenameFileNode(oldFileName, newFileName, this.Parent.ID);
+            return this.RenameFileNode(oldFileName, newFileName, null, this.Parent.ID);
         }
 
         /// <summary>
