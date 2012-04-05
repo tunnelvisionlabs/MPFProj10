@@ -179,16 +179,7 @@ namespace Microsoft.VisualStudio.Project
             string condition = String.Format(CultureInfo.InvariantCulture, ConfigProvider.configString, this.ConfigName);
 
             SetPropertyUnderCondition(propertyName, propertyValue, condition);
-            
-            // property cache will need to be updated
-            this.currentConfig = null;
-           
-            // Signal the output groups that something is changed
-            foreach(OutputGroup group in this.OutputGroups)
-            {
-                group.InvalidateGroup();
-            }
-            this.project.SetProjectFileDirty(true);
+            Invalidate();
 
             return;
         }
@@ -236,6 +227,20 @@ namespace Microsoft.VisualStudio.Project
             }
 
             newGroup.AddProperty(propertyName, propertyValue);
+        }
+
+        public virtual void Invalidate()
+        {
+            // property cache will need to be updated
+            this.currentConfig = null;
+
+            // Signal the output groups that something is changed
+            foreach (OutputGroup group in this.OutputGroups)
+            {
+                group.InvalidateGroup();
+            }
+
+            this.project.SetProjectFileDirty(true);
         }
 
         /// <summary>
