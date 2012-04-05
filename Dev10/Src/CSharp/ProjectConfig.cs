@@ -11,6 +11,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -87,7 +88,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public IList<OutputGroup> OutputGroups
+        public ReadOnlyCollection<OutputGroup> OutputGroups
         {
             get
             {
@@ -112,7 +113,7 @@ namespace Microsoft.VisualStudio.Project
                     }
 
                 }
-                return this.outputGroups;
+                return this.outputGroups.AsReadOnly();
             }
         }
         #endregion
