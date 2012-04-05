@@ -129,6 +129,8 @@
     <Compile Include="ComReferenceNode.cs" />
     <Compile Include="ConfigProvider.cs" />
     <Compile Include="ConfigurationProperties.cs" />
+    <Compile Include="CopyToOutputDirectoryBehavior.cs" />
+    <Compile Include="CopyToOutputDirectoryBehaviorConverter.cs" />
     <Compile Include="DataObject.cs" />
     <Compile Include="DependentFileNode.cs" />
     <Compile Include="DesignPropertyDescriptor.cs" />
