@@ -307,7 +307,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		protected void PrepareProjectConfig()
 		{
 			object[] ppUnk = new object[2];
-			ProjectConfig pjc = new ProjectConfig(projectNode, "manualSetConfigArgument");
+            ProjectConfig pjc = new ProjectConfig(projectNode, "manualSetConfigArgument", "manualSetPlatformArgument");
 			ppUnk[0] = pjc;
 			generalPropertyPage.SetObjects(1, ppUnk);
 		}

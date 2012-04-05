@@ -801,7 +801,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets the configuration provider.
         /// </summary>
-        protected ConfigProvider ConfigProvider
+        public ConfigProvider ConfigProvider
         {
             get
             {
@@ -2486,11 +2486,11 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="config"></param>
         /// <param name="cleanBuild"></param>
-        public virtual void PrepareBuild(string config, bool cleanBuild)
+        public virtual void PrepareBuild(string config, string platform, bool cleanBuild)
         {
             if (this.buildIsPrepared && !cleanBuild) return;
 
-            ProjectOptions options = this.GetProjectOptions(config);
+            ProjectOptions options = this.GetProjectOptions(config, platform);
             string outputPath = Path.GetDirectoryName(options.OutputAssembly);
 
             if (cleanBuild && this.currentConfig.Targets.ContainsKey(MsBuildTarget.Clean))
@@ -2511,7 +2511,7 @@ namespace Microsoft.VisualStudio.Project
         /// Do the build by invoking msbuild
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "vsopts")]
-        public virtual MSBuildResult Build(uint vsopts, string config, IVsOutputWindowPane output, string target)
+        public virtual MSBuildResult Build(uint vsopts, string config, string platform, IVsOutputWindowPane output, string target)
         {
             lock (ProjectNode.BuildLock)
             {
@@ -2521,7 +2521,7 @@ namespace Microsoft.VisualStudio.Project
 
                 try
                 {
-                    this.SetBuildConfigurationProperties(config);
+                    this.SetBuildConfigurationProperties(config, platform);
 
                     result = this.InvokeMsBuild(target);
                 }
@@ -2544,10 +2544,10 @@ namespace Microsoft.VisualStudio.Project
         /// Do the build by invoking msbuild
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "vsopts")]
-        internal virtual void BuildAsync(uint vsopts, string config, IVsOutputWindowPane output, string target, Action<MSBuildResult, string> uiThreadCallback)
+        internal virtual void BuildAsync(uint vsopts, string config, string platform, IVsOutputWindowPane output, string target, Action<MSBuildResult, string> uiThreadCallback)
         {
             this.BuildPrelude(output);
-            this.SetBuildConfigurationProperties(config);
+            this.SetBuildConfigurationProperties(config, platform);
             this.DoMSBuildSubmission(BuildKind.Async, target, uiThreadCallback);
         }
 
@@ -2608,15 +2608,26 @@ namespace Microsoft.VisualStudio.Project
             return;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        public virtual ProjectOptions GetProjectOptions(string config = null)
+        public ProjectOptions GetProjectOptions()
         {
+            return GetProjectOptions(null, null);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+        public virtual ProjectOptions GetProjectOptions(string config, string platform)
+        {
+            if (!string.IsNullOrEmpty(config) && string.IsNullOrEmpty(platform))
+                throw new ArgumentException();
+            if (string.IsNullOrEmpty(config) && !string.IsNullOrEmpty(platform))
+                throw new ArgumentException();
+
 			if (string.IsNullOrEmpty(config))
 			{
 				EnvDTE.Project automationObject = this.GetAutomationObject() as EnvDTE.Project;
                 try
                 {
                     config = Utilities.GetActiveConfigurationName(automationObject);
+                    platform = Utilities.GetActivePlatformName(automationObject);
                 }
                 catch (InvalidOperationException)
                 {
@@ -2628,11 +2639,16 @@ namespace Microsoft.VisualStudio.Project
 				}
 			}
 
-			if (this.options != null && String.Equals(this.options.Config, config, StringComparison.OrdinalIgnoreCase))
-				return this.options;
+            if (this.options != null
+                && string.Equals(this.options.Config, config, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(this.options.Platform, platform, StringComparison.OrdinalIgnoreCase))
+            {
+                return this.options;
+            }
 
             ProjectOptions options = CreateProjectOptions();
 			options.Config = config;
+            options.Platform = platform;
 
 			string targetFrameworkMoniker = GetProjectProperty("TargetFrameworkMoniker", false);
 
@@ -2656,7 +2672,7 @@ namespace Microsoft.VisualStudio.Project
 
             options.GenerateExecutable = true;
 
-            this.SetConfiguration(config);
+            this.SetConfiguration(config, platform);
 
             string outputPath = this.GetOutputPath(this.currentConfig);
             if (!String.IsNullOrEmpty(outputPath))
@@ -2670,7 +2686,7 @@ namespace Microsoft.VisualStudio.Project
             options.ModuleKind = ModuleKindFlags.ConsoleApplication;
 
             options.RootNamespace = GetProjectProperty(ProjectFileConstants.RootNamespace, false);
-            options.OutputAssembly = outputPath + this.GetAssemblyName(config);
+            options.OutputAssembly = outputPath + this.GetAssemblyName(config, platform);
 
             string outputtype = GetProjectProperty(ProjectFileConstants.OutputType, false);
             if (!string.IsNullOrEmpty(outputtype))
@@ -2858,9 +2874,9 @@ namespace Microsoft.VisualStudio.Project
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Attr")]
         [SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bool")]
-        public virtual bool GetBoolAttr(string config, string name)
+        public virtual bool GetBoolAttr(string config, string platform, string name)
         {
-            this.SetConfiguration(config);
+            this.SetConfiguration(config, platform);
             return this.GetBoolAttr(this.currentConfig, name);
         }
 
@@ -2869,9 +2885,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="config">the matching configuration in the msbuild file</param>
         /// <returns>assembly name</returns>
-        public virtual string GetAssemblyName(string config)
+        public virtual string GetAssemblyName(string config, string platform)
         {
-            this.SetConfiguration(config);
+            this.SetConfiguration(config, platform);
             return GetAssemblyName(this.currentConfig);
         }
 
@@ -3459,19 +3475,19 @@ namespace Microsoft.VisualStudio.Project
         /// Set configuration properties for a specific configuration
         /// </summary>
         /// <param name="config">configuration name</param>
-        protected virtual void SetBuildConfigurationProperties(string config)
+        protected virtual void SetBuildConfigurationProperties(string config, string platform)
         {
             ProjectOptions options = null;
 
-            if (!String.IsNullOrEmpty(config))
+            if (!string.IsNullOrEmpty(config) && !string.IsNullOrEmpty(platform))
             {
-                options = this.GetProjectOptions(config);
+                options = this.GetProjectOptions(config, platform);
             }
 
             if (options != null && this.buildProject != null)
             {
                 // Make sure the project configuration is set properly
-                this.SetConfiguration(config);
+                this.SetConfiguration(config, platform);
             }
         }
 
@@ -3656,7 +3672,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Factory method for configuration provider
         /// </summary>
-        /// <returns>Configuration provider created</returns>
+        /// <returns>Non-null configuration provider created</returns>
         protected virtual ConfigProvider CreateConfigProvider()
         {
             return new ConfigProvider(this);
@@ -4107,7 +4123,7 @@ namespace Microsoft.VisualStudio.Project
 
             EnvDTE.Project automationObject = this.GetAutomationObject() as EnvDTE.Project;
 
-            this.SetConfiguration(Utilities.GetActiveConfigurationName(automationObject));
+            this.SetConfiguration(Utilities.GetActiveConfigurationName(automationObject), Utilities.GetActivePlatformName(automationObject));
         }
 
         /// <summary>
@@ -4116,12 +4132,16 @@ namespace Microsoft.VisualStudio.Project
         /// which are based on the $(Configuration) property.
         /// </summary>
         /// <param name="config">Configuration name</param>
-        public virtual void SetConfiguration(string config)
+        public virtual void SetConfiguration(string config, string platform)
         {
             if (config == null)
-            {
                 throw new ArgumentNullException("config");
-            }
+            if (platform == null)
+                throw new ArgumentNullException("platform");
+            if (string.IsNullOrEmpty(config))
+                throw new ArgumentException("config cannot be null or empty");
+            if (string.IsNullOrEmpty(platform))
+                throw new ArgumentException("platform cannot be null or empty");
 
             // Can't ask for the active config until the project is opened, so do nothing in that scenario
             if (!projectOpened)
@@ -4133,16 +4153,21 @@ namespace Microsoft.VisualStudio.Project
             {
                 EnvDTE.Project automationObject = this.GetAutomationObject() as EnvDTE.Project;
                 string currentConfigName = Utilities.GetActiveConfigurationName(automationObject);
-                bool configsAreEqual = String.Equals(currentConfigName, config, StringComparison.OrdinalIgnoreCase);
+                string currentPlatformName = Utilities.GetActivePlatformName(automationObject);
+                bool configsAreEqual =
+                    string.Equals(currentConfigName, config, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(currentPlatformName, platform, StringComparison.OrdinalIgnoreCase);
 
                 if (configsAreEqual)
                 {
                     return;
                 }
+
                 throw new InvalidOperationException("Cannot change configurations during a build.");
             }
 
             bool propertiesChanged = this.buildProject.SetGlobalProperty(ProjectFileConstants.Configuration, config);
+            propertiesChanged |= this.buildProject.SetGlobalProperty(ProjectFileConstants.Platform, ConfigProvider.GetPlatformPropertyFromPlatformName(platform));
             if (this.currentConfig == null || propertiesChanged)
             {
                 this.currentConfig = this.buildProject.CreateProjectInstance();
@@ -4358,6 +4383,7 @@ namespace Microsoft.VisualStudio.Project
             this.buildProject.SetGlobalProperty(GlobalProperty.Configuration.ToString(), name);
 
             // If the platform is "Any CPU" then it should be set to AnyCPU, since that is the property value in MsBuild terms.
+            platform = ConfigProvider.GetPlatformPropertyFromPlatformName(platform);
             if (String.Equals(platform, ConfigProvider.AnyCPUPlatform, StringComparison.Ordinal))
             {
                 platform = ProjectFileValues.AnyCPU;
@@ -4389,7 +4415,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Resumes MSBuild.
         /// </summary>
-        public void ResumeMSBuild(string config, IVsOutputWindowPane output, string target)
+        public void ResumeMSBuild(string config, string platform, IVsOutputWindowPane output, string target)
         {
             this.suspendMSBuildCounter--;
 
@@ -4397,7 +4423,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 try
                 {
-                    this.Build(config, output, target);
+                    this.Build(config, platform, output, target);
                 }
                 finally
                 {
@@ -4409,9 +4435,9 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Resumes MSBuild.
         /// </summary>
-        public void ResumeMSBuild(string config, string target)
+        public void ResumeMSBuild(string config, string platform, string target)
         {
-            this.ResumeMSBuild(config, null, target);
+            this.ResumeMSBuild(config, platform, null, target);
         }
 
         /// <summary>
@@ -4419,13 +4445,13 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public void ResumeMSBuild(string target)
         {
-            this.ResumeMSBuild(String.Empty, null, target);
+            this.ResumeMSBuild(string.Empty, string.Empty, null, target);
         }
 
         /// <summary>
         /// Calls MSBuild if it is not suspended. If it is suspended then it will remember to call when msbuild is resumed.
         /// </summary>
-        public MSBuildResult CallMSBuild(string config, IVsOutputWindowPane output, string target)
+        public MSBuildResult CallMSBuild(string config, string platform, IVsOutputWindowPane output, string target)
         {
             if (this.suspendMSBuildCounter > 0)
             {
@@ -4435,16 +4461,16 @@ namespace Microsoft.VisualStudio.Project
             }
             else
             {
-                return this.Build(config, output, target);
+                return this.Build(config, platform, output, target);
             }
         }
 
         /// <summary>
         /// Overloaded method. Calls MSBuild if it is not suspended. Does not log on the outputwindow. If it is suspended then it will remeber to call when msbuild is resumed.
         /// </summary>
-        public MSBuildResult CallMSBuild(string config, string target)
+        public MSBuildResult CallMSBuild(string config, string platform, string target)
         {
-            return this.CallMSBuild(config, null, target);
+            return this.CallMSBuild(config, platform, null, target);
         }
 
         /// <summary>
@@ -4452,7 +4478,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public MSBuildResult CallMSBuild(string target)
         {
-            return this.CallMSBuild(String.Empty, null, target);
+            return this.CallMSBuild(string.Empty, string.Empty, null, target);
         }
 
         /// <summary>
@@ -4460,23 +4486,23 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public MSBuildResult CallMSBuild(string target, IVsOutputWindowPane output)
         {
-            return this.CallMSBuild(String.Empty, output, target);
+            return this.CallMSBuild(string.Empty, string.Empty, output, target);
         }
 
         /// <summary>
         /// Overloaded method to invoke MSBuild
         /// </summary>
-        public MSBuildResult Build(string config, IVsOutputWindowPane output, string target)
+        public MSBuildResult Build(string config, string platform, IVsOutputWindowPane output, string target)
         {
-            return this.Build(0, config, output, target);
+            return this.Build(0, config, platform, output, target);
         }
 
         /// <summary>
         /// Overloaded method to invoke MSBuild. Does not log build results to the output window pane.
         /// </summary>
-        public MSBuildResult Build(string config, string target)
+        public MSBuildResult Build(string config, string platform, string target)
         {
-            return this.Build(0, config, null, target);
+            return this.Build(0, config, platform, null, target);
         }
 
         /// <summary>
@@ -4484,7 +4510,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public MSBuildResult Build(string target)
         {
-            return this.Build(0, String.Empty, null, target);
+            return this.Build(0, string.Empty, string.Empty, null, target);
         }
 
         /// <summary>
@@ -4492,7 +4518,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public MSBuildResult Build(string target, IVsOutputWindowPane output)
         {
-            return this.Build(0, String.Empty, output, target);
+            return this.Build(0, string.Empty, string.Empty, output, target);
         }
 
         /// <summary>
@@ -4500,9 +4526,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="config">name of configuration</param>
         /// <returns>Output path</returns>
-        public string GetOutputPath(string config)
+        public string GetOutputPath(string config, string platform)
         {
-            this.SetConfiguration(config);
+            this.SetConfiguration(config, platform);
             return this.GetOutputPath(this.currentConfig);
         }
 
@@ -4545,9 +4571,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="config">Name of configuration</param>
         /// <returns>Name of output assembly</returns>
-        public string GetOutputAssembly(string config)
+        public string GetOutputAssembly(string config, string platform)
         {
-            ProjectOptions options = this.GetProjectOptions(config);
+            ProjectOptions options = this.GetProjectOptions(config, platform);
 
             return options.OutputAssembly;
         }

@@ -47,7 +47,8 @@ namespace Microsoft.VisualStudio.Project
 
         #region fields
         private ProjectNode project;
-        private string configName;
+        private string _configName;
+        private string _platform;
         private MSBuildExecution.ProjectInstance currentConfig;
         private List<OutputGroup> outputGroups;
         private IProjectConfigProperties configurationProperties;
@@ -68,11 +69,20 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.configName;
+                return this._configName;
             }
+
             set
             {
-                this.configName = value;
+                this._configName = value;
+            }
+        }
+
+        public string Platform
+        {
+            get
+            {
+                return this._platform;
             }
         }
 
@@ -119,10 +129,11 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region ctors
-        public ProjectConfig(ProjectNode project, string configuration)
+        public ProjectConfig(ProjectNode project, string configuration, string platform)
         {
             this.project = project;
-            this.configName = configuration;
+            this._configName = configuration;
+            this._platform = platform;
 
             // Because the project can be aggregated by a flavor, we need to make sure
             // we get the outer most implementation of that interface (hence: project --> IUnknown --> Interface)
@@ -157,7 +168,7 @@ namespace Microsoft.VisualStudio.Project
 
         public void PrepareBuild(bool clean)
         {
-            project.PrepareBuild(this.configName, clean);
+            project.PrepareBuild(this.ConfigName, this.Platform, clean);
         }
 
         public virtual string GetConfigurationProperty(string propertyName, bool resetCache)
@@ -176,7 +187,7 @@ namespace Microsoft.VisualStudio.Project
                 throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
             }
 
-            string condition = String.Format(CultureInfo.InvariantCulture, ConfigProvider.configString, this.ConfigName);
+            string condition = ProjectManager.ConfigProvider.GetConfigurationPlatformCondition(this.ConfigName, this.Platform);
 
             SetPropertyUnderCondition(propertyName, propertyValue, condition);
             Invalidate();
@@ -313,25 +324,14 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                string name;
-                string[] platform = new string[1];
-                uint[] actual = new uint[1];
-                name = this.configName;
-                // currently, we only support one platform, so just add it..
-                IVsCfgProvider provider;
-                ErrorHandler.ThrowOnFailure(project.GetCfgProvider(out provider));
-                ErrorHandler.ThrowOnFailure(((IVsCfgProvider2)provider).GetPlatformNames(1, platform, actual));
-                if(!string.IsNullOrEmpty(platform[0]))
-                {
-                    name += "|" + platform[0];
-                }
+                string name = string.Format("{0}|{1}", this.ConfigName, this._platform);
                 return name;
             }
         }
         public virtual int get_IsDebugOnly(out int fDebug)
         {
             fDebug = 0;
-            if(this.configName == "Debug")
+            if(this.ConfigName == "Debug")
             {
                 fDebug = 1;
             }
@@ -341,7 +341,7 @@ namespace Microsoft.VisualStudio.Project
         {
             CCITracing.TraceCall();
             fRelease = 0;
-            if(this.configName == "Release")
+            if(this.ConfigName == "Release")
             {
                 fRelease = 1;
             }
@@ -462,7 +462,7 @@ namespace Microsoft.VisualStudio.Project
                 string property = GetConfigurationProperty("StartProgram", true);
                 if(string.IsNullOrEmpty(property))
                 {
-                    info.bstrExe = this.project.GetOutputAssembly(this.ConfigName);
+                    info.bstrExe = this.project.GetOutputAssembly(this.ConfigName, this.Platform);
                 }
                 else
                 {
@@ -528,7 +528,7 @@ namespace Microsoft.VisualStudio.Project
         public virtual int QueryDebugLaunch(uint flags, out int fCanLaunch)
         {
             CCITracing.TraceCall();
-            string assembly = this.project.GetAssemblyName(this.ConfigName);
+            string assembly = this.project.GetAssemblyName(this.ConfigName, this.Platform);
             fCanLaunch = (assembly != null && assembly.ToUpperInvariant().EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) ? 1 : 0;
             if(fCanLaunch == 0)
             {
@@ -691,7 +691,7 @@ namespace Microsoft.VisualStudio.Project
             if (resetCache || this.currentConfig == null)
             {
                 // Get properties for current configuration from project file and cache it
-                this.project.SetConfiguration(this.ConfigName);
+                this.project.SetConfiguration(this.ConfigName, this.Platform);
                 this.project.BuildProject.ReevaluateIfNecessary();
                 // Create a snapshot of the evaluated project in its current state
                 this.currentConfig = this.project.BuildProject.CreateProjectInstance();

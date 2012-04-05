@@ -407,8 +407,31 @@ namespace Microsoft.VisualStudio.Project
                     currentConfigName = activeConfig.ConfigurationName;
                 }
             }
-            return currentConfigName;
 
+            return currentConfigName;
+        }
+
+        /// <summary>
+        /// Gets the active configuration name.
+        /// </summary>
+        /// <param name="automationObject">The automation object.</param>
+        /// <returns>The name of the active configuartion.</returns>		
+        internal static string GetActivePlatformName(EnvDTE.Project automationObject)
+        {
+            if (automationObject == null)
+                throw new ArgumentNullException("automationObject");
+
+            string currentConfigName = string.Empty;
+            if (automationObject.ConfigurationManager != null)
+            {
+                EnvDTE.Configuration activeConfig = automationObject.ConfigurationManager.ActiveConfiguration;
+                if (activeConfig != null)
+                {
+                    currentConfigName = activeConfig.PlatformName;
+                }
+            }
+
+            return currentConfigName;
         }
 
 

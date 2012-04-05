@@ -217,7 +217,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 		private void SetProjectConfig()
 		{
 			object[] ppUnk = new object[2];
-			ProjectConfig config = new ProjectConfig(projectNode, "manualSetConfig");
+			ProjectConfig config = new ProjectConfig(projectNode, "manualSetConfig", "manualSetPlatform");
 			ppUnk[0] = config;
 			generalPropertyPage.SetObjects(1, ppUnk);
 		}
