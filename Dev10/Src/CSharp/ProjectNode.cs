@@ -844,7 +844,7 @@ namespace Microsoft.VisualStudio.Project
         /// Gets or set whether items can be deleted for this project.
         /// Enabling this feature can have the potential destructive behavior such as deleting files from disk.
         /// </summary>
-        protected internal bool CanProjectDeleteItems
+        protected internal virtual bool CanProjectDeleteItems
         {
             get
             {
@@ -7014,7 +7014,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#endregion
 
-		public int UpdateTargetFramework(IVsHierarchy pHier, string currentTargetFramework, string newTargetFramework)
+		public virtual int UpdateTargetFramework(IVsHierarchy pHier, string currentTargetFramework, string newTargetFramework)
 		{
 			FrameworkName moniker = new FrameworkName(newTargetFramework);
 			SetProjectProperty("TargetFrameworkIdentifier", moniker.Identifier);
@@ -7023,7 +7023,7 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.S_OK;
 		}
 
-		public int UpgradeProject(uint grfUpgradeFlags)
+		public virtual int UpgradeProject(uint grfUpgradeFlags)
 		{
 			int hr = VSConstants.S_OK;
 
@@ -7037,7 +7037,7 @@ namespace Microsoft.VisualStudio.Project
 			return hr;
 		}
 
-		private bool PerformTargetFrameworkCheck()
+		protected virtual bool PerformTargetFrameworkCheck()
 		{
 			if (this.IsFrameworkOnMachine())
 			{
@@ -7054,7 +7054,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <returns>
 		/// <c>true</c> if the project will be retargeted.  <c>false</c> to load project in unloaded state.
 		/// </returns>
-		private bool ShowRetargetingDialog()
+		protected virtual bool ShowRetargetingDialog()
 		{
 			var retargetDialog = this.site.GetService(typeof(SVsFrameworkRetargetingDlg)) as IVsFrameworkRetargetingDlg;
 			if (retargetDialog == null)
@@ -7130,7 +7130,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private bool IsFrameworkOnMachine()
+		protected virtual bool IsFrameworkOnMachine()
 		{
 			var multiTargeting = this.site.GetService(typeof(SVsFrameworkMultiTargeting)) as IVsFrameworkMultiTargeting;
 			Array frameworks;
