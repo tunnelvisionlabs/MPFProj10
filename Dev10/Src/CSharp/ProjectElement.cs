@@ -310,7 +310,7 @@ namespace Microsoft.VisualStudio.Project
             IEnumerable<ProjectItem> items = itemProject.BuildProject.GetItems(item.ItemType);
             foreach (ProjectItem projectItem in items)
             {
-                if(projectItem!= null && projectItem.UnevaluatedInclude.Equals(item.UnevaluatedInclude))
+                if(projectItem!= null && projectItem.EvaluatedInclude.Equals(item.EvaluatedInclude))
                 {
                     item = projectItem;
                     return;
