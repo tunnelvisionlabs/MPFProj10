@@ -121,7 +121,7 @@ namespace Microsoft.VisualStudio.Project
 			// Now check to see if the user asked for an IID other than
 			// IUnknown.  If so, we must do another QI.
 			//
-			if(riid.Equals(NativeMethods.IID_IUnknown))
+			if(riid.Equals(VSConstants.IID_IUnknown))
 			{
 				ppvObject = Marshal.GetIUnknownForObject(serviceInstance.ServiceInstance);
 			}

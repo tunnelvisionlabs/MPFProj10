@@ -82,17 +82,17 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public virtual void Exec(prjExecCommand command, int bSuppressUI, object varIn, out object pVarOut)
 		{
-			throw new NotImplementedException(); ;
+			throw new NotImplementedException();
 		}
 
 		public virtual void GenerateKeyPairFiles(string strPublicPrivateFile, string strPublicOnlyFile)
 		{
-			throw new NotImplementedException(); ;
+			throw new NotImplementedException();
 		}
 
 		public virtual string GetUniqueFilename(object pDispatch, string bstrRoot, string bstrDesiredExt)
 		{
-			throw new NotImplementedException(); ;
+			throw new NotImplementedException();
 		}
 
 		public virtual Imports Imports
