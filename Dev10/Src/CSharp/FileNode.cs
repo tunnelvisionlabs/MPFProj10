@@ -750,20 +750,31 @@ namespace Microsoft.VisualStudio.Project
             // What we want to achieve here is to reuse the existing build item. 
             // We want to link to the newly created node to the existing item node and addd the new include.
 
-            //temporarily keep properties from new itemnode since we are going to overwrite it
-            string newInclude = childAdded.ItemNode.Item.EvaluatedInclude;
-            string dependentOf = childAdded.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon);
-            childAdded.ItemNode.RemoveFromProjectFile();
+            bool wasIndependentNode = !this.ItemNode.Item.UnevaluatedInclude.Contains("*");
+            bool isIndependentNode = !childAdded.ItemNode.Item.UnevaluatedInclude.Contains("*");
 
-            // Assign existing msbuild item to the new childnode
-            childAdded.ItemNode = this.ItemNode;
-            childAdded.ItemNode.Item.ItemType = this.ItemNode.ItemName;
-            childAdded.ItemNode.Item.Xml.Include = newInclude;
-            if(!string.IsNullOrEmpty(dependentOf))
-                childAdded.ItemNode.SetMetadata(ProjectFileConstants.DependentUpon, dependentOf);
-            if (!string.IsNullOrEmpty(linkPath))
-                childAdded.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
-            childAdded.ItemNode.RefreshProperties();
+            if (wasIndependentNode && isIndependentNode)
+            {
+                //temporarily keep properties from new itemnode since we are going to overwrite it
+                string newInclude = childAdded.ItemNode.Item.EvaluatedInclude;
+                string dependentOf = childAdded.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon);
+
+                childAdded.ItemNode.RemoveFromProjectFile();
+
+                // Assign existing msbuild item to the new childnode
+                childAdded.ItemNode = this.ItemNode;
+                childAdded.ItemNode.Item.ItemType = this.ItemNode.ItemName;
+                childAdded.ItemNode.Item.Xml.Include = newInclude;
+                if (!string.IsNullOrEmpty(dependentOf))
+                    childAdded.ItemNode.SetMetadata(ProjectFileConstants.DependentUpon, dependentOf);
+                if (!string.IsNullOrEmpty(linkPath))
+                    childAdded.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
+                childAdded.ItemNode.RefreshProperties();
+            }
+            else if (wasIndependentNode)
+            {
+                this.ItemNode.RemoveFromProjectFile();
+            }
 
             //Update the new document in the RDT.
             DocumentManager.RenameDocument(this.ProjectMgr.Site, oldFileName, newFileName, childAdded.ID);

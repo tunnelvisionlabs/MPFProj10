@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
@@ -975,6 +976,16 @@ namespace Microsoft.VisualStudio.Project
 				return;
 			}
 
+			bool wildcard = ItemNode.Item.UnevaluatedInclude.Contains("*");
+			bool single = true;
+			if (wildcard)
+			{
+				var items = this.ProjectMgr.BuildProject.Items.Where(i => i.UnevaluatedInclude.Equals(ItemNode.Item.UnevaluatedInclude));
+				single = items.Count() == 1;
+				if (!single && !removeFromStorage)
+					return;
+			}
+
 			// Close the document if it has a manager.
 			DocumentManager manager = this.GetDocumentManager();
 			if(manager != null)
@@ -1010,7 +1021,15 @@ namespace Microsoft.VisualStudio.Project
 
 			// We save here the path to delete since this.Url might call the Include which will be deleted by the RemoveFromProjectFile call.
 			string pathToDelete = this.GetMkDocument();
-			this.itemNode.RemoveFromProjectFile();
+
+			if (single)
+			{
+				this.itemNode.RemoveFromProjectFile();
+			}
+			else
+			{
+				this.ProjectMgr.BuildProject.ReevaluateIfNecessary();
+			}
 
 			if(removeFromStorage)
 			{
