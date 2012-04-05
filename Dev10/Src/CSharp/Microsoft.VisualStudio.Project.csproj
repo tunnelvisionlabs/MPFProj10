@@ -217,7 +217,8 @@
     <Compile Include="ReplacePairToken.cs" />
     <Compile Include="SafeGlobalAllocHandle.cs" />
     <Compile Include="SingleFileGeneratorFactory.GeneratorMetaData.cs" />
-    <Compile Include="SingleFileGeneratorNodeProperties.cs" />
+    <Compile Include="SingleFileGeneratorNodeExtenderProperties.cs" />
+    <Compile Include="SingleFileGeneratorNodeExtenderProvider.cs" />
     <Compile Include="tagDVASPECT.cs" />
     <Compile Include="tagTYMED.cs" />
     <Compile Include="TokenReplaceType.cs" />
