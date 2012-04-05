@@ -194,7 +194,7 @@ namespace Microsoft.VisualStudio.Project
                      if (args.IsTerminating)
                      {
                          string s = String.Format(CultureInfo.InvariantCulture, "An unhandled exception is about to terminate the process.  Exception info:\n{0}", args.ExceptionObject.ToString());
-                         Debug.Assert(false, s);
+                         Debug.Fail(s);
                      }
                  });
 
