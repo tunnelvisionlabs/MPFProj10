@@ -27,8 +27,10 @@ namespace Microsoft.VisualStudio.Project
 {
 	[CLSCompliant(false)]
 	[ComVisible(true)]
-	public class FolderNode : HierarchyNode
+	public class FolderNode : HierarchyNode, IProjectSourceNode
 	{
+		private bool isNonMemberItem;
+
 		#region ctors
 		/// <summary>
 		/// Constructor for the FolderNode
@@ -45,10 +47,36 @@ namespace Microsoft.VisualStudio.Project
             }
 
 			this.VirtualNodeName = relativePath.TrimEnd('\\');
+			this.isNonMemberItem = element.IsVirtual;
+			ExcludeNodeFromScc = true;
 		}
 		#endregion
 
 		#region overridden properties
+		/// <summary>
+		/// Specifies if a Node is under source control.
+		/// </summary>
+		/// <value>Specifies if a Node is under source control.</value>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
+		public override bool ExcludeNodeFromScc
+		{
+			get
+			{
+				// Non member items donot participate in SCC.
+				if (this.IsNonMemberItem)
+				{
+					return true;
+				}
+
+				return base.ExcludeNodeFromScc;
+			}
+
+			set
+			{
+				base.ExcludeNodeFromScc = value;
+			}
+		}
+
 		public override int SortPriority
 		{
 			get { return DefaultSortOrderNode.FolderNode; }
@@ -66,6 +94,22 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 		#endregion
+
+		// =========================================================================================
+		// IProjectSourceNode Properties
+		// =========================================================================================
+
+		/// <summary>
+		/// Flag that indicates if this node is not a member of the project.
+		/// </summary>
+		/// <value>true if the item is not a member of the project build, false otherwise.</value>
+		public bool IsNonMemberItem
+		{
+			get
+			{
+				return this.isNonMemberItem;
+			}
+		}
 
 		#region overridden methods
 		protected override NodeProperties CreatePropertiesObject()
@@ -92,8 +136,84 @@ namespace Microsoft.VisualStudio.Project
 			return new Automation.OAFolderItem(this.ProjectMgr.GetAutomationObject() as Automation.OAProject, this);
 		}
 
+        /// <summary>
+        /// Sets the node property.
+        /// </summary>
+        /// <param name="propid">Property id.</param>
+        /// <param name="value">Property value.</param>
+        /// <returns>Returns success or failure code.</returns>
+        public override int SetProperty(int propid, object value)
+        {
+            int result;
+            __VSHPROPID id = (__VSHPROPID)propid;
+            switch (id)
+            {
+            case __VSHPROPID.VSHPROPID_IsNonMemberItem:
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                bool boolValue = false;
+                CCITracing.TraceCall(this.ID + "," + id.ToString());
+                if (bool.TryParse(value.ToString(), out boolValue))
+                {
+                    this.isNonMemberItem = boolValue;
+                }
+                else
+                {
+                    Trace.WriteLine("Could not parse the IsNonMemberItem property value.");
+                }
+
+                result = VSConstants.S_OK;
+                break;
+
+            default:
+                result = base.SetProperty(propid, value);
+                break;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the node property.
+        /// </summary>
+        /// <param name="propId">Property id.</param>
+        /// <returns>The property value.</returns>
+        public override object GetProperty(int propId)
+        {
+            switch ((__VSHPROPID)propId)
+            {
+            case __VSHPROPID.VSHPROPID_IsNonMemberItem:
+                return this.IsNonMemberItem;
+            }
+
+            return base.GetProperty(propId);
+        }
+
+        /// <summary>
+        /// Provides the node name for inline editing of caption. 
+        /// Overriden to diable this fuctionality for non member fodler node.
+        /// </summary>
+        /// <returns>Caption of the folder node if the node is a member item, null otherwise.</returns>
+        public override string GetEditLabel()
+        {
+            if (this.IsNonMemberItem)
+            {
+                return null;
+            }
+
+            return base.GetEditLabel();
+        }
+
 		public override object GetIconHandle(bool open)
 		{
+            if (this.IsNonMemberItem)
+            {
+                return this.ProjectMgr.ImageHandler.GetIconHandle(open ? (int)ProjectNode.ImageName.OpenExcludedFolder : (int)ProjectNode.ImageName.ExcludedFolder);
+            }
+
 			return this.ProjectMgr.ImageHandler.GetIconHandle(open ? (int)ProjectNode.ImageName.OpenFolder : (int)ProjectNode.ImageName.Folder);
 		}
 
@@ -164,10 +284,18 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 
-		public override int MenuCommandId
-		{
-			get { return VsMenus.IDM_VS_CTXT_FOLDERNODE; }
-		}
+        public override int MenuCommandId
+        {
+            get
+            {
+                if (this.IsNonMemberItem)
+                {
+                    return VsMenus.IDM_VS_CTXT_XPROJ_MULTIITEM;
+                }
+
+                return VsMenus.IDM_VS_CTXT_FOLDERNODE;
+            }
+        }
 
 		public override Guid ItemTypeGuid
 		{
@@ -290,10 +418,33 @@ namespace Microsoft.VisualStudio.Project
 			}
 			else if(cmdGroup == VsMenus.guidStandardCommandSet2K)
 			{
-				if((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
+                if ((VsCommands2K)cmd == VsCommands2K.INCLUDEINPROJECT)
+                {
+                    // if it is a non member item node, the we support "Include In Project" command
+                    if (IsNonMemberItem)
+                    {
+                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                    }
+                    else
+                    {
+                        result |= QueryStatusResult.NOTSUPPORTED;
+                    }
+
+                    return VSConstants.S_OK;
+                }
+                else if ((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
 				{
-					result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
-					return VSConstants.S_OK;
+                    // if it is a non member item node, then we don't support "Exclude From Project" command
+                    if (IsNonMemberItem)
+                    {
+                        result |= QueryStatusResult.NOTSUPPORTED;
+                    }
+                    else
+                    {
+                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                    }
+
+                    return VSConstants.S_OK;
 				}
 			}
 			else
@@ -309,6 +460,12 @@ namespace Microsoft.VisualStudio.Project
             {
                 switch ((VsCommands2K)cmd)
                 {
+                case VsCommands2K.INCLUDEINPROJECT:
+                    return ((IProjectSourceNode)this).IncludeInProject();
+
+                case VsCommands2K.EXCLUDEFROMPROJECT:
+                    return ((IProjectSourceNode)this).ExcludeFromProject();
+
                 case ProjectFileConstants.CommandExploreFolderInWindows:
                     ProjectNode.ExploreFolderInWindows(GetMkDocument());
                     return VSConstants.S_OK;
@@ -316,6 +473,32 @@ namespace Microsoft.VisualStudio.Project
             }
 
             return base.ExecCommandOnNode(cmdGroup, cmd, nCmdexecopt, pvaIn, pvaOut);
+        }
+
+        /// <summary>
+        /// Adds the this node to the build system.
+        /// </summary>
+        /// <param name="recursive">Flag to indicate if the addition should be recursive.</param>
+        protected virtual void AddToMSBuild(bool recursive)
+        {
+            if (ProjectMgr == null || ProjectMgr.IsClosed)
+            {
+                return; // do nothing
+            }
+
+            this.ItemNode = ProjectMgr.AddFileToMsBuild(this.Url);
+            this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, false);
+            if (recursive)
+            {
+                for (HierarchyNode node = this.FirstChild; node != null; node = node.NextSibling)
+                {
+                    IProjectSourceNode sourceNode = node as IProjectSourceNode;
+                    if (sourceNode != null)
+                    {
+                        sourceNode.IncludeInProject(recursive);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -355,7 +538,126 @@ namespace Microsoft.VisualStudio.Project
 			return false;
 		}
 
-		#endregion
+        // =========================================================================================
+        // IProjectSourceNode Methods
+        // =========================================================================================
+
+        /// <summary>
+        /// Exclude the item from the project system.
+        /// </summary>
+        /// <returns>Returns success or failure code.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
+        int IProjectSourceNode.ExcludeFromProject()
+        {
+            if (ProjectMgr == null || ProjectMgr.IsClosed)
+            {
+                return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
+            else if (this.IsNonMemberItem)
+            {
+                return VSConstants.S_OK; // do nothing, just ignore it.
+            }
+
+            //using ( WixHelperMethods.NewWaitCursor() )
+            //{
+            // Check out the project file.
+            if (!ProjectMgr.QueryEditProjectFile(false))
+            {
+                throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
+            }
+
+            // remove children, if any, before removing from the hierarchy
+            for (HierarchyNode child = this.FirstChild; child != null; child = child.NextSibling)
+            {
+                IProjectSourceNode node = child as IProjectSourceNode;
+                if (node != null)
+                {
+                    int result = node.ExcludeFromProject();
+                    if (result != VSConstants.S_OK)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            if (ProjectMgr != null && ProjectMgr.ShowAllFilesEnabled && Directory.Exists(this.Url))
+            {
+                string url = this.Url;
+                this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, true);
+                this.ItemNode.RemoveFromProjectFile();
+                this.ItemNode = new ProjectElement(this.ProjectMgr, null, true);  // now we have to create a new ItemNode to indicate that this is virtual node.
+                this.ItemNode.Rename(url);
+                this.ItemNode.SetMetadata(ProjectFileConstants.Name, this.Url);
+                this.ReDraw(UIHierarchyElement.Icon); // we have to redraw the icon of the node as it is now not a member of the project and shoul be drawn using a different icon.
+            }
+            else if (this.Parent != null) // the project node has no parentNode
+            {
+                // this is important to make it non member item. otherwise, the multi-selection scenario would
+                // not work if it has any parent child relation.
+                this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, true);
+
+                // remove from the hierarchy
+                this.OnItemDeleted();
+                this.Parent.RemoveChild(this);
+                this.ItemNode.RemoveFromProjectFile();
+            }
+
+            // refresh property browser...
+            ProjectNode.RefreshPropertyBrowser();
+            //}
+
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Include the item into the project system.
+        /// </summary>
+        /// <returns>Returns success or failure code.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
+        int IProjectSourceNode.IncludeInProject()
+        {
+            return ((IProjectSourceNode)this).IncludeInProject(true);
+        }
+
+        /// <summary>
+        /// Include the item into the project system recursively.
+        /// </summary>
+        /// <param name="recursive">Flag that indicates if the inclusion should be recursive or not.</param>
+        /// <returns>Returns success or failure code.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
+        int IProjectSourceNode.IncludeInProject(bool recursive)
+        {
+            if (this.ProjectMgr == null || this.ProjectMgr.IsClosed)
+            {
+                return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
+            else if (!this.IsNonMemberItem)
+            {
+                return VSConstants.S_OK; // do nothing, just ignore it.
+            }
+
+            //using ( WixHelperMethods.NewWaitCursor() )
+            //{
+            // Check out the project file.
+            if (!this.ProjectMgr.QueryEditProjectFile(false))
+            {
+                throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
+            }
+
+            // make sure that all parent folders are included in the project
+            ProjectNode.EnsureParentFolderIncluded(this);
+
+            // now add this node to the project.
+            this.AddToMSBuild(recursive);
+            this.ReDraw(UIHierarchyElement.Icon);
+
+            // refresh property browser...
+            ProjectNode.RefreshPropertyBrowser();
+            //}
+
+            return VSConstants.S_OK;
+        }
+        #endregion
 
 		#region virtual methods
 		/// <summary>

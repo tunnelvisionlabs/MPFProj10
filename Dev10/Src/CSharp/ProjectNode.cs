@@ -147,6 +147,14 @@ namespace Microsoft.VisualStudio.Project
             DoNotTriggerTrackerEvents = 2
         }
 
+        /// <summary>
+        /// This is the node filter delegate.
+        /// </summary>
+        /// <param name="node">Node to be tested.</param>
+        /// <param name="criteria">Filter criteria.</param>
+        /// <returns>Returns if the node should be filtered or not.</returns>
+        public delegate bool NodeFilter(HierarchyNode node, object criteria);
+
         #endregion
 
         #region constants
@@ -200,6 +208,8 @@ namespace Microsoft.VisualStudio.Project
         /// A cached copy of project options.
         /// </summary>
         private ProjectOptions options;
+
+        private bool showAllFilesEnabled;
 
         /// <summary>
         /// This property returns the time of the last change made to this project.
@@ -994,6 +1004,18 @@ namespace Microsoft.VisualStudio.Project
                 this.package = value;
             }
         }
+
+        /// <summary>
+        /// Gets if the ShowAllFiles is enabled or not.
+        /// </summary>
+        /// <value>true if the ShowAllFiles option is enabled, false otherwise.</value>
+        public bool ShowAllFilesEnabled
+        {
+            get
+            {
+                return this.showAllFilesEnabled;
+            }
+        }
         #endregion
 
         #region ctor
@@ -1006,6 +1028,467 @@ namespace Microsoft.VisualStudio.Project
 
         #region static methods
 
+        /// <summary>
+        /// Adds the <see cref="Path.DirectorySeparatorChar"/> character to the end of the path if it doesn't already exist at the end.
+        /// </summary>
+        /// <param name="path">The string to add the trailing directory separator character to.</param>
+        /// <returns>The original string with the specified character at the end.</returns>
+        public static string EnsureTrailingDirectoryChar(string path)
+        {
+            return EnsureTrailingChar(path, Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Adds the specified character to the end of the string if it doesn't already exist at the end.
+        /// </summary>
+        /// <param name="value">The string to add the trailing character to.</param>
+        /// <param name="charToEnsure">The character that will be at the end of the string upon return.</param>
+        /// <returns>The original string with the specified character at the end.</returns>
+        public static string EnsureTrailingChar(string value, char charToEnsure)
+        {
+            VerifyStringArgument(value, "value");
+
+            if (value[value.Length - 1] != charToEnsure)
+            {
+                value += charToEnsure;
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Adds non member items to the hierarchy.
+        /// </summary>
+        /// <param name="project">The project to modify.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
+        internal static void AddNonMemberItems(ProjectNode project)
+        {
+            IList<string> files = new List<string>();
+            IList<string> folders = new List<string>();
+
+            // obtain the list of files and folders under the project folder.
+            GetRelativeFileSystemEntries(project.ProjectFolder, null, files, folders);
+
+            // exclude the items which are the part of the build.
+            ExcludeProjectBuildItems(project, files, folders);
+
+            AddNonMemberFolderItems(project, folders);
+            AddNonMemberFileItems(project, files);
+        }
+
+        /// <summary>
+        /// Removes non member item nodes from hierarchy.
+        /// </summary>
+        /// <param name="project">The project to modify.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
+        internal static void RemoveNonMemberItems(ProjectNode project)
+        {
+            IList<HierarchyNode> nodeList = new List<HierarchyNode>();
+            FindNodes(nodeList, project, IsNodeNonMemberItem, null);
+            for (int index = nodeList.Count - 1; index >= 0; index--)
+            {
+                HierarchyNode parent = nodeList[index].Parent;
+                nodeList[index].OnItemDeleted();
+                parent.RemoveChild(nodeList[index]);
+            }
+        }
+
+        /// <summary>
+        /// This is the filter for non member items.
+        /// </summary>
+        /// <param name="node">Node to be filtered.</param>
+        /// <param name="criteria">Filter criteria.</param>
+        /// <returns>Returns if the node is a non member item node or not.</returns>
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Boolean.TryParse(System.String,System.Boolean@)")]
+        private static bool IsNodeNonMemberItem(HierarchyNode node, object criteria)
+        {
+            bool isNonMemberItem = false;
+            if (node != null)
+            {
+                object propObj = node.GetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem);
+                if (propObj != null)
+                {
+                    Boolean.TryParse(propObj.ToString(), out isNonMemberItem);
+                }
+            }
+
+            return isNonMemberItem;
+        }
+
+        /// <summary>
+        /// Gets the file system entries of a folder and its all sub-folders with relative path.
+        /// </summary>
+        /// <param name="baseFolder">Base folder.</param>
+        /// <param name="filter">Filter to be used. default is "*"</param>
+        /// <param name="fileList">Files list containing the relative file paths.</param>
+        /// <param name="folderList">Folders list containing the relative folder paths.</param>
+        private static void GetRelativeFileSystemEntries(string baseFolder, string filter, IList<string> fileList, IList<string> folderList)
+        {
+            if (baseFolder == null)
+            {
+                throw new ArgumentNullException("baseFolder");
+            }
+
+            if (String.IsNullOrEmpty(filter))
+            {
+                filter = "*";  // include all files and folders
+            }
+
+            if (fileList != null)
+            {
+                string[] fileEntries = Directory.GetFiles(baseFolder, filter, SearchOption.AllDirectories);
+                foreach (string file in fileEntries)
+                {
+                    string fileRelativePath = GetRelativePath(baseFolder, file);
+                    if (!String.IsNullOrEmpty(fileRelativePath))
+                    {
+                        fileList.Add(fileRelativePath);
+                    }
+                }
+            }
+
+            if (folderList != null)
+            {
+                string[] folderEntries = Directory.GetDirectories(baseFolder, filter, SearchOption.AllDirectories);
+                foreach (string folder in folderEntries)
+                {
+                    string folderRelativePath = GetRelativePath(baseFolder, folder);
+                    if (!String.IsNullOrEmpty(folderRelativePath))
+                    {
+                        folderList.Add(folderRelativePath);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Excludes the file and folder items from their corresponding maps if they are part of the build.
+        /// </summary>
+        /// <param name="project">The project to modify.</param>
+        /// <param name="fileList">List containing relative files paths.</param>
+        /// <param name="folderList">List containing relative folder paths.</param>
+        private static void ExcludeProjectBuildItems(ProjectNode project, IList<string> fileList, IList<string> folderList)
+        {
+            ICollection<MSBuild.ProjectItem> projectItems = project.BuildProject.Items;
+
+            if (projectItems == null)
+            {
+                return; // do nothig, just ignore it.
+            }
+            else if (fileList == null && folderList == null)
+            {
+                throw new ArgumentNullException("folderList");
+            }
+
+            // we need these maps becuase we need to have both lowercase and actual case path information.
+            // we use lower case paths for case-insesitive search of file entries and actual paths for 
+            // creating hierarchy node. if we don't do that, we will end up with duplicate nodes when the
+            // case of path in .wixproj file doesn't match with the actual file path on the disk.
+            IDictionary<string, string> folderMap = null;
+            IDictionary<string, string> fileMap = null;
+
+            if (folderList != null)
+            {
+                folderMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (string folder in folderList)
+                {
+                    folderMap.Add(folder, folder);
+                }
+            }
+
+            if (fileList != null)
+            {
+                fileMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (string file in fileList)
+                {
+                    fileMap.Add(file, file);
+                }
+            }
+
+            foreach (MSBuild.ProjectItem buildItem in projectItems)
+            {
+                if (folderMap != null &&
+                    folderMap.Count > 0 &&
+                    String.Equals(buildItem.ItemType, ProjectFileConstants.Folder, StringComparison.OrdinalIgnoreCase))
+                {
+                    string relativePath = buildItem.EvaluatedInclude;
+                    if (Path.IsPathRooted(relativePath)) // if not the relative path, make it relative
+                    {
+                        relativePath = GetRelativePath(project.ProjectFolder, relativePath);
+                    }
+
+                    if (folderMap.ContainsKey(relativePath))
+                    {
+                        folderList.Remove(folderMap[relativePath]); // remove it from the actual list.
+                        folderMap.Remove(relativePath);
+                    }
+                }
+                else if (fileMap != null &&
+                    fileMap.Count > 0 &&
+                    IsFileItem(buildItem))
+                {
+                    string relativePath = buildItem.EvaluatedInclude;
+                    if (Path.IsPathRooted(relativePath)) // if not the relative path, make it relative
+                    {
+                        relativePath = GetRelativePath(project.ProjectFolder, relativePath);
+                    }
+
+                    if (fileMap.ContainsKey(relativePath))
+                    {
+                        fileList.Remove(fileMap[relativePath]); // remove it from the actual list.
+                        fileMap.Remove(relativePath);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds non member folder items to the hierarcy.
+        /// </summary>
+        /// <param name="project">The project to modify.</param>
+        /// <param name="folderList">Folders list containing the folder names.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
+        private static void AddNonMemberFolderItems(ProjectNode project, IList<string> folderList)
+        {
+            if (folderList == null)
+            {
+                throw new ArgumentNullException("folderList");
+            }
+
+            foreach (string folderKey in folderList)
+            {
+                HierarchyNode parentNode = project;
+                string[] folders = folderKey.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                FolderNode topFolderNode = null;
+                foreach (string folder in folders)
+                {
+                    string childNodeId = Path.Combine(parentNode.VirtualNodeName, folder);
+                    HierarchyNode childNode = parentNode.FindChild(childNodeId);
+                    if (childNode == null)
+                    {
+                        if (topFolderNode == null)
+                        {
+                            topFolderNode = parentNode as FolderNode;
+                            if (topFolderNode != null && (!topFolderNode.IsNonMemberItem) && topFolderNode.IsExpanded)
+                            {
+                                topFolderNode = null;
+                            }
+                        }
+
+                        ProjectElement element = new ProjectElement(project, null, true);
+                        childNode = project.CreateFolderNode(childNodeId, element);
+                        parentNode.AddChild(childNode);
+                    }
+
+                    parentNode = childNode;
+                }
+
+                if (topFolderNode != null)
+                {
+                    topFolderNode.CollapseFolder();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds non member file items to the hierarcy.
+        /// </summary>
+        /// <param name="project">The project to modify.</param>
+        /// <param name="fileList">Files containing the information about the non member file items.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
+        private static void AddNonMemberFileItems(ProjectNode project, IList<string> fileList)
+        {
+            if (fileList == null)
+            {
+                throw new ArgumentNullException("fileList");
+            }
+
+            foreach (string fileKey in fileList)
+            {
+                HierarchyNode parentNode = project;
+                string[] pathItems = fileKey.Split(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
+                FolderNode topFolderNode = null;
+                foreach (string fileOrDir in pathItems)
+                {
+                    string childNodeId = Path.Combine(parentNode.VirtualNodeName, fileOrDir);
+                    HierarchyNode childNode = parentNode.FindChild(childNodeId);
+                    if (childNode == null)
+                    {
+                        if (String.Equals(project.ProjectFile, childNodeId, StringComparison.OrdinalIgnoreCase)) // skip the project file itself.
+                        {
+                            break;
+                        }
+                        else if (topFolderNode == null)
+                        {
+                            topFolderNode = parentNode as FolderNode;
+                            if (topFolderNode != null && (!topFolderNode.IsNonMemberItem) && topFolderNode.IsExpanded)
+                            {
+                                topFolderNode = null;
+                            }
+                        }
+
+                        ProjectElement element = new ProjectElement(project, null, true);
+                        element.Rename(childNodeId);
+                        element.SetMetadata(ProjectFileConstants.Name, childNodeId);
+                        childNode = project.CreateFileNode(element);
+                        parentNode.AddChild(childNode);
+                        break;
+                    }
+
+                    parentNode = childNode;
+                }
+
+                if (topFolderNode != null)
+                {
+                    topFolderNode.CollapseFolder();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Walks up in the hierarchy and ensures that all parent folder nodes of 'node' are included in the project.
+        /// </summary>
+        /// <param name="node">Start hierarchy node.</param>
+        internal static void EnsureParentFolderIncluded(HierarchyNode node)
+        {
+            if (node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
+
+            // use stack to make sure all parent folders are included in the project.
+            Stack<FolderNode> stack = new Stack<FolderNode>();
+
+            // Find out the parent folder nodes if any.
+            FolderNode parentFolderNode = node.Parent as FolderNode;
+            while (parentFolderNode != null && parentFolderNode.IsNonMemberItem)
+            {
+                stack.Push(parentFolderNode);
+                parentFolderNode.CreateDirectory(); // ensure that the folder is there on file system
+                parentFolderNode = parentFolderNode.Parent as FolderNode;
+            }
+
+            // include all parent folders in the project.
+            while (stack.Count > 0)
+            {
+                FolderNode folderNode = stack.Pop();
+                ((IProjectSourceNode)folderNode).IncludeInProject(false);
+            }
+        }
+
+        /// <summary>
+        /// Finds child nodes uner the parent node and places them in the currentList.
+        /// </summary>
+        /// <param name="currentList">List to be populated with the nodes.</param>
+        /// <param name="parent">Parent node under which the nodes should be searched.</param>
+        /// <param name="filter">Filter to be used while selecting the node.</param>
+        /// <param name="criteria">Criteria to be used by the filter.</param>
+        public static void FindNodes(IList<HierarchyNode> currentList, HierarchyNode parent, NodeFilter filter, object criteria)
+        {
+            if (currentList == null)
+            {
+                throw new ArgumentNullException("currentList");
+            }
+
+            if (parent == null)
+            {
+                throw new ArgumentNullException("parent");
+            }
+
+            if (filter == null)
+            {
+                throw new ArgumentNullException("filter");
+            }
+
+            for (HierarchyNode child = parent.FirstChild; child != null; child = child.NextSibling)
+            {
+                if (filter(child, criteria))
+                {
+                    currentList.Add(child);
+                }
+
+                FindNodes(currentList, child, filter, criteria);
+            }
+        }
+
+        /// <summary>
+        /// Makes subPath relative with respect to basePath.
+        /// </summary>
+        /// <param name="basePath">Base folder path.</param>
+        /// <param name="subPath">Path of the sub folder or file.</param>
+        /// <returns>The relative path for the subPath if it shares the same root with basePath or subPath otherwise.</returns>
+        /// <remarks>
+        /// We introduced GetRelativePath method because the Microsoft.VisualStudio.Shell.PackageUtilities.MakeRelative() doesn't
+        /// work as expected in some cases (as of 11/12/2007). For example:
+        /// Test # 1
+        /// Base Path:      C:\a\b\r\d\..\..\e\f
+        /// Sub Path:       c:\a\b\e\f\g\h\..\i\j.txt
+        /// Expected:       g\i\j.txt
+        /// Actual:         c:\a\b\e\f\g\h\..\i\j.txt
+        /// -------------
+        /// Test # 2
+        /// Base Path:      \\mghaznawks\a\e\f
+        /// Sub Path:       \\mghaznawks\e\f\g\h\i\j.txt
+        /// Expected:       \\mghaznawks\e\f\g\h\i\j.txt
+        /// Actual:         ..\..\..\e\f\g\h\i\j.txt
+        /// Note that the base root path is \\mghaznawks\a\   Ref: System.IO.Path.GetPathRoot(string)
+        /// -------------
+        /// Test # 3
+        /// Base Path:      \\mghaznawks\C$\a\..\e\f
+        /// Sub Path:       \\mghaznawks\D$\e\f\g\h\i\j.txt
+        /// Expected:       \\mghaznawks\D$\e\f\g\h\i\j.txt
+        /// Actual:         ..\..\..\..\..\D$\e\f\g\h\i\j.txt
+        /// -------------
+        /// Test # 4
+        /// Base Path:      \\mghaznawks\C$\a\..\e\f
+        /// Sub Path:       \\mghaznawks\c$\e\f\g\h\i\j.txt
+        /// Expected:       g\h\i\j.txt
+        /// Actual:         ..\..\..\..\..\c$\e\f\g\h\i\j.txt
+        /// </remarks>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentException.#ctor(System.String)")]
+        public static string GetRelativePath(string basePath, string subPath)
+        {
+            VerifyStringArgument(basePath, "basePath");
+            VerifyStringArgument(subPath, "subPath");
+
+            if (!Path.IsPathRooted(basePath))
+            {
+                throw new ArgumentException("The 'basePath' is not rooted.");
+            }
+
+            if (!Path.IsPathRooted(subPath))
+            {
+                return subPath;
+            }
+
+            if (!String.Equals(Path.GetPathRoot(basePath), Path.GetPathRoot(subPath), StringComparison.OrdinalIgnoreCase))
+            {
+                // both paths have different roots so we can't make them relative
+                return subPath;
+            }
+
+            // Url.MakeRelative method requires the base path to be ended with a '\' if it is a folder,
+            // otherwise it considers it as a file so we need to make sure that the folder path is right
+            basePath = EnsureTrailingDirectoryChar(basePath.Trim());
+
+            Url url = new Url(basePath);
+            return url.MakeRelative(new Url(subPath));
+        }
+
+        internal static void RefreshPropertyBrowser()
+        {
+            IVsUIShell vsuiShell = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
+
+            if (vsuiShell == null)
+            {
+                throw new InvalidOperationException();
+            }
+            else
+            {
+                ErrorHandler.ThrowOnFailure(vsuiShell.RefreshPropertyBrowser(0));
+            }
+        }
+
         internal static void ExploreFolderInWindows(string folderPath)
         {
             if (folderPath == null)
@@ -1013,6 +1496,55 @@ namespace Microsoft.VisualStudio.Project
 
             string explorerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
             System.Diagnostics.Process.Start(explorerPath, string.Format("\"{0}\"", folderPath));
+        }
+
+        /// <summary>
+        /// Returns if the buildItem is a file item or not.
+        /// </summary>
+        /// <param name="buildItem">BuildItem to be checked.</param>
+        /// <returns>Returns true if the buildItem is a file item, false otherwise.</returns>
+        private static bool IsFileItem(MSBuild.ProjectItem buildItem)
+        {
+            if (buildItem == null)
+            {
+                throw new ArgumentNullException("buildItem");
+            }
+
+            bool isFileItem = false;
+            if (String.Equals(buildItem.ItemType, ProjectFileConstants.Compile, StringComparison.OrdinalIgnoreCase))
+            {
+                isFileItem = true;
+            }
+            else if (String.Equals(buildItem.ItemType, ProjectFileConstants.EmbeddedResource, StringComparison.OrdinalIgnoreCase))
+            {
+                isFileItem = true;
+            }
+            else if (String.Equals(buildItem.ItemType, ProjectFileConstants.Content, StringComparison.OrdinalIgnoreCase))
+            {
+                isFileItem = true;
+            }
+            else if (String.Equals(buildItem.ItemType, "None", StringComparison.OrdinalIgnoreCase))
+            {
+                isFileItem = true;
+            }
+
+            return isFileItem;
+        }
+
+        /// <summary>
+        /// Verifies that the specified string argument is non-null and non-empty, asserting if it
+        /// is not and throwing a new <see cref="ArgumentException"/>.
+        /// </summary>
+        /// <param name="argument">The argument to check.</param>
+        /// <param name="argumentName">The name of the argument.</param>
+        public static void VerifyStringArgument(string argument, string argumentName)
+        {
+            if (argument == null || argument.Length == 0 || argument.Trim().Length == 0)
+            {
+                string message = String.Format(CultureInfo.InvariantCulture, "The string argument '{0}' is null or empty.", argumentName);
+                Trace.WriteLine("Invalid string argument", message);
+                throw new ArgumentException(message, argumentName);
+            }
         }
         #endregion
         #region overridden methods
@@ -2721,7 +3253,35 @@ namespace Microsoft.VisualStudio.Project
         /// <returns></returns>
         protected internal virtual int ShowAllFiles()
         {
-            return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
+            return this.ToggleShowAllFiles();
+        }
+
+        /// <summary>
+        /// Toggles the state of Show all files
+        /// </summary>
+        /// <returns>S_OK if it's possible to toggle the state, OLECMDERR_E_NOTSUPPORTED if not</returns>
+        internal int ToggleShowAllFiles()
+        {
+            if (this.ProjectMgr == null || this.ProjectMgr.IsClosed)
+            {
+                return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
+
+            //using ( WixHelperMethods.NewWaitCursor() )
+            //{
+            this.showAllFilesEnabled = !this.showAllFilesEnabled; // toggle the flag
+
+            if (this.showAllFilesEnabled)
+            {
+                AddNonMemberItems(this);
+            }
+            else
+            {
+                RemoveNonMemberItems(this);
+            }
+            //}
+
+            return NativeMethods.S_OK;
         }
 
         /// <summary>
@@ -3328,7 +3888,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>A Projectelement describing the newly added file.</returns>
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToMs")]
         [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        protected virtual ProjectElement AddFileToMsBuild(string file)
+        protected internal virtual ProjectElement AddFileToMsBuild(string file)
         {
             ProjectElement newItem;
 

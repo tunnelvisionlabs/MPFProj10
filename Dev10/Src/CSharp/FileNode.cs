@@ -27,11 +27,13 @@ namespace Microsoft.VisualStudio.Project
 {
     [CLSCompliant(false)]
     [ComVisible(true)]
-    public class FileNode : HierarchyNode
+    public class FileNode : HierarchyNode, IProjectSourceNode
     {
         #region static fiels
         private static Dictionary<string, int> extensionIcons;
         #endregion
+
+        private bool isNonMemberItem;
 
         #region overriden Properties
         /// <summary>
@@ -57,6 +59,11 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
+                if (this.IsNonMemberItem)
+                {
+                    return (int)ProjectNode.ImageName.ExcludedFile;
+                }
+
                 // Check if the file is there.
                 if(!this.CanShowDefaultIcon())
                 {
@@ -84,7 +91,39 @@ namespace Microsoft.VisualStudio.Project
 
         public override int MenuCommandId
         {
-            get { return VsMenus.IDM_VS_CTXT_ITEMNODE; }
+            get
+            {
+                if (this.IsNonMemberItem)
+                {
+                    return VsMenus.IDM_VS_CTXT_XPROJ_MULTIITEM;
+                }
+
+                return VsMenus.IDM_VS_CTXT_ITEMNODE;
+            }
+        }
+
+        /// <summary>
+        /// Specifies if a Node is under source control.
+        /// </summary>
+        /// <value>Specifies if a Node is under source control.</value>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
+        public override bool ExcludeNodeFromScc
+        {
+            get
+            {
+                // Non member items donot participate in SCC.
+                if (this.IsNonMemberItem)
+                {
+                    return true;
+                }
+
+                return base.ExcludeNodeFromScc;
+            }
+
+            set
+            {
+                base.ExcludeNodeFromScc = value;
+            }
         }
 
         public override string Url
@@ -171,8 +210,26 @@ namespace Microsoft.VisualStudio.Project
             {
                 this.HasDesigner = true;
             }
+
+            this.isNonMemberItem = element.IsVirtual;
         }
         #endregion
+
+        // =========================================================================================
+        // IProjectSourceNode Properties
+        // =========================================================================================
+
+        /// <summary>
+        /// Flag that indicates if this node is not a member of the project.
+        /// </summary>
+        /// <value>true if the item is not a member of the project build, false otherwise.</value>
+        public bool IsNonMemberItem
+        {
+            get
+            {
+                return this.isNonMemberItem;
+            }
+        }
 
         #region overridden methods
         protected override NodeProperties CreatePropertiesObject()
@@ -455,6 +512,12 @@ namespace Microsoft.VisualStudio.Project
             {
                 switch((VsCommands2K)cmd)
                 {
+                    case VsCommands2K.INCLUDEINPROJECT:
+                        return ((IProjectSourceNode)this).IncludeInProject();
+
+                    case VsCommands2K.EXCLUDEFROMPROJECT:
+                        return ((IProjectSourceNode)this).ExcludeFromProject();
+
                     case VsCommands2K.RUNCUSTOMTOOL:
                         {
                             try
@@ -489,6 +552,13 @@ namespace Microsoft.VisualStudio.Project
                         return VSConstants.S_OK;
 
                     case VsCommands.ViewCode:
+                        if (this.IsNonMemberItem)
+                            result |= QueryStatusResult.NOTSUPPORTED;
+                        else
+                            result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+
+                        return VSConstants.S_OK;
+
                     //case VsCommands.Delete: goto case VsCommands.OpenWith;
                     case VsCommands.Open:
                     case VsCommands.OpenWith:
@@ -498,8 +568,24 @@ namespace Microsoft.VisualStudio.Project
             }
             else if(cmdGroup == VsMenus.guidStandardCommandSet2K)
             {
-                if((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
+                if ((VsCommands2K)cmd == VsCommands2K.INCLUDEINPROJECT)
                 {
+                    // if it is a non member item node, the we support "Include In Project" command
+                    if (IsNonMemberItem)
+                    {
+                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        return VSConstants.S_OK;
+                    }
+                }
+                else if((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
+                {
+                    // if it is a non member item node, then we don't support "Exclude From Project" command
+                    if (IsNonMemberItem)
+                    {
+                        result |= QueryStatusResult.NOTSUPPORTED;
+                        return VSConstants.S_OK;
+                    }
+
                     string linkPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
                     if (string.IsNullOrEmpty(linkPath))
                     {
@@ -862,6 +948,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.ProjectMgr.CanProjectDeleteItems;
             }
+
             return false;
         }
 
@@ -915,6 +1002,216 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
+        /// <summary>
+        /// Sets the node property.
+        /// </summary>
+        /// <param name="propid">Property id.</param>
+        /// <param name="value">Property value.</param>
+        /// <returns>Returns success or failure code.</returns>
+        public override int SetProperty(int propid, object value)
+        {
+            int result;
+            __VSHPROPID id = (__VSHPROPID)propid;
+            switch (id)
+            {
+            case __VSHPROPID.VSHPROPID_IsNonMemberItem:
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                bool boolValue;
+                CCITracing.TraceCall(this.ID + "," + id.ToString());
+                if (Boolean.TryParse(value.ToString(), out boolValue))
+                {
+                    this.isNonMemberItem = boolValue;
+
+                    // Reset exclude from scc
+                    this.ExcludeNodeFromScc = this.IsNonMemberItem;
+                }
+                else
+                {
+                    Trace.WriteLine("Could not parse the IsNonMemberItem property value.");
+                }
+
+                result = VSConstants.S_OK;
+                break;
+
+            default:
+                result = base.SetProperty(propid, value);
+                break;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the node property.
+        /// </summary>
+        /// <param name="propId">Property id.</param>
+        /// <returns>The property value.</returns>
+        public override object GetProperty(int propId)
+        {
+            __VSHPROPID id = (__VSHPROPID)propId;
+            switch (id)
+            {
+            case __VSHPROPID.VSHPROPID_IsNonMemberItem:
+                return this.IsNonMemberItem;
+            }
+
+            return base.GetProperty(propId);
+        }
+
+        /// <summary>
+        /// Provides the node name for inline editing of caption. 
+        /// Overriden to diable this fuctionality for non member fodler node.
+        /// </summary>
+        /// <returns>Caption of the file node if the node is a member item, null otherwise.</returns>
+        public override string GetEditLabel()
+        {
+            if (this.IsNonMemberItem)
+            {
+                return null;
+            }
+
+            return base.GetEditLabel();
+        }
+        #endregion
+
+        #region IProjectSourceNode members
+        /// <summary>
+        /// Exclude the item from the project system.
+        /// </summary>
+        /// <returns>Returns success or failure code.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
+        int IProjectSourceNode.ExcludeFromProject()
+        {
+            if (this.ProjectMgr == null || this.ProjectMgr.IsClosed)
+            {
+                return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
+            else if (this.IsNonMemberItem)
+            {
+                return VSConstants.S_OK; // do nothing, just ignore it.
+            }
+
+            // Ask Document tracker listeners if we can remove the item.
+            { // just to limit the scope.
+                string documentToRemove = this.GetMkDocument();
+                string[] filesToBeDeleted = new string[1] { documentToRemove };
+                VSQUERYREMOVEFILEFLAGS[] queryRemoveFlags = this.GetQueryRemoveFileFlags(filesToBeDeleted);
+                if (!this.ProjectMgr.Tracker.CanRemoveItems(filesToBeDeleted, queryRemoveFlags))
+                {
+                    return (int)OleConstants.OLECMDERR_E_CANCELED;
+                }
+
+                // Close the document if it has a manager.
+                DocumentManager manager = this.GetDocumentManager();
+                if (manager != null)
+                {
+                    if (manager.Close(__FRAMECLOSE.FRAMECLOSE_PromptSave) == VSConstants.E_ABORT)
+                    {
+                        // User cancelled operation in message box.
+                        return VSConstants.OLE_E_PROMPTSAVECANCELLED;
+                    }
+                }
+
+                // Check out the project file.
+                if (!this.ProjectMgr.QueryEditProjectFile(false))
+                {
+                    throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
+                }
+            }
+
+            // close the document window if open.
+            this.CloseDocumentWindow(this);
+
+            ProjectNode projectNode = this.ProjectMgr as ProjectNode;
+
+            if (projectNode != null && projectNode.ShowAllFilesEnabled && File.Exists(this.Url))
+            {
+                string url = this.Url; // need to store before removing the node.
+                this.ItemNode.RemoveFromProjectFile();
+                this.ProjectMgr.Tracker.OnItemRemoved(url, VSREMOVEFILEFLAGS.VSREMOVEFILEFLAGS_NoFlags);
+                this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, true); // Set it as non member item
+                this.ItemNode = new ProjectElement(this.ProjectMgr, null, true); // now we have to set a new ItemNode to indicate that this is virtual node.
+                this.ItemNode.Rename(url);
+                this.ItemNode.SetMetadata(ProjectFileConstants.Name, url);
+
+                ////this.ProjectMgr.OnItemAdded(this.Parent, this);
+                this.ReDraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now not a member of the project and should be drawn using a different icon.
+                this.ReDraw(UIHierarchyElement.SccState); // update the SCC state icon.
+            }
+            else if (this.Parent != null) // the project node has no parentNode
+            {
+                // Remove from the Hierarchy
+                this.OnItemDeleted();
+                this.Parent.RemoveChild(this);
+                this.ItemNode.RemoveFromProjectFile();
+            }
+
+            //this.ResetProperties();
+
+            // refresh property browser...
+            ProjectNode.RefreshPropertyBrowser();
+
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Include the item into the project system.
+        /// </summary>
+        /// <returns>Returns success or failure code.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
+        int IProjectSourceNode.IncludeInProject()
+        {
+            if (ProjectMgr == null || ProjectMgr.IsClosed)
+            {
+                return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
+            else if (!this.IsNonMemberItem)
+            {
+                return VSConstants.S_OK; // do nothing, just ignore it.
+            }
+
+            // Check out the project file.
+            if (!ProjectMgr.QueryEditProjectFile(false))
+            {
+                throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
+            }
+
+            // make sure that all parent folders are included in the project
+            ProjectNode.EnsureParentFolderIncluded(this);
+
+            // now add this node to the project.
+            this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, false);
+            this.ItemNode = ProjectMgr.AddFileToMsBuild(this.Url);
+            this.ProjectMgr.Tracker.OnItemAdded(this.Url, VSADDFILEFLAGS.VSADDFILEFLAGS_NoFlags);
+
+            // notify others
+            ////projectNode.OnItemAdded(this.Parent, this);
+            this.ReDraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now a member of the project and should be drawn using a different icon.
+            this.ReDraw(UIHierarchyElement.SccState); // update the SCC state icon.
+
+            //this.ResetProperties();
+
+            // refresh property browser...
+            ProjectNode.RefreshPropertyBrowser();
+
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Include the item into the project system recursively.
+        /// </summary>
+        /// <param name="recursive">Flag that indicates if the inclusion should be recursive or not.</param>
+        /// <returns>Returns success or failure code.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
+        int IProjectSourceNode.IncludeInProject(bool recursive)
+        {
+            // recursive doesn't make any sense in case of a file item. so just include this item.
+            return ((IProjectSourceNode)this).IncludeInProject();
+        }
         #endregion
 
         #region Helper methods

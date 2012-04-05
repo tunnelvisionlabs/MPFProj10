@@ -426,7 +426,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Specifies if a Node is under source control.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
-		public bool ExcludeNodeFromScc
+		public virtual bool ExcludeNodeFromScc
 		{
 			get
 			{
@@ -1815,6 +1815,9 @@ namespace Microsoft.VisualStudio.Project
 				if((VsCommands2K)cmd == VsCommands2K.SHOWALLFILES)
 				{
 					result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+					if (ProjectMgr.ShowAllFilesEnabled)
+						result |= QueryStatusResult.LATCHED;
+
 					return VSConstants.S_OK;
 				}
 			}

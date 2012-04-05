@@ -146,6 +146,7 @@
     <Compile Include="IDEBuildLogger.cs" />
     <Compile Include="ImageHandler.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="IProjectSourceNode.cs" />
     <Compile Include="LocalizableProperties.cs" />
     <Compile Include="SafeGlobalAllocHandle.cs" />
     <Compile Include="UIThread.cs" />
