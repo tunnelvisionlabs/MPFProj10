@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public class OANestedProjectItem : OAProjectItem<NestedProjectNode>
 	{
 		#region fields
-		EnvDTE.Project nestedProject;
+		private readonly EnvDTE.Project nestedProject;
 		#endregion
 
 		#region ctors

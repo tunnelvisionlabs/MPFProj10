@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 								References,
 								ReferencesEvents
 	{
-		private ReferenceContainerNode container;
+		private readonly ReferenceContainerNode container;
 
 		public OAReferences(ReferenceContainerNode containerNode)
 		{

@@ -27,7 +27,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public abstract class OAReferenceBase<RefType> : Reference
 		where RefType : ReferenceNode
 	{
-		private RefType referenceNode;
+		private readonly RefType referenceNode;
 
 		protected OAReferenceBase(RefType referenceNode)
 		{

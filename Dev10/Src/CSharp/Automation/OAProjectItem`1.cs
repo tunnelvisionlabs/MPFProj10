@@ -23,8 +23,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 	{
 
 		#region fields
-		private T node;
-		private OAProject project;
+		private readonly T node;
+		private readonly OAProject project;
 		#endregion
 
 		#region properties

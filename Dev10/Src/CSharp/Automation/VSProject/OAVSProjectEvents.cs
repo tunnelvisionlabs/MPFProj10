@@ -24,7 +24,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	[ComVisible(true)]
 	public class OAVSProjectEvents : VSProjectEvents
 	{
-		private OAVSProject vsProject;
+		private readonly OAVSProject vsProject;
 
 		public OAVSProjectEvents(OAVSProject vsProject)
 		{

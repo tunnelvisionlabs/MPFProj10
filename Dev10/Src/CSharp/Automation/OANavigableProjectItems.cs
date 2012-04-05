@@ -25,9 +25,9 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public class OANavigableProjectItems : EnvDTE.ProjectItems
 	{
 		#region fields
-		private OAProject project;
-		private IList<EnvDTE.ProjectItem> items;
-		private HierarchyNode nodeWithItems;
+		private readonly OAProject project;
+		private readonly IList<EnvDTE.ProjectItem> items;
+		private readonly HierarchyNode nodeWithItems;
 		#endregion
 
 		#region properties

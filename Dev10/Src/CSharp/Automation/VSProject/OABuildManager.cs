@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 									BuildManager,
 									BuildManagerEvents
 	{
-		private ProjectNode projectManager;
+		private readonly ProjectNode projectManager;
 
 		public OABuildManager(ProjectNode project)
 		{

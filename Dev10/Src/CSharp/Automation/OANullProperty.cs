@@ -21,7 +21,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public class OANullProperty : EnvDTE.Property
 	{
 		#region fields
-		private OAProperties parent;
+		private readonly OAProperties parent;
 		#endregion
 
 		#region ctors

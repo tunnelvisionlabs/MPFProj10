@@ -25,11 +25,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 	[ComVisible(true)]
 	public class OAVSProjectItem : VSProjectItem
 	{
-		private FileNode fileNode;
+		private readonly FileNode fileNode;
 
 		public OAVSProjectItem(FileNode fileNode)
 		{
-			this.FileNode = fileNode;
+			this.fileNode = fileNode;
 		}
 
 		#region VSProjectItem Members
@@ -74,10 +74,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 			get
 			{
 				return fileNode;
-			}
-			set
-			{
-				fileNode = value;
 			}
 		}
 		#endregion
