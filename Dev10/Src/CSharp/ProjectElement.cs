@@ -363,7 +363,7 @@ namespace Microsoft.VisualStudio.Project
                 return true;
 
             // Verify that they are not null (cast to object first to avoid stack overflow)
-            if(element1 as object == null || element2 as object == null)
+            if (object.ReferenceEquals(element1, null) || object.ReferenceEquals(element2, null))
             {
                 return false;
             }
@@ -384,13 +384,7 @@ namespace Microsoft.VisualStudio.Project
             string include1 = element1.GetMetadata(ProjectFileConstants.Include);
             string include2 = element2.GetMetadata(ProjectFileConstants.Include);
 
-            // Unfortunately the checking for nulls have to be done again, since neither String.Equals nor String.Compare can handle nulls.
             // Virtual folders should not be handled here.
-            if(include1 == null || include2 == null)
-            {
-                return false;
-            }
-
             return String.Equals(include1, include2, StringComparison.CurrentCultureIgnoreCase);
         }
 
