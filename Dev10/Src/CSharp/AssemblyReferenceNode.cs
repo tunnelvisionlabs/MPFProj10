@@ -90,7 +90,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		private Automation.OAAssemblyReference assemblyRef;
-		internal override object Object
+		public override object Object
 		{
 			get
 			{

@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudio.Project
     public class ReferenceContainerNode : HierarchyNode, IReferenceContainer
     {
         #region fields
-        internal const string ReferencesNodeVirtualName = "References";
+        public const string ReferencesNodeVirtualName = "References";
         #endregion
 
         #region ctor
@@ -91,7 +91,7 @@ namespace Microsoft.VisualStudio.Project
 
 
         private Automation.OAReferences references;
-        internal override object Object
+        public override object Object
         {
             get
             {

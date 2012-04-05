@@ -232,7 +232,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Returns an object that is a special view over this object; this is the value
 		/// returned by the Object property of the automation objects.
 		/// </summary>
-		internal virtual object Object
+		public virtual object Object
 		{
 			get { return this; }
 		}
@@ -3134,7 +3134,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helper methods
-		internal HierarchyNode FindChild(string name)
+		public HierarchyNode FindChild(string name)
 		{
 			if(String.IsNullOrEmpty(name))
 			{

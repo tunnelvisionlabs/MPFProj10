@@ -122,7 +122,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
         private Automation.OAComReference comReference;
-        internal override object Object
+        public override object Object
         {
             get
             {
