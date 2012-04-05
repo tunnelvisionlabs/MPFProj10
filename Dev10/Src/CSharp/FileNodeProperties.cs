@@ -84,6 +84,11 @@ namespace Microsoft.VisualStudio.Project
 
             set
             {
+                if (Node.ItemNode.IsVirtual && value != CopyToOutputDirectoryBehavior.DoNotCopy)
+                {
+                    Node.ItemNode = Node.ProjectManager.AddFileToMsBuild(Node.VirtualNodeName, ProjectFileConstants.Content, null);
+                }
+
                 if (this.Node.ItemNode.Item != null)
                 {
                     this.Node.ItemNode.SetMetadata(ProjectFileConstants.CopyToOutputDirectory, value.ToString());
