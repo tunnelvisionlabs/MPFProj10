@@ -163,7 +163,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return new Version().ToString();
+				return new Version(MajorVersion, MinorVersion, BuildNumber, RevisionNumber).ToString();
 			}
 		}
 
