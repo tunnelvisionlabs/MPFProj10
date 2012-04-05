@@ -9,13 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using Microsoft.VisualStudio.Shell.Interop;
-using VSLangProj;
-using Microsoft.VisualStudio;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using VSLangProj;
+
 	public class OABuildManager : ConnectionPointContainer,
 									IEventSource<_dispBuildManagerEvents>,
 									BuildManager,
@@ -39,24 +38,36 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public virtual EnvDTE.Project ContainingProject
 		{
-			get { return projectManager.GetAutomationObject() as EnvDTE.Project; }
+			get
+			{
+				return projectManager.GetAutomationObject() as EnvDTE.Project;
+			}
 		}
 
 		public virtual EnvDTE.DTE DTE
 		{
-			get { return projectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE; }
+			get
+			{
+				return projectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual object DesignTimeOutputMonikers
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				throw new NotImplementedException();
+			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual object Parent
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		#endregion

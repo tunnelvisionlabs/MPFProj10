@@ -9,47 +9,53 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using EnvDTE;
-using VSLangProj;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using EnvDTE;
+	using VSLangProj;
+
 	/// <summary>
 	/// Represents a language-specific project item
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "OAVS")]
-	[ComVisible(true), CLSCompliant(false)]
+	[CLSCompliant(false)]
+	[ComVisible(true)]
 	public class OAVSProjectItem : VSProjectItem
 	{
-		#region fields
 		private FileNode fileNode;
-		#endregion
 
-		#region ctors
 		public OAVSProjectItem(FileNode fileNode)
 		{
 			this.FileNode = fileNode;
 		}
-		#endregion
 
 		#region VSProjectItem Members
 
 		public virtual EnvDTE.Project ContainingProject
 		{
-			get { return fileNode.ProjectManager.GetAutomationObject() as EnvDTE.Project; }
+			get
+			{
+				return fileNode.ProjectManager.GetAutomationObject() as EnvDTE.Project;
+			}
 		}
 
 		public virtual ProjectItem ProjectItem
 		{
-			get { return fileNode.GetAutomationObject() as ProjectItem; }
+			get
+			{
+				return fileNode.GetAutomationObject() as ProjectItem;
+			}
 		}
 
 		public virtual DTE DTE
 		{
-			get { return (DTE)this.fileNode.ProjectManager.Site.GetService(typeof(DTE)); }
+			get
+			{
+				return (DTE)this.fileNode.ProjectManager.Site.GetService(typeof(DTE));
+			}
 		}
 
 		public virtual void RunCustomTool()

@@ -9,32 +9,27 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using EnvDTE;
-using VSLangProj;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using VSLangProj;
+
 	/// <summary>
 	/// Provides access to language-specific project events
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "OAVS")]
-	[ComVisible(true), CLSCompliant(false)]
+	[CLSCompliant(false)]
+	[ComVisible(true)]
 	public class OAVSProjectEvents : VSProjectEvents
 	{
-		#region fields
 		private OAVSProject vsProject;
-		#endregion
 
-		#region ctors
 		public OAVSProjectEvents(OAVSProject vsProject)
 		{
 			this.vsProject = vsProject;
 		}
-		#endregion
 
 		#region VSProjectEvents Members
 
@@ -46,7 +41,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual ImportsEvents ImportsEvents
 		{
 			get

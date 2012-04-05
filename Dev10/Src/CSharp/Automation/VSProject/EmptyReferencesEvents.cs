@@ -9,16 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using EnvDTE;
-using VSLangProj;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
-	public class EmptyReferencesEvents : ConnectionPointContainer, IEventSource<_dispReferencesEvents>, ReferencesEvents
+	using VSLangProj;
+
+	public sealed class EmptyReferencesEvents : ConnectionPointContainer, IEventSource<_dispReferencesEvents>, ReferencesEvents
 	{
 		public static readonly EmptyReferencesEvents Instance = new EmptyReferencesEvents();
 

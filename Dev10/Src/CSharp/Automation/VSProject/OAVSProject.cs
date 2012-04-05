@@ -9,15 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using EnvDTE;
-using VSLangProj;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using EnvDTE;
+	using VSLangProj;
+
 	/// <summary>
 	/// Represents an automation friendly version of a language-specific project.
 	/// </summary>
@@ -25,17 +24,13 @@ namespace Microsoft.VisualStudio.Project.Automation
 	[ComVisible(true), CLSCompliant(false)]
 	public class OAVSProject : VSProject
 	{
-		#region fields
 		private ProjectNode project;
 		private OAVSProjectEvents events;
-		#endregion
 
-		#region ctors
 		public OAVSProject(ProjectNode project)
 		{
 			this.project = project;
 		}
-		#endregion
 
 		#region VSProject Members
 
@@ -129,7 +124,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			throw new NotImplementedException();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual string TemplatePath
 		{
 			get
@@ -138,7 +133,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual ProjectItem WebReferencesFolder
 		{
 			get
@@ -147,13 +142,14 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual bool WorkOffline
 		{
 			get
 			{
 				throw new NotImplementedException();
 			}
+
 			set
 			{
 				throw new NotImplementedException();

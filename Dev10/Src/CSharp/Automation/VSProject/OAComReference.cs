@@ -9,19 +9,19 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
+	using System.Runtime.InteropServices;
+
 	[SuppressMessage("Microsoft.Interoperability", "CA1405:ComVisibleTypeBaseTypesShouldBeComVisible")]
 	[ComVisible(true)]
 	public class OAComReference : OAReferenceBase<ComReferenceNode>
 	{
-		public OAComReference(ComReferenceNode comReference) :
-			base(comReference)
+		public OAComReference(ComReferenceNode comReference)
+			: base(comReference)
 		{
 		}
 
@@ -56,16 +56,28 @@ namespace Microsoft.VisualStudio.Project.Automation
 		}
 		public override int MajorVersion
 		{
-			get { return BaseReferenceNode.MajorVersionNumber; }
+			get
+			{
+				return BaseReferenceNode.MajorVersionNumber;
+			}
 		}
+
 		public override int MinorVersion
 		{
-			get { return BaseReferenceNode.MinorVersionNumber; }
+			get
+			{
+				return BaseReferenceNode.MinorVersionNumber;
+			}
 		}
+
 		public override string Name
 		{
-			get { return BaseReferenceNode.Caption; }
+			get
+			{
+				return BaseReferenceNode.Caption;
+			}
 		}
+
 		public override VSLangProj.prjReferenceType Type
 		{
 			get

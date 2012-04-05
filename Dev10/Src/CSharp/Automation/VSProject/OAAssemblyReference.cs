@@ -9,20 +9,20 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using VSLangProj;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System.Diagnostics.CodeAnalysis;
+	using System.Reflection;
+	using System.Runtime.InteropServices;
+	using System.Text;
+	using VSLangProj;
+
 	[SuppressMessage("Microsoft.Interoperability", "CA1405:ComVisibleTypeBaseTypesShouldBeComVisible")]
 	[ComVisible(true)]
 	public class OAAssemblyReference : OAReferenceBase<AssemblyReferenceNode>
 	{
-		public OAAssemblyReference(AssemblyReferenceNode assemblyReference) :
-			base(assemblyReference)
+		public OAAssemblyReference(AssemblyReferenceNode assemblyReference)
+			: base(assemblyReference)
 		{
 		}
 

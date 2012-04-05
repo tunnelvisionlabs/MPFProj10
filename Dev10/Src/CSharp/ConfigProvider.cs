@@ -9,19 +9,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Microsoft.Build.Construction;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-
 /* This file provides a basefunctionallity for IVsCfgProvider2.
    Instead of using the IVsProjectCfgEventsHelper object we have our own little sink and call our own helper methods
    similiar to the interface. But there is no real benefit in inheriting from the interface in the first place. 
@@ -31,6 +18,19 @@ using Microsoft.VisualStudio.Shell.Interop;
 */
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
+	using System.IO;
+	using System.Linq;
+	using System.Runtime.InteropServices;
+	using Microsoft.Build.Construction;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+
     [CLSCompliant(false)]
     [ComVisible(true)]
     public class ConfigProvider : IVsCfgProvider2, IVsProjectCfgProvider, IVsExtensibleObject
@@ -61,13 +61,15 @@ namespace Microsoft.VisualStudio.Project
         /// they provide us with this data.
         /// Returns/sets the [(<propName, propCondition>) <propValue>] collection
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual List<KeyValuePair<KeyValuePair<string, string>, string>> NewConfigProperties
         {
             get
             {
                 return newCfgProps;
             }
+
             set
             {
                 newCfgProps = value;

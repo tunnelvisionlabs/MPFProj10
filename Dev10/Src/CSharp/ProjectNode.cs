@@ -463,6 +463,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.supportsProjectDesigner;
             }
+
             set
             {
                 this.supportsProjectDesigner = value;
@@ -487,6 +488,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.showProjectInSolutionPage;
             }
+
             set
             {
                 this.showProjectInSolutionPage = value;
@@ -505,6 +507,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return canFileNodesHaveChilds;
             }
+
             set
             {
                 canFileNodesHaveChilds = value;
@@ -522,6 +525,7 @@ namespace Microsoft.VisualStudio.Project
                     tokenProcessor = new TokenProcessor();
                 return tokenProcessor;
             }
+
             set
             {
                 tokenProcessor = value;
@@ -600,6 +604,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return Path.GetFileName(this.filename);
             }
+
             set
             {
                 this.SetEditLabel(value);
@@ -716,6 +721,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.disableQueryEdit;
             }
+
             set
             {
                 this.disableQueryEdit = value;
@@ -753,6 +759,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.buildLogger;
             }
+
             set
             {
                 this.buildLogger = value;
@@ -824,6 +831,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.disableScc;
             }
+
             set
             {
                 this.disableScc = value;
@@ -840,6 +848,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return canProjectDeleteItems;
             }
+
             set
             {
                 canProjectDeleteItems = value;

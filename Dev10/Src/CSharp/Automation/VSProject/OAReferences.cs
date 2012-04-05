@@ -9,17 +9,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.Shell.Interop;
-using VSLangProj;
-using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using VSLangProj;
+	using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
+
 	/// <summary>
 	/// Represents the automation object for the equivalent ReferenceContainerNode object
 	/// </summary>
@@ -31,6 +31,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 								ReferencesEvents
 	{
 		private ReferenceContainerNode container;
+
 		public OAReferences(ReferenceContainerNode containerNode)
 		{
 			container = containerNode;
@@ -250,8 +251,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
-            Justification="Support for this has not yet been added")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
+            Justification = "Support for this has not yet been added")]
         private void OnReferenceChanged(object sender, HierarchyNodeEventArgs args)
         {
             // Validate the parameters.
