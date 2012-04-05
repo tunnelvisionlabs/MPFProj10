@@ -156,11 +156,6 @@ namespace Microsoft.VisualStudio.Project
         internal const string PerUserFileExtension = ".user";
      
 		private Guid GUID_MruPage = new Guid("{19B97F03-9594-4c1c-BE28-25FF030113B3}");
-
-        /// <summary>
-        /// The VS command that allows projects to open Windows Explorer to the project directory.
-        /// </summary>
-        private const VsCommands2K ExploreFolderInWindowsCommand = (VsCommands2K)1635;
 		
 		#endregion
 
@@ -1009,6 +1004,17 @@ namespace Microsoft.VisualStudio.Project
         }
         #endregion
 
+        #region static methods
+
+        internal static void ExploreFolderInWindows(string folderPath)
+        {
+            if (folderPath == null)
+                throw new ArgumentNullException("folderPath");
+
+            string explorerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
+            System.Diagnostics.Process.Start(explorerPath, string.Format("\"{0}\"", folderPath));
+        }
+        #endregion
         #region overridden methods
         protected override NodeProperties CreatePropertiesObject()
         {
@@ -1367,6 +1373,21 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
+        protected override QueryStatusResult QueryStatusCommandFromOleCommandTarget(Guid cmdGroup, uint cmd, out bool handled)
+        {
+            if (cmdGroup == VsMenus.guidStandardCommandSet2K)
+            {
+                switch ((VsCommands2K)cmd)
+                {
+                case ProjectFileConstants.CommandExploreFolderInWindows:
+                    handled = true;
+                    return QueryStatusResult.ENABLED | QueryStatusResult.SUPPORTED;
+                }
+            }
+
+            return base.QueryStatusCommandFromOleCommandTarget(cmdGroup, cmd, out handled);
+        }
+
         /// <summary>
         /// Handles command status on the project node. If a command cannot be handled then the base should be called.
         /// </summary>
@@ -1431,10 +1452,6 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands2K.EXCLUDEFROMPROJECT:
                         result |= QueryStatusResult.SUPPORTED | QueryStatusResult.INVISIBLE;
                         return VSConstants.S_OK;
-
-                    case ExploreFolderInWindowsCommand:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
-                        return VSConstants.S_OK;
                 }
             }
             else
@@ -1479,9 +1496,8 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands2K.ADDWEBREFERENCECTX:
                         return this.AddWebReference();
 
-                    case ExploreFolderInWindowsCommand:
-                        string explorerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
-                        System.Diagnostics.Process.Start(explorerPath, this.ProjectFolder);
+                    case ProjectFileConstants.CommandExploreFolderInWindows:
+                        ExploreFolderInWindows(this.ProjectFolder);
                         return VSConstants.S_OK;
                 }
             }

@@ -287,6 +287,21 @@ namespace Microsoft.VisualStudio.Project
 			return base.QueryStatusOnNode(cmdGroup, cmd, pCmdText, ref result);
 		}
 
+        protected override int ExecCommandOnNode(Guid cmdGroup, uint cmd, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            if (cmdGroup == VsMenus.guidStandardCommandSet2K)
+            {
+                switch ((VsCommands2K)cmd)
+                {
+                case ProjectFileConstants.CommandExploreFolderInWindows:
+                    ProjectNode.ExploreFolderInWindows(GetMkDocument());
+                    return VSConstants.S_OK;
+                }
+            }
+
+            return base.ExecCommandOnNode(cmdGroup, cmd, nCmdexecopt, pvaIn, pvaOut);
+        }
+
 		protected override bool CanDeleteItem(__VSDELETEITEMOPERATION deleteOperation)
 		{
 			if(deleteOperation == __VSDELETEITEMOPERATION.DELITEMOP_DeleteFromStorage)

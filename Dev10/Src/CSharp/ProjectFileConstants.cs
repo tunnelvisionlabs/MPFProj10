@@ -10,6 +10,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System.Diagnostics.CodeAnalysis;
+using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 
 namespace Microsoft.VisualStudio.Project
 {
@@ -40,6 +41,8 @@ namespace Microsoft.VisualStudio.Project
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM")]
 	public static class ProjectFileConstants
 	{
+		public const VsCommands2K CommandExploreFolderInWindows = (VsCommands2K)1635;
+
 		public const string Include = "Include";
 		public const string Name = "Name";
 		public const string HintPath = "HintPath";
