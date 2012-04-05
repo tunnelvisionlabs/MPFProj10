@@ -80,14 +80,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 		#region IDisposable Members
 		private void Dispose(bool disposing)
 		{
-			if(!this.isDisposed)
+			if(disposing && !this.isDisposed)
 			{
 				lock(Mutex)
 				{
-					if(disposing)
-					{
-						ExitAutomation();
-					}
+					ExitAutomation();
 
 					this.isDisposed = true;
 				}
