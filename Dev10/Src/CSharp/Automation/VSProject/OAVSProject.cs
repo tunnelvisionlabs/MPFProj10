@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public virtual ProjectItem AddWebReference(string bstrUrl)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public virtual BuildManager BuildManager
@@ -49,12 +49,12 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public virtual void CopyProject(string bstrDestFolder, string bstrDestUNCPath, prjCopyProjectOption copyProjectOption, string bstrUsername, string bstrPassword)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public virtual ProjectItem CreateWebReferencesFolder()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public virtual DTE DTE
@@ -77,24 +77,24 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public virtual void Exec(prjExecCommand command, int bSuppressUI, object varIn, out object pVarOut)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public virtual void GenerateKeyPairFiles(string strPublicPrivateFile, string strPublicOnlyFile)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public virtual string GetUniqueFilename(object pDispatch, string bstrRoot, string bstrDesiredExt)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public virtual Imports Imports
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
@@ -121,38 +121,35 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public virtual void Refresh()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual string TemplatePath
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual ProjectItem WebReferencesFolder
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual bool WorkOffline
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 
 			set
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
