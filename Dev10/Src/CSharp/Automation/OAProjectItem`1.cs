@@ -45,6 +45,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public OAProjectItem(OAProject project, T node)
 		{
+			if (project == null)
+				throw new ArgumentNullException("project");
+			if (node == null)
+				throw new ArgumentNullException("node");
+
 			this.node = node;
 			this.project = project;
 		}

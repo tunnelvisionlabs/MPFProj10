@@ -28,6 +28,9 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public OAVSProjectEvents(OAVSProject vsProject)
 		{
+			if (vsProject == null)
+				throw new ArgumentNullException("vsProject");
+
 			this._vsProject = vsProject;
 		}
 

@@ -125,14 +125,19 @@ namespace Microsoft.VisualStudio.Project
 		public AssemblyReferenceNode(ProjectNode root, string assemblyPath)
 			: base(root)
 		{
-			// Validate the input parameters.
-			if(null == root)
+			if(root == null)
 			{
 				throw new ArgumentNullException("root");
 			}
-			if(string.IsNullOrEmpty(assemblyPath))
+
+			if(assemblyPath == null)
 			{
 				throw new ArgumentNullException("assemblyPath");
+			}
+
+			if(string.IsNullOrEmpty(assemblyPath))
+			{
+				throw new ArgumentException("assemblyPath cannot be null or empty");
 			}
 
 			this.InitializeFileChangeEvents();

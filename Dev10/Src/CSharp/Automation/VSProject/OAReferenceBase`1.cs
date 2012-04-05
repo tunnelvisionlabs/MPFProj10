@@ -31,6 +31,9 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		protected OAReferenceBase(TReferenceNode referenceNode)
 		{
+			if (referenceNode == null)
+				throw new ArgumentNullException("referenceNode");
+
 			this._referenceNode = referenceNode;
 		}
 
@@ -38,6 +41,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
+				//Contract.Ensures(Contract.Result<TReferenceNode>() != null);
 				return _referenceNode;
 			}
 		}

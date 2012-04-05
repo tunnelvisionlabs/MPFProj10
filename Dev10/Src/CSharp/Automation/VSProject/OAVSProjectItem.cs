@@ -29,6 +29,9 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public OAVSProjectItem(FileNode fileNode)
 		{
+			if (fileNode == null)
+				throw new ArgumentNullException("fileNode");
+
 			this._fileNode = fileNode;
 		}
 

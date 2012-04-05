@@ -27,6 +27,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 		public OANestedProjectItem(OAProject project, NestedProjectNode node)
 			: base(project, node)
 		{
+            if (project == null)
+            {
+                throw new ArgumentNullException("project");
+            }
+
             if (node == null)
             {
                 throw new ArgumentNullException("node");

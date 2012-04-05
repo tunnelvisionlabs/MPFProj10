@@ -475,6 +475,10 @@ namespace Microsoft.VisualStudio.Project
             {
                 throw new ArgumentNullException("root");
             }
+            if (element == null)
+            {
+                throw new ArgumentNullException("element");
+            }
 
 			this.projectMgr = root;
 			this.itemNode = element;

@@ -24,6 +24,9 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		public OANullProperty(OAProperties parent)
 		{
+			if (parent == null)
+				throw new ArgumentNullException("parent");
+
 			this._parent = parent;
 		}
 
