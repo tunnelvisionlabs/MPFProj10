@@ -27,18 +27,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 		}
 
 		#region Reference override
-		public override int BuildNumber
-		{
-			get
-			{
-				if((null == BaseReferenceNode.ResolvedAssembly) ||
-					(null == BaseReferenceNode.ResolvedAssembly.Version))
-				{
-					return 0;
-				}
-				return BaseReferenceNode.ResolvedAssembly.Version.Build;
-			}
-		}
 		public override string Culture
 		{
 			get
@@ -89,6 +77,42 @@ namespace Microsoft.VisualStudio.Project.Automation
 				return BaseReferenceNode.ResolvedAssembly.Version.Minor;
 			}
 		}
+		public override int BuildNumber
+		{
+			get
+			{
+				if((null == BaseReferenceNode.ResolvedAssembly) ||
+					(null == BaseReferenceNode.ResolvedAssembly.Version))
+				{
+					return 0;
+				}
+				return BaseReferenceNode.ResolvedAssembly.Version.Build;
+			}
+		}
+		public override int RevisionNumber
+		{
+			get
+			{
+				if((null == BaseReferenceNode.ResolvedAssembly) ||
+					(null == BaseReferenceNode.ResolvedAssembly.Version))
+				{
+					return 0;
+				}
+				return BaseReferenceNode.ResolvedAssembly.Version.Revision;
+			}
+		}
+		public override string Version
+		{
+			get
+			{
+				if((null == BaseReferenceNode.ResolvedAssembly) ||
+					(null == BaseReferenceNode.ResolvedAssembly.Version))
+				{
+					return string.Empty;
+				}
+				return BaseReferenceNode.ResolvedAssembly.Version.ToString();
+			}
+		}
 
 		public override string PublicKeyToken
 		{
@@ -124,18 +148,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 				return null;
 			}
 		}
-		public override int RevisionNumber
-		{
-			get
-			{
-				if((null == BaseReferenceNode.ResolvedAssembly) ||
-					(null == BaseReferenceNode.ResolvedAssembly.Version))
-				{
-					return 0;
-				}
-				return BaseReferenceNode.ResolvedAssembly.Version.Revision;
-			}
-		}
 		public override bool StrongName
 		{
 			get
@@ -153,18 +165,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 			get
 			{
 				return prjReferenceType.prjReferenceTypeAssembly;
-			}
-		}
-		public override string Version
-		{
-			get
-			{
-				if((null == BaseReferenceNode.ResolvedAssembly) ||
-					(null == BaseReferenceNode.ResolvedAssembly.Version))
-				{
-					return string.Empty;
-				}
-				return BaseReferenceNode.ResolvedAssembly.Version.ToString();
 			}
 		}
 		#endregion

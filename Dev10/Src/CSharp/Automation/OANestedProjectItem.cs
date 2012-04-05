@@ -9,23 +9,21 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	[SuppressMessage("Microsoft.Interoperability", "CA1405:ComVisibleTypeBaseTypesShouldBeComVisible")]
-	[ComVisible(true), CLSCompliant(false)]
+	[ComVisible(true)]
+	[CLSCompliant(false)]
 	public class OANestedProjectItem : OAProjectItem<NestedProjectNode>
 	{
-		#region fields
 		private readonly EnvDTE.Project nestedProject;
-		#endregion
 
-		#region ctors
 		public OANestedProjectItem(OAProject project, NestedProjectNode node)
 			: base(project, node)
 		{
@@ -41,9 +39,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		#endregion
-
-		#region overridden methods
 		/// <summary>
 		/// Returns the collection of project items defined in the nested project
 		/// </summary>
@@ -69,6 +64,5 @@ namespace Microsoft.VisualStudio.Project.Automation
 				return this.nestedProject;
 			}
 		}
-		#endregion
 	}
 }

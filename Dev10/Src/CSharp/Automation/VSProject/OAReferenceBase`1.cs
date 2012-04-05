@@ -24,33 +24,25 @@ namespace Microsoft.VisualStudio.Project.Automation
 	/// <typeparam name="RefType"></typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T")]
 	[ComVisible(true)]
-	public abstract class OAReferenceBase<RefType> : Reference
-		where RefType : ReferenceNode
+	public abstract class OAReferenceBase<TReferenceNode> : Reference
+		where TReferenceNode : ReferenceNode
 	{
-		private readonly RefType referenceNode;
+		private readonly TReferenceNode _referenceNode;
 
-		protected OAReferenceBase(RefType referenceNode)
+		protected OAReferenceBase(TReferenceNode referenceNode)
 		{
-			this.referenceNode = referenceNode;
+			this._referenceNode = referenceNode;
 		}
 
-		protected RefType BaseReferenceNode
+		protected TReferenceNode BaseReferenceNode
 		{
 			get
 			{
-				return referenceNode;
+				return _referenceNode;
 			}
 		}
 
 		#region Reference Members
-
-		public virtual int BuildNumber
-		{
-			get
-			{
-				return 0;
-			}
-		}
 
 		public virtual References Collection
 		{
@@ -145,6 +137,30 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
+		public virtual int BuildNumber
+		{
+			get
+			{
+				return 0;
+			}
+		}
+
+		public virtual int RevisionNumber
+		{
+			get
+			{
+				return 0;
+			}
+		}
+
+		public virtual string Version
+		{
+			get
+			{
+				return new Version().ToString();
+			}
+		}
+
 		public virtual string Name
 		{
 			get
@@ -166,19 +182,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 			get
 			{
 				throw new NotImplementedException();
-			}
-		}
-
-		public virtual void Remove()
-		{
-			BaseReferenceNode.Remove(false);
-		}
-
-		public virtual int RevisionNumber
-		{
-			get
-			{
-				return 0;
 			}
 		}
 
@@ -206,17 +209,14 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		public virtual string Version
-		{
-			get
-			{
-				return new Version().ToString();
-			}
-		}
-
 		public virtual object get_Extender(string ExtenderName)
 		{
 			throw new NotImplementedException();
+		}
+
+		public virtual void Remove()
+		{
+			BaseReferenceNode.Remove(false);
 		}
 
 		#endregion

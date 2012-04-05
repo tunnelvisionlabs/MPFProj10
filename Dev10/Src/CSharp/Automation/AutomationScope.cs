@@ -22,9 +22,10 @@ namespace Microsoft.VisualStudio.Project.Automation
 	/// </summary>
 	public class AutomationScope : IDisposable
 	{
+		private static readonly object Mutex = new object();
+
 		private readonly IVsExtensibility3 extensibility;
 		private bool inAutomation;
-		private static readonly object Mutex = new object();
 		private bool isDisposed;
 
 		/// <summary>
@@ -65,7 +66,10 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// </summary>
 		public IVsExtensibility3 Extensibility
 		{
-			get { return extensibility; }
+			get
+			{
+				return extensibility;
+			}
 		}
 
 		/// <summary>

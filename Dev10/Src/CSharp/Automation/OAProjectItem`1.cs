@@ -9,25 +9,21 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	[ComVisible(true), CLSCompliant(false)]
 	public class OAProjectItem<T> : EnvDTE.ProjectItem
 		 where T : HierarchyNode
 	{
-
-		#region fields
 		private readonly T node;
 		private readonly OAProject project;
-		#endregion
 
-		#region properties
 		protected T Node
 		{
 			get
@@ -46,15 +42,12 @@ namespace Microsoft.VisualStudio.Project.Automation
 				return this.project;
 			}
 		}
-		#endregion
 
-		#region ctors
 		public OAProjectItem(OAProject project, T node)
 		{
 			this.node = node;
 			this.project = project;
 		}
-		#endregion
 
 		#region EnvDTE.ProjectItem
 

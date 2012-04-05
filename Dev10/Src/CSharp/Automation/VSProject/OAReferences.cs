@@ -30,20 +30,20 @@ namespace Microsoft.VisualStudio.Project.Automation
 								References,
 								ReferencesEvents
 	{
-		private readonly ReferenceContainerNode container;
+		private readonly ReferenceContainerNode _container;
 
 		public OAReferences(ReferenceContainerNode containerNode)
 		{
-			container = containerNode;
+			_container = containerNode;
 			AddEventSource<_dispReferencesEvents>(this as IEventSource<_dispReferencesEvents>);
-			container.OnChildAdded += new EventHandler<HierarchyNodeEventArgs>(OnReferenceAdded);
-			container.OnChildRemoved += new EventHandler<HierarchyNodeEventArgs>(OnReferenceRemoved);
+			_container.OnChildAdded += new EventHandler<HierarchyNodeEventArgs>(OnReferenceAdded);
+			_container.OnChildRemoved += new EventHandler<HierarchyNodeEventArgs>(OnReferenceRemoved);
 		}
 
 		#region Private Members
 		private Reference AddFromSelectorData(VSCOMPONENTSELECTORDATA selector, string wrapperTool = null)
 		{
-			ReferenceNode refNode = container.AddReferenceFromSelectorData(selector, wrapperTool);
+			ReferenceNode refNode = _container.AddReferenceFromSelectorData(selector, wrapperTool);
 			if(null == refNode)
 			{
 				return null;
@@ -99,7 +99,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 				return null;
 			}
 			// Get the soulution.
-			IVsSolution solution = container.ProjectManager.Site.GetService(typeof(SVsSolution)) as IVsSolution;
+			IVsSolution solution = _container.ProjectManager.Site.GetService(typeof(SVsSolution)) as IVsSolution;
 			if(null == solution)
 			{
 				return null;
@@ -126,7 +126,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return container.ProjectManager.GetAutomationObject() as EnvDTE.Project;
+				return _container.ProjectManager.GetAutomationObject() as EnvDTE.Project;
 			}
 		}
 
@@ -134,7 +134,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return container.EnumReferences().Count;
+				return _container.EnumReferences().Count;
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return container.ProjectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+				return _container.ProjectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
 			}
 		}
 
@@ -168,7 +168,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		public IEnumerator GetEnumerator()
 		{
 			List<Reference> references = new List<Reference>();
-			IEnumerator baseEnum = container.EnumReferences().GetEnumerator();
+			IEnumerator baseEnum = _container.EnumReferences().GetEnumerator();
 			if(null == baseEnum)
 			{
 				return references.GetEnumerator();
@@ -198,7 +198,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 			// Note that this cast will throw if the index is not convertible to int.
 			int intIndex = (int)index;
-			IList<ReferenceNode> refs = container.EnumReferences();
+			IList<ReferenceNode> refs = _container.EnumReferences();
 			if(null == refs)
 			{
 				throw new ArgumentOutOfRangeException("index");
@@ -215,7 +215,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return container.Parent.Object;
+				return _container.Parent.Object;
 			}
 		}
 
@@ -231,7 +231,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		private void OnReferenceAdded(object sender, HierarchyNodeEventArgs args)
 		{
 			// Validate the parameters.
-			if((container != sender as ReferenceContainerNode) ||
+			if((_container != sender as ReferenceContainerNode) ||
 				(null == args) || (null == args.Child))
 			{
 				return;
@@ -256,7 +256,7 @@ namespace Microsoft.VisualStudio.Project.Automation
         private void OnReferenceChanged(object sender, HierarchyNodeEventArgs args)
         {
             // Validate the parameters.
-            if ((container != sender as ReferenceContainerNode) ||
+            if ((_container != sender as ReferenceContainerNode) ||
                 (null == args) || (null == args.Child))
             {
                 return;
@@ -279,7 +279,7 @@ namespace Microsoft.VisualStudio.Project.Automation
         private void OnReferenceRemoved(object sender, HierarchyNodeEventArgs args)
 		{
 			// Validate the parameters.
-			if((container != sender as ReferenceContainerNode) ||
+			if((_container != sender as ReferenceContainerNode) ||
 				(null == args) || (null == args.Child))
 			{
 				return;

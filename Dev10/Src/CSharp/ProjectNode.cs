@@ -378,7 +378,6 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-
         #endregion
 
         #region virtual properties

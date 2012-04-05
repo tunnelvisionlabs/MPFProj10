@@ -24,11 +24,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 	[ComVisible(true)]
 	public class OAVSProjectEvents : VSProjectEvents
 	{
-		private readonly OAVSProject vsProject;
+		private readonly OAVSProject _vsProject;
 
 		public OAVSProjectEvents(OAVSProject vsProject)
 		{
-			this.vsProject = vsProject;
+			this._vsProject = vsProject;
 		}
 
 		#region VSProjectEvents Members
@@ -37,7 +37,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return vsProject.BuildManager as BuildManagerEvents;
+				return _vsProject.BuildManager as BuildManagerEvents;
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			get
 			{
 				// this can't return null or a NullReferenceException in Microsoft.VisualStudio.Xaml will take down the IDE (VS2010)
-				ReferencesEvents events = vsProject.References as ReferencesEvents;
+				ReferencesEvents events = _vsProject.References as ReferencesEvents;
 				return events ?? EmptyReferencesEvents.Instance;
 			}
 		}

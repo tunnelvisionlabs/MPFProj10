@@ -20,11 +20,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 									BuildManager,
 									BuildManagerEvents
 	{
-		private readonly ProjectNode projectManager;
+		private readonly ProjectNode _projectManager;
 
 		public OABuildManager(ProjectNode project)
 		{
-			projectManager = project;
+			_projectManager = project;
 			AddEventSource<_dispBuildManagerEvents>(this as IEventSource<_dispBuildManagerEvents>);
 		}
 
@@ -40,7 +40,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return projectManager.GetAutomationObject() as EnvDTE.Project;
+				return _projectManager.GetAutomationObject() as EnvDTE.Project;
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				return projectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+				return _projectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
 			}
 		}
 

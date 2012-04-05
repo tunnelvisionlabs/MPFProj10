@@ -9,37 +9,34 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using EnvDTE;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-using VSConstants = Microsoft.VisualStudio.VSConstants;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
+	using System.IO;
+	using System.Runtime.InteropServices;
+	using EnvDTE;
+	using Microsoft.VisualStudio;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
+	using VSConstants = Microsoft.VisualStudio.VSConstants;
+
 	/// <summary>
 	/// Represents an automation object for a file in a project
 	/// </summary>
 	[SuppressMessage("Microsoft.Interoperability", "CA1405:ComVisibleTypeBaseTypesShouldBeComVisible")]
-	[ComVisible(true), CLSCompliant(false)]
+	[ComVisible(true)]
+	[CLSCompliant(false)]
 	public class OAFileItem : OAProjectItem<FileNode>
 	{
-		#region ctors
 		public OAFileItem(OAProject project, FileNode node)
 			: base(project, node)
 		{
 		}
 
-		#endregion
-
-		#region overridden methods
 		/// <summary>
 		/// Returns the dirty state of the document.
 		/// </summary>
@@ -273,10 +270,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-
-		#endregion
-
-		#region helpers
 		/// <summary>
 		/// Saves or Save As the  file
 		/// </summary>
@@ -367,7 +360,5 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 
 		}
-		#endregion
-
 	}
 }

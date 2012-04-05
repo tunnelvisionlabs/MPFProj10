@@ -498,6 +498,7 @@ namespace Microsoft.VisualStudio.Project
 			this.hierarchyId = this.projectMgr.ItemIdMap.Add(this);
 			this.oleServiceProvider.AddService(typeof(IVsHierarchy), root, false);
 		}
+
 		#endregion
 
 		#region static methods
@@ -2433,6 +2434,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				throw new ArgumentNullException("node");
 			}
+
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
 			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
@@ -2458,6 +2460,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				throw new ArgumentNullException("parent");
 			}
+
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
 			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
@@ -2484,7 +2487,6 @@ namespace Microsoft.VisualStudio.Project
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ReDraw")]
 		public virtual void ReDraw(UIHierarchyElement element)
 		{
-
 			foreach(IVsHierarchyEvents sink in this.projectMgr.hierarchyEventSinks)
 			{
 				int result;
@@ -2575,7 +2577,6 @@ namespace Microsoft.VisualStudio.Project
 				{
 					manager.Close(__FRAMECLOSE.FRAMECLOSE_PromptSave);
 				}
-
 			}
 			catch { }
 			finally
@@ -2606,10 +2607,12 @@ namespace Microsoft.VisualStudio.Project
 				CCITracing.TraceCall(vspropId.ToString() + "=" + guid.ToString());
 				return hr;
 			}
+
 			if(guid == Guid.Empty)
 			{
 				return VSConstants.DISP_E_MEMBERNOTFOUND;
 			}
+
 			return VSConstants.S_OK;
 		}
 
@@ -2622,16 +2625,17 @@ namespace Microsoft.VisualStudio.Project
 				return VSConstants.DISP_E_MEMBERNOTFOUND;
 			}
 
-
 			HierarchyNode n = this.projectMgr.NodeFromItemId(itemId);
 			if(n != null)
 			{
 				propVal = n.GetProperty(propId);
 			}
+
 			if(propVal == null)
 			{
 				return VSConstants.DISP_E_MEMBERNOTFOUND;
 			}
+
 			return VSConstants.S_OK;
 		}
 
@@ -2674,10 +2678,12 @@ namespace Microsoft.VisualStudio.Project
 				itemId = this.hierarchyId;
 				return VSConstants.S_OK;
 			}
+
 			if(this.firstChild != null)
 			{
 				this.firstChild.ParseCanonicalName(name, out itemId);
 			}
+
 			if (itemId == notFoundValue && this.nextSibling != null)
 			{
 				this.nextSibling.ParseCanonicalName(name, out itemId);
@@ -2702,6 +2708,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				rc = n.SetGuidProperty(propid, ref guid);
 			}
+
 			return rc;
 		}
 
@@ -2733,35 +2740,31 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.S_OK;
 		}
 
-
 		public int Unused0()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
-
 
 		public int Unused1()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
-
 		public int Unused2()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
-
 
 		public int Unused3()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
-
 		public int Unused4()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
+
 		#endregion
 
 		#region IVsUIHierarchy methods
