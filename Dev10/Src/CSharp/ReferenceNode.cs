@@ -60,22 +60,6 @@ namespace Microsoft.VisualStudio.Project
 		{
 			get { return Guid.Empty; }
 		}
-
-		public override string Url
-		{
-			get
-			{
-				return String.Empty;
-			}
-		}
-
-		public override string Caption
-		{
-			get
-			{
-				return String.Empty;
-			}
-		}
 		#endregion
 
 		#region overridden methods
