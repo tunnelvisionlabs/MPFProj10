@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
 
 namespace Microsoft.VisualStudio.Project
 {
@@ -44,6 +45,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region overridden methods
+
 		public override string GetClassName()
 		{
 			return this.GetType().FullName;
@@ -57,7 +59,7 @@ namespace Microsoft.VisualStudio.Project
 				return;
 			}
 
-			this.outputPath = this.GetConfigProperty(BuildPropertyPageTag.OutputPath.ToString());
+			this.outputPath = this.GetConfigProperty(BuildPropertyPageTag.OutputPath.ToString(), _PersistStorageType.PST_PROJECT_FILE);
 		}
 
 		protected override int ApplyChanges()
@@ -68,10 +70,11 @@ namespace Microsoft.VisualStudio.Project
 				return VSConstants.E_INVALIDARG;
 			}
 
-			this.SetConfigProperty(BuildPropertyPageTag.OutputPath.ToString(), this.outputPath);
+			this.SetConfigProperty(BuildPropertyPageTag.OutputPath.ToString(), _PersistStorageType.PST_PROJECT_FILE, this.outputPath);
 			this.IsDirty = false;
 			return VSConstants.S_OK;
 		}
+
 		#endregion
 	}
 }

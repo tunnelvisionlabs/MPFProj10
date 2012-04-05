@@ -199,9 +199,9 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 				return;
 			}
 
-			this.assemblyName = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), true);
+			this.assemblyName = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), _PersistStorageType.PST_PROJECT_FILE, true);
 
-			string outputType = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), false);
+			string outputType = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), _PersistStorageType.PST_PROJECT_FILE, false);
 
 			if(outputType != null && outputType.Length > 0)
 			{
@@ -214,9 +214,9 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 				}
 			}
 
-			this.defaultNamespace = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), false);
-			this.startupObject = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), false);
-			this.applicationIcon = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), false);
+			this.defaultNamespace = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), _PersistStorageType.PST_PROJECT_FILE, false);
+			this.startupObject = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), _PersistStorageType.PST_PROJECT_FILE, false);
+			this.applicationIcon = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), _PersistStorageType.PST_PROJECT_FILE, false);
 
 			try
 			{
@@ -241,11 +241,11 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
 			bool reloadRequired = this.ProjectManager.TargetFrameworkMoniker != this.targetFrameworkMoniker;
 
-			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), this.assemblyName);
-			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), this.outputType.ToString());
-			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), this.defaultNamespace);
-			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), this.startupObject);
-			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), this.applicationIcon);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), _PersistStorageType.PST_PROJECT_FILE, this.assemblyName);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), _PersistStorageType.PST_PROJECT_FILE, this.outputType.ToString());
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), _PersistStorageType.PST_PROJECT_FILE, this.defaultNamespace);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), _PersistStorageType.PST_PROJECT_FILE, this.startupObject);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), _PersistStorageType.PST_PROJECT_FILE, this.applicationIcon);
 
 			if (reloadRequired)
 			{

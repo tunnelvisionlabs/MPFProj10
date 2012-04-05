@@ -81,7 +81,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// The user file extension.
         /// </summary>
-        protected internal const string PerUserFileExtension = ".user";
+        private const string _perUserFileExtension = ".user";
      
 		protected Guid GUID_MruPage = new Guid("{19B97F03-9594-4c1c-BE28-25FF030113B3}");
 		
@@ -312,7 +312,7 @@ namespace Microsoft.VisualStudio.Project
                     this.projectIdGuid = value;
                     if (this.buildProject != null)
                     {
-                        this.SetProjectProperty("ProjectGuid", this.projectIdGuid.ToString("B"));
+                        this.SetProjectProperty("ProjectGuid", _PersistStorageType.PST_PROJECT_FILE, this.projectIdGuid.ToString("B"));
                     }
                 }
             }
@@ -791,11 +791,19 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public string UserFileName
+        protected virtual string UserFileName
         {
             get
             {
                 return FileName + PerUserFileExtension;
+            }
+        }
+
+        protected virtual string PerUserFileExtension
+        {
+            get
+            {
+                return _perUserFileExtension;
             }
         }
 
@@ -901,6 +909,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.buildProject;
             }
+
             set
             {
                 SetBuildProject(value);
@@ -913,7 +922,7 @@ namespace Microsoft.VisualStudio.Project
             get
             {
                 if (_userBuildProject == null && File.Exists(UserFileName))
-                    CreateUserBuildProject();
+                    _userBuildProject = CreateUserBuildProject();
 
                 return _userBuildProject;
             }
@@ -1492,17 +1501,6 @@ namespace Microsoft.VisualStudio.Project
             return false;
         }
 
-        public void CreateUserBuildProject()
-        {
-            if (!File.Exists(UserFileName))
-            {
-                MSBuild.Project userBuildProject = new MSBuild.Project();
-                userBuildProject.Save(UserFileName);
-            }
-
-            _userBuildProject = BuildEngine.LoadProject(UserFileName);
-        }
-
         /// <summary>
         /// Verifies that the specified string argument is non-null and non-empty, asserting if it
         /// is not and throwing a new <see cref="ArgumentException"/>.
@@ -2040,6 +2038,26 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region virtual methods
+
+        public MSBuild.Project GetOrCreateUserBuildProject()
+        {
+            var userBuildProject = UserBuildProject;
+            if (userBuildProject == null)
+                _userBuildProject = CreateUserBuildProject();
+
+            return UserBuildProject;
+        }
+
+        protected virtual MSBuild.Project CreateUserBuildProject()
+        {
+            if (!File.Exists(UserFileName))
+            {
+                MSBuild.Project userBuildProject = new MSBuild.Project();
+                userBuildProject.Save(UserFileName);
+            }
+
+            return BuildEngine.LoadProject(UserFileName);
+        }
 
         /// <summary>
         /// Executes a wizard.
@@ -2600,9 +2618,9 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="propertyName">Name of the property to get</param>
         /// <param name="resetCache">True to avoid using the cache</param>
         /// <returns>null if property does not exist, otherwise value of the property</returns>
-        public virtual string GetProjectProperty(string propertyName, bool resetCache)
+        public virtual string GetProjectProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
         {
-            MSBuildExecution.ProjectPropertyInstance property = GetMsBuildProperty(propertyName, resetCache);
+            MSBuildExecution.ProjectPropertyInstance property = GetMsBuildProperty(propertyName, storageType, resetCache);
             if (property == null)
                 return null;
 
@@ -2614,20 +2632,22 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="propertyName">Name of property</param>
         /// <param name="propertyValue">Value of property</param>
-        public virtual void SetProjectProperty(string propertyName, string propertyValue)
+        public virtual void SetProjectProperty(string propertyName, _PersistStorageType storageType, string propertyValue)
         {
             if (propertyName == null)
                 throw new ArgumentNullException("propertyName", "Cannot set a null project property");
 
             string oldValue = null;
-            ProjectPropertyInstance oldProp = GetMsBuildProperty(propertyName, true);
+            ProjectPropertyInstance oldProp = GetMsBuildProperty(propertyName, storageType, true);
             if (oldProp != null)
                 oldValue = oldProp.EvaluatedValue;
+
             if (propertyValue == null)
             {
                 // if property already null, do nothing
                 if (oldValue == null)
                     return;
+
                 // otherwise, set it to empty
                 propertyValue = String.Empty;
             }
@@ -2636,19 +2656,78 @@ namespace Microsoft.VisualStudio.Project
             if (!String.Equals(oldValue, propertyValue, StringComparison.Ordinal))
             {
                 // Check out the project file.
-                if (!this.ProjectManager.QueryEditProjectFile(false))
+                if (storageType == _PersistStorageType.PST_PROJECT_FILE && !this.ProjectManager.QueryEditProjectFile(false))
                 {
                     throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
                 }
 
-                this.buildProject.SetProperty(propertyName, propertyValue);
+                MSBuild.Project project = (storageType == _PersistStorageType.PST_PROJECT_FILE) ? this.BuildProject : this.GetOrCreateUserBuildProject();
+                project.SetProperty(propertyName, propertyValue);
                 RaiseProjectPropertyChanged(propertyName, oldValue, propertyValue);
 
                 // property cache will need to be updated
                 this.currentConfig = null;
                 this.SetProjectFileDirty(true);
             }
-            return;
+        }
+
+        public virtual void SetPropertyUnderCondition(string propertyName, _PersistStorageType storageType, string condition, string propertyValue)
+        {
+            if (propertyName == null)
+                throw new ArgumentNullException("propertyName");
+
+            if (string.IsNullOrWhiteSpace(condition))
+            {
+                SetProjectProperty(propertyName, storageType, propertyValue);
+            }
+
+            string conditionTrimmed = condition.Trim();
+            MSBuild.Project project = (storageType == _PersistStorageType.PST_PROJECT_FILE) ? BuildProject : GetOrCreateUserBuildProject();
+            MSBuildConstruction.ProjectPropertyGroupElement destinationGroup = null;
+            foreach (MSBuildConstruction.ProjectPropertyGroupElement group in project.Xml.PropertyGroups)
+            {
+                if (String.Equals(group.Condition.Trim(), conditionTrimmed, StringComparison.OrdinalIgnoreCase))
+                {
+                    destinationGroup = group;
+                    break;
+                }
+            }
+
+            if (destinationGroup == null)
+            {
+                MSBuildConstruction.ProjectElement lastRelevantElement = null;
+                foreach (MSBuildConstruction.ProjectPropertyGroupElement group in project.Xml.PropertyGroupsReversed)
+                {
+                    if (string.IsNullOrEmpty(group.Condition))
+                        continue;
+
+                    if (group.Condition.IndexOf("'$(Configuration)'", StringComparison.OrdinalIgnoreCase) >= 0
+                        || group.Condition.IndexOf("'$(Platform)'", StringComparison.OrdinalIgnoreCase) >= 0
+                        || group.Condition.IndexOf("'$(Configuration)|$(Platform)'", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        lastRelevantElement = group;
+                        break;
+                    }
+                }
+
+                if (lastRelevantElement == null)
+                    lastRelevantElement = project.Xml.PropertyGroupsReversed.First();
+
+                destinationGroup = project.Xml.CreatePropertyGroupElement();
+                project.Xml.InsertAfterChild(destinationGroup, lastRelevantElement);
+                destinationGroup.Condition = condition;
+            }
+
+            foreach (MSBuildConstruction.ProjectPropertyElement property in destinationGroup.PropertiesReversed) // If there's dupes, pick the last one so we win
+            {
+                if (String.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase) && property.Condition.Length == 0)
+                {
+                    property.Value = propertyValue;
+                    return;
+                }
+            }
+
+            destinationGroup.AddProperty(propertyName, propertyValue);
         }
 
         public ProjectOptions GetProjectOptions()
@@ -2693,7 +2772,7 @@ namespace Microsoft.VisualStudio.Project
 			options.Config = config;
             options.Platform = platform;
 
-			string targetFrameworkMoniker = GetProjectProperty("TargetFrameworkMoniker", false);
+            string targetFrameworkMoniker = GetProjectProperty("TargetFrameworkMoniker", _PersistStorageType.PST_PROJECT_FILE, false);
 
 			if (!string.IsNullOrEmpty(targetFrameworkMoniker))
 			{
@@ -2717,7 +2796,7 @@ namespace Microsoft.VisualStudio.Project
 
             this.SetConfiguration(config, platform);
 
-            string outputPath = this.GetOutputPath(this.currentConfig);
+            string outputPath = GetOutputPath(this.currentConfig);
             if (!String.IsNullOrEmpty(outputPath))
             {
                 // absolutize relative to project folder location
@@ -2728,10 +2807,10 @@ namespace Microsoft.VisualStudio.Project
             options.OutputAssembly = outputPath + this.Caption + ".exe";
             options.ModuleKind = ModuleKindFlags.ConsoleApplication;
 
-            options.RootNamespace = GetProjectProperty(ProjectFileConstants.RootNamespace, false);
+            options.RootNamespace = GetProjectProperty(ProjectFileConstants.RootNamespace, _PersistStorageType.PST_PROJECT_FILE, false);
             options.OutputAssembly = outputPath + this.GetAssemblyName(config, platform);
 
-            string outputtype = GetProjectProperty(ProjectFileConstants.OutputType, false);
+            string outputtype = GetProjectProperty(ProjectFileConstants.OutputType, _PersistStorageType.PST_PROJECT_FILE, false);
             if (!string.IsNullOrEmpty(outputtype))
             {
                 outputtype = outputtype.ToLower(CultureInfo.InvariantCulture);
@@ -2747,8 +2826,8 @@ namespace Microsoft.VisualStudio.Project
             else
                 options.ModuleKind = ModuleKindFlags.ConsoleApplication;
 
-            options.Win32Icon = GetProjectProperty("ApplicationIcon", false);
-            options.MainClass = GetProjectProperty("StartupObject", false);
+            options.Win32Icon = GetProjectProperty("ApplicationIcon", _PersistStorageType.PST_PROJECT_FILE, false);
+            options.MainClass = GetProjectProperty("StartupObject", _PersistStorageType.PST_PROJECT_FILE, false);
 
             //    other settings from CSharp we may want to adopt at some point...
             //    AssemblyKeyContainerName = ""  //This is the key file used to sign the interop assembly generated when importing a com object via add reference
@@ -2767,11 +2846,11 @@ namespace Microsoft.VisualStudio.Project
                 options.AllowUnsafeCode = true;
             }
 
-            if (GetProjectProperty("BaseAddress", false) != null)
+            if (GetProjectProperty("BaseAddress", _PersistStorageType.PST_PROJECT_FILE, false) != null)
             {
                 try
                 {
-                    options.BaseAddress = Int64.Parse(GetProjectProperty("BaseAddress", false), CultureInfo.InvariantCulture);
+                    options.BaseAddress = Int64.Parse(GetProjectProperty("BaseAddress", _PersistStorageType.PST_PROJECT_FILE, false), CultureInfo.InvariantCulture);
                 }
                 catch (ArgumentNullException e)
                 {
@@ -2796,16 +2875,16 @@ namespace Microsoft.VisualStudio.Project
                 options.CheckedArithmetic = true;
             }
 
-            if (GetProjectProperty("DefineConstants", false) != null)
+            if (GetProjectProperty("DefineConstants", _PersistStorageType.PST_PROJECT_FILE, false) != null)
             {
                 options.DefinedPreprocessorSymbols = new StringCollection();
-                foreach (string s in GetProjectProperty("DefineConstants", false).Replace(" \t\r\n", "").Split(';'))
+                foreach (string s in GetProjectProperty("DefineConstants", _PersistStorageType.PST_PROJECT_FILE, false).Replace(" \t\r\n", "").Split(';'))
                 {
                     options.DefinedPreprocessorSymbols.Add(s);
                 }
             }
 
-            string docFile = GetProjectProperty("DocumentationFile", false);
+            string docFile = GetProjectProperty("DocumentationFile", _PersistStorageType.PST_PROJECT_FILE, false);
             if (!String.IsNullOrEmpty(docFile))
             {
                 options.XmlDocFileName = Path.Combine(this.ProjectFolder, docFile);
@@ -2816,11 +2895,11 @@ namespace Microsoft.VisualStudio.Project
                 options.IncludeDebugInformation = true;
             }
 
-            if (GetProjectProperty("FileAlignment", false) != null)
+            if (GetProjectProperty("FileAlignment", _PersistStorageType.PST_PROJECT_FILE, false) != null)
             {
                 try
                 {
-                    options.FileAlignment = Int32.Parse(GetProjectProperty("FileAlignment", false), CultureInfo.InvariantCulture);
+                    options.FileAlignment = Int32.Parse(GetProjectProperty("FileAlignment", _PersistStorageType.PST_PROJECT_FILE, false), CultureInfo.InvariantCulture);
                 }
                 catch (ArgumentNullException e)
                 {
@@ -2863,11 +2942,11 @@ namespace Microsoft.VisualStudio.Project
                 options.TreatWarningsAsErrors = true;
             }
 
-            if (GetProjectProperty("WarningLevel", false) != null)
+            if (GetProjectProperty("WarningLevel", _PersistStorageType.PST_PROJECT_FILE, false) != null)
             {
                 try
                 {
-                    options.WarningLevel = Int32.Parse(GetProjectProperty("WarningLevel", false), CultureInfo.InvariantCulture);
+                    options.WarningLevel = Int32.Parse(GetProjectProperty("WarningLevel", _PersistStorageType.PST_PROJECT_FILE, false), CultureInfo.InvariantCulture);
                 }
                 catch (ArgumentNullException e)
                 {
@@ -2920,7 +2999,7 @@ namespace Microsoft.VisualStudio.Project
         public virtual bool GetBoolAttr(string config, string platform, string name)
         {
             this.SetConfiguration(config, platform);
-            return this.GetBoolAttr(this.currentConfig, name);
+            return GetBoolAttr(this.currentConfig, name);
         }
 
         /// <summary>
@@ -2931,7 +3010,7 @@ namespace Microsoft.VisualStudio.Project
         public virtual string GetAssemblyName(string config, string platform)
         {
             this.SetConfiguration(config, platform);
-            return GetAssemblyName(this.currentConfig);
+            return GetAssemblyFileName(this.currentConfig);
         }
 
         /// <summary>
@@ -3698,17 +3777,17 @@ namespace Microsoft.VisualStudio.Project
                 return;
             }
 
-            if (String.IsNullOrEmpty(GetProjectProperty(ProjectFileConstants.AssemblyName)))
+            if (String.IsNullOrEmpty(GetProjectProperty(ProjectFileConstants.AssemblyName, _PersistStorageType.PST_PROJECT_FILE)))
             {
-                SetProjectProperty(ProjectFileConstants.AssemblyName, projectName);
+                SetProjectProperty(ProjectFileConstants.AssemblyName, _PersistStorageType.PST_PROJECT_FILE, projectName);
             }
-            if (String.IsNullOrEmpty(GetProjectProperty(ProjectFileConstants.Name)))
+            if (String.IsNullOrEmpty(GetProjectProperty(ProjectFileConstants.Name, _PersistStorageType.PST_PROJECT_FILE)))
             {
-                SetProjectProperty(ProjectFileConstants.Name, projectName);
+                SetProjectProperty(ProjectFileConstants.Name, _PersistStorageType.PST_PROJECT_FILE, projectName);
             }
-            if (String.IsNullOrEmpty(GetProjectProperty(ProjectFileConstants.RootNamespace)))
+            if (String.IsNullOrEmpty(GetProjectProperty(ProjectFileConstants.RootNamespace, _PersistStorageType.PST_PROJECT_FILE)))
             {
-                SetProjectProperty(ProjectFileConstants.RootNamespace, projectName);
+                SetProjectProperty(ProjectFileConstants.RootNamespace, _PersistStorageType.PST_PROJECT_FILE, projectName);
             }
         }
 
@@ -3872,11 +3951,13 @@ namespace Microsoft.VisualStudio.Project
             string newFileNameWithoutExtension = Path.GetFileNameWithoutExtension(newFileName);
 
             // Refresh solution explorer
-            this.SetProjectProperty(ProjectFileConstants.Name, newFileNameWithoutExtension);
+            this.SetProjectProperty(ProjectFileConstants.Name, _PersistStorageType.PST_PROJECT_FILE, newFileNameWithoutExtension);
 
             // Saves the project file on disk.
             this.buildProject.Save(newFileName);
 
+            if (_userBuildProject != null)
+                _userBuildProject.Save(UserFileName);
         }
 
         /// <summary>
@@ -4211,6 +4292,14 @@ namespace Microsoft.VisualStudio.Project
 
             bool propertiesChanged = this.buildProject.SetGlobalProperty(ProjectFileConstants.Configuration, config);
             propertiesChanged |= this.buildProject.SetGlobalProperty(ProjectFileConstants.Platform, ConfigProvider.GetPlatformPropertyFromPlatformName(platform));
+
+            var userBuildProject = UserBuildProject;
+            if (userBuildProject != null)
+            {
+                propertiesChanged |= userBuildProject.SetGlobalProperty(ProjectFileConstants.Configuration, config);
+                propertiesChanged |= userBuildProject.SetGlobalProperty(ProjectFileConstants.Platform, ConfigProvider.GetPlatformPropertyFromPlatformName(platform));
+            }
+
             if (this.currentConfig == null || propertiesChanged)
             {
                 this.currentConfig = this.buildProject.CreateProjectInstance();
@@ -4237,12 +4326,6 @@ namespace Microsoft.VisualStudio.Project
 			}
 
             this.options = null;
-
-            if (_userBuildProject != null)
-            {
-                _userBuildProject.SetGlobalProperty(ProjectFileConstants.Configuration, config);
-                _userBuildProject.SetGlobalProperty(ProjectFileConstants.Platform, ConfigProvider.GetPlatformPropertyFromPlatformName(platform));
-            }
         }
 
         /// <summary>
@@ -4578,7 +4661,7 @@ namespace Microsoft.VisualStudio.Project
         public string GetOutputPath(string config, string platform)
         {
             this.SetConfiguration(config, platform);
-            return this.GetOutputPath(this.currentConfig);
+            return GetOutputPath(this.currentConfig);
         }
 
         /// <summary>
@@ -4586,9 +4669,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="propertyName">Name of Property to retrieve</param>
         /// <returns>Evaluated value of property.</returns>
-        public string GetProjectProperty(string propertyName)
+        public string GetProjectProperty(string propertyName, _PersistStorageType storageType)
         {
-            return this.GetProjectProperty(propertyName, true);
+            return this.GetProjectProperty(propertyName, storageType, true);
         }
 
 		/// <summary>
@@ -5181,7 +5264,6 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int Save(string fileToBeSaved, int remember, uint formatIndex)
         {
-
             // The file name can be null. Then try to use the Url.
             string tempFileToBeSaved = fileToBeSaved;
             if (String.IsNullOrEmpty(tempFileToBeSaved) && !String.IsNullOrEmpty(this.Url))
@@ -5219,8 +5301,12 @@ namespace Microsoft.VisualStudio.Project
                     string saveFolder = Path.GetDirectoryName(tempFileToBeSaved);
                     if (!Directory.Exists(saveFolder))
                         Directory.CreateDirectory(saveFolder);
+
                     // Save the project
                     this.buildProject.Save(tempFileToBeSaved);
+                    if (_userBuildProject != null)
+                        _userBuildProject.Save(UserFileName);
+
                     this.SetProjectFileDirty(false);
                 }
                 finally
@@ -5242,9 +5328,6 @@ namespace Microsoft.VisualStudio.Project
             {
                 this.SetProjectFileDirty(true);
             }
-
-            if (result == VSConstants.S_OK && _userBuildProject != null)
-                _userBuildProject.Save(UserFileName);
 
             return result;
         }
@@ -6258,7 +6341,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>HResult</returns>
         public int GetAggregateProjectTypeGuids(out string projectTypeGuids)
         {
-            projectTypeGuids = this.GetProjectProperty(ProjectFileConstants.ProjectTypeGuids);
+            projectTypeGuids = this.GetProjectProperty(ProjectFileConstants.ProjectTypeGuids, _PersistStorageType.PST_PROJECT_FILE);
             // In case someone manually removed this from our project file, default to our project without flavors
             if (String.IsNullOrEmpty(projectTypeGuids))
                 projectTypeGuids = this.ProjectGuid.ToString("B");
@@ -6301,7 +6384,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>HResult</returns>
         public int SetAggregateProjectTypeGuids(string projectTypeGuids)
         {
-            this.SetProjectProperty(ProjectFileConstants.ProjectTypeGuids, projectTypeGuids);
+            this.SetProjectProperty(ProjectFileConstants.ProjectTypeGuids, _PersistStorageType.PST_PROJECT_FILE, projectTypeGuids);
             return VSConstants.S_OK;
         }
 
@@ -6363,15 +6446,16 @@ namespace Microsoft.VisualStudio.Project
             propertyValue = null;
             if (string.IsNullOrEmpty(configName))
             {
-                propertyValue = this.GetProjectProperty(propertyName);
+                propertyValue = this.GetProjectProperty(propertyName, (_PersistStorageType)storage);
             }
             else
             {
                 IVsCfg configurationInterface;
                 ErrorHandler.ThrowOnFailure(this.ConfigProvider.GetCfgOfName(configName, string.Empty, out configurationInterface));
                 ProjectConfig config = (ProjectConfig)configurationInterface;
-                propertyValue = config.GetConfigurationProperty(propertyName, true);
+                propertyValue = config.GetConfigurationProperty(propertyName, (_PersistStorageType)storage, true);
             }
+
             return VSConstants.S_OK;
         }
 
@@ -6419,15 +6503,16 @@ namespace Microsoft.VisualStudio.Project
             // TODO: when adding support for User files, we need to update this method
             if (string.IsNullOrEmpty(configName))
             {
-                this.SetProjectProperty(propertyName, propertyValue);
+                this.SetProjectProperty(propertyName, (_PersistStorageType)storage, propertyValue);
             }
             else
             {
                 IVsCfg configurationInterface;
                 ErrorHandler.ThrowOnFailure(this.ConfigProvider.GetCfgOfName(configName, string.Empty, out configurationInterface));
                 ProjectConfig config = (ProjectConfig)configurationInterface;
-                config.SetConfigurationProperty(propertyName, propertyValue);
+                config.SetConfigurationProperty(propertyName, (_PersistStorageType)storage, propertyValue);
             }
+
             return VSConstants.S_OK;
         }
 
@@ -6559,26 +6644,41 @@ namespace Microsoft.VisualStudio.Project
             return currentParent;
         }
 
-        private MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, bool resetCache)
+        private MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
         {
-            if (resetCache || this.currentConfig == null)
+            ProjectInstance projectInstance = this.currentConfig;
+            if (resetCache || this.currentConfig == null || storageType == _PersistStorageType.PST_USER_FILE)
             {
                 // Get properties from project file and cache it
                 this.SetCurrentConfiguration();
                 this.currentConfig = this.buildProject.CreateProjectInstance();
+                if (storageType == _PersistStorageType.PST_PROJECT_FILE)
+                    projectInstance = this.currentConfig;
+                else if (UserBuildProject != null)
+                    projectInstance = UserBuildProject.CreateProjectInstance();
             }
 
             if (this.currentConfig == null)
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.FailedToRetrieveProperties, CultureInfo.CurrentUICulture), propertyName));
+            {
+                if (storageType == _PersistStorageType.PST_PROJECT_FILE)
+                    throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.FailedToRetrieveProperties, CultureInfo.CurrentUICulture), propertyName));
+
+                return null;
+            }
 
             // return property asked for
-            return this.currentConfig.GetProperty(propertyName);
+            return GetMsBuildProperty(this.currentConfig, propertyName);
         }
 
-        private string GetOutputPath(MSBuildExecution.ProjectInstance properties)
+        private static ProjectPropertyInstance GetMsBuildProperty(ProjectInstance projectInstance, string propertyName)
         {
-            this.currentConfig = properties;
-            string outputPath = GetProjectProperty("OutputPath");
+            return projectInstance.GetProperty(propertyName);
+        }
+
+        private static string GetOutputPath(MSBuildExecution.ProjectInstance properties)
+        {
+            ProjectPropertyInstance property = GetMsBuildProperty(properties, "OutputPath");
+            string outputPath = property != null ? property.EvaluatedValue : null;
 
             if (!String.IsNullOrEmpty(outputPath))
             {
@@ -6590,25 +6690,30 @@ namespace Microsoft.VisualStudio.Project
             return outputPath;
         }
 
-        private bool GetBoolAttr(MSBuildExecution.ProjectInstance properties, string name)
+        private static bool GetBoolAttr(MSBuildExecution.ProjectInstance properties, string name)
         {
-            this.currentConfig = properties;
-            string s = GetProjectProperty(name);
-
-            return (s != null && s.ToUpperInvariant().Trim() == "TRUE");
+            ProjectPropertyInstance property = GetMsBuildProperty(properties, name);
+            string stringValue = property != null ? property.EvaluatedValue : null;
+            return string.Equals("true", stringValue, StringComparison.OrdinalIgnoreCase);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        private string GetAssemblyName(MSBuildExecution.ProjectInstance properties)
+        private string GetAssemblyFileName(MSBuildExecution.ProjectInstance properties)
         {
             this.currentConfig = properties;
             string name = null;
 
-            name = GetProjectProperty(ProjectFileConstants.AssemblyName);
+            ProjectPropertyInstance property = GetMsBuildProperty(properties, ProjectFileConstants.IntermediateAssembly);
+            name = property != null ? property.EvaluatedValue : null;
+            if (!string.IsNullOrWhiteSpace(name))
+                return Path.GetFileName(name);
+
+            property = GetMsBuildProperty(properties, ProjectFileConstants.AssemblyName);
+            name = property != null ? property.EvaluatedValue : null;
             if (name == null)
                 name = this.Caption;
 
-            string outputtype = GetProjectProperty(ProjectFileConstants.OutputType, false);
+            string outputtype = GetProjectProperty(ProjectFileConstants.OutputType, _PersistStorageType.PST_PROJECT_FILE, false);
 
             if (outputtype == "library")
             {
@@ -6656,10 +6761,10 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         private void InitSccInfo()
         {
-            this.sccProjectName = this.GetProjectProperty(ProjectFileConstants.SccProjectName);
-            this.sccLocalPath = this.GetProjectProperty(ProjectFileConstants.SccLocalPath);
-            this.sccProvider = this.GetProjectProperty(ProjectFileConstants.SccProvider);
-            this.sccAuxPath = this.GetProjectProperty(ProjectFileConstants.SccAuxPath);
+            this.sccProjectName = this.GetProjectProperty(ProjectFileConstants.SccProjectName, _PersistStorageType.PST_PROJECT_FILE);
+            this.sccLocalPath = this.GetProjectProperty(ProjectFileConstants.SccLocalPath, _PersistStorageType.PST_PROJECT_FILE);
+            this.sccProvider = this.GetProjectProperty(ProjectFileConstants.SccProvider, _PersistStorageType.PST_PROJECT_FILE);
+            this.sccAuxPath = this.GetProjectProperty(ProjectFileConstants.SccAuxPath, _PersistStorageType.PST_PROJECT_FILE);
         }
 
         private void OnAfterProjectOpen(object sender, AfterProjectFileOpenedEventArgs e)
@@ -6689,7 +6794,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         private void SetProjectGuidFromProjectFile()
         {
-            string projectGuid = this.GetProjectProperty(ProjectFileConstants.ProjectGuid);
+            string projectGuid = this.GetProjectProperty(ProjectFileConstants.ProjectGuid, _PersistStorageType.PST_PROJECT_FILE);
             if (String.IsNullOrEmpty(projectGuid))
             {
                 this.projectIdGuid = Guid.NewGuid();
@@ -6730,6 +6835,9 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="node">The subtree to close.</param>
         private static void CloseAllNodes(HierarchyNode node)
         {
+            if (node == null)
+                throw new ArgumentNullException("node");
+
             for (HierarchyNode n = node.FirstChild; n != null; n = n.NextSibling)
             {
                 if (n.FirstChild != null)
@@ -7030,9 +7138,9 @@ namespace Microsoft.VisualStudio.Project
 		public virtual int UpdateTargetFramework(IVsHierarchy pHier, string currentTargetFramework, string newTargetFramework)
 		{
 			FrameworkName moniker = new FrameworkName(newTargetFramework);
-			SetProjectProperty("TargetFrameworkIdentifier", moniker.Identifier);
-			SetProjectProperty("TargetFrameworkVersion", "v" + moniker.Version);
-			SetProjectProperty("TargetFrameworkProfile", moniker.Profile);
+			SetProjectProperty("TargetFrameworkIdentifier", _PersistStorageType.PST_PROJECT_FILE, moniker.Identifier);
+			SetProjectProperty("TargetFrameworkVersion", _PersistStorageType.PST_PROJECT_FILE, "v" + moniker.Version);
+			SetProjectProperty("TargetFrameworkProfile", _PersistStorageType.PST_PROJECT_FILE, moniker.Profile);
 			return VSConstants.S_OK;
 		}
 

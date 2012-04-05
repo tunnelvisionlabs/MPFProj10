@@ -12,6 +12,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Project.Automation;
+using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
 
 namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 {
@@ -159,7 +160,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		{
 			get
 			{
-				return this.parent.Target.Node.ProjectManager.GetProjectProperty(this.name);
+				return this.parent.Target.Node.ProjectManager.GetProjectProperty(this.name, _PersistStorageType.PST_PROJECT_FILE);
 			}
 			set
 			{
@@ -170,11 +171,11 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 
 				if(value is string)
 				{
-					this.parent.Target.Node.ProjectManager.SetProjectProperty(this.name, value.ToString());
+					this.parent.Target.Node.ProjectManager.SetProjectProperty(this.name, _PersistStorageType.PST_PROJECT_FILE, value.ToString());
 				}
 				else
 				{
-					this.parent.Target.Node.ProjectManager.SetProjectProperty(this.name, value.ToString());
+					this.parent.Target.Node.ProjectManager.SetProjectProperty(this.name, _PersistStorageType.PST_PROJECT_FILE, value.ToString());
 				}
 			}
 		}

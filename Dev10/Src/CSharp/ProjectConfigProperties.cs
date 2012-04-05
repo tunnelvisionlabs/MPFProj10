@@ -11,26 +11,27 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 using System;
 using System.Runtime.InteropServices;
+using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
 
 namespace Microsoft.VisualStudio.Project
 {
 	/// <summary>
 	/// Implements the configuration dependent properties interface
 	/// </summary>
-	[CLSCompliant(false), ComVisible(true)]
+	[CLSCompliant(false)]
+	[ComVisible(true)]
 	[ClassInterface(ClassInterfaceType.None)]
 	public class ProjectConfigProperties : IProjectConfigProperties
 	{
-		#region fields
-		private ProjectConfig projectConfig;
-		#endregion
+		private readonly ProjectConfig _projectConfig;
 
-		#region ctors
 		public ProjectConfigProperties(ProjectConfig projectConfig)
 		{
-			this.projectConfig = projectConfig;
+            if (projectConfig == null)
+                throw new ArgumentNullException("projectConfig");
+
+			this._projectConfig = projectConfig;
 		}
-		#endregion
 
 		#region IProjectConfigProperties Members
 
@@ -38,11 +39,12 @@ namespace Microsoft.VisualStudio.Project
 		{
 			get
 			{
-				return this.projectConfig.GetConfigurationProperty(BuildPropertyPageTag.OutputPath.ToString(), true);
+				return this._projectConfig.GetConfigurationProperty(BuildPropertyPageTag.OutputPath.ToString(), _PersistStorageType.PST_PROJECT_FILE, true);
 			}
+
 			set
 			{
-				this.projectConfig.SetConfigurationProperty(BuildPropertyPageTag.OutputPath.ToString(), value);
+				this._projectConfig.SetConfigurationProperty(BuildPropertyPageTag.OutputPath.ToString(), _PersistStorageType.PST_PROJECT_FILE, value);
 			}
 		}
 

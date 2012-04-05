@@ -256,7 +256,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int get_Property(string pszProperty, out object pvar)
         {
-            pvar = project.GetProjectProperty(pszProperty);
+            pvar = project.GetProjectProperty(pszProperty, _PersistStorageType.PST_PROJECT_FILE);
             return VSConstants.S_OK;
         }
 

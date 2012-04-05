@@ -46,7 +46,7 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region fields
-        private ProjectNode project;
+        private readonly ProjectNode _project;
         private string _configName;
         private string _platform;
         private MSBuildExecution.ProjectInstance currentConfig;
@@ -61,7 +61,8 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.project;
+                //Contract.Ensures(Contract.Result<ProjectNode>() != null);
+                return this._project;
             }
         }
 
@@ -69,11 +70,17 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
+                //Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
                 return this._configName;
             }
 
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+                if (string.IsNullOrEmpty(value))
+                    throw new ArgumentException("value cannot be null or empty");
+
                 this._configName = value;
             }
         }
@@ -82,6 +89,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
+                //Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
                 return this._platform;
             }
         }
@@ -111,14 +119,14 @@ namespace Microsoft.VisualStudio.Project
                     // Get the list of group names from the project.
                     // The main reason we get it from the project is to make it easier for someone to modify
                     // it by simply overriding that method and providing the correct MSBuild target(s).
-                    IList<KeyValuePair<string, string>> groupNames = project.GetOutputGroupNames();
+                    IList<KeyValuePair<string, string>> groupNames = _project.GetOutputGroupNames();
 
                     if(groupNames != null)
                     {
                         // Populate the output array
                         foreach(KeyValuePair<string, string> group in groupNames)
                         {
-                            OutputGroup outputGroup = CreateOutputGroup(project, group);
+                            OutputGroup outputGroup = CreateOutputGroup(_project, group);
                             this.outputGroups.Add(outputGroup);
                         }
                     }
@@ -132,7 +140,18 @@ namespace Microsoft.VisualStudio.Project
         #region ctors
         public ProjectConfig(ProjectNode project, string configuration, string platform)
         {
-            this.project = project;
+            if (project == null)
+                throw new ArgumentNullException("project");
+            if (configuration == null)
+                throw new ArgumentNullException("configuration");
+            if (platform == null)
+                throw new ArgumentNullException("platform");
+            if (string.IsNullOrEmpty("configuration"))
+                throw new ArgumentException("configuration cannot be null or empty");
+            if (string.IsNullOrEmpty("platform"))
+                throw new ArgumentException("platform cannot be null or empty");
+
+            this._project = project;
             this._configName = configuration;
             this._platform = platform;
 
@@ -155,7 +174,7 @@ namespace Microsoft.VisualStudio.Project
             IPersistXMLFragment persistXML = flavoredCfg as IPersistXMLFragment;
             if(null != persistXML)
             {
-                this.project.LoadXmlFragment(persistXML, this.DisplayName);
+                this._project.LoadXmlFragment(persistXML, this.DisplayName);
             }
         }
         #endregion
@@ -169,76 +188,30 @@ namespace Microsoft.VisualStudio.Project
 
         public void PrepareBuild(bool clean)
         {
-            project.PrepareBuild(this.ConfigName, this.Platform, clean);
+            _project.PrepareBuild(this.ConfigName, this.Platform, clean);
         }
 
-        public virtual string GetConfigurationProperty(string propertyName, bool resetCache)
+        public virtual string GetConfigurationProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
         {
-            MSBuildExecution.ProjectPropertyInstance property = GetMsBuildProperty(propertyName, resetCache);
+            MSBuildExecution.ProjectPropertyInstance property = GetMsBuildProperty(propertyName, storageType, resetCache);
             if (property == null)
                 return null;
 
             return property.EvaluatedValue;
         }
 
-        public virtual void SetConfigurationProperty(string propertyName, string propertyValue)
+        public virtual void SetConfigurationProperty(string propertyName, _PersistStorageType storageType, string propertyValue)
         {
-            if(!this.project.QueryEditProjectFile(false))
+            if(!this._project.QueryEditProjectFile(false))
             {
                 throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
             }
 
             string condition = ProjectManager.ConfigProvider.GetConfigurationPlatformCondition(this.ConfigName, this.Platform);
-
-            SetPropertyUnderCondition(propertyName, propertyValue, condition);
+            ProjectManager.SetPropertyUnderCondition(propertyName, storageType, condition, propertyValue);
             Invalidate();
 
             return;
-        }
-
-        /// <summary>
-        /// Emulates the behavior of SetProperty(name, value, condition) on the old MSBuild object model.
-        /// This finds a property group with the specified condition (or creates one if necessary) then sets the property in there.
-        /// </summary>
-        private void SetPropertyUnderCondition(string propertyName, string propertyValue, string condition)
-        {
-            string conditionTrimmed = (condition == null) ? String.Empty : condition.Trim();
-
-            if (conditionTrimmed.Length == 0)
-            {
-                this.project.BuildProject.SetProperty(propertyName, propertyValue);
-                return;
-            }
-
-            // New OM doesn't have a convenient equivalent for setting a property with a particular property group condition. 
-            // So do it ourselves.
-            MSBuildConstruction.ProjectPropertyGroupElement newGroup = null;
-
-            foreach (MSBuildConstruction.ProjectPropertyGroupElement group in this.project.BuildProject.Xml.PropertyGroups)
-            {
-                if (String.Equals(group.Condition.Trim(), conditionTrimmed, StringComparison.OrdinalIgnoreCase))
-                {
-                    newGroup = group;
-                    break;
-                }
-            }
-
-            if (newGroup == null)
-            {
-                newGroup = this.project.BuildProject.Xml.AddPropertyGroup(); // Adds after last existing PG, else at start of project
-                newGroup.Condition = condition;
-            }
-
-            foreach (MSBuildConstruction.ProjectPropertyElement property in newGroup.PropertiesReversed) // If there's dupes, pick the last one so we win
-            {
-                if (String.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase) && property.Condition.Length == 0)
-                {
-                    property.Value = propertyValue;
-                    return;
-                }
-            }
-
-            newGroup.AddProperty(propertyName, propertyValue);
         }
 
         public virtual void Invalidate()
@@ -252,7 +225,7 @@ namespace Microsoft.VisualStudio.Project
                 group.InvalidateGroup();
             }
 
-            this.project.SetProjectFileDirty(true);
+            this._project.SetProjectFileDirty(true);
         }
 
         /// <summary>
@@ -409,7 +382,7 @@ namespace Microsoft.VisualStudio.Project
             CCITracing.TraceCall();
             p = null;
             IVsCfgProvider cfgProvider = null;
-            this.project.GetCfgProvider(out cfgProvider);
+            this._project.GetCfgProvider(out cfgProvider);
             if(cfgProvider != null)
             {
                 p = cfgProvider as IVsProjectCfgProvider;
@@ -475,17 +448,17 @@ namespace Microsoft.VisualStudio.Project
                 info.dlo = Microsoft.VisualStudio.Shell.Interop.DEBUG_LAUNCH_OPERATION.DLO_CreateProcess;
 
                 // On first call, reset the cache, following calls will use the cached values
-                string property = GetConfigurationProperty("StartProgram", true);
+                string property = GetConfigurationProperty("StartProgram", _PersistStorageType.PST_USER_FILE, true);
                 if(string.IsNullOrEmpty(property))
                 {
-                    info.bstrExe = this.project.GetOutputAssembly(this.ConfigName, this.Platform);
+                    info.bstrExe = this._project.GetOutputAssembly(this.ConfigName, this.Platform);
                 }
                 else
                 {
                     info.bstrExe = property;
                 }
 
-                property = GetConfigurationProperty("WorkingDirectory", false);
+                property = GetConfigurationProperty("WorkingDirectory", _PersistStorageType.PST_USER_FILE, false);
                 if(string.IsNullOrEmpty(property))
                 {
                     info.bstrCurDir = Path.GetDirectoryName(info.bstrExe);
@@ -495,13 +468,13 @@ namespace Microsoft.VisualStudio.Project
                     info.bstrCurDir = property;
                 }
 
-                property = GetConfigurationProperty("CmdArgs", false);
+                property = GetConfigurationProperty("CmdArgs", _PersistStorageType.PST_USER_FILE, false);
                 if(!string.IsNullOrEmpty(property))
                 {
                     info.bstrArg = property;
                 }
 
-                property = GetConfigurationProperty("RemoteDebugMachine", false);
+                property = GetConfigurationProperty("RemoteDebugMachine", _PersistStorageType.PST_USER_FILE, false);
                 if(property != null && property.Length > 0)
                 {
                     info.bstrRemoteMachine = property;
@@ -509,7 +482,7 @@ namespace Microsoft.VisualStudio.Project
 
                 info.fSendStdoutToOutputWindow = 0;
 
-                property = GetConfigurationProperty("EnableUnmanagedDebugging", false);
+                property = GetConfigurationProperty("EnableUnmanagedDebugging", _PersistStorageType.PST_USER_FILE, false);
                 if(property != null && string.Equals(property, "true", StringComparison.OrdinalIgnoreCase))
                 {
                     //Set the unmanged debugger
@@ -522,7 +495,7 @@ namespace Microsoft.VisualStudio.Project
                 }
 
                 info.grfLaunch = grfLaunch;
-                VsShellUtilities.LaunchDebugger(this.project.Site, info);
+                VsShellUtilities.LaunchDebugger(this._project.Site, info);
             }
             catch(Exception e)
             {
@@ -544,11 +517,11 @@ namespace Microsoft.VisualStudio.Project
         public virtual int QueryDebugLaunch(uint flags, out int fCanLaunch)
         {
             CCITracing.TraceCall();
-            string assembly = this.project.GetAssemblyName(this.ConfigName, this.Platform);
+            string assembly = this._project.GetAssemblyName(this.ConfigName, this.Platform);
             fCanLaunch = (assembly != null && assembly.ToUpperInvariant().EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) ? 1 : 0;
             if(fCanLaunch == 0)
             {
-                string property = GetConfigurationProperty("StartProgram", true);
+                string property = GetConfigurationProperty("StartProgram", _PersistStorageType.PST_USER_FILE, true);
                 fCanLaunch = (property != null && property.Length > 0) ? 1 : 0;
             }
             return VSConstants.S_OK;
@@ -660,11 +633,11 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
         public virtual int GetProjectItem(out IVsHierarchy hier, out uint itemid)
         {
-            if(this.project == null || this.project.NodeProperties == null)
+            if(this._project == null || this._project.NodeProperties == null)
             {
                 throw new InvalidOperationException();
             }
-            return this.project.NodeProperties.GetProjectItem(out hier, out itemid);
+            return this._project.NodeProperties.GetProjectItem(out hier, out itemid);
         }
         #endregion
 
@@ -702,18 +675,18 @@ namespace Microsoft.VisualStudio.Project
             return true;
         }
 
-        private MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, bool resetCache)
+        private MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
         {
             if (resetCache || this.currentConfig == null)
             {
                 // Get properties for current configuration from project file and cache it
-                this.project.SetConfiguration(this.ConfigName, this.Platform);
-                this.project.BuildProject.ReevaluateIfNecessary();
+                this._project.SetConfiguration(this.ConfigName, this.Platform);
+                this._project.BuildProject.ReevaluateIfNecessary();
                 // Create a snapshot of the evaluated project in its current state
-                this.currentConfig = this.project.BuildProject.CreateProjectInstance();
+                this.currentConfig = this._project.BuildProject.CreateProjectInstance();
 
                 // Restore configuration
-                project.SetCurrentConfiguration();
+                _project.SetCurrentConfiguration();
             }
 
             if (this.currentConfig == null)
@@ -744,7 +717,7 @@ namespace Microsoft.VisualStudio.Project
             // Retrive the list of guids from hierarchy properties.
             // Because a flavor could modify that list we must make sure we are calling the outer most implementation of IVsHierarchy
             string guidsList = String.Empty;
-            IVsHierarchy hierarchy = HierarchyNode.GetOuterHierarchy(this.project);
+            IVsHierarchy hierarchy = HierarchyNode.GetOuterHierarchy(this._project);
             object variant = null;
             ErrorHandler.ThrowOnFailure(hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID2.VSHPROPID_CfgPropertyPagesCLSIDList, out variant), new int[] { VSConstants.DISP_E_MEMBERNOTFOUND, VSConstants.E_NOTIMPL });
             guidsList = (string)variant;

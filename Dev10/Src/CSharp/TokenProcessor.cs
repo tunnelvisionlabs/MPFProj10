@@ -16,6 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
 
 namespace Microsoft.VisualStudio.Project
 {
@@ -321,7 +322,7 @@ namespace Microsoft.VisualStudio.Project
             }
 			
             // Get base namespace from the project
-			string namespce = node.GetProjectProperty("RootNamespace");
+			string namespce = node.GetProjectProperty("RootNamespace", _PersistStorageType.PST_PROJECT_FILE);
 			if(String.IsNullOrEmpty(namespce))
 				namespce = Path.GetFileNameWithoutExtension(fileFullPath); ;
 

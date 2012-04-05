@@ -26,6 +26,7 @@ namespace Microsoft.VisualStudio.Project
 		public const string Name = "Name";
 		public const string HintPath = "HintPath";
 		public const string AssemblyName = "AssemblyName";
+		public const string IntermediateAssembly = "IntermediateAssembly";
 		public const string FinalOutputPath = "FinalOutputPath";
 		public const string Project = "Project";
 		public const string LinkedIntoProjectAt = "LinkedIntoProjectAt";
