@@ -668,10 +668,12 @@ namespace Microsoft.VisualStudio.Project
             }
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+                if (string.IsNullOrEmpty("value"))
+                    throw new ArgumentException("value cannot be null or empty");
                 if (Path.IsPathRooted(value))
-                {
                     throw new ArgumentException("Path must not be rooted.");
-                }
 
                 this.outputBaseRelativePath = value;
             }
