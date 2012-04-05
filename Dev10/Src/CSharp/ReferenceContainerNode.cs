@@ -23,6 +23,7 @@ using MSBuild = Microsoft.Build.Evaluation;
 using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+using System.Collections.ObjectModel;
 
 namespace Microsoft.VisualStudio.Project
 {
@@ -49,9 +50,9 @@ namespace Microsoft.VisualStudio.Project
             ProjectFileConstants.COMReference
         };
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        protected virtual string[] SupportedReferenceTypes
+        protected virtual ReadOnlyCollection<string> SupportedReferenceTypes
         {
-            get { return supportedReferenceTypes; }
+            get { return new ReadOnlyCollection<string>(supportedReferenceTypes); }
         }
         #endregion
 
