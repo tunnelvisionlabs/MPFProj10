@@ -10,17 +10,20 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using prjBuildAction = VSLangProj.prjBuildAction;
 
 namespace Microsoft.VisualStudio.Project
 {
@@ -31,18 +34,21 @@ namespace Microsoft.VisualStudio.Project
 		[SRCategoryAttribute(SR.Advanced)]
 		[LocDisplayName(SR.BuildAction)]
 		[SRDescriptionAttribute(SR.BuildActionDescription)]
-        [DefaultValue(BuildAction.None)]
-		public virtual BuildAction BuildAction
+		[DefaultValue(prjBuildAction.prjBuildActionNone)]
+		public virtual prjBuildAction BuildAction
 		{
 			get
 			{
 				string value = this.Node.ItemNode.ItemName;
 				if(value == null || value.Length == 0)
 				{
-					return BuildAction.None;
+					return prjBuildAction.prjBuildActionNone;
 				}
-				return (BuildAction)Enum.Parse(typeof(BuildAction), value);
+
+				KeyValuePair<string, prjBuildAction> pair = Node.ProjectManager.AvailableFileBuildActions.FirstOrDefault(i => string.Equals(i.Key, value, StringComparison.OrdinalIgnoreCase));
+				return pair.Value;
 			}
+
 			set
 			{
 				this.Node.ItemNode.ItemName = value.ToString();

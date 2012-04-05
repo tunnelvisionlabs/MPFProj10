@@ -10,6 +10,7 @@
         private readonly HierarchyNode _node;
 
         public SingleFileGeneratorNodeExtenderProperties(HierarchyNode node)
+            : base(node.ProjectManager)
         {
             _node = node;
         }

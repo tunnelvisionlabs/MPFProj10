@@ -62,6 +62,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region ctors
 		public NodeProperties(HierarchyNode node)
+			: base(node.ProjectManager)
 		{
 			if(node == null)
 			{

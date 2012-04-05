@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
 using Microsoft.VisualStudio.Project.Automation;
+using prjBuildAction = VSLangProj.prjBuildAction;
 
 namespace Microsoft.VisualStudio.Project.IntegrationTests
 {
@@ -69,13 +70,13 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				Assert.IsNotNull(props);
 
 				// Test the build action.
-				Assert.IsTrue(props.BuildAction == BuildAction.Content, "The BuildAction build action should be set to compile model");
-				props.BuildAction = BuildAction.Compile;
-				Assert.IsTrue(props.BuildAction == BuildAction.Compile, "BuildAction has not been set correctly in the project file");
-				props.BuildAction = BuildAction.EmbeddedResource;
-				Assert.IsTrue(props.BuildAction == BuildAction.EmbeddedResource, "BuildAction has not been set correctly in the project file");
-				props.BuildAction = BuildAction.None;
-				Assert.IsTrue(props.BuildAction == BuildAction.None, "BuildAction has not been set correctly in the project file");
+				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionContent, "The BuildAction build action should be set to compile model");
+				props.BuildAction = prjBuildAction.prjBuildActionCompile;
+				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionCompile, "BuildAction has not been set correctly in the project file");
+				props.BuildAction = prjBuildAction.prjBuildActionEmbeddedResource;
+				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionEmbeddedResource, "BuildAction has not been set correctly in the project file");
+				props.BuildAction = prjBuildAction.prjBuildActionNone;
+				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionNone, "BuildAction has not been set correctly in the project file");
 			});
 		}
 

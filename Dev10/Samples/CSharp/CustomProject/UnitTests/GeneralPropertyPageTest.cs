@@ -41,8 +41,6 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 		{
 			base.Initialize();
 
-			generalPropertyPage = new GeneralPropertyPage();
-
 			customProjectPackage = new CustomProjectPackage();
 			((IVsPackage)customProjectPackage).SetSite(serviceProvider);
 
@@ -61,6 +59,8 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 				int pfCanceled;
 				projectNode.Load(projectFile, "", "", 2, ref iidProject, out pfCanceled);
 			}
+
+			generalPropertyPage = new GeneralPropertyPage(projectNode);
 		}
 
 		[TestMethod()]

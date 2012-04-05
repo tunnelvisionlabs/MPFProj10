@@ -26,12 +26,13 @@ namespace Microsoft.VisualStudio.Project
 	{
 		#region fields
 		private string outputPath;
+		#endregion
 
-		public BuildPropertyPage()
+		public BuildPropertyPage(ProjectNode projectManager)
+			: base(projectManager)
 		{
 			this.Name = SR.GetString(SR.BuildCaption, CultureInfo.CurrentUICulture);
 		}
-		#endregion
 
 		#region properties
 		[SRCategoryAttribute(SR.BuildCaption)]

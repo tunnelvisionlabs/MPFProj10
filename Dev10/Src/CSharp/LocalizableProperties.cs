@@ -22,6 +22,27 @@ namespace Microsoft.VisualStudio.Project
 	[ComVisible(true)]
 	public class LocalizableProperties : ICustomTypeDescriptor
 	{
+		private readonly ProjectNode _projectManager;
+
+		public LocalizableProperties(ProjectNode projectManager)
+		{
+			if (projectManager == null)
+				throw new ArgumentNullException("projectManager");
+
+			_projectManager = projectManager;
+		}
+
+		[Browsable(false)]
+		[AutomationBrowsable(false)]
+		public ProjectNode ProjectManager
+		{
+			get
+			{
+				//Contract.Ensures(Contract.Result<ProjectNode>() != null);
+				return _projectManager;
+			}
+		}
+
 		#region ICustomTypeDescriptor
 		public virtual AttributeCollection GetAttributes()
 		{
@@ -83,7 +104,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public virtual DesignPropertyDescriptor CreateDesignPropertyDescriptor(PropertyDescriptor propertyDescriptor)
 		{
-			return new DesignPropertyDescriptor(propertyDescriptor);
+			return new DesignPropertyDescriptor(propertyDescriptor, ProjectManager);
 		}
 
 		public virtual string GetComponentName()

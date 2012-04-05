@@ -38,13 +38,17 @@ namespace Microsoft.VisualStudio.Project
 		private bool active;
 		private bool dirty;
 		private IPropertyPageSite site;
-		private ProjectNode project;
 		private ProjectConfig[] projectConfigs;
 		private IVSMDPropertyGrid grid;
 		private string name;
 		private static volatile object Mutex = new object();
 		private bool isDisposed;
 		#endregion
+
+		public SettingsPage(ProjectNode projectManager)
+			: base(projectManager)
+		{
+		}
 
 		#region properties
 
@@ -59,16 +63,6 @@ namespace Microsoft.VisualStudio.Project
 			set
 			{
 				this.name = value;
-			}
-		}
-
-		[Browsable(false)]
-		[AutomationBrowsable(false)]
-		public ProjectNode ProjectManager
-		{
-			get
-			{
-				return this.project;
 			}
 		}
 
@@ -223,9 +217,9 @@ namespace Microsoft.VisualStudio.Project
 				NativeMethods.SetParent(this.panel.Handle, parent);
 			}
 
-			if(this.grid == null && this.project != null && this.project.Site != null)
+			if(this.grid == null && this.ProjectManager != null && this.ProjectManager.Site != null)
 			{
-				IVSMDPropertyBrowser pb = this.project.Site.GetService(typeof(IVSMDPropertyBrowser)) as IVSMDPropertyBrowser;
+				IVSMDPropertyBrowser pb = this.ProjectManager.Site.GetService(typeof(IVSMDPropertyBrowser)) as IVSMDPropertyBrowser;
 				this.grid = pb.CreatePropertyGrid();
 			}
 
@@ -325,9 +319,9 @@ namespace Microsoft.VisualStudio.Project
 					{
 						ProjectConfig config = (ProjectConfig)punk[i];
 
-						if(this.project == null || (this.project != (punk[0] as ProjectConfig).ProjectManager))
+						if(this.ProjectManager == null || (this.ProjectManager != (punk[0] as ProjectConfig).ProjectManager))
 						{
-							this.project = config.ProjectManager;
+                            throw new InvalidOperationException();
 						}
 
 						configs.Add(config);
@@ -337,9 +331,9 @@ namespace Microsoft.VisualStudio.Project
 				}
 				else if(punk[0] is NodeProperties)
 				{
-                    if (this.project == null || (this.project != (punk[0] as NodeProperties).Node.ProjectManager))
+                    if (this.ProjectManager == null || (this.ProjectManager != (punk[0] as NodeProperties).Node.ProjectManager))
 					{
-						this.project = (punk[0] as NodeProperties).Node.ProjectManager;
+                        throw new InvalidOperationException();
 					}
 
 					System.Collections.Generic.Dictionary<string, ProjectConfig> configsMap = new System.Collections.Generic.Dictionary<string, ProjectConfig>();
@@ -380,10 +374,10 @@ namespace Microsoft.VisualStudio.Project
 			}
 			else
 			{
-				this.project = null;
+                //this.ProjectManager = null;
 			}
 
-			if(this.active && this.project != null)
+			if(this.active && this.ProjectManager != null)
 			{
 				UpdateObjects();
 			}
@@ -427,7 +421,7 @@ namespace Microsoft.VisualStudio.Project
 
 		protected void UpdateObjects()
 		{
-			if(this.projectConfigs != null && this.project != null)
+			if(this.projectConfigs != null && this.ProjectManager != null)
 			{
 				// Demand unmanaged permissions in order to access unmanaged memory.
 				new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();

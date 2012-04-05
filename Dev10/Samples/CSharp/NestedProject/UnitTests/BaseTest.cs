@@ -153,8 +153,6 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
         
         protected virtual void LoadProject()
         {
-            generalPropertyPage = new GeneralPropertyPage();
-
             // Prepare the package
             projectPackage = new NestedProjectPackage();
             ((IVsPackage)projectPackage).SetSite(serviceProvider);
@@ -176,6 +174,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
                 projectNode.Load(fullPathToProjectFile, "", "", 2, ref iidProject, out pfCanceled);
             }
 
+            generalPropertyPage = new GeneralPropertyPage(projectNode);
         }
 	}
 }

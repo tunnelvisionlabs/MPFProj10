@@ -12,6 +12,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -35,6 +36,7 @@ using MSBuild = Microsoft.Build.Evaluation;
 using MSBuildConstruction = Microsoft.Build.Construction;
 using MSBuildExecution = Microsoft.Build.Execution;
 using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using prjBuildAction = VSLangProj.prjBuildAction;
 using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 
@@ -269,6 +271,8 @@ namespace Microsoft.VisualStudio.Project
 
         // Has the object been disposed.
         private bool isDisposed;
+
+        private readonly List<KeyValuePair<string, prjBuildAction>> _availableFileBuildActions = new List<KeyValuePair<string, prjBuildAction>>();
         #endregion
 
         #region abstract properties
@@ -320,6 +324,14 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region properties
+
+        public ReadOnlyCollection<KeyValuePair<string, prjBuildAction>> AvailableFileBuildActions
+        {
+            get
+            {
+                return _availableFileBuildActions.AsReadOnly();
+            }
+        }
 
         #region overridden properties
         public override int MenuCommandId
@@ -674,6 +686,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return this.outputBaseRelativePath;
             }
+
             set
             {
                 if (value == null)
@@ -3298,6 +3311,9 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>A FolderNode that can then be added to the hierarchy</returns>
         protected internal virtual FolderNode CreateFolderNode(string path, ProjectElement element)
         {
+            if (element == null)
+                throw new ArgumentNullException("element");
+
             FolderNode folderNode = new FolderNode(this, path, element);
             return folderNode;
         }
@@ -3618,14 +3634,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>True = items of this type should be included in the project</returns>
         protected virtual bool IsItemTypeFileType(string type)
         {
-            if (String.Equals(type, BuildAction.Compile.ToString(), StringComparison.OrdinalIgnoreCase)
-                || String.Equals(type, BuildAction.Content.ToString(), StringComparison.OrdinalIgnoreCase)
-                || String.Equals(type, BuildAction.EmbeddedResource.ToString(), StringComparison.OrdinalIgnoreCase)
-                || String.Equals(type, BuildAction.None.ToString(), StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            // we don't know about this type, so ignore it.
-            return false;
+            return _availableFileBuildActions.Any(i => string.Equals(i.Key, type, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -6964,6 +6973,18 @@ namespace Microsoft.VisualStudio.Project
             if (this.buildProject != null)
             {
                 SetupProjectGlobalPropertiesThatAllProjectSystemsMustSet();
+
+                _availableFileBuildActions.Clear();
+                _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("None", prjBuildAction.prjBuildActionNone));
+                _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("Compile", prjBuildAction.prjBuildActionCompile));
+                _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("Content", prjBuildAction.prjBuildActionContent));
+                _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("EmbeddedResource", prjBuildAction.prjBuildActionEmbeddedResource));
+                ICollection<MSBuild.ProjectItem> availableItemNames = buildProject.GetItems("AvailableItemName");
+                foreach (var itemName in availableItemNames)
+                {
+                    if (!_availableFileBuildActions.Any(i => string.Equals(i.Key, itemName.EvaluatedInclude, StringComparison.OrdinalIgnoreCase)))
+                        _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>(itemName.EvaluatedInclude, (prjBuildAction)_availableFileBuildActions.Count));
+                }
             }
         }
 

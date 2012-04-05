@@ -39,7 +39,8 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		/// <summary>
 		/// Explicitly defined default constructor.
 		/// </summary>
-		public GeneralPropertyPage()
+		public GeneralPropertyPage(ProjectNode projectManager)
+			: base(projectManager)
 		{
 			this.Name = Resources.GetString(Resources.GeneralCaption);
 		}

@@ -109,6 +109,7 @@
     <Compile Include="AutomationBrowsableAttribute.cs" />
     <Compile Include="Automation\VSProject\EmptyReferencesEvents.cs" />
     <Compile Include="Automation\VSProject\OAVSProjectEvents.cs" />
+    <Compile Include="AvailableFileBuildActionConverter.cs" />
     <Compile Include="BeforeProjectFileClosedEventArgs.cs" />
     <Compile Include="BuildableProjectConfig.cs" />
     <Compile Include="BuildAction.cs" />
