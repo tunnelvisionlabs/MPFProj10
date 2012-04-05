@@ -1037,8 +1037,18 @@ namespace Microsoft.VisualStudio.Project
             // exclude the items which are the part of the build.
             this.ExcludeProjectBuildItems(files, folders);
 
-            this.AddNonMemberFolderItems(folders);
-            this.AddNonMemberFileItems(files);
+            var oldEventTriggeringFlag = EventTriggeringFlag;
+            EventTriggeringFlag = EventTriggering.DoNotTriggerHierarchyEvents;
+            try
+            {
+                this.AddNonMemberFolderItems(folders);
+                this.AddNonMemberFileItems(files);
+            }
+            finally
+            {
+                EventTriggeringFlag = oldEventTriggeringFlag;
+                OnInvalidateItems(this);
+            }
         }
 
         /// <summary>
@@ -1227,7 +1237,7 @@ namespace Microsoft.VisualStudio.Project
                 foreach (string folder in folders)
                 {
                     string childNodeId = Path.Combine(parentNode.VirtualNodeName, folder);
-                    HierarchyNode childNode = parentNode.FindChild(childNodeId);
+                    HierarchyNode childNode = parentNode.FindChild(childNodeId, false);
                     if (childNode == null)
                     {
                         if (topFolderNode == null)
@@ -1240,7 +1250,8 @@ namespace Microsoft.VisualStudio.Project
                         }
 
                         ProjectElement element = new ProjectElement(this, null, true);
-                        childNode = this.CreateFolderNode(childNodeId, element);
+                        FolderNode folderNode = this.CreateFolderNode(childNodeId, element);
+                        childNode = folderNode;
                         parentNode.AddChild(childNode);
                     }
 
@@ -1275,7 +1286,7 @@ namespace Microsoft.VisualStudio.Project
                 foreach (string fileOrDir in pathItems)
                 {
                     string childNodeId = Path.Combine(parentNode.VirtualNodeName, fileOrDir);
-                    HierarchyNode childNode = parentNode.FindChild(childNodeId);
+                    HierarchyNode childNode = parentNode.FindChild(childNodeId, false);
                     if (childNode == null)
                     {
                         if (String.Equals(this.ProjectFile, childNodeId, StringComparison.OrdinalIgnoreCase)) // skip the project file itself.
@@ -3189,7 +3200,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     Debug.Assert(this.NodeFromItemId(uiItemId) is FolderNode, "Not a FolderNode");
                     cachedNode = this.NodeFromItemId(uiItemId);
-                    if (nodeCache != null)
+                    if (cachedNode != null && nodeCache != null)
                         nodeCache.Add(strFullPath, cachedNode);
                 }
             }
@@ -3208,11 +3219,15 @@ namespace Microsoft.VisualStudio.Project
                         break;
                     }
                 }
+
                 // If MSBuild did not know about it, create a new one
                 if (item == null)
                     item = this.AddFolderToMsBuild(path);
+
                 folderNode = this.CreateFolderNode(path, item);
                 parent.AddChild(folderNode);
+                if (nodeCache != null)
+                    nodeCache.Add(strFullPath, folderNode);
             }
 
             return folderNode;
