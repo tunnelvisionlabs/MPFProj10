@@ -97,6 +97,22 @@ namespace Microsoft.VisualStudio.Project
 			return this.ProjectMgr.ImageHandler.GetIconHandle(open ? (int)ProjectNode.ImageName.OpenFolder : (int)ProjectNode.ImageName.Folder);
 		}
 
+        /// <summary>
+        /// Collapses the folder.
+        /// </summary>
+        public void CollapseFolder()
+        {
+            this.SetExpanded(false);
+        }
+
+        /// <summary>
+        /// Expands the folder.
+        /// </summary>
+        public void ExpandFolder()
+        {
+            this.SetExpanded(true);
+        }
+
 		/// <summary>
 		/// Rename Folder
 		/// </summary>
@@ -300,6 +316,34 @@ namespace Microsoft.VisualStudio.Project
             }
 
             return base.ExecCommandOnNode(cmdGroup, cmd, nCmdexecopt, pvaIn, pvaOut);
+        }
+
+        /// <summary>
+        /// Sets the expanded state of the folder.
+        /// </summary>
+        /// <param name="expanded">Flag that indicates the expanded state of the folder.
+        /// This should be 'true' for expanded and 'false' for collapsed state.</param>
+        protected void SetExpanded(bool expanded)
+        {
+            this.IsExpanded = expanded;
+            this.SetProperty((int)__VSHPROPID.VSHPROPID_Expanded, expanded);
+
+            // If we are in automation mode then skip the ui part
+            if (!Utilities.IsInAutomationFunction(this.ProjectMgr.Site))
+            {
+                IVsUIHierarchyWindow uiWindow = UIHierarchyUtilities.GetUIHierarchyWindow(this.ProjectMgr.Site, SolutionExplorer);
+                int result = uiWindow.ExpandItem(this.ProjectMgr, this.ID, expanded ? EXPANDFLAGS.EXPF_ExpandFolder : EXPANDFLAGS.EXPF_CollapseFolder);
+                ErrorHandler.ThrowOnFailure(result);
+
+                // then post the expand command to the shell. Folder verification and creation will
+                // happen in the setlabel code...
+                IVsUIShell shell = ProjectMgr.Site.GetService(typeof(SVsUIShell)) as IVsUIShell;
+
+                object dummy = null;
+                Guid cmdGroup = VsMenus.guidStandardCommandSet97;
+                result = shell.PostExecCommand(ref cmdGroup, (uint)(expanded ? VsCommands.Expand : VsCommands.Collapse), 0, ref dummy);
+                ErrorHandler.ThrowOnFailure(result);
+            }
         }
 
 		protected override bool CanDeleteItem(__VSDELETEITEMOPERATION deleteOperation)
