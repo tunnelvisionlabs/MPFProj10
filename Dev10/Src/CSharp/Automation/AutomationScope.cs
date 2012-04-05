@@ -24,17 +24,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 	{
 		private IVsExtensibility3 extensibility;
 		private bool inAutomation;
-		private static volatile object Mutex;
+		private static volatile object Mutex = new object();
 		private bool isDisposed;
-
-		/// <summary>
-		/// Initializes the <see cref="AutomationScope"/> class.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
-		static AutomationScope()
-		{
-			Mutex = new object();
-		}
 
 		/// <summary>
 		/// Defines the beginning of the scope of an automation function. This constuctor
