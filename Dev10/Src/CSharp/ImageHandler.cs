@@ -189,15 +189,15 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if(!this.isDisposed)
 			{
-				lock(Mutex)
+				if (disposing)
 				{
-					if(disposing)
+					lock(Mutex)
 					{
 						this.imageList.Dispose();
 					}
-
-					this.isDisposed = true;
 				}
+
+				this.isDisposed = true;
 			}
 		}
 	}
