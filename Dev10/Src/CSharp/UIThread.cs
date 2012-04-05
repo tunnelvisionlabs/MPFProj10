@@ -105,7 +105,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="a">The action to run</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        internal void Run(Action a)
+        public void Run(Action a)
         {
             if (IsUnitTest)
             {
