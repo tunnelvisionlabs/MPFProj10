@@ -2196,11 +2196,6 @@ namespace Microsoft.VisualStudio.Project
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
 		protected internal virtual void GetSccFiles(IList<string> files, IList<tagVsSccFilesFlags> flags)
 		{
-			if(this.ExcludeNodeFromScc)
-			{
-				return;
-			}
-
 			if(files == null)
 			{
 				throw new ArgumentNullException("files");
@@ -2209,6 +2204,11 @@ namespace Microsoft.VisualStudio.Project
 			if(flags == null)
 			{
 				throw new ArgumentNullException("flags");
+			}
+
+			if(this.ExcludeNodeFromScc)
+			{
+				return;
 			}
 
 			files.Add(this.GetMkDocument());
@@ -2228,11 +2228,6 @@ namespace Microsoft.VisualStudio.Project
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "scc")]
 		protected internal virtual void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
 		{
-			if(this.ExcludeNodeFromScc)
-			{
-				return;
-			}
-
 			if(files == null)
 			{
 				throw new ArgumentNullException("files");
@@ -2241,6 +2236,11 @@ namespace Microsoft.VisualStudio.Project
 			if(flags == null)
 			{
 				throw new ArgumentNullException("flags");
+			}
+
+			if(this.ExcludeNodeFromScc)
+			{
+				return;
 			}
 		}
 
