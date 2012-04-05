@@ -150,6 +150,8 @@ namespace Microsoft.VisualStudio.Project
 
         private MSBuild.Project buildProject;
 
+        private MSBuild.Project _userBuildProject;
+
         private MSBuildExecution.ProjectInstance currentConfig;
 
         private DesignTimeAssemblyResolution designTimeAssemblyResolution;
@@ -789,6 +791,14 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
+        public string UserFileName
+        {
+            get
+            {
+                return FileName + PerUserFileExtension;
+            }
+        }
+
 		protected bool IsIdeInCommandLineMode
 		{
 			get
@@ -894,6 +904,18 @@ namespace Microsoft.VisualStudio.Project
             set
             {
                 SetBuildProject(value);
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public MSBuild.Project UserBuildProject
+        {
+            get
+            {
+                if (_userBuildProject == null && File.Exists(UserFileName))
+                    CreateUserBuildProject();
+
+                return _userBuildProject;
             }
         }
 
@@ -1468,6 +1490,17 @@ namespace Microsoft.VisualStudio.Project
                 return true;
 
             return false;
+        }
+
+        public void CreateUserBuildProject()
+        {
+            if (!File.Exists(UserFileName))
+            {
+                MSBuild.Project userBuildProject = new MSBuild.Project();
+                userBuildProject.Save(UserFileName);
+            }
+
+            _userBuildProject = BuildEngine.LoadProject(UserFileName);
         }
 
         /// <summary>
@@ -4204,6 +4237,12 @@ namespace Microsoft.VisualStudio.Project
 			}
 
             this.options = null;
+
+            if (_userBuildProject != null)
+            {
+                _userBuildProject.SetGlobalProperty(ProjectFileConstants.Configuration, config);
+                _userBuildProject.SetGlobalProperty(ProjectFileConstants.Platform, ConfigProvider.GetPlatformPropertyFromPlatformName(platform));
+            }
         }
 
         /// <summary>
@@ -5231,6 +5270,9 @@ namespace Microsoft.VisualStudio.Project
             {
                 this.SetProjectFileDirty(true);
             }
+
+            if (result == VSConstants.S_OK && _userBuildProject != null)
+                _userBuildProject.Save(UserFileName);
 
             return result;
         }
