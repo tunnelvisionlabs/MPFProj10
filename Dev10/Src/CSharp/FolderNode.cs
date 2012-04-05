@@ -109,6 +109,11 @@ namespace Microsoft.VisualStudio.Project
 			{
 				return this.isNonMemberItem;
 			}
+
+			set
+			{
+				this.isNonMemberItem = value;
+			}
 		}
 
 		#region overridden methods
@@ -158,7 +163,7 @@ namespace Microsoft.VisualStudio.Project
                 CCITracing.TraceCall(this.ID + "," + id.ToString());
                 if (bool.TryParse(value.ToString(), out boolValue))
                 {
-                    this.isNonMemberItem = boolValue;
+                    this.IsNonMemberItem = boolValue;
                 }
                 else
                 {
