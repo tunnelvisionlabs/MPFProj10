@@ -49,7 +49,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 			base.SetMsbuildEngine(customProjectFactory);
 
 			int canCreate;
-			if(VSConstants.S_OK == ((IVsProjectFactory)customProjectFactory).CanCreateProject(projectFile, 2, out canCreate))
+			if(VSConstants.S_OK == ((IVsProjectFactory)customProjectFactory).CanCreateProject(projectFile, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, out canCreate))
 			{
 				PrivateType type = new PrivateType(typeof(MyCustomProjectFactory));
 				PrivateObject obj = new PrivateObject(customProjectFactory, type);
@@ -57,7 +57,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 
 				Guid iidProject = new Guid();
 				int pfCanceled;
-				projectNode.Load(projectFile, "", "", 2, ref iidProject, out pfCanceled);
+				projectNode.Load(projectFile, "", "", (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref iidProject, out pfCanceled);
 			}
 
 			generalPropertyPage = new GeneralPropertyPage(projectNode);

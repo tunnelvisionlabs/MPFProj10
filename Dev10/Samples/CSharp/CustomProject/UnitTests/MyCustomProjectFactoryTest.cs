@@ -53,7 +53,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 
 			base.SetMsbuildEngine(customProjectFactory);
 
-			((IVsProjectFactory)customProjectFactory).CanCreateProject(projectFile, 2, out actual);
+			((IVsProjectFactory)customProjectFactory).CanCreateProject(projectFile, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, out actual);
 
 			Assert.AreEqual(expected, actual, "Cannot create project");
 

@@ -163,7 +163,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 
             //Create the project object using the projectfactory and load the project
             int canCreate;
-            if (VSConstants.S_OK == ((IVsProjectFactory)projectFactory).CanCreateProject(fullPathToProjectFile, 2, out canCreate))
+            if (VSConstants.S_OK == ((IVsProjectFactory)projectFactory).CanCreateProject(fullPathToProjectFile, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, out canCreate))
             {
                 MethodInfo preCreateForOuter = typeof(NestedProjectFactory).GetMethod("PreCreateForOuter", BindingFlags.Instance | BindingFlags.NonPublic);
                 Assert.IsNotNull(preCreateForOuter, "failed to get the PreCreateForOuter method info object from NestedProjectFactory type");
@@ -171,7 +171,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
                 Assert.IsNotNull(projectNode, "Failed to create the projectnode object");
                 Guid iidProject = new Guid();
                 int pfCanceled;
-                projectNode.Load(fullPathToProjectFile, "", "", 2, ref iidProject, out pfCanceled);
+                projectNode.Load(fullPathToProjectFile, "", "", (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref iidProject, out pfCanceled);
             }
 
             generalPropertyPage = new GeneralPropertyPage(projectNode);
