@@ -115,7 +115,9 @@ namespace Microsoft.VisualStudio.Project
             // create and add the item to the project
 
             this.item = project.BuildProject.AddItem(itemType, Microsoft.Build.Evaluation.ProjectCollection.Escape(itemPath))[0];
-            this.itemProject.SetProjectFileDirty(true);
+            if (project.BuildProject.IsDirty)
+                this.itemProject.SetProjectFileDirty(true);
+
             this.RefreshProperties();
         }
 
