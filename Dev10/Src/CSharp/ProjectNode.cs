@@ -547,6 +547,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets an ImageHandler for the project node.
         /// </summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ImageHandler ImageHandler
         {
             get
@@ -808,6 +809,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets the configuration provider.
         /// </summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ConfigProvider ConfigProvider
         {
             get

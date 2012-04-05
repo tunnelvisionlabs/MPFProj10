@@ -86,6 +86,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual object ConfigurationProperties
         {
             get
