@@ -4805,34 +4805,6 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// For internal use only.
-        /// This creates a copy of an existing configuration and add it to the project.
-        /// Caller should change the condition on the PropertyGroup.
-        /// If derived class want to accomplish this, they should call ConfigProvider.AddCfgsOfCfgName()
-        /// It is expected that in the future MSBuild will have support for this so we don't have to
-        /// do it manually.
-        /// </summary>
-        /// <param name="group">PropertyGroup to clone</param>
-        /// <returns></returns>
-        internal MSBuildConstruction.ProjectPropertyGroupElement ClonePropertyGroup(MSBuildConstruction.ProjectPropertyGroupElement group)
-        {
-            // Create a new (empty) PropertyGroup
-            MSBuildConstruction.ProjectPropertyGroupElement newPropertyGroup = this.buildProject.Xml.AddPropertyGroup();
-
-            // Now copy everything from the group we are trying to clone to the group we are creating
-            if (!String.IsNullOrEmpty(group.Condition))
-                newPropertyGroup.Condition = group.Condition;
-            foreach (MSBuildConstruction.ProjectPropertyElement prop in group.Properties)
-            {
-                MSBuildConstruction.ProjectPropertyElement newProperty = newPropertyGroup.AddProperty(prop.Name, prop.Value);
-                if (!String.IsNullOrEmpty(prop.Condition))
-                    newProperty.Condition = prop.Condition;
-            }
-
-            return newPropertyGroup;
-        }
-
-        /// <summary>
         /// Get the project extensions
         /// </summary>
         /// <returns></returns>
