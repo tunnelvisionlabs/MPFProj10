@@ -12,17 +12,19 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 namespace Microsoft.VisualStudio.Project.Automation
 {
 	using System;
+	using System.Diagnostics;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Runtime.InteropServices;
 	using EnvDTE;
 	using VSLangProj;
+	using VSLangProj80;
 
 	/// <summary>
 	/// Represents an automation friendly version of a language-specific project.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "OAVS")]
 	[ComVisible(true), CLSCompliant(false)]
-	public class OAVSProject : VSProject
+	public class OAVSProject : VSProject, VSProject2
 	{
 		private ProjectNode project;
 		private OAVSProjectEvents events;
@@ -65,13 +67,12 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		public virtual VSProjectEvents Events
 		{
 			get
 			{
-				if(events == null)
-					events = new OAVSProjectEvents(this);
-				return events;
+				return Events2;
 			}
 		}
 
@@ -148,6 +149,37 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 
 			set
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		#endregion
+
+		#region VSProject2 Members
+
+		/// <summary>
+		/// Gets a VSProjectEvents2 object that allows you to respond to events of the Imports,
+		/// References, BuildManager, and VSLangProjWebReferencesEvents objects.
+		/// </summary>
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		public virtual VSProjectEvents2 Events2
+		{
+			get
+			{
+				if (events == null)
+					events = new OAVSProjectEvents(this);
+
+				return events;
+			}
+		}
+
+		/// <summary>
+		/// Gets a PublishManager object to allow click once publishing.
+		/// </summary>
+		public virtual object PublishManager
+		{
+			get
 			{
 				throw new NotSupportedException();
 			}

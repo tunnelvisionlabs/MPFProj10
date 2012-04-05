@@ -17,6 +17,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 	using prjReferenceType = VSLangProj.prjReferenceType;
 	using Reference = VSLangProj.Reference;
 	using References = VSLangProj.References;
+	using Reference2 = VSLangProj2.Reference2;
+	using Reference3 = VSLangProj80.Reference3;
 
 	/// <summary>
 	/// Represents the automation equivalent of ReferenceNode
@@ -24,7 +26,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	/// <typeparam name="RefType"></typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T")]
 	[ComVisible(true)]
-	public abstract class OAReferenceBase<TReferenceNode> : Reference
+	public abstract class OAReferenceBase<TReferenceNode> : Reference, Reference2, Reference3
 		where TReferenceNode : ReferenceNode
 	{
 		private readonly TReferenceNode _referenceNode;
@@ -221,6 +223,122 @@ namespace Microsoft.VisualStudio.Project.Automation
 		public virtual void Remove()
 		{
 			BaseReferenceNode.Remove(false);
+		}
+
+		#endregion
+
+		#region Reference2 Members
+
+		/// <summary>
+		/// Gets the version of the runtime the reference was built against.
+		/// </summary>
+		public virtual string RuntimeVersion
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		#endregion
+
+		#region Reference3 Members
+
+		/// <summary>
+		/// Gets or sets the aliased names for the specified reference. This property applies to Visual C# only.
+		/// </summary>
+		public virtual string Aliases
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Gets whether the reference is automatically referenced by the compiler.
+		/// </summary>
+		public virtual bool AutoReferenced
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether the COM reference is isolated, that is, not registered with Windows.
+		/// </summary>
+		public virtual bool Isolated
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Gets the type of reference: assembly, COM, or native.
+		/// </summary>
+		public virtual uint RefType
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Gets whether the current reference was resolved.
+		/// </summary>
+		public virtual bool Resolved
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether only a specific version of the reference is used.
+		/// </summary>
+		public virtual bool SpecificVersion
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Sets or Gets the assembly subtype.
+		/// </summary>
+		public virtual string SubType
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+
+			set
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		#endregion

@@ -15,6 +15,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	using System.Diagnostics.CodeAnalysis;
 	using System.Runtime.InteropServices;
 	using VSLangProj;
+	using VSLangProj80;
 
 	/// <summary>
 	/// Provides access to language-specific project events
@@ -22,7 +23,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "OAVS")]
 	[CLSCompliant(false)]
 	[ComVisible(true)]
-	public class OAVSProjectEvents : VSProjectEvents
+	public class OAVSProjectEvents : VSProjectEvents, VSProjectEvents2
 	{
 		private readonly OAVSProject _vsProject;
 
@@ -60,6 +61,18 @@ namespace Microsoft.VisualStudio.Project.Automation
 				// this can't return null or a NullReferenceException in Microsoft.VisualStudio.Xaml will take down the IDE (VS2010)
 				ReferencesEvents events = _vsProject.References as ReferencesEvents;
 				return events ?? EmptyReferencesEvents.Instance;
+			}
+		}
+
+		#endregion
+
+		#region VSProjectEvents2 Members
+
+		public virtual VSLangProjWebReferencesEvents VSLangProjWebReferencesEvents
+		{
+			get
+			{
+				throw new NotImplementedException();
 			}
 		}
 
