@@ -22,6 +22,11 @@ namespace Microsoft.VisualStudio.Project
             SetHandle(handle);
         }
 
+        private SafeGlobalAllocHandle()
+            : base(true)
+        {
+        }
+
         protected override bool ReleaseHandle()
         {
             UnsafeNativeMethods.GlobalFree(handle);
