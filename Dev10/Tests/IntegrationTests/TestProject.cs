@@ -304,7 +304,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 						IVsUIHierarchy hierOpen;
 						uint itemId;
 						IVsWindowFrame windowFrame;
-						Assert.IsTrue(VsShellUtilities.IsDocumentOpen(node.ProjectMgr.Site, document, logicalView, out hierOpen, out itemId, out windowFrame), "DoDeafult action did not open the file");
+						Assert.IsTrue(VsShellUtilities.IsDocumentOpen(node.ProjectManager.Site, document, logicalView, out hierOpen, out itemId, out windowFrame), "DoDeafult action did not open the file");
 						Assert.IsTrue(itemId == node.ID, "We did not open the correct document");
 						Assert.IsNotNull(windowFrame, "Do deafult action did not retun a window frame");
 						Assert.IsTrue(windowFrame.IsVisible() == VSConstants.S_OK, "Do deafult action did not show a window frame");

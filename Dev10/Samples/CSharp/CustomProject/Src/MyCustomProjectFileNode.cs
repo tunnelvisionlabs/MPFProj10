@@ -45,7 +45,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		{
 			if(automationObject == null)
 			{
-				automationObject = new OAMyCustomProjectFileItem(this.ProjectMgr.GetAutomationObject() as OAProject, this);
+				automationObject = new OAMyCustomProjectFileItem(this.ProjectManager.GetAutomationObject() as OAProject, this);
 			}
 
 			return automationObject;

@@ -1651,7 +1651,7 @@ namespace Microsoft.VisualStudio.Project
             try
             {
                 // Walk the tree and close all nodes.
-                // This has to be done before the project closes, since we want still state available for the ProjectMgr on the nodes 
+                // This has to be done before the project closes, since we want still state available for the ProjectManager on the nodes 
                 // when nodes are closing.
                 try
                 {
@@ -2323,7 +2323,7 @@ namespace Microsoft.VisualStudio.Project
                 // set up internal members and icons
                 canceled = 0;
 
-                this.ProjectMgr = this;
+                this.ProjectManager = this;
                 this.isNewProject = false;
 
                 if ((flags & (uint)__VSCREATEPROJFLAGS.CPF_CLONEFILE) == (uint)__VSCREATEPROJFLAGS.CPF_CLONEFILE)
@@ -2656,7 +2656,7 @@ namespace Microsoft.VisualStudio.Project
             if (!String.Equals(oldValue, propertyValue, StringComparison.Ordinal))
             {
                 // Check out the project file.
-                if (!this.ProjectMgr.QueryEditProjectFile(false))
+                if (!this.ProjectManager.QueryEditProjectFile(false))
                 {
                     throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
                 }
@@ -3265,7 +3265,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>S_OK if it's possible to toggle the state, OLECMDERR_E_NOTSUPPORTED if not</returns>
         internal int ToggleShowAllFiles()
         {
-            if (this.ProjectMgr == null || this.ProjectMgr.IsClosed)
+            if (this.ProjectManager == null || this.ProjectManager.IsClosed)
             {
                 return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
             }
@@ -5347,7 +5347,7 @@ namespace Microsoft.VisualStudio.Project
                 return VSConstants.E_FAIL;
             }
 
-            if (!this.ProjectMgr.QueryEditProjectFile(false))
+            if (!this.ProjectManager.QueryEditProjectFile(false))
             {
                 throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
             }
@@ -5730,7 +5730,7 @@ namespace Microsoft.VisualStudio.Project
         public virtual int TransferItem(string oldMkDoc, string newMkDoc, IVsWindowFrame frame)
         {
             // Fail if hierarchy already closed
-            if (this.ProjectMgr == null || this.ProjectMgr.IsClosed)
+            if (this.ProjectManager == null || this.ProjectManager.IsClosed)
             {
                 return VSConstants.E_FAIL;
             }
@@ -6396,7 +6396,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public int GetTargetFramework(out string ppTargetFramework)
 		{
-			ppTargetFramework = this.ProjectMgr.TargetFrameworkMoniker.FullName;
+			ppTargetFramework = this.ProjectManager.TargetFrameworkMoniker.FullName;
 			return VSConstants.S_OK;
 		}
 

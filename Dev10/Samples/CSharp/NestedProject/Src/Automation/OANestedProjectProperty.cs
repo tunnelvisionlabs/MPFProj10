@@ -159,7 +159,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		{
 			get
 			{
-				return this.parent.Target.Node.ProjectMgr.GetProjectProperty(this.name);
+				return this.parent.Target.Node.ProjectManager.GetProjectProperty(this.name);
 			}
 			set
 			{
@@ -170,11 +170,11 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 
 				if(value is string)
 				{
-					this.parent.Target.Node.ProjectMgr.SetProjectProperty(this.name, value.ToString());
+					this.parent.Target.Node.ProjectManager.SetProjectProperty(this.name, value.ToString());
 				}
 				else
 				{
-					this.parent.Target.Node.ProjectMgr.SetProjectProperty(this.name, value.ToString());
+					this.parent.Target.Node.ProjectManager.SetProjectProperty(this.name, value.ToString());
 				}
 			}
 		}

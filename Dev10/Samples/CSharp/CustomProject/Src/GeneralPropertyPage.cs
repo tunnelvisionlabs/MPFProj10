@@ -120,7 +120,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		/// <remarks>IsDirty flag was switched to true.</remarks>
 		public string ProjectFile
 		{
-			get { return Path.GetFileName(this.ProjectMgr.ProjectFile); }
+			get { return Path.GetFileName(this.ProjectManager.ProjectFile); }
 		}
 
 		[ResourcesCategoryAttribute(Resources.Project)]
@@ -132,7 +132,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		/// <remarks>IsDirty flag was switched to true.</remarks>
 		public string ProjectFolder
 		{
-			get { return Path.GetDirectoryName(this.ProjectMgr.ProjectFolder); }
+			get { return Path.GetDirectoryName(this.ProjectManager.ProjectFolder); }
 		}
 
 		[ResourcesCategoryAttribute(Resources.Project)]
@@ -192,14 +192,14 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		/// </summary>
 		protected override void BindProperties()
 		{
-			if(this.ProjectMgr == null)
+			if(this.ProjectManager == null)
 			{
 				return;
 			}
 
-			this.assemblyName = this.ProjectMgr.GetProjectProperty("AssemblyName", true);
+			this.assemblyName = this.ProjectManager.GetProjectProperty("AssemblyName", true);
 
-			string outputType = this.ProjectMgr.GetProjectProperty("OutputType", false);
+			string outputType = this.ProjectManager.GetProjectProperty("OutputType", false);
 
 			if(outputType != null && outputType.Length > 0)
 			{
@@ -212,13 +212,13 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 				}
 			}
 
-			this.defaultNamespace = this.ProjectMgr.GetProjectProperty("RootNamespace", false);
-			this.startupObject = this.ProjectMgr.GetProjectProperty("StartupObject", false);
-			this.applicationIcon = this.ProjectMgr.GetProjectProperty("ApplicationIcon", false);
+			this.defaultNamespace = this.ProjectManager.GetProjectProperty("RootNamespace", false);
+			this.startupObject = this.ProjectManager.GetProjectProperty("StartupObject", false);
+			this.applicationIcon = this.ProjectManager.GetProjectProperty("ApplicationIcon", false);
 
 			try
 			{
-				this.targetFrameworkMoniker = this.ProjectMgr.TargetFrameworkMoniker;
+				this.targetFrameworkMoniker = this.ProjectManager.TargetFrameworkMoniker;
 			}
 			catch (ArgumentException)
 			{
@@ -228,28 +228,28 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		/// <summary>
 		/// Apply Changes on project node.
 		/// </summary>
-		/// <returns>E_INVALIDARG if internal ProjectMgr is null, otherwise applies changes and return S_OK.</returns>
+		/// <returns>E_INVALIDARG if internal ProjectManager is null, otherwise applies changes and return S_OK.</returns>
 		protected override int ApplyChanges()
 		{
-			if(this.ProjectMgr == null)
+			if(this.ProjectManager == null)
 			{
 				return VSConstants.E_INVALIDARG;
 			}
 
-			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectMgr.Site.GetService((typeof(SVsPropertyPageFrame)));
-			bool reloadRequired = this.ProjectMgr.TargetFrameworkMoniker != this.targetFrameworkMoniker;
+			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
+			bool reloadRequired = this.ProjectManager.TargetFrameworkMoniker != this.targetFrameworkMoniker;
 
-			this.ProjectMgr.SetProjectProperty("AssemblyName", this.assemblyName);
-			this.ProjectMgr.SetProjectProperty("OutputType", this.outputType.ToString());
-			this.ProjectMgr.SetProjectProperty("RootNamespace", this.defaultNamespace);
-			this.ProjectMgr.SetProjectProperty("StartupObject", this.startupObject);
-			this.ProjectMgr.SetProjectProperty("ApplicationIcon", this.applicationIcon);
+			this.ProjectManager.SetProjectProperty("AssemblyName", this.assemblyName);
+			this.ProjectManager.SetProjectProperty("OutputType", this.outputType.ToString());
+			this.ProjectManager.SetProjectProperty("RootNamespace", this.defaultNamespace);
+			this.ProjectManager.SetProjectProperty("StartupObject", this.startupObject);
+			this.ProjectManager.SetProjectProperty("ApplicationIcon", this.applicationIcon);
 
 			if (reloadRequired)
 			{
 				if (MessageBox.Show(Resources.GetString(Resources.ReloadPromptOnTargetFxChanged), Resources.GetString(Resources.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
-					this.ProjectMgr.TargetFrameworkMoniker = this.targetFrameworkMoniker;
+					this.ProjectManager.TargetFrameworkMoniker = this.targetFrameworkMoniker;
 				}
 			}
 

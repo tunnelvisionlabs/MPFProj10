@@ -120,7 +120,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <remarks>IsDirty flag was switched to true.</remarks>
 		public string ProjectFile
 		{
-			get { return Path.GetFileName(this.ProjectMgr.ProjectFile); }
+			get { return Path.GetFileName(this.ProjectManager.ProjectFile); }
 		}
 
 		[ResourcesCategoryAttribute(Resources.Project)]
@@ -132,7 +132,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <remarks>IsDirty flag was switched to true.</remarks>
 		public string ProjectFolder
 		{
-			get { return Path.GetDirectoryName(this.ProjectMgr.ProjectFolder); }
+			get { return Path.GetDirectoryName(this.ProjectManager.ProjectFolder); }
 		}
 
 		[ResourcesCategoryAttribute(Resources.Project)]
@@ -192,16 +192,16 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// </summary>
 		protected override void BindProperties()
 		{
-			if(this.ProjectMgr == null)
+			if(this.ProjectManager == null)
 			{
 				// NOTE: this code covered by unit test method, debug assertion is disabled.
 				// Debug.Assert(false);
 				return;
 			}
 
-			this.assemblyName = this.ProjectMgr.GetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), true);
+			this.assemblyName = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), true);
 
-			string outputType = this.ProjectMgr.GetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), false);
+			string outputType = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), false);
 
 			if(outputType != null && outputType.Length > 0)
 			{
@@ -214,13 +214,13 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 				}
 			}
 
-			this.defaultNamespace = this.ProjectMgr.GetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), false);
-			this.startupObject = this.ProjectMgr.GetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), false);
-			this.applicationIcon = this.ProjectMgr.GetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), false);
+			this.defaultNamespace = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), false);
+			this.startupObject = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), false);
+			this.applicationIcon = this.ProjectManager.GetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), false);
 
 			try
 			{
-				this.targetFrameworkMoniker = this.ProjectMgr.TargetFrameworkMoniker;
+				this.targetFrameworkMoniker = this.ProjectManager.TargetFrameworkMoniker;
 			}
 			catch (ArgumentException)
 			{
@@ -230,29 +230,29 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <summary>
 		/// Apply Changes on project node.
 		/// </summary>
-		/// <returns>E_INVALIDARG if internal ProjectMgr is null, otherwise applies changes and return S_OK.</returns>
+		/// <returns>E_INVALIDARG if internal ProjectManager is null, otherwise applies changes and return S_OK.</returns>
 		protected override int ApplyChanges()
 		{
-			if (this.ProjectMgr == null)
+			if (this.ProjectManager == null)
 			{
 				return VSConstants.E_INVALIDARG;
 			}
 
-			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectMgr.Site.GetService((typeof(SVsPropertyPageFrame)));
-			bool reloadRequired = this.ProjectMgr.TargetFrameworkMoniker != this.targetFrameworkMoniker;
+			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
+			bool reloadRequired = this.ProjectManager.TargetFrameworkMoniker != this.targetFrameworkMoniker;
 
-			this.ProjectMgr.SetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), this.assemblyName);
-			this.ProjectMgr.SetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), this.outputType.ToString());
-			this.ProjectMgr.SetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), this.defaultNamespace);
-			this.ProjectMgr.SetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), this.startupObject);
-			this.ProjectMgr.SetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), this.applicationIcon);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.AssemblyName.ToString(), this.assemblyName);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.OutputType.ToString(), this.outputType.ToString());
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.RootNamespace.ToString(), this.defaultNamespace);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.StartupObject.ToString(), this.startupObject);
+			this.ProjectManager.SetProjectProperty(GeneralPropertyPageTag.ApplicationIcon.ToString(), this.applicationIcon);
 
 			if (reloadRequired)
 			{
                 // Make sure the user understands that reloading the project is necessary, but don't interrupt unit tests.
 				if (UIThread.IsUnitTest || MessageBox.Show(Resources.GetString(Resources.ReloadPromptOnTargetFxChanged), Resources.GetString(Resources.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
-					this.ProjectMgr.TargetFrameworkMoniker = this.targetFrameworkMoniker;
+					this.ProjectManager.TargetFrameworkMoniker = this.targetFrameworkMoniker;
 				}
 			}
 
