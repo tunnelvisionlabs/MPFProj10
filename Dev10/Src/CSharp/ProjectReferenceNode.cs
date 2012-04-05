@@ -63,7 +63,15 @@ namespace Microsoft.VisualStudio.Project
 		{
 			get
 			{
-				return this.referencedProjectFullPath;
+				return this.ReferencedProjectFullPath;
+			}
+		}
+
+		public override bool CanCacheCanonicalName
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(ReferencedProjectFullPath);
 			}
 		}
 
@@ -186,7 +194,7 @@ namespace Microsoft.VisualStudio.Project
 
                         // If the full path of this project is the same as the one of this
                         // reference, then we have found the right project.
-                        if (NativeMethods.IsSamePath(prjPath, referencedProjectFullPath))
+                        if (NativeMethods.IsSamePath(prjPath, ReferencedProjectFullPath))
                         {
                             this.referencedProject = prj;
                             break;
@@ -243,7 +251,7 @@ namespace Microsoft.VisualStudio.Project
 				// based on the project directory.
 				if(!System.IO.Path.IsPathRooted(outputPath))
 				{
-					string projectDir = System.IO.Path.GetDirectoryName(referencedProjectFullPath);
+					string projectDir = System.IO.Path.GetDirectoryName(ReferencedProjectFullPath);
 					outputPath = System.IO.Path.Combine(projectDir, outputPath);
 				}
 
@@ -279,6 +287,23 @@ namespace Microsoft.VisualStudio.Project
 					projectReference = new Automation.OAProjectReference(this);
 				}
 				return projectReference;
+			}
+		}
+
+		private string ReferencedProjectFullPath
+		{
+			get
+			{
+				return referencedProjectFullPath;
+			}
+
+			set
+			{
+				if (referencedProjectFullPath == value)
+					return;
+
+				referencedProjectFullPath = value;
+				ProjectManager.ItemIdMap.UpdateCanonicalName(this);
 			}
 		}
 		#endregion
@@ -317,7 +342,7 @@ namespace Microsoft.VisualStudio.Project
 
 			if(uri != null)
 			{
-				this.referencedProjectFullPath = Microsoft.VisualStudio.Shell.Url.Unescape(uri.LocalPath, true);
+				this.ReferencedProjectFullPath = Microsoft.VisualStudio.Shell.Url.Unescape(uri.LocalPath, true);
 			}
 		}
 
@@ -375,7 +400,7 @@ namespace Microsoft.VisualStudio.Project
 			string justTheFileName = Path.GetFileName(fileName);
 			this.referencedProjectRelativePath = Path.Combine(referenceDir, justTheFileName);
 
-			this.referencedProjectFullPath = Path.Combine(projectPath, justTheFileName);
+			this.ReferencedProjectFullPath = Path.Combine(projectPath, justTheFileName);
 
 			this.buildDependency = new BuildDependency(this.ProjectManager, this.referencedProjectGuid);
 
@@ -457,7 +482,7 @@ namespace Microsoft.VisualStudio.Project
 				return false;
 			}
 
-			return (!String.IsNullOrEmpty(this.referencedProjectFullPath) && File.Exists(this.referencedProjectFullPath));
+			return (!String.IsNullOrEmpty(this.ReferencedProjectFullPath) && File.Exists(this.ReferencedProjectFullPath));
 		}
 
 		/// <summary>

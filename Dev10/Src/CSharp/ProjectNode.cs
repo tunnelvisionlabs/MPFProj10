@@ -100,7 +100,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
         /// List of output groups names and their associated target
         /// </summary>
-        private static KeyValuePair<string, string>[] outputGroupNames =
+        private static readonly KeyValuePair<string, string>[] outputGroupNames =
         {                                      // Name                    Target (MSBuild)
             new KeyValuePair<string, string>("Built",                 "BuiltProjectOutputGroup"),
             new KeyValuePair<string, string>("ContentFiles",          "ContentFilesProjectOutputGroup"),
@@ -112,17 +112,17 @@ namespace Microsoft.VisualStudio.Project
         };
 
         /// <summary>A project will only try to build if it can obtain a lock on this object</summary>
-        private volatile static object BuildLock = new object();
+        private static readonly object BuildLock = new object();
 
         /// <summary>Maps integer ids to project item instances</summary>
-        private EventSinkCollection itemIdMap = new EventSinkCollection();
+        private HierarchyNodeCollection itemIdMap;
 
         /// <summary>A service provider call back object provided by the IDE hosting the project manager</summary>
         private ServiceProvider site;
 
         public static ServiceProvider ServiceProvider { get; set; }
 
-        private TrackDocumentsHelper tracker;
+        private readonly TrackDocumentsHelper tracker;
 
         /// <summary>
         /// A cached copy of project options.
@@ -335,6 +335,14 @@ namespace Microsoft.VisualStudio.Project
             get
             {
                 return this.GetMkDocument();
+            }
+        }
+
+        public override bool CanCacheCanonicalName
+        {
+            get
+            {
+                return true;
             }
         }
 
@@ -593,7 +601,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return Path.GetDirectoryName(this.filename);
+                return Path.GetDirectoryName(this.FileName);
             }
         }
 
@@ -604,7 +612,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return Path.GetFileName(this.filename);
+                return Path.GetFileName(this.FileName);
             }
 
             set
@@ -735,10 +743,14 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets a collection of integer ids that maps to project item instances
         /// </summary>
-        internal EventSinkCollection ItemIdMap
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public HierarchyNodeCollection ItemIdMap
         {
             get
             {
+                if (this.itemIdMap == null)
+                    this.itemIdMap = CreateHierarchyNodeCollection();
+
                 return this.itemIdMap;
             }
         }
@@ -790,6 +802,15 @@ namespace Microsoft.VisualStudio.Project
             get
             {
                 return this.filename;
+            }
+
+            set
+            {
+                if (this.filename == value)
+                    return;
+
+                this.filename = value;
+                ItemIdMap.UpdateCanonicalName(this);
             }
         }
 
@@ -986,9 +1007,11 @@ namespace Microsoft.VisualStudio.Project
         #region ctor
 
         protected ProjectNode()
+            : base(VSConstants.VSITEMID.Root)
         {
-            this.Initialize();
+            this.tracker = new TrackDocumentsHelper(this);
         }
+
         #endregion
 
         #region static methods
@@ -1047,8 +1070,35 @@ namespace Microsoft.VisualStudio.Project
             finally
             {
                 EventTriggeringFlag = oldEventTriggeringFlag;
-                OnInvalidateItems(this);
             }
+
+            // walk the expanded folders of the hierarchy looking for visible non-member items
+            List<HierarchyNode> visibleNonMemberItems = GetVisibleNonMemberItems();
+            foreach (var node in visibleNonMemberItems)
+                OnItemAdded(node.Parent, node);
+        }
+
+        private List<HierarchyNode> GetVisibleNonMemberItems()
+        {
+            List<HierarchyNode> result = new List<HierarchyNode>();
+            Queue<HierarchyNode> workList = new Queue<HierarchyNode>();
+            workList.Enqueue(this);
+
+            while (workList.Count > 0)
+            {
+                HierarchyNode node = workList.Dequeue();
+                for (HierarchyNode child = node.FirstChild; child != null; child = child.NextSibling)
+                {
+                    if (child.IsExpanded)
+                        workList.Enqueue(child);
+
+                    object nonMemberItem = child.GetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem);
+                    if (nonMemberItem is bool && (bool)nonMemberItem)
+                        result.Add(child);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -1274,44 +1324,47 @@ namespace Microsoft.VisualStudio.Project
         protected virtual void AddNonMemberFileItems(IList<string> fileList)
         {
             if (fileList == null)
-            {
                 throw new ArgumentNullException("fileList");
-            }
 
             foreach (string fileKey in fileList)
             {
                 HierarchyNode parentNode = this;
-                string[] pathItems = fileKey.Split(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
                 FolderNode topFolderNode = null;
-                foreach (string fileOrDir in pathItems)
+
+                string canonicalName = fileKey;
+                if (!Path.IsPathRooted(canonicalName))
+                    canonicalName = Path.Combine(ProjectManager.BaseURI.AbsoluteUrl, fileKey);
+
+                if (fileKey.IndexOfAny(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }) < 0)
                 {
-                    string childNodeId = Path.Combine(parentNode.VirtualNodeName, fileOrDir);
-                    HierarchyNode childNode = parentNode.FindChild(childNodeId, false);
-                    if (childNode == null)
-                    {
-                        if (String.Equals(this.ProjectFile, childNodeId, StringComparison.OrdinalIgnoreCase)) // skip the project file itself.
-                        {
-                            break;
-                        }
-                        else if (topFolderNode == null)
-                        {
-                            topFolderNode = parentNode as FolderNode;
-                            if (topFolderNode != null && (!topFolderNode.IsNonMemberItem) && topFolderNode.IsExpanded)
-                            {
-                                topFolderNode = null;
-                            }
-                        }
-
-                        ProjectElement element = new ProjectElement(this, null, true);
-                        element.Rename(childNodeId);
-                        element.SetMetadata(ProjectFileConstants.Name, childNodeId);
-                        childNode = this.CreateFileNode(element);
-                        parentNode.AddChild(childNode);
-                        break;
-                    }
-
-                    parentNode = childNode;
+                    // the parent is the project node, just make sure this isn't the project file itself
+                    if (NativeMethods.IsSamePath(ProjectFile, canonicalName))
+                        continue;
                 }
+                else
+                {
+                    string directoryCanonicalName = Path.GetDirectoryName(canonicalName) + '\\';
+                    List<HierarchyNode> parentFolderNodes = itemIdMap.GetNodesByName(directoryCanonicalName);
+                    if (parentFolderNodes.Count == 1)
+                    {
+                        parentNode = parentFolderNodes[0];
+                        for (HierarchyNode parentChain = parentNode; parentChain != null; parentChain = parentChain.Parent)
+                        {
+                            FolderNode folderNode = parentChain as FolderNode;
+                            if (folderNode != null)
+                                topFolderNode = folderNode;
+                        }
+
+                        if (topFolderNode != null && !topFolderNode.IsNonMemberItem && topFolderNode.IsExpanded)
+                            topFolderNode = null;
+                    }
+                }
+
+                ProjectElement element = new ProjectElement(this, null, true);
+                element.Rename(canonicalName);
+                element.SetMetadata(ProjectFileConstants.Name, canonicalName);
+                HierarchyNode childNode = this.CreateFileNode(element);
+                parentNode.AddChild(childNode);
 
                 if (topFolderNode != null)
                 {
@@ -1808,9 +1861,14 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>The moniker for the project file.</returns>
         public override string GetMkDocument()
         {
-            Debug.Assert(!String.IsNullOrEmpty(this.filename));
+            Debug.Assert(!String.IsNullOrEmpty(this.FileName));
             Debug.Assert(this.BaseURI != null && !String.IsNullOrEmpty(this.BaseURI.AbsoluteUrl));
-            return Path.Combine(this.BaseURI.AbsoluteUrl, this.filename);
+            return Path.Combine(this.BaseURI.AbsoluteUrl, this.FileName);
+        }
+
+        protected virtual HierarchyNodeCollection CreateHierarchyNodeCollection()
+        {
+            return new HierarchyNodeCollection(this, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -2334,7 +2392,6 @@ namespace Microsoft.VisualStudio.Project
                 // set up internal members and icons
                 canceled = 0;
 
-                this.ProjectManager = this;
                 this.isNewProject = false;
 
                 if ((flags & (uint)__VSCREATEPROJFLAGS.CPF_CLONEFILE) == (uint)__VSCREATEPROJFLAGS.CPF_CLONEFILE)
@@ -2398,12 +2455,12 @@ namespace Microsoft.VisualStudio.Project
 
                     Debug.Assert(!String.IsNullOrEmpty(tempName), "Could not compute project name");
                     string tempProjectFileName = tempName + extension;
-                    this.filename = Path.Combine(location, tempProjectFileName);
+                    this.FileName = Path.Combine(location, tempProjectFileName);
 
                     // Initialize the common project properties.
                     this.InitializeProjectProperties();
 
-                    ErrorHandler.ThrowOnFailure(this.Save(this.filename, 1, 0));
+                    ErrorHandler.ThrowOnFailure(this.Save(this.FileName, 1, 0));
 
                     // now we do have the project file saved. we need to create embedded files.
                     foreach (MSBuild.ProjectItem item in this.BuildProject.Items)
@@ -2437,7 +2494,7 @@ namespace Microsoft.VisualStudio.Project
                 }
                 else
                 {
-                    this.filename = fileName;
+                    this.FileName = fileName;
                 }
 
                 // now reload to fix up references
@@ -3436,7 +3493,7 @@ namespace Microsoft.VisualStudio.Project
                 this.isClosed = false;
                 this.eventTriggeringFlag = ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents | ProjectNode.EventTriggering.DoNotTriggerTrackerEvents;
 
-                SetBuildProject(Utilities.ReinitializeMsBuildProject(this.buildEngine, this.filename, this.buildProject));
+                SetBuildProject(Utilities.ReinitializeMsBuildProject(this.buildEngine, this.FileName, this.buildProject));
 
                 // Load the guid
                 this.SetProjectGuidFromProjectFile();
@@ -3515,7 +3572,7 @@ namespace Microsoft.VisualStudio.Project
                     File.Delete(newFile);
                 }
 
-                SuspendFileChanges fileChanges = new SuspendFileChanges(this.Site, this.filename);
+                SuspendFileChanges fileChanges = new SuspendFileChanges(this.Site, this.FileName);
                 fileChanges.Suspend();
                 try
                 {
@@ -3538,6 +3595,8 @@ namespace Microsoft.VisualStudio.Project
                     ErrorHandler.ThrowOnFailure(vsSolution.OnAfterRenameProject((IVsProject)this, oldFile, newFile, 0));
 
                     ErrorHandler.ThrowOnFailure(shell.RefreshPropertyBrowser(0));
+
+                    ItemIdMap.UpdateAllCanonicalNames();
                 }
                 finally
                 {
@@ -3807,7 +3866,7 @@ namespace Microsoft.VisualStudio.Project
         protected virtual void InitializeProjectProperties()
         {
             // Get projectName from project filename. Return if not set
-            string projectName = Path.GetFileNameWithoutExtension(this.filename);
+            string projectName = Path.GetFileNameWithoutExtension(this.FileName);
             if (String.IsNullOrEmpty(projectName))
             {
                 return;
@@ -3920,7 +3979,7 @@ namespace Microsoft.VisualStudio.Project
                 throw new InvalidOperationException(errorMessage);
             }
 
-            string oldName = this.filename;
+            string oldName = this.FileName;
 
             IVsSolution solution = this.Site.GetService(typeof(IVsSolution)) as IVsSolution;
             Debug.Assert(solution != null, "Could not retrieve the solution form the service provider");
@@ -3930,7 +3989,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             int canRenameContinue = 0;
-            ErrorHandler.ThrowOnFailure(solution.QueryRenameProject(this, this.filename, newFileName, 0, out canRenameContinue));
+            ErrorHandler.ThrowOnFailure(solution.QueryRenameProject(this, this.FileName, newFileName, 0, out canRenameContinue));
 
             if (canRenameContinue == 0)
             {
@@ -3952,7 +4011,7 @@ namespace Microsoft.VisualStudio.Project
                 //Redraw.
                 this.OnPropertyChanged(this, (int)__VSHPROPID.VSHPROPID_Caption, 0);
 
-                ErrorHandler.ThrowOnFailure(solution.OnAfterRenameProject(this, oldName, this.filename, 0));
+                ErrorHandler.ThrowOnFailure(solution.OnAfterRenameProject(this, oldName, this.FileName, 0));
 
                 IVsUIShell shell = this.Site.GetService(typeof(SVsUIShell)) as IVsUIShell;
                 Debug.Assert(shell != null, "Could not get the ui shell from the project");
@@ -3960,7 +4019,9 @@ namespace Microsoft.VisualStudio.Project
                 {
                     throw new InvalidOperationException();
                 }
+
                 ErrorHandler.ThrowOnFailure(shell.RefreshPropertyBrowser(0));
+                ItemIdMap.UpdateAllCanonicalNames();
             }
             finally
             {
@@ -3982,7 +4043,7 @@ namespace Microsoft.VisualStudio.Project
 
             this.buildProject.FullPath = newFileName;
 
-            this.filename = newFileName;
+            this.FileName = newFileName;
 
             string newFileNameWithoutExtension = Path.GetFileNameWithoutExtension(newFileName);
 
@@ -4827,7 +4888,7 @@ namespace Microsoft.VisualStudio.Project
                 IVsQueryEditQuerySave2 queryEditQuerySave = this.GetService(typeof(SVsQueryEditQuerySave)) as IVsQueryEditQuerySave2;
                 if (queryEditQuerySave != null)
                 {   // Project path dependends on server/client project
-                    string path = this.filename;
+                    string path = this.FileName;
 
                     tagVSQueryEditFlags qef = tagVSQueryEditFlags.QEF_AllowInMemoryEdits;
                     if (suppressUI)
@@ -5225,7 +5286,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int GetCurFile(out string name, out uint formatIndex)
         {
-            name = this.filename;
+            name = this.FileName;
             formatIndex = 0;
             return VSConstants.S_OK;
         }
@@ -5293,7 +5354,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int Load(string fileName, uint mode, int readOnly)
         {
-            this.filename = fileName;
+            this.FileName = fileName;
             this.Reload();
             return VSConstants.S_OK;
         }
@@ -5323,13 +5384,13 @@ namespace Microsoft.VisualStudio.Project
 
             int result = VSConstants.S_OK;
             bool saveAs = true;
-            if (NativeMethods.IsSamePath(tempFileToBeSaved, this.filename))
+            if (NativeMethods.IsSamePath(tempFileToBeSaved, this.FileName))
             {
                 saveAs = false;
             }
             if (!saveAs)
             {
-                SuspendFileChanges fileChanges = new SuspendFileChanges(this.Site, this.filename);
+                SuspendFileChanges fileChanges = new SuspendFileChanges(this.Site, this.FileName);
                 fileChanges.Suspend();
                 try
                 {
@@ -6591,15 +6652,6 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region private helper methods
-
-        /// <summary>
-        /// Initialize projectNode
-        /// </summary>
-        private void Initialize()
-        {
-            this.ID = VSConstants.VSITEMID_ROOT;
-            this.tracker = new TrackDocumentsHelper(this);
-        }
 
         /// <summary>
         /// Add an item to the hierarchy based on the item path

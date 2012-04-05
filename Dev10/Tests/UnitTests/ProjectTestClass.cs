@@ -24,9 +24,6 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 	{
 		public ProjectTestClass()
 		{
-			// This would normally be done by default, but since we don't do official loading initialize it ourselves
-			this.ProjectManager = this;
-
 			// To avoid having to mock the SCC stuff simply disable it
 			this.IsSccDisabled = true;
 			this.DisableQueryEdit = true;

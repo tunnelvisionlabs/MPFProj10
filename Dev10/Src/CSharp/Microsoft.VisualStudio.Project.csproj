@@ -140,6 +140,7 @@
     <Compile Include="GlobalProperty.cs" />
     <Compile Include="HierarchyAddType.cs" />
     <Compile Include="HierarchyNode.DropEffect.cs" />
+    <Compile Include="HierarchyNodeCollection.cs" />
     <Compile Include="HierarchyNodeEventArgs.cs" />
     <Compile Include="IBuildDependencyOnProjectContainer.cs" />
     <Compile Include="IBuildDependencyUpdate.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="MsBuildGeneratedItemType.cs" />
     <Compile Include="MSBuildResult.cs" />
     <Compile Include="MsBuildTarget.cs" />
+    <Compile Include="ObjectReferenceEqualityComparer`1.cs" />
     <Compile Include="OleServiceProvider.ServiceCreatorCallback.cs" />
     <Compile Include="OleServiceProvider.ServiceData.cs" />
     <Compile Include="OutputType.cs" />

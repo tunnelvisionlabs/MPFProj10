@@ -60,6 +60,23 @@ namespace Microsoft.VisualStudio.Project
                 return this.nestedHierarchy;
             }
         }
+
+        private string ProjectPath
+        {
+            get
+            {
+                return projectPath;
+            }
+
+            set
+            {
+                if (projectPath == value)
+                    return;
+
+                projectPath = value;
+                ProjectManager.ItemIdMap.UpdateCanonicalName(this);
+            }
+        }
         #endregion
 
         #region virtual properties
@@ -80,7 +97,15 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.projectPath;
+                return this.ProjectPath;
+            }
+        }
+
+        public override bool CanCacheCanonicalName
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ProjectPath);
             }
         }
 
@@ -132,15 +157,12 @@ namespace Microsoft.VisualStudio.Project
 
         #region ctor
 
-        protected NestedProjectNode()
-        {
-        }
-
         public NestedProjectNode(ProjectNode root, ProjectElement element)
             : base(root, element)
         {
             this.IsExpanded = true;
         }
+
         #endregion
 
         #region IPropertyNotifySink Members
@@ -379,7 +401,7 @@ namespace Microsoft.VisualStudio.Project
                 return String.Empty;
             }
 
-            return this.projectPath;
+            return this.ProjectPath;
         }
 
         /// <summary>
@@ -581,7 +603,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             this.projectName = Path.GetFileName(fileName);
-            this.projectPath = Path.Combine(destination, this.projectName);
+            this.ProjectPath = Path.Combine(destination, this.projectName);
 
             // get the IVsSolution interface from the global service provider
             IVsSolution solution = this.GetService(typeof(IVsSolution)) as IVsSolution;
@@ -716,7 +738,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns></returns>
         protected virtual void CreateProjectDirectory()
         {
-            string directoryName = Path.GetDirectoryName(this.projectPath);
+            string directoryName = Path.GetDirectoryName(this.ProjectPath);
 
             if (!Directory.Exists(directoryName))
             {
@@ -753,7 +775,7 @@ namespace Microsoft.VisualStudio.Project
 
             try
             {
-                ErrorHandler.ThrowOnFailure(rdt.FindAndLockDocument((uint)flags, this.projectPath, out ivsHierarchy, out itemid, out docData, out docCookie));
+                ErrorHandler.ThrowOnFailure(rdt.FindAndLockDocument((uint)flags, this.ProjectPath, out ivsHierarchy, out itemid, out docData, out docCookie));
                 flags |= _VSRDTFLAGS.RDT_EditLock;
 
                 if (ivsHierarchy != null && docCookie != (uint)ShellConstants.VSDOCCOOKIE_NIL)
@@ -769,7 +791,7 @@ namespace Microsoft.VisualStudio.Project
                     // get inptr for hierarchy
                     projectPtr = Marshal.GetIUnknownForObject(this.nestedHierarchy);
                     Debug.Assert(projectPtr != IntPtr.Zero, " Project pointer for the nested hierarchy has not been initialized");
-                    ErrorHandler.ThrowOnFailure(rdt.RegisterAndLockDocument((uint)flags, this.projectPath, this.ProjectManager, this.ID, projectPtr, out docCookie));
+                    ErrorHandler.ThrowOnFailure(rdt.RegisterAndLockDocument((uint)flags, this.ProjectPath, this.ProjectManager, this.ID, projectPtr, out docCookie));
 
                     this.DocCookie = docCookie;
                     Debug.Assert(this.DocCookie != (uint)ShellConstants.VSDOCCOOKIE_NIL, "Invalid cookie when registering document in the running document table.");
@@ -828,7 +850,7 @@ namespace Microsoft.VisualStudio.Project
                 return;
             }
 
-            string oldFileName = this.projectPath;
+            string oldFileName = this.ProjectPath;
             string oldPath = this.Url;
 
             try
@@ -850,14 +872,14 @@ namespace Microsoft.VisualStudio.Project
 
                 // update state.
                 this.projectName = newFileName;
-                this.projectPath = Path.Combine(projectDirectory, this.projectName);
+                this.ProjectPath = Path.Combine(projectDirectory, this.projectName);
 
                 // Unload and lock the RDT entries
                 this.UnlockRDTEntry();
                 this.LockRDTEntry();
 
                 // Since actually this is a rename in our hierarchy notify the tracker that a rename has happened.
-                this.ProjectManager.Tracker.OnItemRenamed(oldPath, this.projectPath, VSRENAMEFILEFLAGS.VSRENAMEFILEFLAGS_IsNestedProjectFile);
+                this.ProjectManager.Tracker.OnItemRenamed(oldPath, this.ProjectPath, VSRENAMEFILEFLAGS.VSRENAMEFILEFLAGS_IsNestedProjectFile);
             }
             finally
             {
@@ -897,7 +919,7 @@ namespace Microsoft.VisualStudio.Project
                 IVsUIHierarchy hier;
 
                 IVsWindowFrame windowFrame;
-                VsShellUtilities.IsDocumentOpen(this.ProjectManager.Site, this.projectPath, Guid.Empty, out hier, out itemid, out windowFrame);
+                VsShellUtilities.IsDocumentOpen(this.ProjectManager.Site, this.ProjectPath, Guid.Empty, out hier, out itemid, out windowFrame);
 
 
                 if (itemid == VSConstants.VSITEMID_NIL)

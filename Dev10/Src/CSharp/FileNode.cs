@@ -147,8 +147,17 @@ namespace Microsoft.VisualStudio.Project
                     // Path is relative, so make it relative to project path
                     url = new Url(this.ProjectManager.BaseURI, path);
                 }
-                return url.AbsoluteUrl;
 
+                return url.AbsoluteUrl;
+            }
+        }
+
+        public override bool CanCacheCanonicalName
+        {
+            get
+            {
+                return this.ProjectManager.CanCacheCanonicalName
+                    && !string.IsNullOrEmpty(ItemNode.GetMetadata(ProjectFileConstants.Include));
             }
         }
         #endregion
@@ -432,6 +441,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     this.ItemNode.Rename(oldrelPath);
                     this.ItemNode.RefreshProperties();
+                    ProjectManager.ItemIdMap.UpdateCanonicalName(this);
                 }
 
                 if(this is DependentFileNode)
@@ -723,7 +733,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     // The path of the file is changed or its parent is changed; in both cases we have
                     // to rename the item.
-                    this.RenameFileNode(oldName, newFilePath, linkPath, targetContainer.ID);
+                    this.RenameFileNode(oldName, newFilePath, linkPath, targetContainer);
                     this.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
                     OnInvalidateItems(this.Parent);
                 }
@@ -814,8 +824,19 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="newParentId">The new parent id of the item.</param>
         /// <returns>The newly added FileNode.</returns>
         /// <remarks>While a new node will be used to represent the item, the underlying MSBuild item will be the same and as a result file properties saved in the project file will not be lost.</remarks>
-        protected virtual FileNode RenameFileNode(string oldFileName, string newFileName, string linkPath, uint newParentId)
+        protected virtual FileNode RenameFileNode(string oldFileName, string newFileName, string linkPath, HierarchyNode newParent)
         {
+            if (oldFileName == null)
+                throw new ArgumentNullException("oldFileName");
+            if (newFileName == null)
+                throw new ArgumentNullException("newFileName");
+            if (newParent == null)
+                throw new ArgumentNullException("newParent");
+            if (string.IsNullOrEmpty(oldFileName))
+                throw new ArgumentException("oldFileName cannot be null or empty");
+            if (string.IsNullOrEmpty(newFileName))
+                throw new ArgumentException("newFileName cannot be null or empty");
+
             if(string.Equals(oldFileName, newFileName, StringComparison.Ordinal))
             {
                 // We do not want to rename the same file
@@ -833,11 +854,14 @@ namespace Microsoft.VisualStudio.Project
             VSADDRESULT[] result = new VSADDRESULT[1];
             Guid emptyGuid = Guid.Empty;
             VSADDITEMOPERATION op = (String.IsNullOrEmpty(linkPath) ? VSADDITEMOPERATION.VSADDITEMOP_OPENFILE : VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE);
-            ErrorHandler.ThrowOnFailure(this.ProjectManager.AddItemWithSpecific(newParentId, op, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
+            ErrorHandler.ThrowOnFailure(this.ProjectManager.AddItemWithSpecific(newParent.ID, op, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
             FileNode childAdded = this.ProjectManager.FindChild(newFileName) as FileNode;
             Debug.Assert(childAdded != null, "Could not find the renamed item in the hierarchy");
-            // Update the itemid to the newly added.
-            this.ID = childAdded.ID;
+
+            /* No need to update the ID of this node. If ID is referenced by the caller after the
+             * node is removed from the hierarchy, it will throw an InvalidOperationException.
+             */
+            //this.ID = childAdded.ID;
 
             // Remove the item created by the add item. We need to do this otherwise we will have two items.
             // Please be aware that we have not removed the ItemNode associated to the removed file node from the hierrachy.
@@ -885,10 +909,13 @@ namespace Microsoft.VisualStudio.Project
 			}
 
             //Update FirstChild
-            childAdded.FirstChild = this.FirstChild;
+            foreach (var child in this.Children)
+            {
+                LinkedListNode<HierarchyNode> linkedNode = childAdded.Children.AddLast(child);
+                childAdded.SetParent(childAdded, linkedNode);
+            }
 
             //Update ChildNodes
-            SetNewParentOnChildNodes(childAdded);
             RenameChildNodes(childAdded);
 
             return childAdded;
@@ -900,7 +927,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="newFileNode">The newly added Parent node.</param>
         protected virtual void RenameChildNodes(FileNode parentNode)
         {
-            foreach(HierarchyNode child in GetChildNodes())
+            foreach(HierarchyNode child in Children)
             {
                 FileNode childNode = child as FileNode;
                 if(null == childNode)
@@ -943,6 +970,7 @@ namespace Microsoft.VisualStudio.Project
             if(this.ItemNode != null && !String.IsNullOrEmpty(originalFileName))
             {
                 this.ItemNode.Rename(originalFileName);
+                ProjectManager.ItemIdMap.UpdateCanonicalName(this);
             }
         }
 
@@ -994,17 +1022,7 @@ namespace Microsoft.VisualStudio.Project
                 return;
             }
 
-            if(files == null)
-            {
-                throw new ArgumentNullException("files");
-            }
-
-            if(flags == null)
-            {
-                throw new ArgumentNullException("flags");
-            }
-
-            foreach(HierarchyNode node in this.GetChildNodes())
+            foreach(HierarchyNode node in this.Children)
             {
                 files.Add(node.GetMkDocument());
             }
@@ -1309,7 +1327,7 @@ namespace Microsoft.VisualStudio.Project
 
         private FileNode RenameFileNode(string oldFileName, string newFileName)
         {
-            return this.RenameFileNode(oldFileName, newFileName, null, this.Parent.ID);
+            return this.RenameFileNode(oldFileName, newFileName, null, this.Parent);
         }
 
         /// <summary>
@@ -1393,29 +1411,6 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        /// <summary>
-        /// Update the ChildNodes after the parent node has been renamed
-        /// </summary>
-        /// <param name="newFileNode">The new FileNode created as part of the rename of this node</param>
-        private void SetNewParentOnChildNodes(FileNode newFileNode)
-        {
-            foreach(HierarchyNode childNode in GetChildNodes())
-            {
-                childNode.Parent = newFileNode;
-            }
-        }
-
-        private List<HierarchyNode> GetChildNodes()
-        {
-            List<HierarchyNode> childNodes = new List<HierarchyNode>();
-            HierarchyNode childNode = this.FirstChild;
-            while(childNode != null)
-            {
-                childNodes.Add(childNode);
-                childNode = childNode.NextSibling;
-            }
-            return childNodes;
-        }
         #endregion
     }
 }

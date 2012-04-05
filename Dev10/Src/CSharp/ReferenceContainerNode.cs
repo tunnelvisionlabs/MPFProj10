@@ -82,6 +82,31 @@ namespace Microsoft.VisualStudio.Project
             get { return this.VirtualNodeName; }
         }
 
+        public override bool CanCacheCanonicalName
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(VirtualNodeName);
+            }
+        }
+
+        public override string VirtualNodeName
+        {
+            get
+            {
+                return base.VirtualNodeName;
+            }
+
+            set
+            {
+                if (VirtualNodeName == value)
+                    return;
+
+                base.VirtualNodeName = value;
+                ProjectManager.ItemIdMap.UpdateCanonicalName(this);
+            }
+        }
+
         public override string Caption
         {
             get
@@ -89,7 +114,6 @@ namespace Microsoft.VisualStudio.Project
                 return SR.GetString(SR.ReferencesNodeName, CultureInfo.CurrentUICulture);
             }
         }
-
 
         private Automation.OAReferences references;
         public override object Object

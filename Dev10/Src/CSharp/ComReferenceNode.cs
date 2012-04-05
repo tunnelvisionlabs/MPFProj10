@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.projectRelativeFilePath;
+                return this.ProjectRelativeFilePath;
             }
         }
 
@@ -131,6 +131,31 @@ namespace Microsoft.VisualStudio.Project
                     comReference = new Automation.OAComReference(this);
                 }
                 return comReference;
+            }
+        }
+
+        public override bool CanCacheCanonicalName
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ProjectRelativeFilePath);
+            }
+        }
+
+        private string ProjectRelativeFilePath
+        {
+            get
+            {
+                return projectRelativeFilePath;
+            }
+
+            set
+            {
+                if (projectRelativeFilePath == value)
+                    return;
+
+                projectRelativeFilePath = value;
+                ProjectManager.ItemIdMap.UpdateCanonicalName(this);
             }
         }
         #endregion
@@ -316,11 +341,11 @@ namespace Microsoft.VisualStudio.Project
                     string name = reference.EvaluatedInclude;
                     if(Path.IsPathRooted(name))
                     {
-                        this.projectRelativeFilePath = name;
+                        this.ProjectRelativeFilePath = name;
                     }
                     else
                     {
-                        this.projectRelativeFilePath = Path.Combine(this.ProjectManager.ProjectFolder, name);
+                        this.ProjectRelativeFilePath = Path.Combine(this.ProjectManager.ProjectFolder, name);
                     }
 
                     if(renameItemNode)

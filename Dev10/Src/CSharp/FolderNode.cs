@@ -332,6 +332,31 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
+        public override bool CanCacheCanonicalName
+        {
+            get
+            {
+                return ProjectManager.CanCacheCanonicalName && !string.IsNullOrEmpty(VirtualNodeName);
+            }
+        }
+
+        public override string VirtualNodeName
+        {
+            get
+            {
+                return base.VirtualNodeName;
+            }
+
+            set
+            {
+                if (VirtualNodeName == value)
+                    return;
+
+                base.VirtualNodeName = value;
+                ProjectManager.ItemIdMap.UpdateCanonicalName(this);
+            }
+        }
+
 		public override string GetMkDocument()
 		{
 			Debug.Assert(this.Url != null, "No url sepcified for this node");
@@ -513,6 +538,9 @@ namespace Microsoft.VisualStudio.Project
         /// This should be 'true' for expanded and 'false' for collapsed state.</param>
         protected void SetExpanded(bool expanded)
         {
+            if (this.IsExpanded == expanded)
+                return;
+
             this.IsExpanded = expanded;
             this.SetProperty((int)__VSHPROPID.VSHPROPID_Expanded, expanded);
 
@@ -794,6 +822,8 @@ namespace Microsoft.VisualStudio.Project
 			{
 				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.ID, EXPANDFLAGS.EXPF_SelectItem));
 			}
+
+            ProjectManager.ItemIdMap.UpdateCanonicalName(this);
 		}
 
 		/// <summary>
