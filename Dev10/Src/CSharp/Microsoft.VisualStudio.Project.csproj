@@ -125,6 +125,8 @@
     <Compile Include="DesignTimeAssemblyResolution.MockEngine.cs" />
     <Compile Include="DesignTimeAssemblyResolution.RarInputs.cs" />
     <Compile Include="DragDropHelper.cs" />
+    <Compile Include="EnumConnectionPoints`1.cs" />
+    <Compile Include="EnumConnections.cs" />
     <Compile Include="EnumFORMATETC.cs" />
     <Compile Include="EnumSTATDATA.cs" />
     <Compile Include="FileChangedOnDiskEventArgs.cs" />

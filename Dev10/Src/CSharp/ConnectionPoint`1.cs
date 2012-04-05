@@ -9,21 +9,22 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio;
+	using Microsoft.VisualStudio.OLE.Interop;
+
 	public class ConnectionPoint<SinkType> : IConnectionPoint
 		where SinkType : class
 	{
-		Dictionary<uint, SinkType> sinks;
+		private readonly Dictionary<uint, SinkType> sinks;
+		private readonly ConnectionPointContainer container;
+		private readonly IEventSource<SinkType> source;
 		private uint nextCookie;
-		private ConnectionPointContainer container;
-		private IEventSource<SinkType> source;
+
 		internal ConnectionPoint(ConnectionPointContainer container, IEventSource<SinkType> source)
 		{
 			if(null == container)
@@ -34,19 +35,20 @@ namespace Microsoft.VisualStudio.Project
 			{
 				throw new ArgumentNullException("source");
 			}
+
+			this.sinks = new Dictionary<uint, SinkType>();
 			this.container = container;
 			this.source = source;
-			sinks = new Dictionary<uint, SinkType>();
-			nextCookie = 1;
+			this.nextCookie = 1;
 		}
+
 		#region IConnectionPoint Members
 		public void Advise(object pUnkSink, out uint pdwCookie)
 		{
 			SinkType sink = pUnkSink as SinkType;
-			if(null == sink)
-			{
+			if (sink == null)
 				Marshal.ThrowExceptionForHR(VSConstants.E_NOINTERFACE);
-			}
+
 			sinks.Add(nextCookie, sink);
 			pdwCookie = nextCookie;
 			source.OnSinkAdded(sink);
@@ -55,7 +57,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public void EnumConnections(out IEnumConnections ppEnum)
 		{
-			throw new NotImplementedException(); ;
+			ppEnum = new EnumConnections<SinkType>(sinks);
 		}
 
 		public void GetConnectionInterface(out Guid pIID)

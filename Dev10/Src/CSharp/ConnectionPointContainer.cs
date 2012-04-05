@@ -9,14 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.OLE.Interop;
+
 	[ComVisible(true)]
 	public class ConnectionPointContainer : IConnectionPointContainer
 	{
@@ -44,8 +43,9 @@ namespace Microsoft.VisualStudio.Project
 		#region IConnectionPointContainer Members
 		void IConnectionPointContainer.EnumConnectionPoints(out IEnumConnectionPoints ppEnum)
 		{
-			throw new NotImplementedException(); ;
+			ppEnum = new EnumConnectionPoints(connectionPoints.Values);
 		}
+
 		void IConnectionPointContainer.FindConnectionPoint(ref Guid riid, out IConnectionPoint ppCP)
 		{
 			ppCP = connectionPoints[riid];
