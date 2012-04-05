@@ -234,6 +234,8 @@ namespace Microsoft.VisualStudio.Project
 
         private DesignTimeAssemblyResolution designTimeAssemblyResolution;
 
+        private bool designTimeAssemblyResolutionFailed;
+
         private ConfigProvider configProvider;
 
         private TaskProvider taskProvider;
@@ -1547,6 +1549,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
         #endregion
+
         #region overridden methods
         protected override NodeProperties CreatePropertiesObject()
         {
@@ -4145,7 +4148,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     return;
                 }
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Cannot change configurations during a build.");
             }
 
             bool propertiesChanged = this.buildProject.SetGlobalProperty(ProjectFileConstants.Configuration, config);
@@ -4154,14 +4157,24 @@ namespace Microsoft.VisualStudio.Project
                 this.currentConfig = this.buildProject.CreateProjectInstance();
             }
 
-			if (propertiesChanged || this.designTimeAssemblyResolution == null)
+			if (propertiesChanged || (this.designTimeAssemblyResolution == null && !this.designTimeAssemblyResolutionFailed))
 			{
+				this.designTimeAssemblyResolutionFailed = false;
+
 				if (this.designTimeAssemblyResolution == null)
 				{
 					this.designTimeAssemblyResolution = new DesignTimeAssemblyResolution();
 				}
 
-				this.designTimeAssemblyResolution.Initialize(this);
+				try
+				{
+					this.designTimeAssemblyResolution.Initialize(this);
+				}
+				catch (InvalidOperationException)
+				{
+					this.designTimeAssemblyResolution = null;
+					this.designTimeAssemblyResolutionFailed = true;
+				}
 			}
 
             this.options = null;
@@ -6395,6 +6408,9 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			pcResolvedAssemblyPaths = 0;
+
+			if (designTimeAssemblyResolution == null)
+				return VSConstants.E_FAIL;
 
 			try
 			{
