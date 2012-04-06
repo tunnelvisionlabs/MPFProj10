@@ -1419,7 +1419,7 @@ namespace Microsoft.VisualStudio.Project
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cmdexecopt")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "n")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "pva")]
-		protected virtual int ExecCommandOnNode(Guid cmdGroup, uint cmd, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+		protected virtual int ExecCommandOnNode(Guid cmdGroup, uint cmd, OLECMDEXECOPT nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
 		{
 			if(this.projectMgr == null || this.projectMgr.IsClosed)
 			{
@@ -1485,7 +1485,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="handled">An out parameter specifying that the command was handled.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
-		protected virtual int ExecCommandThatDependsOnSelectedNodes(Guid cmdGroup, uint cmdId, uint cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin, IList<HierarchyNode> selectedNodes, out bool handled)
+		protected virtual int ExecCommandThatDependsOnSelectedNodes(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin, IList<HierarchyNode> selectedNodes, out bool handled)
 		{
 			handled = false;
 			if(cmdGroup == VsMenus.guidVsUIHierarchyWindowCmds)
@@ -1535,7 +1535,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="handled">An out parameter specifying that the command was handled.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
-		protected virtual int ExecCommandIndependentOfSelection(Guid cmdGroup, uint cmdId, uint cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin, out bool handled)
+		protected virtual int ExecCommandIndependentOfSelection(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin, out bool handled)
 		{
 			handled = false;
 
@@ -1610,7 +1610,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="commandOrigin">The origin of the command. From IOleCommandTarget or hierarchy.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
-		protected virtual int InternalExecCommand(Guid cmdGroup, uint cmdId, uint cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin)
+		protected virtual int InternalExecCommand(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin)
 		{
 			CCITracing.TraceCall(cmdGroup.ToString() + "," + cmdId.ToString());
 			if(this.projectMgr == null || this.projectMgr.IsClosed)
@@ -2686,10 +2686,22 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
 		}
 
-
-		public virtual int QueryClose(out int fCanClose)
+		int IVsHierarchy.QueryClose(out int fCanClose)
 		{
-			fCanClose = 1;
+			bool canClose;
+			int result = QueryClose(out canClose);
+			fCanClose = canClose ? 1 : 0;
+			return result;
+		}
+
+		int IVsUIHierarchy.QueryClose(out int fCanClose)
+		{
+			return ((IVsHierarchy)this).QueryClose(out fCanClose);
+		}
+
+		public virtual int QueryClose(out bool canClose)
+		{
+			canClose = true;
 			return VSConstants.S_OK;
 		}
 
@@ -2801,9 +2813,14 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IVsUIHierarchy methods
 
-		public virtual int ExecCommand(uint itemId, ref Guid guidCmdGroup, uint nCmdId, uint nCmdExecOpt, IntPtr pvain, IntPtr p)
+		int IVsUIHierarchy.ExecCommand(uint itemId, ref Guid guidCmdGroup, uint nCmdId, uint nCmdExecOpt, IntPtr pvain, IntPtr p)
 		{
-			return this.InternalExecCommand(guidCmdGroup, nCmdId, nCmdExecOpt, pvain, p, CommandOrigin.UiHierarchy);
+			return this.ExecCommand(itemId, ref guidCmdGroup, nCmdId, (OLECMDEXECOPT)nCmdExecOpt, pvain, p);
+		}
+
+		public virtual int ExecCommand(uint itemId, ref Guid guidCmdGroup, uint nCmdId, OLECMDEXECOPT nCmdExecOpt, IntPtr pvain, IntPtr p)
+		{
+			return this.InternalExecCommand(guidCmdGroup, nCmdId, (OLECMDEXECOPT)nCmdExecOpt, pvain, p, CommandOrigin.UiHierarchy);
 		}
 
 		public virtual int QueryStatusCommand(uint itemId, ref Guid guidCmdGroup, uint cCmds, OLECMD[] cmds, IntPtr pCmdText)
@@ -2972,13 +2989,18 @@ namespace Microsoft.VisualStudio.Project
 			return returnCode;
 		}
 
+		int IVsPersistHierarchyItem2.IgnoreItemFileChanges(uint itemId, int ignoreFlag)
+		{
+			return IgnoreItemFileChanges(itemId, ignoreFlag != 0);
+		}
+
 		/// <summary>
 		/// Flag indicating that changes to a file can be ignored when item is saved or reloaded. 
 		/// </summary>
 		/// <param name="itemId">Specifies the item id from VSITEMID.</param>
 		/// <param name="ignoreFlag">Flag indicating whether or not to ignore changes (1 to ignore, 0 to stop ignoring).</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public virtual int IgnoreItemFileChanges(uint itemId, int ignoreFlag)
+		public virtual int IgnoreItemFileChanges(uint itemId, bool ignoreFlag)
 		{
 			#region precondition
 			if(this.ProjectManager == null || this.ProjectManager.IsClosed)
@@ -2990,10 +3012,18 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode n = this.ProjectManager.NodeFromItemId(itemId);
 			if(n != null)
 			{
-				n.IgnoreItemFileChanges(ignoreFlag == 0 ? false : true);
+				n.IgnoreItemFileChanges(ignoreFlag);
 			}
 
 			return VSConstants.S_OK;
+		}
+
+		int IVsPersistHierarchyItem2.IsItemReloadable(uint itemId, out int isReloadable)
+		{
+			bool reloadable;
+			int result = IsItemReloadable(itemId, out reloadable);
+			isReloadable = reloadable ? 1 : 0;
+			return result;
 		}
 
 		/// <summary>
@@ -3003,9 +3033,9 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="isReloadable">A flag indicating that the project item is reloadable (1 for reloadable, 0 for non-reloadable).</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reloadable")]
-		public virtual int IsItemReloadable(uint itemId, out int isReloadable)
+		public virtual int IsItemReloadable(uint itemId, out bool isReloadable)
 		{
-			isReloadable = 0;
+			isReloadable = false;
 
 			if(this.ProjectManager == null || this.ProjectManager.IsClosed)
 			{
@@ -3015,7 +3045,7 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode n = this.ProjectManager.NodeFromItemId(itemId);
 			if(n != null)
 			{
-				isReloadable = (n.IsItemReloadable()) ? 1 : 0;
+				isReloadable = n.IsItemReloadable();
 			}
 
 			return VSConstants.S_OK;
@@ -3050,7 +3080,15 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// CommandTarget.Exec is called for most major operations if they are NOT UI based. Otherwise IVSUInode::exec is called first
 		/// </summary>
-		public virtual int Exec(ref Guid guidCmdGroup, uint nCmdId, uint nCmdExecOpt, IntPtr pvaIn, IntPtr pvaOut)
+		int IOleCommandTarget.Exec(ref Guid guidCmdGroup, uint nCmdId, uint nCmdExecOpt, IntPtr pvaIn, IntPtr pvaOut)
+		{
+			return this.Exec(ref guidCmdGroup, nCmdId, (OLECMDEXECOPT)nCmdExecOpt, pvaIn, pvaOut);
+		}
+
+		/// <summary>
+		/// CommandTarget.Exec is called for most major operations if they are NOT UI based. Otherwise IVSUInode::exec is called first
+		/// </summary>
+		public virtual int Exec(ref Guid guidCmdGroup, uint nCmdId, OLECMDEXECOPT nCmdExecOpt, IntPtr pvaIn, IntPtr pvaOut)
 		{
 			return this.InternalExecCommand(guidCmdGroup, nCmdId, nCmdExecOpt, pvaIn, pvaOut, CommandOrigin.OleCommandTarget);
 		}
@@ -3067,7 +3105,12 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IVsHierarchyDeleteHandler methods
 
-		public virtual int DeleteItem(uint delItemOp, uint itemId)
+		int IVsHierarchyDeleteHandler.DeleteItem(uint delItemOp, uint itemId)
+		{
+			return DeleteItem((__VSDELETEITEMOPERATION)delItemOp, itemId);
+		}
+
+		public virtual int DeleteItem(__VSDELETEITEMOPERATION delItemOp, uint itemId)
 		{
 			if(itemId == VSConstants.VSITEMID_SELECTION)
 			{
@@ -3077,17 +3120,24 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode node = this.projectMgr.NodeFromItemId(itemId);
 			if(node != null)
 			{
-				node.Remove((delItemOp & (uint)__VSDELETEITEMOPERATION.DELITEMOP_DeleteFromStorage) != 0);
+				node.Remove((delItemOp & __VSDELETEITEMOPERATION.DELITEMOP_DeleteFromStorage) != 0);
 				return VSConstants.S_OK;
 			}
 
 			return VSConstants.E_FAIL;
 		}
 
-
-		public virtual int QueryDeleteItem(uint delItemOp, uint itemId, out int candelete)
+		int IVsHierarchyDeleteHandler.QueryDeleteItem(uint delItemOp, uint itemId, out int candelete)
 		{
-			candelete = 0;
+			bool canDeleteItem;
+			int result = QueryDeleteItem((__VSDELETEITEMOPERATION)delItemOp, itemId, out canDeleteItem);
+			candelete = canDeleteItem ? 1 : 0;
+			return result;
+		}
+
+		public virtual int QueryDeleteItem(__VSDELETEITEMOPERATION delItemOp, uint itemId, out bool canDeleteItem)
+		{
+			canDeleteItem = false;
 			if(itemId == VSConstants.VSITEMID_SELECTION)
 			{
 				return VSConstants.E_INVALIDARG;
@@ -3112,19 +3162,27 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			// Ask the nodes if they can remove the item.
-			bool canDeleteItem = node.CanDeleteItem((__VSDELETEITEMOPERATION)delItemOp);
-			if(canDeleteItem)
-			{
-				candelete = 1;
-			}
-
+			canDeleteItem = node.CanDeleteItem(delItemOp);
 			return VSConstants.S_OK;
 		}
 		#endregion
 
 		#region IVsHierarchyDropDataSource2 methods
 
-		public virtual int GetDropInfo(out uint pdwOKEffects, out Microsoft.VisualStudio.OLE.Interop.IDataObject ppDataObject, out IDropSource ppDropSource)
+		int IVsHierarchyDropDataSource.GetDropInfo(out uint pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
+		{
+			return ((IVsHierarchyDropDataSource2)this).GetDropInfo(out pdwOKEffects, out ppDataObject, out ppDropSource);
+		}
+
+		int IVsHierarchyDropDataSource2.GetDropInfo(out uint pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
+		{
+			DropEffect effect;
+			int result = GetDropInfo(out effect, out ppDataObject, out ppDropSource);
+			pdwOKEffects = (uint)effect;
+			return result;
+		}
+
+		public virtual int GetDropInfo(out DropEffect pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
 		{
 			pdwOKEffects = (uint)DropEffect.None;
 			ppDataObject = null;
@@ -3132,22 +3190,47 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.E_NOTIMPL;
 		}
 
-		public virtual int OnDropNotify(int fDropped, uint dwEffects)
+		int IVsHierarchyDropDataSource.OnDropNotify(int fDropped, uint dwEffects)
+		{
+			return OnDropNotify(fDropped != 0, (DropEffect)dwEffects);
+		}
+
+		int IVsHierarchyDropDataSource2.OnDropNotify(int fDropped, uint dwEffects)
+		{
+			return OnDropNotify(fDropped != 0, (DropEffect)dwEffects);
+		}
+
+		public virtual int OnDropNotify(bool dropped, DropEffect effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
-		public virtual int OnBeforeDropNotify(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, uint dwEffect, out int fCancelDrop)
+		int IVsHierarchyDropDataSource2.OnBeforeDropNotify(IDataObject pDataObject, uint dwEffect, out int fCancelDrop)
 		{
-			pDataObject = null;
-			fCancelDrop = 0;
+			bool cancelDrop;
+			int result = OnBeforeDropNotify(pDataObject, (DropEffect)dwEffect, out cancelDrop);
+			fCancelDrop = cancelDrop ? 1 : 0;
+			return result;
+		}
+
+		public virtual int OnBeforeDropNotify(IDataObject pDataObject, DropEffect effect, out bool cancelDrop)
+		{
+			cancelDrop = false;
 			return VSConstants.E_NOTIMPL;
 		}
 		#endregion
 
 		#region IVsHierarchyDropDataTarget methods
 
-		public virtual int DragEnter(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, uint grfKeyState, uint itemid, ref uint pdwEffect)
+		int IVsHierarchyDropDataTarget.DragEnter(IDataObject pDataObject, uint grfKeyState, uint itemid, ref uint pdwEffect)
+		{
+			DropEffect effect = (DropEffect)pdwEffect;
+			int result = DragEnter(pDataObject, grfKeyState, itemid, ref effect);
+			pdwEffect = (uint)effect;
+			return result;
+		}
+
+		public virtual int DragEnter(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffect pdwEffect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -3157,12 +3240,28 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.E_NOTIMPL;
 		}
 
-		public virtual int DragOver(uint grfKeyState, uint itemid, ref uint pdwEffect)
+		int IVsHierarchyDropDataTarget.DragOver(uint grfKeyState, uint itemid, ref uint pdwEffect)
+		{
+			DropEffect effect = (DropEffect)pdwEffect;
+			int result = DragOver(grfKeyState, itemid, ref effect);
+			pdwEffect = (uint)effect;
+			return result;
+		}
+
+		public virtual int DragOver(uint grfKeyState, uint itemid, ref DropEffect effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
-		public virtual int Drop(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, uint grfKeyState, uint itemid, ref uint pdwEffect)
+		int IVsHierarchyDropDataTarget.Drop(IDataObject pDataObject, uint grfKeyState, uint itemid, ref uint pdwEffect)
+		{
+			DropEffect effect = (DropEffect)pdwEffect;
+			int result = Drop(pDataObject, grfKeyState, itemid, ref effect);
+			pdwEffect = (uint)effect;
+			return result;
+		}
+
+		public virtual int Drop(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffect effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}

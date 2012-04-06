@@ -2058,7 +2058,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="pvaIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
         /// <param name="pvaOut">VARIANTARG structure to receive command output. Can be NULL.</param>
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-        protected override int ExecCommandOnNode(Guid cmdGroup, uint cmd, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        protected override int ExecCommandOnNode(Guid cmdGroup, uint cmd, OLECMDEXECOPT nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             if (cmdGroup == VsMenus.guidStandardCommandSet97)
             {
