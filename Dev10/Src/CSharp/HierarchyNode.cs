@@ -49,8 +49,8 @@ namespace Microsoft.VisualStudio.Project
 	//, IVsBuildStatusCallback 
 	{
 		#region Events
-        internal event EventHandler<HierarchyNodeEventArgs> OnChildAdded;
-        internal event EventHandler<HierarchyNodeEventArgs> OnChildRemoved;
+		public event EventHandler<HierarchyNodeEventArgs> ChildAdded;
+		public event EventHandler<HierarchyNodeEventArgs> ChildRemoved;
 		#endregion
 
 		#region static/const fields
@@ -634,6 +634,20 @@ namespace Microsoft.VisualStudio.Project
             node.SetParent(null, null);
 		}
 
+		protected virtual void OnChildAdded(HierarchyNodeEventArgs e)
+		{
+			var t = ChildAdded;
+			if (t != null)
+				t(this, e);
+		}
+
+		protected virtual void OnChildRemoved(HierarchyNodeEventArgs e)
+		{
+			var t = ChildRemoved;
+			if (t != null)
+				t(this, e);
+		}
+
 		/// <summary>
 		/// Returns an automation object representing this node
 		/// </summary>
@@ -1022,12 +1036,7 @@ namespace Microsoft.VisualStudio.Project
 			this.ProjectManager.Tracker.OnItemRemoved(documentToRemove, removeFlags[0]);
 
 			// Notify hierarchy event listeners that we have removed the item
-			var onChildRemoved = parentNode.OnChildRemoved;
-			if (onChildRemoved != null)
-			{
-				HierarchyNodeEventArgs args = new HierarchyNodeEventArgs(this);
-				onChildRemoved(parentNode, args);
-			}
+			parentNode.OnChildRemoved(new HierarchyNodeEventArgs(this));
 
 			// Notify hierarchy event listeners that items have been invalidated
 			OnInvalidateItems(this.parentNode);
@@ -2330,12 +2339,7 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentNullException("child");
             }
 
-			var onChildAdded = parent.OnChildAdded;
-			if (onChildAdded != null)
-			{
-				HierarchyNodeEventArgs args = new HierarchyNodeEventArgs(child);
-				onChildAdded(parent, args);
-			}
+            parent.OnChildAdded(new HierarchyNodeEventArgs(child));
 
             ProjectManager.ItemIdMap.UpdateCanonicalName(child);
 

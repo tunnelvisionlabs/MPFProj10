@@ -36,8 +36,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			_container = containerNode;
 			AddEventSource<_dispReferencesEvents>(this as IEventSource<_dispReferencesEvents>);
-			_container.OnChildAdded += new EventHandler<HierarchyNodeEventArgs>(OnReferenceAdded);
-			_container.OnChildRemoved += new EventHandler<HierarchyNodeEventArgs>(OnReferenceRemoved);
+			_container.ChildAdded += new EventHandler<HierarchyNodeEventArgs>(OnReferenceAdded);
+			_container.ChildRemoved += new EventHandler<HierarchyNodeEventArgs>(OnReferenceRemoved);
 		}
 
 		#region Private Members
