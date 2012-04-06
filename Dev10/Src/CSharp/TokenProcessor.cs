@@ -9,17 +9,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
+	using System.IO;
+	using System.Text;
+	using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
+
 	/// <summary>
 	/// Contain a number of functions that handle token replacement
 	/// </summary>

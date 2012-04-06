@@ -9,13 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
-using VSRegistry = Microsoft.VisualStudio.Shell.VSRegistry;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using Microsoft.Win32;
+	using VSRegistry = Microsoft.VisualStudio.Shell.VSRegistry;
+
 	/// <summary>
 	/// Gets registry settings from for a project.
 	/// </summary>

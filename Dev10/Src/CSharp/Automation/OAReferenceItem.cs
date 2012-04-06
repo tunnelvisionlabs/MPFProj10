@@ -9,13 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// Represents the automation object equivalent to a ReferenceNode object
 	/// </summary>

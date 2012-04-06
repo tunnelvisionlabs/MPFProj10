@@ -9,11 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System.Collections.Generic;
-using RuntimeHelpers = System.Runtime.CompilerServices.RuntimeHelpers;
-
 namespace Microsoft.VisualStudio.Project
 {
+    using System.Collections.Generic;
+    using RuntimeHelpers = System.Runtime.CompilerServices.RuntimeHelpers;
+
     public class ObjectReferenceEqualityComparer<T> : IEqualityComparer<T>
     {
         public static ObjectReferenceEqualityComparer<T> Default = new ObjectReferenceEqualityComparer<T>();

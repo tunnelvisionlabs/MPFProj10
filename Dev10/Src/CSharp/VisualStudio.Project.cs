@@ -9,17 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Reflection;
-using System.Globalization;
-using System.Resources;
-using System.Text;
-using System.Threading;
-using System.ComponentModel;
-using System.Security.Permissions;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.ComponentModel;
+	using System.Globalization;
+	using System.Resources;
+	using System.Threading;
+
 	[AttributeUsage(AttributeTargets.All)]
 	internal sealed class SRDescriptionAttribute : DescriptionAttribute
 	{

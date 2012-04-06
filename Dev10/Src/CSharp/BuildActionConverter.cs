@@ -9,24 +9,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.Versioning;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.ComponentModel;
+	using System.Globalization;
+
 	public class BuildActionConverter : EnumConverter
 	{
-
 		public BuildActionConverter()
 			: base(typeof(BuildAction))
 		{
-
 		}
 
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

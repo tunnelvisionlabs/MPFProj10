@@ -9,17 +9,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Reflection;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
+	using System.Reflection;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// Contains all of the properties of a given object that are contained in a generic collection of properties.
 	/// </summary>

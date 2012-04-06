@@ -9,18 +9,16 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using MSBuild = Microsoft.Build.Evaluation;
-using MSBuildExecution = Microsoft.Build.Execution;
-
 namespace Microsoft.VisualStudio.Project
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using MSBuildExecution = Microsoft.Build.Execution;
+
     /// <summary>
     /// Allows projects to group outputs according to usage.
     /// </summary>

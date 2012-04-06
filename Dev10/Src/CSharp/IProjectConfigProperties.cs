@@ -9,11 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// Defines the config dependent properties exposed through automation
 	/// </summary>

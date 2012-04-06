@@ -9,14 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Runtime.InteropServices;
+	using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
 	public partial class OleServiceProvider : IOleServiceProvider, IDisposable
 	{
 		#region fields

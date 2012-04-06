@@ -9,25 +9,24 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using MSBuild = Microsoft.Build.Evaluation;
-using OLECMDEXECOPT = Microsoft.VisualStudio.OLE.Interop.OLECMDEXECOPT;
-using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
-using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
-using System.Collections.ObjectModel;
-
 namespace Microsoft.VisualStudio.Project
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using MSBuild = Microsoft.Build.Evaluation;
+    using OLECMDEXECOPT = Microsoft.VisualStudio.OLE.Interop.OLECMDEXECOPT;
+    using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+    using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
+    using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+
     [CLSCompliant(false), ComVisible(true)]
     public class ReferenceContainerNode : HierarchyNode, IReferenceContainer
     {

@@ -9,21 +9,19 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-
 namespace Microsoft.VisualStudio.Project
 {
+    using System;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using Microsoft.VisualStudio.OLE.Interop;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
+
     [CLSCompliant(false), ComVisible(true)]
     public class NestedProjectNode : HierarchyNode, IPropertyNotifySink
     {

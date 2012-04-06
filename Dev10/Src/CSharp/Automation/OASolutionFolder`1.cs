@@ -9,15 +9,15 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	[ComVisible(true), CLSCompliant(false)]
 	public class OASolutionFolder<T> : EnvDTE80.SolutionFolder
 		where T : HierarchyNode

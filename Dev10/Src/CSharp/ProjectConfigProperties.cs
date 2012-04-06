@@ -9,12 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Runtime.InteropServices;
-using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Runtime.InteropServices;
+	using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
+
 	/// <summary>
 	/// Implements the configuration dependent properties interface
 	/// </summary>

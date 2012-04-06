@@ -9,18 +9,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
+	using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
+
 	/// <summary>
 	/// This abstract class handles opening, saving of items in the hierarchy.
 	/// </summary>

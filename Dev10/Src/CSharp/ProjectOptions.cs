@@ -9,12 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System.Collections.Specialized;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Versioning;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System.Collections.Specialized;
+	using System.Runtime.Versioning;
+
 	public class ProjectOptions : System.CodeDom.Compiler.CompilerParameters
 	{
 		public string Config { get; set; }

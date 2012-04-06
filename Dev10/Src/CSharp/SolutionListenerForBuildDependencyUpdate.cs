@@ -9,16 +9,15 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
+
 	/// <summary>
 	/// The purpose of this class is to set a build dependency from a modeling project to all its sub projects
 	/// </summary>

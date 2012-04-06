@@ -9,15 +9,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-
-
 namespace Microsoft.VisualStudio.Project
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-    using Microsoft.VisualStudio.Shell.Interop;
 
     /// <summary>
     /// Provides information about the current build status.

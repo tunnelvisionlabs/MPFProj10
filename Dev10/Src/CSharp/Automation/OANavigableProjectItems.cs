@@ -9,15 +9,15 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using ProjectItems = EnvDTE.ProjectItems;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using ProjectItems = EnvDTE.ProjectItems;
+
 	/// <summary>
 	/// This can navigate a collection object only (partial implementation of ProjectItems interface)
 	/// </summary>

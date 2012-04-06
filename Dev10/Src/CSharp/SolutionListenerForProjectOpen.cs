@@ -9,14 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
 
 	[CLSCompliant(false)]
 	public class SolutionListenerForProjectOpen : SolutionListener

@@ -9,31 +9,29 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Security.Policy;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
-using IServiceProvider = System.IServiceProvider;
-using MSBuild = Microsoft.Build.Evaluation;
-using VSRegistry = Microsoft.VisualStudio.Shell.VSRegistry;
-
 namespace Microsoft.VisualStudio.Project
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.Globalization;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using System.Security.Permissions;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Windows.Forms;
+    using Microsoft.VisualStudio.OLE.Interop;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using Microsoft.Win32;
+    using IServiceProvider = System.IServiceProvider;
+    using MSBuild = Microsoft.Build.Evaluation;
+    using VSRegistry = Microsoft.VisualStudio.Shell.VSRegistry;
+
     public static class Utilities
     {
         private const string defaultMSBuildVersion = "4.0";

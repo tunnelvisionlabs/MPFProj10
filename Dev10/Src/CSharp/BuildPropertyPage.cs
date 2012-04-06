@@ -9,15 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.Runtime.InteropServices;
+	using _PersistStorageType = Microsoft.VisualStudio.Shell.Interop._PersistStorageType;
+
 	/// <summary>
 	/// Defines the properties on the build property page and the logic the binds the properties to project data (load and save)
 	/// </summary>

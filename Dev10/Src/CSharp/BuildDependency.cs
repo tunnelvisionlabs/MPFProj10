@@ -9,13 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	public class BuildDependency : IVsBuildDependency
 	{
 		Guid referencedProjectGuid = Guid.Empty;

@@ -9,10 +9,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+
 	public partial class ProjectNode
 	{
 		#region fields

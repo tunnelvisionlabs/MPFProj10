@@ -9,18 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System.Collections;
+	using Microsoft.VisualStudio.OLE.Interop;
+
 	public class EnumFORMATETC : IEnumFORMATETC
 	{
 		IEnumerable cache; // of DataCacheEntrys.

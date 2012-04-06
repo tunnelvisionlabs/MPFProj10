@@ -9,10 +9,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System.Diagnostics;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System.Diagnostics;
+
 	public class CCITracing
 	{
 		private CCITracing() { }

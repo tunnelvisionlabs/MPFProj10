@@ -9,17 +9,16 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
-using VSRegistry = Microsoft.VisualStudio.Shell.VSRegistry;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.OLE.Interop;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using Microsoft.Win32;
+	using VSRegistry = Microsoft.VisualStudio.Shell.VSRegistry;
+
 	/// <summary>
 	/// Provides implementation IVsSingleFileGeneratorFactory for
 	/// </summary>

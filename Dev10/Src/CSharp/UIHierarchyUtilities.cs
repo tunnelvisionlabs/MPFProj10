@@ -9,13 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	/// <summary>
 	///This class provides some useful static shell based methods. 
 	/// </summary>

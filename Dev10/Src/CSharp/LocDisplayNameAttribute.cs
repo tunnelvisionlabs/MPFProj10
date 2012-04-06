@@ -9,13 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.ComponentModel;
+	using System.Diagnostics;
+	using System.Globalization;
+
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
 	public sealed class LocDisplayNameAttribute : DisplayNameAttribute
 	{

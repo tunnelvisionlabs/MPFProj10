@@ -9,12 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using Microsoft.VisualStudio.Shell.Interop;
-using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
+	using System;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
+
 	/// <summary>
 	/// Helper class that handle the scope of an automation function.
 	/// It should be used inside a "using" directive to define the scope of the

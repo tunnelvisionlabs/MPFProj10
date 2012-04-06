@@ -9,27 +9,25 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Windows.Forms.Design;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Windows.Threading;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.Win32;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Text;
+    using System.Threading;
+    using System.Windows.Forms.Design;
+    using System.Windows.Threading;
+    using Microsoft.Build.Framework;
+    using Microsoft.Build.Utilities;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using Microsoft.VisualStudio.TextManager.Interop;
+    using Microsoft.Win32;
+    using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
     /// <summary>
     /// This class implements an MSBuild logger that output events to VS outputwindow and tasklist.
     /// </summary>

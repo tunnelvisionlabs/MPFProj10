@@ -9,13 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
+
 	/// <summary>
 	/// This class triggers the project events for "our" hierrachies.
 	/// </summary>

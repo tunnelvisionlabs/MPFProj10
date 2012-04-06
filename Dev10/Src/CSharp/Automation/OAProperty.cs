@@ -9,13 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project.Automation
 {
-	[CLSCompliant(false), ComVisible(true)]
+	using System;
+	using System.Reflection;
+	using System.Runtime.InteropServices;
+
+	[CLSCompliant(false)]
+	[ComVisible(true)]
 	public class OAProperty : EnvDTE.Property
 	{
 		#region fields

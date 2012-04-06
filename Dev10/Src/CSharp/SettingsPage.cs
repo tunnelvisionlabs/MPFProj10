@@ -9,20 +9,19 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Windows.Forms;
-using Microsoft.VisualStudio.Designer.Interfaces;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.ComponentModel;
+	using System.Drawing;
+	using System.Globalization;
+	using System.Runtime.InteropServices;
+	using System.Security.Permissions;
+	using System.Windows.Forms;
+	using Microsoft.VisualStudio.Designer.Interfaces;
+	using Microsoft.VisualStudio.OLE.Interop;
+	using Microsoft.VisualStudio.Shell.Interop;
 
 	/// <summary>
 	/// The base class for property pages.

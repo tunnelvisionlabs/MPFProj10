@@ -9,18 +9,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.IO;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.OLE.Interop;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using Microsoft.VisualStudio.TextManager.Interop;
+
 	/// <summary>
 	/// Provides support for single file generator.
 	/// </summary>

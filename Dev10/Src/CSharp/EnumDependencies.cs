@@ -9,13 +9,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	[CLSCompliant(false)]
 	public class EnumDependencies : IVsEnumDependencies
 	{

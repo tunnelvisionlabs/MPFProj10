@@ -9,14 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
 	public class ProjectDesignerDocumentManager : DocumentManager
 	{
 		#region ctors

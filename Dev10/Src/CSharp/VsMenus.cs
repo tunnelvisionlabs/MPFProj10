@@ -9,11 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+
 	/// <summary>
 	/// Defines menu commands guids and menu command id's
 	/// </summary>

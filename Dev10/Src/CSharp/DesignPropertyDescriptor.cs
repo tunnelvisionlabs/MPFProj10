@@ -9,13 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.ComponentModel;
-using prjBuildAction = VSLangProj.prjBuildAction;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.ComponentModel;
+	using prjBuildAction = VSLangProj.prjBuildAction;
+
 	/// <summary>
 	/// The purpose of DesignPropertyDescriptor is to allow us to customize the
 	/// display name of the property in the property grid.  None of the CLR

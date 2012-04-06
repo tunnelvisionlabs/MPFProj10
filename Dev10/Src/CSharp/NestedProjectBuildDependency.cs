@@ -9,12 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	/// <summary>
 	/// Used for adding a build dependency to nested project (not a real project reference)
 	/// </summary>

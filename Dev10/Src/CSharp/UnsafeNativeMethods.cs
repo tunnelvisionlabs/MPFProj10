@@ -9,11 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Runtime.InteropServices;
+
 	internal static partial class UnsafeNativeMethods
 	{
 		[DllImport(ExternDll.Kernel32, SetLastError = true, EntryPoint = "RtlMoveMemory")]

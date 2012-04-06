@@ -21,7 +21,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 	using Microsoft.VisualStudio;
 	using Microsoft.VisualStudio.Shell;
 	using Microsoft.VisualStudio.Shell.Interop;
-	using IServiceProvider = System.IServiceProvider;
 	using VSConstants = Microsoft.VisualStudio.VSConstants;
 
 	/// <summary>

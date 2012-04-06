@@ -9,15 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
-using Microsoft.VisualStudio;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Drawing;
+	using System.IO;
+	using System.Windows.Forms;
+
 	public class ImageHandler : IDisposable
 	{
 		private ImageList imageList;

@@ -9,11 +9,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System.Diagnostics.CodeAnalysis;
-using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System.Diagnostics.CodeAnalysis;
+
 	/// <summary>
 	/// Defines the constant strings for various msbuild targets
 	/// </summary>

@@ -9,15 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
 	/// <summary>
 	/// This class handles opening, saving of file items in the hierarchy.
 	/// </summary>

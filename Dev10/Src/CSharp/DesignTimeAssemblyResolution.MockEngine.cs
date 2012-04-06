@@ -9,19 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Build.Framework;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Build.Utilities;
-using Microsoft.Build.Execution;
-using System.IO;
-using System.Globalization;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Globalization;
+	using System.Text;
+	using Microsoft.Build.Framework;
+
 	partial class DesignTimeAssemblyResolution
 	{
 		/// <summary>

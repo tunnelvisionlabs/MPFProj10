@@ -9,16 +9,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Text;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System.Diagnostics.CodeAnalysis;
+
 	/// <summary>
 	/// Storage classes for string to be deleted between tokens to be deleted 
 	/// </summary>

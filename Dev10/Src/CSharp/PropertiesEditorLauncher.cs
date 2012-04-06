@@ -9,14 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.ComponentModel;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.ComponentModel;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+
 	/// <summary>
 	/// This class is used to enable launching the project properties
 	/// editor from the Properties Browser.

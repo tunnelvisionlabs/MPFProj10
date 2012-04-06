@@ -9,23 +9,19 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using MSBuild = Microsoft.Build.Evaluation;
-using MSBuildExecution = Microsoft.Build.Execution;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.IO;
+	using System.Reflection;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using MSBuild = Microsoft.Build.Evaluation;
+
 	[CLSCompliant(false)]
 	[ComVisible(true)]
 	public class AssemblyReferenceNode : ReferenceNode

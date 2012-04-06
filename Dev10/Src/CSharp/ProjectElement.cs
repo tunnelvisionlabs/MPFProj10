@@ -9,18 +9,16 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using MSBuild = Microsoft.Build.Evaluation;
-using Microsoft.Build.Evaluation;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.IO;
+	using System.Runtime.InteropServices;
+	using Microsoft.Build.Evaluation;
+	using MSBuild = Microsoft.Build.Evaluation;
 
     /// <summary>
     /// This class represent a project item (usualy a file) and allow getting and

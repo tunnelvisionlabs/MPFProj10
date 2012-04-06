@@ -9,13 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Collections;
+	using System.ComponentModel;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// Enables a managed object to expose properties and attributes for COM objects.
 	/// </summary>

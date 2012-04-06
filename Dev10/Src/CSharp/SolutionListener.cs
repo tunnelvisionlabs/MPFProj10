@@ -9,15 +9,13 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
+	using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
 
 	[CLSCompliant(false)]
 	public abstract class SolutionListener : IVsSolutionEvents3, IVsSolutionEvents4, IDisposable

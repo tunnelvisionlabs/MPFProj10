@@ -9,15 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using IServiceProvider = System.IServiceProvider;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using IServiceProvider = System.IServiceProvider;
+	using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
+
 	/// <summary>
 	/// Defines an abstract class implementing IVsUpdateSolutionEvents interfaces.
 	/// </summary>

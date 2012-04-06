@@ -9,16 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
+	using Microsoft.VisualStudio.Shell;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
 
 	[CLSCompliant(false)]
 	public abstract class ProjectDocumentsListener : IVsTrackProjectDocumentsEvents2, IDisposable

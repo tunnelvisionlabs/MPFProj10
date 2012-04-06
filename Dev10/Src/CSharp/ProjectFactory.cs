@@ -9,19 +9,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using MSBuild = Microsoft.Build.Evaluation;
-using MSBuildExecution = Microsoft.Build.Execution;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using MSBuild = Microsoft.Build.Evaluation;
+
 	/// <summary>
 	/// Creates projects within the solution
 	/// </summary>

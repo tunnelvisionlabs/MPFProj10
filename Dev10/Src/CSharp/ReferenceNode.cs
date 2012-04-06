@@ -9,22 +9,19 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Text;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using OLECMDEXECOPT = Microsoft.VisualStudio.OLE.Interop.OLECMDEXECOPT;
-using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+	using System.Diagnostics;
+	using System.IO;
+	using System.Runtime.InteropServices;
+	using System.Security.Permissions;
+	using System.Text;
+	using Microsoft.VisualStudio.Shell.Interop;
+	using OLECMDEXECOPT = Microsoft.VisualStudio.OLE.Interop.OLECMDEXECOPT;
+	using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+	using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+
 	[CLSCompliant(false), ComVisible(true)]
 	public abstract class ReferenceNode : HierarchyNode
 	{
