@@ -12,19 +12,17 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 namespace Microsoft.VisualStudio.Project.Automation
 {
 	using System;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Runtime.InteropServices;
 	using prjReferenceType = VSLangProj.prjReferenceType;
 	using Reference = VSLangProj.Reference;
-	using References = VSLangProj.References;
 	using Reference2 = VSLangProj2.Reference2;
 	using Reference3 = VSLangProj80.Reference3;
+	using References = VSLangProj.References;
 
 	/// <summary>
 	/// Represents the automation equivalent of ReferenceNode
 	/// </summary>
 	/// <typeparam name="RefType"></typeparam>
-	[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T")]
 	[ComVisible(true)]
 	public abstract class OAReferenceBase<TReferenceNode> : Reference, Reference2, Reference3
 		where TReferenceNode : ReferenceNode
