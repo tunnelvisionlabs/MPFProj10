@@ -2033,7 +2033,9 @@ namespace Microsoft.VisualStudio.Project
                 switch ((VsCommands2K)cmd)
                 {
                     case VsCommands2K.ADDREFERENCE:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= QueryStatusResult.SUPPORTED;
+                        if (GetReferenceContainer() != null)
+                            result |= QueryStatusResult.ENABLED;
                         return VSConstants.S_OK;
 
                     case VsCommands2K.EXCLUDEFROMPROJECT:
