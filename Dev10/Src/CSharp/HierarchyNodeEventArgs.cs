@@ -9,28 +9,25 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.Shell.Interop;
-
 namespace Microsoft.VisualStudio.Project
 {
+	using EventArgs = System.EventArgs;
+
 	/// <summary>
 	/// This class is used for the events raised by a HierarchyNode object.
 	/// </summary>
 	public class HierarchyNodeEventArgs : EventArgs
 	{
-		private HierarchyNode child;
+		private readonly HierarchyNode _child;
 
-		internal HierarchyNodeEventArgs(HierarchyNode child)
+		public HierarchyNodeEventArgs(HierarchyNode child)
 		{
-			this.child = child;
+			this._child = child;
 		}
 
 		public HierarchyNode Child
 		{
-			get { return this.child; }
+			get { return this._child; }
 		}
 	}
 }
