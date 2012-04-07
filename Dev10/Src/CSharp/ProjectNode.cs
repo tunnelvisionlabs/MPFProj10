@@ -31,6 +31,7 @@ namespace Microsoft.VisualStudio.Project
     using Microsoft.VisualStudio.OLE.Interop;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
+    using DialogResult = Microsoft.Internal.VisualStudio.PlatformUI.DialogResult;
     using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
     using IServiceProvider = System.IServiceProvider;
     using MSBuild = Microsoft.Build.Evaluation;
@@ -3466,7 +3467,7 @@ namespace Microsoft.VisualStudio.Project
             }
             //}
 
-            return NativeMethods.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -4212,7 +4213,7 @@ namespace Microsoft.VisualStudio.Project
             icon = OLEMSGICON.OLEMSGICON_QUERY;
             buttons = OLEMSGBUTTON.OLEMSGBUTTON_YESNO;
             int msgboxResult = VsShellUtilities.ShowMessageBox(this.Site, title, message, icon, buttons, defaultButton);
-            if (msgboxResult != NativeMethods.IDYES)
+            if (msgboxResult != DialogResult.Yes)
             {
                 return (int)OleConstants.OLECMDERR_E_CANCELED;
             }
@@ -5632,7 +5633,7 @@ namespace Microsoft.VisualStudio.Project
                         OLEMSGBUTTON buttons = OLEMSGBUTTON.OLEMSGBUTTON_YESNO;
                         OLEMSGDEFBUTTON defaultButton = OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST;
                         int messageboxResult = VsShellUtilities.ShowMessageBox(this.Site, title, message, icon, buttons, defaultButton);
-                        if (messageboxResult == NativeMethods.IDNO)
+                        if (messageboxResult == DialogResult.No)
                         {
                             result[0] = VSADDRESULT.ADDRESULT_Cancel;
                             return (int)OleConstants.OLECMDERR_E_CANCELED;

@@ -23,6 +23,7 @@ namespace Microsoft.VisualStudio.Project
 	using Microsoft.VisualStudio.OLE.Interop;
 	using Microsoft.VisualStudio.Shell;
 	using Microsoft.VisualStudio.Shell.Interop;
+	using DialogResult = Microsoft.Internal.VisualStudio.PlatformUI.DialogResult;
 	using IOleDataObject = Microsoft.VisualStudio.OLE.Interop.IDataObject;
 	using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
@@ -287,13 +288,13 @@ namespace Microsoft.VisualStudio.Project
 			int result = VsShellUtilities.ShowMessageBox(Site, title, message, icon, buttons, defaultButton);
 			switch(result)
 			{
-				case NativeMethods.IDYES:
+				case DialogResult.Yes:
 					break;
 
-				case NativeMethods.IDNO:
+				case DialogResult.No:
 					return VSConstants.S_OK;
 
-				case NativeMethods.IDCANCEL: goto default;
+				case DialogResult.Cancel: goto default;
 
 				default:
 					cancelDrop = true;

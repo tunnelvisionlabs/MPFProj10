@@ -317,7 +317,7 @@ namespace Microsoft.VisualStudio.Project
 				uint itemid, cookie;
 				bool docInRdt = true;
 				IntPtr docData = IntPtr.Zero;
-				int hr = NativeMethods.E_FAIL;
+				int hr = VSConstants.E_FAIL;
 				try
 				{
 					//Getting a read lock on the document. Must be released later.

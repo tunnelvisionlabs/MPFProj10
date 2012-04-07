@@ -1350,7 +1350,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if(selectedNodes == null || selectedNodes.Count == 0 || pointerToVariant == IntPtr.Zero)
 			{
-				return NativeMethods.OLECMDERR_E_NOTSUPPORTED;
+				return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
 			}
 
 			int idmxStoredMenu = 0;

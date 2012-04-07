@@ -21,6 +21,7 @@ namespace Microsoft.VisualStudio.Project
 	using Microsoft.VisualStudio.Project.Automation;
 	using Microsoft.VisualStudio.Shell;
 	using Microsoft.VisualStudio.Shell.Interop;
+	using DialogResult = Microsoft.Internal.VisualStudio.PlatformUI.DialogResult;
 	using MSBuild = Microsoft.Build.Evaluation;
 
 	[CLSCompliant(false), ComVisible(true)]
@@ -790,7 +791,7 @@ namespace Microsoft.VisualStudio.Project
 				OLEMSGICON icon = OLEMSGICON.OLEMSGICON_INFO;
 				OLEMSGBUTTON buttons = OLEMSGBUTTON.OLEMSGBUTTON_YESNO;
 				OLEMSGDEFBUTTON defaultButton = OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST;
-				reload = (VsShellUtilities.ShowMessageBox(this.Site, message, title, icon, buttons, defaultButton) == NativeMethods.IDYES);
+				reload = (VsShellUtilities.ShowMessageBox(this.Site, message, title, icon, buttons, defaultButton) == DialogResult.Yes);
 			}
 
 			if(reload)

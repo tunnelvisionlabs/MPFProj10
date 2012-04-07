@@ -627,7 +627,7 @@ namespace Microsoft.VisualStudio.Project
 
             //Create new project using factory
             int cancelled;
-            Guid refiid = NativeMethods.IID_IUnknown;
+            Guid refiid = VSConstants.IID_IUnknown;
             IntPtr projectPtr = IntPtr.Zero;
 
             try
