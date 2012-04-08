@@ -22,7 +22,8 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 	[Guid("82B6E04F-DBE2-45ba-B881-36C6109D6D1E")]
 	internal class ProjectTestClass : VisualStudio.Project.ProjectNode
 	{
-		public ProjectTestClass()
+		public ProjectTestClass(ProjectPackage package)
+			: base(package)
 		{
 			// To avoid having to mock the SCC stuff simply disable it
 			this.IsSccDisabled = true;

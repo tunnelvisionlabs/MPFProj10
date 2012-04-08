@@ -106,7 +106,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 		{
 			using(ProjectEventsSource eventSource = new ProjectEventsSource())
 			{
-				ProjectTestClass project = new ProjectTestClass();
+				ProjectTestClass project = new ProjectTestClass(new ProjectTestPackage());
 				IProjectEventsProvider eventProvider = project as IProjectEventsProvider;
 				Assert.IsNotNull(eventProvider, "Project class does not implements IProjectEventsProvider.");
 				Assert.IsFalse(IsProjectOpened(project), "Project is opened right after its creation.");
@@ -124,7 +124,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 			{
 				using(ProjectEventsSource secondSource = new ProjectEventsSource())
 				{
-					ProjectTestClass project = new ProjectTestClass();
+					ProjectTestClass project = new ProjectTestClass(new ProjectTestPackage());
 					IProjectEventsProvider eventProvider = project as IProjectEventsProvider;
 					Assert.IsNotNull(eventProvider, "Project class does not implements IProjectEventsProvider.");
 					eventProvider.ProjectEventsProvider = firstSource;
@@ -142,7 +142,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 		[TestMethod]
 		public void SetNullSource()
 		{
-			ProjectTestClass project = new ProjectTestClass();
+			ProjectTestClass project = new ProjectTestClass(new ProjectTestPackage());
 			IProjectEventsProvider eventProvider = project as IProjectEventsProvider;
 			Assert.IsNotNull(eventProvider, "Project class does not implements IProjectEventsProvider.");
 			eventProvider.ProjectEventsProvider = null;

@@ -48,7 +48,8 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region ctors
-		protected ProjectContainerNode()
+		protected ProjectContainerNode(ProjectPackage package)
+			: base(package)
 		{
 		}
 		#endregion

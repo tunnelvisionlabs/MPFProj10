@@ -86,7 +86,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		[TestMethod()]
 		public void GetConfigurationIndependentPropertyPagesTest()
 		{
-			NestedProjectNode target = new NestedProjectNode();
+			NestedProjectNode target = new NestedProjectNode(new NestedProjectPackage());
 			VisualStudio_Project_Samples_NestedProjectNodeAccessor accessor =
 				new VisualStudio_Project_Samples_NestedProjectNodeAccessor(target);
 
@@ -104,7 +104,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		[TestMethod()]
 		public void GetFormatListTest()
 		{
-			NestedProjectNode target = new NestedProjectNode();
+			NestedProjectNode target = new NestedProjectNode(new NestedProjectPackage());
 
 			string ppszFormatList;
 
@@ -124,7 +124,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		[TestMethod()]
 		public void GetPriorityProjectDesignerPagesTest()
 		{
-			NestedProjectNode target = new NestedProjectNode();
+			NestedProjectNode target = new NestedProjectNode(new NestedProjectPackage());
 			VisualStudio_Project_Samples_NestedProjectNodeAccessor accessor =
 				new VisualStudio_Project_Samples_NestedProjectNodeAccessor(target);
 
@@ -142,7 +142,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		[TestMethod()]
 		public void ConstructorTest()
 		{
-			NestedProjectNode target = new NestedProjectNode();
+			NestedProjectNode target = new NestedProjectNode(new NestedProjectPackage());
 			Assert.IsNotNull(target, "Failed to initialize new instance of NestedProjectNode");
 		}
 
@@ -165,7 +165,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		[TestMethod()]
 		public void ProjectTypeTest()
 		{
-			NestedProjectNode target = new NestedProjectNode();
+			NestedProjectNode target = new NestedProjectNode(new NestedProjectPackage());
 
 			string val = typeof(NestedProjectNode).Name;
 

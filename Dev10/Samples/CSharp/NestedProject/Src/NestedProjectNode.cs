@@ -29,7 +29,8 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <summary>
 		/// Explicitly defined default constructor.
 		/// </summary>
-		public NestedProjectNode()
+		public NestedProjectNode(ProjectPackage package)
+			: base(package)
 		{
 			this.SupportsProjectDesigner = true;
             this.CanProjectDeleteItems = true;

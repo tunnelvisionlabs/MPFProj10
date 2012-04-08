@@ -267,7 +267,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// The internal package implementation.
         /// </summary>
-        private ProjectPackage package;
+        private readonly ProjectPackage package;
 
         // Has the object been disposed.
         private bool isDisposed;
@@ -991,16 +991,11 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// The internal package implementation.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProjectPackage Package
+        public ProjectPackage Package
         {
             get
             {
                 return this.package;
-            }
-            set
-            {
-                this.package = value;
             }
         }
 
@@ -1019,9 +1014,13 @@ namespace Microsoft.VisualStudio.Project
 
         #region ctor
 
-        protected ProjectNode()
+        protected ProjectNode(ProjectPackage package)
             : base(VSConstants.VSITEMID.Root)
         {
+            if (package == null)
+                throw new ArgumentNullException("package");
+
+            this.package = package;
             this.tracker = new TrackDocumentsHelper(this);
         }
 

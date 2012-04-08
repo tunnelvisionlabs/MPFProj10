@@ -59,6 +59,7 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		/// </summary>
 		/// <param name="package">Value of the project package for initialize internal package field.</param>
 		public MyCustomProjectNode(CustomProjectPackage package)
+			: base(package)
 		{
 			this.package = package;
 

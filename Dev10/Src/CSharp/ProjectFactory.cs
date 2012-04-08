@@ -151,7 +151,6 @@ namespace Microsoft.VisualStudio.Project
 			Debug.Assert(node != null, "The project failed to be created");
 			node.BuildEngine = this.buildEngine;
             node.BuildProject = this.buildProject;
-			node.Package = this.package as ProjectPackage;
 			return node;
 		}
 

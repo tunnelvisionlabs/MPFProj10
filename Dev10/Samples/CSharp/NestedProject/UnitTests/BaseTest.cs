@@ -38,7 +38,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 
         protected override ProjectNode CreateProject()
         {
-            NesteProjectNodeFake project = new NesteProjectNodeFake();
+            NesteProjectNodeFake project = new NesteProjectNodeFake((ProjectPackage)Package);
             project.SetSite((IOleServiceProvider)((IServiceProvider)this.Package).GetService(typeof(IOleServiceProvider)));
             return project;
         }
@@ -50,6 +50,11 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
     /// </summary>
     public class NesteProjectNodeFake : NestedProjectNode
     {
+        public NesteProjectNodeFake(ProjectPackage package)
+            : base(package)
+        {
+        }
+
         protected override void ProcessReferences()
         {
             return;

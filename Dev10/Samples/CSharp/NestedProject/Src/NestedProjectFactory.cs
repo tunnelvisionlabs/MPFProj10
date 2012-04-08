@@ -40,7 +40,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <returns></returns>
 		protected override ProjectNode CreateProject()
 		{
-			NestedProjectNode project = new NestedProjectNode();
+			NestedProjectNode project = new NestedProjectNode((ProjectPackage)Package);
 			project.SetSite((IOleServiceProvider)((IServiceProvider)this.Package).GetService(typeof(IOleServiceProvider)));
 			return project;
 		}

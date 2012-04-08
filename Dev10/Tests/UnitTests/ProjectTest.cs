@@ -69,7 +69,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 			public PackageTestEnvironment()
 			{
 				// Create the project
-				project = new ProjectTestClass();
+				project = new ProjectTestClass(new ProjectTestPackage());
 
 				// Site the project
 				services = Microsoft.VsSDK.UnitTestLibrary.OleServiceProvider.CreateOleServiceProviderWithBasicServices();
