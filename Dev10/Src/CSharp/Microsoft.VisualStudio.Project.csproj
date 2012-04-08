@@ -104,13 +104,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveConfigurationChangedEventArgs.cs" />
-    <Compile Include="AfterProjectFileOpenedEventArgs.cs" />
+    <Compile Include="ProjectFileOpenedEventArgs.cs" />
     <Compile Include="AssemblyReferenceNode.cs" />
     <Compile Include="AutomationBrowsableAttribute.cs" />
     <Compile Include="Automation\VSProject\EmptyReferencesEvents.cs" />
     <Compile Include="Automation\VSProject\OAVSProjectEvents.cs" />
     <Compile Include="AvailableFileBuildActionConverter.cs" />
-    <Compile Include="BeforeProjectFileClosedEventArgs.cs" />
+    <Compile Include="ProjectFileClosingEventArgs.cs" />
     <Compile Include="BuildableProjectConfig.cs" />
     <Compile Include="BuildAction.cs" />
     <Compile Include="BuildActionConverter.cs" />

@@ -23,12 +23,12 @@ namespace Microsoft.VisualStudio.Project
 		#region events
 		/// Event raised just after the project file opened.
 		/// </summary>
-		public event EventHandler<AfterProjectFileOpenedEventArgs> AfterProjectFileOpened;
+		public event EventHandler<ProjectFileOpenedEventArgs> AfterProjectFileOpened;
 
 		/// <summary>
 		/// Event raised before the project file closed.
 		/// </summary>
-		public event EventHandler<BeforeProjectFileClosedEventArgs> BeforeProjectFileClosed;
+		public event EventHandler<ProjectFileClosingEventArgs> BeforeProjectFileClosed;
 		#endregion
 
 		#region ctor
@@ -70,10 +70,10 @@ namespace Microsoft.VisualStudio.Project
 		private void RaiseAfterProjectFileOpened(bool added)
 		{
 			// Save event in temporary variable to avoid race condition.
-			EventHandler<AfterProjectFileOpenedEventArgs> tempEvent = this.AfterProjectFileOpened;
+			EventHandler<ProjectFileOpenedEventArgs> tempEvent = this.AfterProjectFileOpened;
 			if(tempEvent != null)
 			{
-				tempEvent(this, new AfterProjectFileOpenedEventArgs(added));
+				tempEvent(this, new ProjectFileOpenedEventArgs(added));
 			}
 		}
 
@@ -87,10 +87,10 @@ namespace Microsoft.VisualStudio.Project
 		private void RaiseBeforeProjectFileClosed(bool removed)
 		{
 			// Save event in temporary variable to avoid race condition.
-			EventHandler<BeforeProjectFileClosedEventArgs> tempEvent = this.BeforeProjectFileClosed;
+			EventHandler<ProjectFileClosingEventArgs> tempEvent = this.BeforeProjectFileClosed;
 			if(tempEvent != null)
 			{
-				tempEvent(this, new BeforeProjectFileClosedEventArgs(removed));
+				tempEvent(this, new ProjectFileClosingEventArgs(removed));
 			}
 		}
 	}

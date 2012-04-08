@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 
-	public class BeforeProjectFileClosedEventArgs : EventArgs
+	public class ProjectFileClosingEventArgs : EventArgs
 	{
 		#region fields
 		private readonly bool removed;
@@ -32,7 +32,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region ctor
-		internal BeforeProjectFileClosedEventArgs(bool removed)
+		internal ProjectFileClosingEventArgs(bool removed)
 		{
 			this.removed = removed;
 		}

@@ -25,12 +25,12 @@ namespace Microsoft.VisualStudio.Project
 		/// Event raised just after the project file opened.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1713:EventsShouldNotHaveBeforeOrAfterPrefix")]
-		event EventHandler<AfterProjectFileOpenedEventArgs> AfterProjectFileOpened;
+		event EventHandler<ProjectFileOpenedEventArgs> AfterProjectFileOpened;
 
 		/// <summary>
 		/// Event raised before the project file closed.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1713:EventsShouldNotHaveBeforeOrAfterPrefix")]
-		event EventHandler<BeforeProjectFileClosedEventArgs> BeforeProjectFileClosed;
+		event EventHandler<ProjectFileClosingEventArgs> BeforeProjectFileClosed;
 	}
 }

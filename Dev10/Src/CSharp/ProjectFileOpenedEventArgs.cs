@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 
-	public class AfterProjectFileOpenedEventArgs : EventArgs
+	public class ProjectFileOpenedEventArgs : EventArgs
 	{
 		#region fields
 		private readonly bool added;
@@ -32,7 +32,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region ctor
-		internal AfterProjectFileOpenedEventArgs(bool added)
+		internal ProjectFileOpenedEventArgs(bool added)
 		{
 			this.added = added;
 		}

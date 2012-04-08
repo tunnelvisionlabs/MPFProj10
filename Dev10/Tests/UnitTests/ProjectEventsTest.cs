@@ -19,24 +19,24 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 	public static class ProjectEventsUtilities
 	{
 		private static ConstructorInfo afterProjectFileOpenedEventArgsCtr;
-		public static AfterProjectFileOpenedEventArgs CreateAfterProjectFileOpenedEventArgs(bool added)
+		public static ProjectFileOpenedEventArgs CreateAfterProjectFileOpenedEventArgs(bool added)
 		{
 			if(null == afterProjectFileOpenedEventArgsCtr)
 			{
 				//afterProjectFileOpenedEventArgsCtr = typeof(AfterProjectFileOpenedEventArgs).GetConstructor(new Type[] { typeof(bool) });
-				afterProjectFileOpenedEventArgsCtr = typeof(AfterProjectFileOpenedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
+				afterProjectFileOpenedEventArgsCtr = typeof(ProjectFileOpenedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
 			}
-			return afterProjectFileOpenedEventArgsCtr.Invoke(new object[] { added }) as AfterProjectFileOpenedEventArgs;
+			return afterProjectFileOpenedEventArgsCtr.Invoke(new object[] { added }) as ProjectFileOpenedEventArgs;
 		}
 
 		private static ConstructorInfo beforeProjectFileClosedEventArgsCtr;
-		public static BeforeProjectFileClosedEventArgs CreateBeforeProjectFileClosedEventArgs(bool removed)
+		public static ProjectFileClosingEventArgs CreateBeforeProjectFileClosedEventArgs(bool removed)
 		{
 			if(null == beforeProjectFileClosedEventArgsCtr)
 			{
-				beforeProjectFileClosedEventArgsCtr = typeof(BeforeProjectFileClosedEventArgs).GetConstructor(new Type[] { typeof(bool) });
+				beforeProjectFileClosedEventArgsCtr = typeof(ProjectFileClosingEventArgs).GetConstructor(new Type[] { typeof(bool) });
 			}
-			return beforeProjectFileClosedEventArgsCtr.Invoke(new object[] { removed }) as BeforeProjectFileClosedEventArgs;
+			return beforeProjectFileClosedEventArgsCtr.Invoke(new object[] { removed }) as ProjectFileClosingEventArgs;
 		}
 	}
 
@@ -51,8 +51,8 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 				BeforeClosed,
 				AnyEvent
 			}
-			public event EventHandler<AfterProjectFileOpenedEventArgs> AfterProjectFileOpened;
-			public event EventHandler<BeforeProjectFileClosedEventArgs> BeforeProjectFileClosed;
+			public event EventHandler<ProjectFileOpenedEventArgs> AfterProjectFileOpened;
+			public event EventHandler<ProjectFileClosingEventArgs> BeforeProjectFileClosed;
 
 			public void SignalOpenStatus(bool isOpened)
 			{

@@ -6883,7 +6883,7 @@ namespace Microsoft.VisualStudio.Project
             this.sccAuxPath = this.GetProjectProperty(ProjectFileConstants.SccAuxPath, _PersistStorageType.PST_PROJECT_FILE);
         }
 
-        private void OnAfterProjectOpen(object sender, AfterProjectFileOpenedEventArgs e)
+        private void OnAfterProjectOpen(object sender, ProjectFileOpenedEventArgs e)
         {
             this.projectOpened = true;
         }
