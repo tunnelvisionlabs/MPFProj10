@@ -26,7 +26,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Event that is raised when one of the observed file names have changed on disk.
 		/// </summary>
-		internal event EventHandler<FileChangedOnDiskEventArgs> FileChangedOnDisk;
+		public event EventHandler<FileChangedOnDiskEventArgs> FileChangedOnDisk;
 
 		/// <summary>
 		/// Reference to the FileChange service.

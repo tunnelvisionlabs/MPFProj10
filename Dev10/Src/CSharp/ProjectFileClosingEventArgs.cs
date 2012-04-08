@@ -12,7 +12,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 namespace Microsoft.VisualStudio.Project
 {
 	using System;
-	using System.Diagnostics.CodeAnalysis;
 
 	public class ProjectFileClosingEventArgs : EventArgs
 	{
@@ -24,15 +23,14 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// true if the project was removed from the solution before the solution was closed. false if the project was removed from the solution while the solution was being closed.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		internal bool Removed
+		public bool Removed
 		{
 			get { return this.removed; }
 		}
 		#endregion
 
 		#region ctor
-		internal ProjectFileClosingEventArgs(bool removed)
+		public ProjectFileClosingEventArgs(bool removed)
 		{
 			this.removed = removed;
 		}

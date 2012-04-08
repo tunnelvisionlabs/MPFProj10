@@ -15,8 +15,8 @@
             _node = node;
         }
 
-        internal event EventHandler<HierarchyNodeEventArgs> CustomToolChanged;
-        internal event EventHandler<HierarchyNodeEventArgs> CustomToolNamespaceChanged;
+        public event EventHandler<HierarchyNodeEventArgs> CustomToolChanged;
+        public event EventHandler<HierarchyNodeEventArgs> CustomToolNamespaceChanged;
 
         [Browsable(false)]
         [AutomationBrowsable(false)]

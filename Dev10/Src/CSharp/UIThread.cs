@@ -87,15 +87,14 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Initializes unit testing mode for this object
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal void InitUnitTestingMode()
+        public void InitUnitTestingMode()
         {
             Debug.Assert(this.synchronizationContext == null, "Context has already been captured; too late to InitUnitTestingMode");
             IsUnitTest = true;
         }
 
         [Conditional("DEBUG")]
-        internal void MustBeCalledFromUIThread()
+        public void MustBeCalledFromUIThread()
         {
             Debug.Assert(this.uithread == System.Threading.Thread.CurrentThread || IsUnitTest, "This must be called from the GUI thread");
         }
@@ -143,8 +142,8 @@ namespace Microsoft.VisualStudio.Project
         /// Runs an action synchronously on an associated forms synchronization context
         /// </summary>
         /// <param name="a">The action to run.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        internal void RunSync(Action a)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+        public void RunSync(Action a)
         {
             if (IsUnitTest)
             {

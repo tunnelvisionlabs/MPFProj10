@@ -12,7 +12,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 namespace Microsoft.VisualStudio.Project
 {
 	using System;
-	using System.Diagnostics.CodeAnalysis;
 	using Microsoft.VisualStudio.OLE.Interop;
 
 	public sealed class DataCacheEntry : IDisposable
@@ -31,7 +30,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region properties
-		internal FORMATETC Format
+		public FORMATETC Format
 		{
 			get
 			{
@@ -39,7 +38,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		internal SafeGlobalAllocHandle Data
+		public SafeGlobalAllocHandle Data
 		{
 			get
 			{
@@ -47,8 +46,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		internal DATADIR DataDir
+		public DATADIR DataDir
 		{
 			get
 			{

@@ -989,8 +989,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="serviceProvider">A reference to a Service Provider.</param>
         /// <returns>true if the shell is in command line mode. false otherwise.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal static bool IsShellInCommandLineMode(System.IServiceProvider serviceProvider)
+        public static bool IsShellInCommandLineMode(System.IServiceProvider serviceProvider)
         {
             if(serviceProvider == null)
             {

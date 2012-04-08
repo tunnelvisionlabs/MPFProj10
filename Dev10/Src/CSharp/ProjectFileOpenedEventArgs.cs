@@ -12,7 +12,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 namespace Microsoft.VisualStudio.Project
 {
 	using System;
-	using System.Diagnostics.CodeAnalysis;
 
 	public class ProjectFileOpenedEventArgs : EventArgs
 	{
@@ -24,15 +23,14 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// True if the project is added to the solution after the solution is opened. false if the project is added to the solution while the solution is being opened.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		internal bool Added
+		public bool Added
 		{
 			get { return this.added; }
 		}
 		#endregion
 
 		#region ctor
-		internal ProjectFileOpenedEventArgs(bool added)
+		public ProjectFileOpenedEventArgs(bool added)
 		{
 			this.added = added;
 		}

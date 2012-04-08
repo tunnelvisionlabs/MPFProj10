@@ -1118,7 +1118,6 @@ namespace Microsoft.VisualStudio.Project
         /// Called when a platform name was added
         /// </summary>
         /// <param name="platformName">The name of the platform.</param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void NotifyOnPlatformNameAdded(string platformName)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)
@@ -1131,7 +1130,6 @@ namespace Microsoft.VisualStudio.Project
         /// Called when a platform name was deleted
         /// </summary>
         /// <param name="platformName">The name of the platform.</param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void NotifyOnPlatformNameDeleted(string platformName)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)

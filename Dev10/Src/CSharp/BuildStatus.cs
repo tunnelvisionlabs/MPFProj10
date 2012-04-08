@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.Project
     /// <summary>
     /// Provides information about the current build status.
     /// </summary>
-    internal static class BuildStatus
+    public static class BuildStatus
     {
         private static BuildKind? currentBuild;
 
@@ -26,7 +26,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets a value whether a build is in progress.
         /// </summary>
-        internal static bool IsInProgress
+        public static bool IsInProgress
         {
             get { return BuildStatus.currentBuild.HasValue; }
         }
@@ -83,7 +83,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Called when a build is ended.
         /// </summary>
-        internal static void EndBuild()
+        public static void EndBuild()
         {
             Debug.Assert(IsInProgress, "Attempt to end a build that is not started");
             lock (Mutex)

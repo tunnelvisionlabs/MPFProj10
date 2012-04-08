@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Constructs a new event args.
 		/// </summary>
 		/// <param name="fileName">The hierarchy that has changed its configuration.</param>
-		internal ActiveConfigurationChangedEventArgs(IVsHierarchy hierarchy)
+		public ActiveConfigurationChangedEventArgs(IVsHierarchy hierarchy)
 		{
 			this.hierarchy = hierarchy;
 		}
@@ -38,7 +38,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The hierarchy whose configuration has changed 
 		/// </summary>
-		internal IVsHierarchy Hierarchy
+		public IVsHierarchy Hierarchy
 		{
 			get
 			{
