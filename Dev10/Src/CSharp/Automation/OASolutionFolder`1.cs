@@ -22,8 +22,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public class OASolutionFolder<T> : EnvDTE80.SolutionFolder
 		where T : HierarchyNode
 	{
-		bool hidden = false;
-		T node;
+		private readonly T node;
+		private bool hidden;
 
 		public OASolutionFolder(T associatedNode)
 		{

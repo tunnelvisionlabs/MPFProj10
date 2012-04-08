@@ -17,10 +17,11 @@ namespace Microsoft.VisualStudio.Project
 	{
 		private class ServiceData : IDisposable
 		{
-			private Type serviceType;
+			private readonly Type serviceType;
+			private readonly bool shouldDispose;
 			private object instance;
 			private ServiceCreatorCallback creator;
-			private bool shouldDispose;
+
 			public ServiceData(Type serviceType, object instance, ServiceCreatorCallback callback, bool shouldDispose)
 			{
 				if(null == serviceType)

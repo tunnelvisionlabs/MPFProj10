@@ -27,7 +27,7 @@ namespace Microsoft.VisualStudio.Project
 	public abstract class DocumentManager
 	{
 		#region fields
-		private HierarchyNode node = null;
+		private readonly HierarchyNode node;
 		#endregion
 
 		#region properties

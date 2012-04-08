@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// String to delete
 		/// </summary>
-		private string token;
+		private readonly string token;
 
 		/// <summary>
 		/// Constructor

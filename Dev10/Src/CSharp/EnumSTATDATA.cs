@@ -16,9 +16,9 @@ namespace Microsoft.VisualStudio.Project
 
 	public class EnumSTATDATA : IEnumSTATDATA
 	{
-		IEnumerable i;
+		private readonly IEnumerable i;
 
-		IEnumerator e;
+		private readonly IEnumerator e;
 
 		public EnumSTATDATA(IEnumerable i)
 		{

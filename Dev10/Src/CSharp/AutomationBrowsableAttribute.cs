@@ -33,6 +33,6 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private bool browsable;
+		private readonly bool browsable;
 	}
 }

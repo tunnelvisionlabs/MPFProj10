@@ -23,7 +23,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The hierarchy whose configuration has changed 
 		/// </summary>
-		private IVsHierarchy hierarchy;
+		private readonly IVsHierarchy hierarchy;
 		#endregion
 
 		/// <summary>

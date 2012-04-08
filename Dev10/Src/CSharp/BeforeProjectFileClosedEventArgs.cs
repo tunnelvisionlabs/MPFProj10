@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.Project
 	public class BeforeProjectFileClosedEventArgs : EventArgs
 	{
 		#region fields
-		private bool removed;
+		private readonly bool removed;
 		#endregion
 
 		#region properties

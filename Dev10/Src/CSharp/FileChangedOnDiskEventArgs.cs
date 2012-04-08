@@ -23,17 +23,17 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// File name that was changed on disk.
 		/// </summary>
-		private string fileName;
+		private readonly string fileName;
 
 		/// <summary>
 		/// The item ide of the file that has changed.
 		/// </summary>
-		private uint itemID;
+		private readonly uint itemID;
 
 		/// <summary>
 		/// The reason the file has changed on disk.
 		/// </summary>
-		private _VSFILECHANGEFLAGS fileChangeFlag;
+		private readonly _VSFILECHANGEFLAGS fileChangeFlag;
 		#endregion
 
 		/// <summary>

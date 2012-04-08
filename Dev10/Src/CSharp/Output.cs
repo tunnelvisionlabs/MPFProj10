@@ -19,8 +19,8 @@ namespace Microsoft.VisualStudio.Project
 
 	public class Output : IVsOutput2
 	{
-		private ProjectNode project;
-        private ProjectItemInstance output;
+		private readonly ProjectNode project;
+        private readonly ProjectItemInstance output;
 
 		/// <summary>
 		/// Constructor for IVSOutput2 implementation

@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.Project
 	/// </summary>
 	public class NestedProjectBuildDependency : IVsBuildDependency
 	{
-		IVsHierarchy dependentHierarchy = null;
+		private readonly IVsHierarchy dependentHierarchy;
 
 		#region ctors
 		[CLSCompliant(false)]

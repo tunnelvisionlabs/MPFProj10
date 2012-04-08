@@ -26,7 +26,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	[ComVisible(true), CLSCompliant(false)]
 	public class OAVSProject : VSProject, VSProject2
 	{
-		private ProjectNode project;
+		private readonly ProjectNode project;
 		private OAVSProjectEvents events;
 
 		public OAVSProject(ProjectNode project)

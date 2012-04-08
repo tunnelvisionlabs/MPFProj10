@@ -26,13 +26,13 @@ namespace Microsoft.VisualStudio.Project
     public class OutputGroup : IVsOutputGroup2
     {
         #region fields
-        private ProjectConfig projectCfg;
-        private ProjectNode project;
+        private readonly ProjectConfig projectCfg;
+        private readonly ProjectNode project;
 
-        private List<Output> outputs = new List<Output>();
+        private readonly List<Output> outputs = new List<Output>();
+        private readonly string name;
+        private readonly string targetName;
         private Output keyOutput;
-        private string name;
-        private string targetName;
         #endregion
 
         #region properties

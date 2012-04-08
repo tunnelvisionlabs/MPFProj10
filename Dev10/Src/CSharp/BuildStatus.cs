@@ -21,7 +21,7 @@ namespace Microsoft.VisualStudio.Project
     {
         private static BuildKind? currentBuild;
 
-        private static volatile object Mutex = new object();
+        private static readonly object Mutex = new object();
 
         /// <summary>
         /// Gets a value whether a build is in progress.

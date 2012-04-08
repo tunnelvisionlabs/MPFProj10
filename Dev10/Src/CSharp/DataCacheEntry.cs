@@ -21,13 +21,13 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Defines an object that will be a mutex for this object for synchronizing thread calls.
 		/// </summary>
-		private static volatile object Mutex = new object();
+		private static readonly object Mutex = new object();
 
-		private FORMATETC format;
+		private readonly FORMATETC format;
 
 		private SafeGlobalAllocHandle data;
 
-		private DATADIR dataDir;
+		private readonly DATADIR dataDir;
 		#endregion
 
 		#region properties

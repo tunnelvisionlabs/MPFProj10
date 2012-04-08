@@ -42,8 +42,8 @@ namespace Microsoft.VisualStudio.Project
 
         #region fields
         private readonly ProjectNode _project;
+        private readonly string _platform;
         private string _configName;
-        private string _platform;
         private MSBuildExecution.ProjectInstance currentConfig;
         private List<OutputGroup> outputGroups;
         private IProjectConfigProperties configurationProperties;

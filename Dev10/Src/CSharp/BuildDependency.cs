@@ -17,8 +17,8 @@ namespace Microsoft.VisualStudio.Project
 
 	public class BuildDependency : IVsBuildDependency
 	{
-		Guid referencedProjectGuid = Guid.Empty;
-		ProjectNode projectMgr = null;
+		private readonly Guid referencedProjectGuid;
+		private readonly ProjectNode projectMgr;
 
 		[CLSCompliant(false)]
 		public BuildDependency(ProjectNode projectMgr, Guid projectReference)

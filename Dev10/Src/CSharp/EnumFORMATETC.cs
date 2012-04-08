@@ -16,11 +16,11 @@ namespace Microsoft.VisualStudio.Project
 
 	public class EnumFORMATETC : IEnumFORMATETC
 	{
-		IEnumerable cache; // of DataCacheEntrys.
+		private readonly IEnumerable cache; // of DataCacheEntrys.
 
-		DATADIR dir;
+		private readonly DATADIR dir;
 
-		IEnumerator e;
+		private readonly IEnumerator e;
 
 		public EnumFORMATETC(DATADIR dir, IEnumerable cache)
 		{

@@ -28,8 +28,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public class OAProperties : EnvDTE.Properties
 	{
 		#region fields
-		private NodeProperties target;
-		private Dictionary<string, EnvDTE.Property> properties = new Dictionary<string, EnvDTE.Property>();
+		private readonly NodeProperties target;
+		private readonly Dictionary<string, EnvDTE.Property> properties = new Dictionary<string, EnvDTE.Property>();
 		#endregion
 
 		#region properties

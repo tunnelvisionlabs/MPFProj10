@@ -24,13 +24,13 @@ namespace Microsoft.VisualStudio.Project
 	public abstract class ProjectFactory : Microsoft.VisualStudio.Shell.Flavor.FlavoredProjectFactoryBase
 	{
 		#region fields
-		private Microsoft.VisualStudio.Shell.Package package;
-		private System.IServiceProvider site;
+		private readonly Microsoft.VisualStudio.Shell.Package package;
+		private readonly System.IServiceProvider site;
 
 		/// <summary>
 		/// The msbuild engine that we are going to use.
 		/// </summary>
-		private MSBuild.ProjectCollection buildEngine;
+		private readonly MSBuild.ProjectCollection buildEngine;
 
 		/// <summary>
 		/// The msbuild project for the project file.

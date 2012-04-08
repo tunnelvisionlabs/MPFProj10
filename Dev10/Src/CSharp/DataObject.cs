@@ -24,8 +24,8 @@ namespace Microsoft.VisualStudio.Project
 	{
 		#region fields
 		internal const int DATA_S_SAMEFORMATETC = 0x00040130;
-		EventSinkCollection map;
-		ArrayList entries;
+		private readonly EventSinkCollection map;
+		private readonly ArrayList entries;
 		#endregion
 
 		public DataObject()

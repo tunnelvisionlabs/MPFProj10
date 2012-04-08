@@ -39,7 +39,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Defines an object that will be a mutex for this object for synchronizing thread calls.
         /// </summary>
-        private static volatile object Mutex = new object();
+        private static readonly object Mutex = new object();
 
         /// <summary>
         /// Sets the dispose flag on the object.

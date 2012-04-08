@@ -20,8 +20,8 @@ namespace Microsoft.VisualStudio.Project.Automation
 	public class OAProperty : EnvDTE.Property
 	{
 		#region fields
-		private OAProperties parent;
-		private PropertyInfo pi;
+		private readonly OAProperties parent;
+		private readonly PropertyInfo pi;
 		#endregion
 
 		#region ctors

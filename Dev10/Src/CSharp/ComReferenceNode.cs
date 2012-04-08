@@ -30,13 +30,13 @@ namespace Microsoft.VisualStudio.Project
     public class ComReferenceNode : ReferenceNode
     {
         #region fields
+        private readonly Guid typeGuid;
+        private readonly string minorVersionNumber;
+        private readonly string majorVersionNumber;
+        private readonly string lcid;
         private string typeName;
-        private Guid typeGuid;
         private string projectRelativeFilePath;
         private string installedFilePath;
-        private string minorVersionNumber;
-        private string majorVersionNumber;
-        private string lcid;
         #endregion
 
         #region properties

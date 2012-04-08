@@ -18,7 +18,7 @@ namespace Microsoft.VisualStudio.Project
 	[CLSCompliant(false)]
 	public class EnumDependencies : IVsEnumDependencies
 	{
-		private List<IVsDependency> dependencyList = new List<IVsDependency>();
+		private readonly List<IVsDependency> dependencyList = new List<IVsDependency>();
 
 		private uint nextIndex;
 

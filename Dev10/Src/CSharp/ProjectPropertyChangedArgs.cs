@@ -20,9 +20,9 @@ namespace Microsoft.VisualStudio.Project
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 	public class ProjectPropertyChangedArgs : EventArgs
 	{
-		private string propertyName;
-		private string oldValue;
-		private string newValue;
+		private readonly string propertyName;
+		private readonly string oldValue;
+		private readonly string newValue;
 
 		internal ProjectPropertyChangedArgs(string propertyName, string oldValue, string newValue)
 		{

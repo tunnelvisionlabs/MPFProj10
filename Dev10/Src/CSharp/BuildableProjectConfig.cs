@@ -29,8 +29,8 @@ namespace Microsoft.VisualStudio.Project
     public class BuildableProjectConfig : IVsBuildableProjectCfg
     {
         #region fields
-        ProjectConfig config = null;
-        EventSinkCollection callbacks = new EventSinkCollection();
+        private readonly ProjectConfig config;
+        private readonly EventSinkCollection callbacks = new EventSinkCollection();
         #endregion
 
         #region ctors

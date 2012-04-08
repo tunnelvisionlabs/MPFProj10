@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.Project
 	public class AfterProjectFileOpenedEventArgs : EventArgs
 	{
 		#region fields
-		private bool added;
+		private readonly bool added;
 		#endregion
 
 		#region properties

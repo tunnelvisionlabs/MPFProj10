@@ -34,7 +34,7 @@ namespace Microsoft.VisualStudio.Project
 		IVsBrowseObject
 	{
 		#region fields
-		private HierarchyNode node;
+		private readonly HierarchyNode node;
 		#endregion
 
 		#region properties

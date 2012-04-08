@@ -26,7 +26,7 @@ namespace Microsoft.VisualStudio.Project
 			private int messages = 0;
 			private int warnings = 0;
 			private int errors = 0;
-			private StringBuilder log = new StringBuilder();
+			private readonly StringBuilder log = new StringBuilder();
 			private readonly bool enableLog = false;
 
 			internal MockEngine(bool enableLog)

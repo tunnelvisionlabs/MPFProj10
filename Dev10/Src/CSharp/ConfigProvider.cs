@@ -42,9 +42,9 @@ namespace Microsoft.VisualStudio.Project
         public const string x86Platform = "x86";
 
         private readonly ProjectNode project;
-        private EventSinkCollection cfgEventSinks = new EventSinkCollection();
+        private readonly EventSinkCollection cfgEventSinks = new EventSinkCollection();
         private List<KeyValuePair<KeyValuePair<string, string>, string>> newCfgProps = new List<KeyValuePair<KeyValuePair<string, string>, string>>();
-        private Dictionary<string, ProjectConfig> configurationsList = new Dictionary<string, ProjectConfig>();
+        private readonly Dictionary<string, ProjectConfig> configurationsList = new Dictionary<string, ProjectConfig>();
         #endregion
 
         #region Properties
