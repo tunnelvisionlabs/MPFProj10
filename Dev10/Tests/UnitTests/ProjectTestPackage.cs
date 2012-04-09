@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 	}

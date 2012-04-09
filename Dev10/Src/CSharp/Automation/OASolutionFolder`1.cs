@@ -101,7 +101,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 

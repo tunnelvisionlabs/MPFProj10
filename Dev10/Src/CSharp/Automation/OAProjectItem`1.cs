@@ -200,7 +200,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 				else
 				{
 					// Not supported. Override this method in derived classes to return appropriate collection object
-					throw new NotImplementedException();
+					throw new NotSupportedException();
 				}
 			}
 		}
@@ -250,7 +250,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 			set
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
@@ -283,11 +283,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 			set
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 

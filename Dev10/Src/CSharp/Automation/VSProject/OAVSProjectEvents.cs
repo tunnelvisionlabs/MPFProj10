@@ -45,12 +45,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual ImportsEvents ImportsEvents
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
@@ -72,7 +71,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
