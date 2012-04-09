@@ -3184,15 +3184,15 @@ namespace Microsoft.VisualStudio.Project
 
 		int IVsHierarchyDropDataSource2.GetDropInfo(out uint pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
 		{
-			DropEffect effect;
+			DropEffects effect;
 			int result = GetDropInfo(out effect, out ppDataObject, out ppDropSource);
 			pdwOKEffects = (uint)effect;
 			return result;
 		}
 
-		public virtual int GetDropInfo(out DropEffect pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
+		public virtual int GetDropInfo(out DropEffects pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
 		{
-			pdwOKEffects = (uint)DropEffect.None;
+			pdwOKEffects = (uint)DropEffects.None;
 			ppDataObject = null;
 			ppDropSource = null;
 			return VSConstants.E_NOTIMPL;
@@ -3200,15 +3200,15 @@ namespace Microsoft.VisualStudio.Project
 
 		int IVsHierarchyDropDataSource.OnDropNotify(int fDropped, uint dwEffects)
 		{
-			return OnDropNotify(fDropped != 0, (DropEffect)dwEffects);
+			return OnDropNotify(fDropped != 0, (DropEffects)dwEffects);
 		}
 
 		int IVsHierarchyDropDataSource2.OnDropNotify(int fDropped, uint dwEffects)
 		{
-			return OnDropNotify(fDropped != 0, (DropEffect)dwEffects);
+			return OnDropNotify(fDropped != 0, (DropEffects)dwEffects);
 		}
 
-		public virtual int OnDropNotify(bool dropped, DropEffect effect)
+		public virtual int OnDropNotify(bool dropped, DropEffects effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -3216,12 +3216,12 @@ namespace Microsoft.VisualStudio.Project
 		int IVsHierarchyDropDataSource2.OnBeforeDropNotify(IDataObject pDataObject, uint dwEffect, out int fCancelDrop)
 		{
 			bool cancelDrop;
-			int result = OnBeforeDropNotify(pDataObject, (DropEffect)dwEffect, out cancelDrop);
+			int result = OnBeforeDropNotify(pDataObject, (DropEffects)dwEffect, out cancelDrop);
 			fCancelDrop = cancelDrop ? 1 : 0;
 			return result;
 		}
 
-		public virtual int OnBeforeDropNotify(IDataObject pDataObject, DropEffect effect, out bool cancelDrop)
+		public virtual int OnBeforeDropNotify(IDataObject pDataObject, DropEffects effect, out bool cancelDrop)
 		{
 			cancelDrop = false;
 			return VSConstants.E_NOTIMPL;
@@ -3232,13 +3232,13 @@ namespace Microsoft.VisualStudio.Project
 
 		int IVsHierarchyDropDataTarget.DragEnter(IDataObject pDataObject, uint grfKeyState, uint itemid, ref uint pdwEffect)
 		{
-			DropEffect effect = (DropEffect)pdwEffect;
+			DropEffects effect = (DropEffects)pdwEffect;
 			int result = DragEnter(pDataObject, grfKeyState, itemid, ref effect);
 			pdwEffect = (uint)effect;
 			return result;
 		}
 
-		public virtual int DragEnter(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffect pdwEffect)
+		public virtual int DragEnter(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects pdwEffect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -3250,26 +3250,26 @@ namespace Microsoft.VisualStudio.Project
 
 		int IVsHierarchyDropDataTarget.DragOver(uint grfKeyState, uint itemid, ref uint pdwEffect)
 		{
-			DropEffect effect = (DropEffect)pdwEffect;
+			DropEffects effect = (DropEffects)pdwEffect;
 			int result = DragOver(grfKeyState, itemid, ref effect);
 			pdwEffect = (uint)effect;
 			return result;
 		}
 
-		public virtual int DragOver(uint grfKeyState, uint itemid, ref DropEffect effect)
+		public virtual int DragOver(uint grfKeyState, uint itemid, ref DropEffects effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
 		int IVsHierarchyDropDataTarget.Drop(IDataObject pDataObject, uint grfKeyState, uint itemid, ref uint pdwEffect)
 		{
-			DropEffect effect = (DropEffect)pdwEffect;
+			DropEffects effect = (DropEffects)pdwEffect;
 			int result = Drop(pDataObject, grfKeyState, itemid, ref effect);
 			pdwEffect = (uint)effect;
 			return result;
 		}
 
-		public virtual int Drop(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffect effect)
+		public virtual int Drop(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}

@@ -13,18 +13,15 @@ namespace Microsoft.VisualStudio.Project
 {
 	using System;
 
-	partial class HierarchyNode
+	/// <summary>
+	/// DropEffect as defined in oleidl.h
+	/// </summary>
+	[Flags]
+	public enum DropEffects
 	{
-		/// <summary>
-		/// DropEffect as defined in oleidl.h
-		/// </summary>
-		[Flags]
-		public enum DropEffect
-		{
-			None,
-			Copy = 1,
-			Move = 2,
-			Link = 4
-		}
+		None,
+		Copy = 1,
+		Move = 2,
+		Link = 4
 	}
 }

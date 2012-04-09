@@ -49,9 +49,9 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="itemid">Item identifier for the item currently being dragged</param>
 		/// <param name="pdwEffect">On entry, a pointer to the current DropEffect. On return, must contain the new valid DropEffect</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public override int DragEnter(IOleDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffect pdwEffect)
+		public override int DragEnter(IOleDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects pdwEffect)
 		{
-			pdwEffect = DropEffect.None;
+			pdwEffect = DropEffects.None;
 
 			if(this.SourceDraggedOrCutOrCopied)
 			{
@@ -85,9 +85,9 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="pdwEffect"> On entry, reference to the value of the pdwEffect parameter of the IVsHierarchy object, identifying all effects that the hierarchy supports. 
 		/// On return, the pdwEffect parameter must contain one of the effect flags that indicate the result of the drop operation. For a list of pwdEffects values, see <seealso cref="DragEnter"/></param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public override int DragOver(uint grfKeyState, uint itemid, ref DropEffect pdwEffect)
+		public override int DragOver(uint grfKeyState, uint itemid, ref DropEffects pdwEffect)
 		{
-			pdwEffect = (uint)DropEffect.None;
+			pdwEffect = (uint)DropEffects.None;
 
 			// Dragging items to a project that is being debugged is not supported
 			// (see VSWhidbey 144785)            
@@ -126,14 +126,14 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="pdwEffect">Visual effects associated with the drag-and drop-operation, such as a cursor, bitmap, and so on. 
 		/// The value of dwEffects passed to the source object via the OnDropNotify method is the value of pdwEffects returned by the Drop method</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
-		public override int Drop(IOleDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffect pdwEffect)
+		public override int Drop(IOleDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects pdwEffect)
 		{
 			if(pDataObject == null)
 			{
 				return VSConstants.E_INVALIDARG;
 			}
 
-			pdwEffect = DropEffect.None;
+			pdwEffect = DropEffects.None;
 
 			// Get the node that is being dragged over and ask it which node should handle this call
 			HierarchyNode targetNode = NodeFromItemId(itemid);
@@ -193,10 +193,10 @@ namespace Microsoft.VisualStudio.Project
 		/// If the drop occurs, then this data object (item) is incorporated into the target hierarchy or hierarchy window.</param>
 		/// <param name="ppDropSource">Pointer to the IDropSource interface of the item being dragged.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public override int GetDropInfo(out DropEffect pdwOKEffects, out IOleDataObject ppDataObject, out IDropSource ppDropSource)
+		public override int GetDropInfo(out DropEffects pdwOKEffects, out IOleDataObject ppDataObject, out IDropSource ppDropSource)
 		{
 			//init out params
-			pdwOKEffects = (uint)DropEffect.None;
+			pdwOKEffects = (uint)DropEffects.None;
 			ppDataObject = null;
 			ppDropSource = null;
 
@@ -208,7 +208,7 @@ namespace Microsoft.VisualStudio.Project
 
 			this.SourceDraggedOrCutOrCopied = true;
 
-			pdwOKEffects = DropEffect.Move | DropEffect.Copy;
+			pdwOKEffects = DropEffects.Move | DropEffects.Copy;
 
 			ppDataObject = dataObject;
 			return VSConstants.S_OK;
@@ -221,14 +221,14 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="dwEffects">Visual effects associated with the drag-and-drop operation, such as cursors, bitmaps, and so on. 
 		/// The value of dwEffects passed to the source object via OnDropNotify method is the value of pdwEffects returned by Drop method.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
-		public override int OnDropNotify(bool dropped, DropEffect dwEffects)
+		public override int OnDropNotify(bool dropped, DropEffects dwEffects)
 		{
 			if(!this.SourceDraggedOrCutOrCopied)
 			{
 				return VSConstants.S_FALSE;
 			}
 
-			this.CleanupSelectionDataObject(dropped, false, dwEffects == DropEffect.Move);
+			this.CleanupSelectionDataObject(dropped, false, dwEffects == DropEffects.Move);
 
 			this.SourceDraggedOrCutOrCopied = false;
 
@@ -246,7 +246,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="dwEffect">Current state of the keyboard and the mouse modifier keys.</param>
 		/// <param name="cancelDrop">If true, then the drop is cancelled by the source hierarchy. If false, then the drop can continue.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
-		public override int OnBeforeDropNotify(IOleDataObject o, DropEffect dwEffect, out bool cancelDrop)
+		public override int OnBeforeDropNotify(IOleDataObject o, DropEffects dwEffect, out bool cancelDrop)
 		{
 			// If there is nothing to be dropped just return that drop should be cancelled.
 			if(this.ItemsDraggedOrCutOrCopied == null)
@@ -321,7 +321,7 @@ namespace Microsoft.VisualStudio.Project
 
 		int IVsUIHierWinClipboardHelperEvents.OnPaste(int wasCut, uint dropEffect)
 		{
-			return OnPaste(wasCut != 0, (DropEffect)dropEffect);
+			return OnPaste(wasCut != 0, (DropEffects)dropEffect);
 		}
 
 		/// <summary>
@@ -332,19 +332,19 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="dropEffect">Visual effects associated with the drag and drop operation, such as cursors, bitmaps, and so on. 
 		/// These should be the same visual effects used in OnDropNotify</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
-		public virtual int OnPaste(bool wasCut, DropEffect dropEffect)
+		public virtual int OnPaste(bool wasCut, DropEffects dropEffect)
 		{
 			if(!this.SourceDraggedOrCutOrCopied)
 			{
 				return VSConstants.S_FALSE;
 			}
 
-			if(dropEffect == DropEffect.None)
+			if(dropEffect == DropEffects.None)
 			{
 				return OnClear(wasCut);
 			}
 
-			this.CleanupSelectionDataObject(false, wasCut, dropEffect == DropEffect.Move);
+			this.CleanupSelectionDataObject(false, wasCut, dropEffect == DropEffects.Move);
 			this.SourceDraggedOrCutOrCopied = false;
 			return VSConstants.S_OK;
 		}
@@ -750,7 +750,7 @@ namespace Microsoft.VisualStudio.Project
 					return VSConstants.E_UNEXPECTED;
 				}
 
-				DropEffect dropEffect = DropEffect.None;
+				DropEffects dropEffect = DropEffects.None;
 				DropDataType dropDataType = DropDataType.None;
 				try
 				{
@@ -951,37 +951,37 @@ namespace Microsoft.VisualStudio.Project
 		///		CTRL DRAG - COPY
 		///		CTRL-SHIFT DRAG - NO DROP (used for reference based projects only)
 		/// </remarks>
-		internal DropEffect QueryDropEffect(DropDataType dropDataType, uint grfKeyState)
+		internal DropEffects QueryDropEffect(DropDataType dropDataType, uint grfKeyState)
 		{
 			//Validate the dropdatatype
 			if((dropDataType != DropDataType.Shell) && (dropDataType != DropDataType.VsRef) && (dropDataType != DropDataType.VsStg))
 			{
-				return DropEffect.None;
+				return DropEffects.None;
 			}
 
 			// CTRL-SHIFT
 			if((grfKeyState & NativeMethods.MK_CONTROL) != 0 && (grfKeyState & NativeMethods.MK_SHIFT) != 0)
 			{
 				// Because we are not referenced base, we don't support link
-				return DropEffect.None;
+				return DropEffects.None;
 			}
 
 			// CTRL
 			if((grfKeyState & NativeMethods.MK_CONTROL) != 0)
-				return DropEffect.Copy;
+				return DropEffects.Copy;
 
 			// SHIFT
 			if((grfKeyState & NativeMethods.MK_SHIFT) != 0)
-				return DropEffect.Move;
+				return DropEffects.Move;
 
 			// no modifier
 			if(this.SourceDraggedOrCutOrCopied)
 			{
-				return DropEffect.Move;
+				return DropEffects.Move;
 			}
 			else
 			{
-				return DropEffect.Copy;
+				return DropEffects.Copy;
 			}
 		}
 

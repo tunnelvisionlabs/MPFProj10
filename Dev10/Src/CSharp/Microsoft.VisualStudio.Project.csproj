@@ -139,7 +139,7 @@
     <Compile Include="FrameworkNameConverter.cs" />
     <Compile Include="GlobalProperty.cs" />
     <Compile Include="HierarchyAddType.cs" />
-    <Compile Include="HierarchyNode.DropEffect.cs" />
+    <Compile Include="DropEffects.cs" />
     <Compile Include="HierarchyNodeCollection.cs" />
     <Compile Include="HierarchyNodeEventArgs.cs" />
     <Compile Include="IBuildDependencyOnProjectContainer.cs" />
