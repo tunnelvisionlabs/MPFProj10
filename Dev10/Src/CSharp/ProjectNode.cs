@@ -108,7 +108,7 @@ namespace Microsoft.VisualStudio.Project
         private HierarchyNodeCollection itemIdMap;
 
         /// <summary>A service provider call back object provided by the IDE hosting the project manager</summary>
-        private ServiceProvider site;
+        private ServiceProvider _site;
 
         public static ServiceProvider ServiceProvider { get; set; }
 
@@ -117,7 +117,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// A cached copy of project options.
         /// </summary>
-        private ProjectOptions options;
+        private ProjectOptions _options;
 
         private bool showAllFilesEnabled;
 
@@ -152,11 +152,11 @@ namespace Microsoft.VisualStudio.Project
 
         private TaskProvider taskProvider;
 
-        private string filename;
+        private string _filename;
 
         private Microsoft.VisualStudio.Shell.Url baseUri;
 
-        private bool isDirty;
+        private bool _isDirty;
 
         private bool isNewProject;
 
@@ -203,13 +203,13 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         private bool disableScc;
 
-        private string sccProjectName;
+        private string _sccProjectName;
 
-        private string sccLocalPath;
+        private string _sccLocalPath;
 
-        private string sccAuxPath;
+        private string _sccAuxPath;
 
-        private string sccProvider;
+        private string _sccProvider;
 
         /// <summary>
         /// Flag for controling how many times we register with the Scc manager.
@@ -457,10 +457,10 @@ namespace Microsoft.VisualStudio.Project
 
                 if (String.IsNullOrEmpty(document))
                 {
-                    return this.isDirty;
+                    return this._isDirty;
                 }
 
-                return (this.isDirty || !File.Exists(document));
+                return (this._isDirty || !File.Exists(document));
             }
         }
 
@@ -550,7 +550,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.site;
+                return this._site;
             }
         }
 
@@ -693,13 +693,13 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-				if (this.options == null)
+				if (this._options == null)
 				{
 					GetProjectOptions();
 				}
-                if (this.options != null)
+                if (this._options != null)
                 {
-                    return this.options.TargetFrameworkMoniker ?? DefaultTargetFrameworkMoniker;
+                    return this._options.TargetFrameworkMoniker ?? DefaultTargetFrameworkMoniker;
                 }
                 else
                 {
@@ -709,7 +709,7 @@ namespace Microsoft.VisualStudio.Project
 
             set
             {
-				if (this.options == null)
+				if (this._options == null)
 				{
 					GetProjectOptions();
 				}
@@ -719,9 +719,9 @@ namespace Microsoft.VisualStudio.Project
 					value = DefaultTargetFrameworkMoniker;
                 }
 
-                if (this.options.TargetFrameworkMoniker != value)
+                if (this._options.TargetFrameworkMoniker != value)
                 {
-                    this.OnTargetFrameworkMonikerChanged(this.options, this.options.TargetFrameworkMoniker, value);
+                    this.OnTargetFrameworkMonikerChanged(this._options, this._options.TargetFrameworkMoniker, value);
                 }
             }
         }
@@ -803,15 +803,15 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.filename;
+                return this._filename;
             }
 
             set
             {
-                if (this.filename == value)
+                if (this._filename == value)
                     return;
 
-                this.filename = value;
+                this._filename = value;
                 ItemIdMap.UpdateCanonicalName(this);
             }
         }
@@ -837,7 +837,7 @@ namespace Microsoft.VisualStudio.Project
 			get
 			{
 				bool cmdline = false;
-				var shell = this.site.GetService(typeof(SVsShell)) as IVsShell;
+				var shell = this._site.GetService(typeof(SVsShell)) as IVsShell;
 				if (shell != null)
 				{
 					object obj;
@@ -1725,14 +1725,14 @@ namespace Microsoft.VisualStudio.Project
         public override int SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider site)
         {
             CCITracing.TraceCall();
-            this.site = new ServiceProvider(site);
-			ServiceProvider = this.site;
+            this._site = new ServiceProvider(site);
+			ServiceProvider = this._site;
 
             if (taskProvider != null)
             {
                 taskProvider.Dispose();
             }
-            taskProvider = new TaskProvider(this.site);
+            taskProvider = new TaskProvider(this._site);
 
             return VSConstants.S_OK;
         }
@@ -1922,9 +1922,9 @@ namespace Microsoft.VisualStudio.Project
                                 buildLogger = null;
                             }
 
-                            if (this.site != null)
+                            if (this._site != null)
                             {
-                                this.site.Dispose();
+                                this._site.Dispose();
                             }
                         }
                         finally
@@ -2851,11 +2851,11 @@ namespace Microsoft.VisualStudio.Project
 				}
 			}
 
-            if (this.options != null
-                && string.Equals(this.options.Config, config, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(this.options.Platform, platform, StringComparison.OrdinalIgnoreCase))
+            if (this._options != null
+                && string.Equals(this._options.Config, config, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(this._options.Platform, platform, StringComparison.OrdinalIgnoreCase))
             {
-                return this.options;
+                return this._options;
             }
 
             ProjectOptions options = CreateProjectOptions();
@@ -2878,7 +2878,7 @@ namespace Microsoft.VisualStudio.Project
 
 			if (config == null)
 			{
-				this.options = options;
+				this._options = options;
 				return options;
 			}
 
@@ -3056,7 +3056,7 @@ namespace Microsoft.VisualStudio.Project
                 }
             }
 
-			this.options = options; // do this AFTER setting configuration so it doesn't clear it.
+			this._options = options; // do this AFTER setting configuration so it doesn't clear it.
 			return options;
         }
 
@@ -3071,7 +3071,7 @@ namespace Microsoft.VisualStudio.Project
 				throw new ArgumentNullException("newTargetFramework");
 			}
 
-			var retargetingService = this.site.GetService(typeof(SVsTrackProjectRetargeting)) as IVsTrackProjectRetargeting;
+			var retargetingService = this._site.GetService(typeof(SVsTrackProjectRetargeting)) as IVsTrackProjectRetargeting;
             if (retargetingService == null)
             {
                 // Probably in a unit test.
@@ -4429,7 +4429,7 @@ namespace Microsoft.VisualStudio.Project
 				}
 			}
 
-            this.options = null;
+            this._options = null;
         }
 
         /// <summary>
@@ -4794,8 +4794,8 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="value">boolean value indicating dirty state</param>
         public void SetProjectFileDirty(bool value)
         {
-            this.isDirty = value;
-            if (this.isDirty)
+            this._isDirty = value;
+            if (this._isDirty)
             {
                 this.lastModifiedTime = DateTime.Now;
                 this.buildIsPrepared = false;
@@ -4881,7 +4881,7 @@ namespace Microsoft.VisualStudio.Project
         public bool QueryEditProjectFile(bool suppressUI)
         {
             bool result = true;
-            if (this.site == null)
+            if (this._site == null)
             {
                 // We're already zombied. Better return FALSE.
                 result = false;
@@ -5040,7 +5040,7 @@ namespace Microsoft.VisualStudio.Project
         protected void RegisterSccProject()
         {
 
-            if (this.IsSccDisabled || this.isRegisteredWithScc || String.IsNullOrEmpty(this.sccProjectName))
+            if (this.IsSccDisabled || this.isRegisteredWithScc || String.IsNullOrEmpty(this._sccProjectName))
             {
                 return;
             }
@@ -5049,7 +5049,7 @@ namespace Microsoft.VisualStudio.Project
 
             if (sccManager != null)
             {
-                ErrorHandler.ThrowOnFailure(sccManager.RegisterSccProject(this, this.sccProjectName, this.sccAuxPath, this.sccLocalPath, this.sccProvider));
+                ErrorHandler.ThrowOnFailure(sccManager.RegisterSccProject(this, this._sccProjectName, this._sccAuxPath, this._sccLocalPath, this._sccProvider));
 
                 this.isRegisteredWithScc = true;
             }
@@ -5639,7 +5639,7 @@ namespace Microsoft.VisualStudio.Project
                     // Copy the file to the correct location.
                     // We will suppress the file change events to be triggered to this item, since we are going to copy over the existing file and thus we will trigger a file change event. 
                     // We do not want the filechange event to ocur in this case, similar that we do not want a file change event to occur when saving a file.
-                    IVsFileChangeEx fileChange = this.site.GetService(typeof(SVsFileChangeEx)) as IVsFileChangeEx;
+                    IVsFileChangeEx fileChange = this._site.GetService(typeof(SVsFileChangeEx)) as IVsFileChangeEx;
                     if (fileChange == null)
                     {
                         throw new InvalidOperationException();
@@ -6852,16 +6852,16 @@ namespace Microsoft.VisualStudio.Project
         {
             bool changed = false;
             Debug.Assert(sccProjectName != null && sccLocalPath != null && sccAuxPath != null && sccProvider != null);
-            if (!String.Equals(sccProjectName, this.sccProjectName, StringComparison.OrdinalIgnoreCase) ||
-                !String.Equals(sccLocalPath, this.sccLocalPath, StringComparison.OrdinalIgnoreCase) ||
-                !String.Equals(sccAuxPath, this.sccAuxPath, StringComparison.OrdinalIgnoreCase) ||
-                !String.Equals(sccProvider, this.sccProvider, StringComparison.OrdinalIgnoreCase))
+            if (!String.Equals(sccProjectName, this._sccProjectName, StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(sccLocalPath, this._sccLocalPath, StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(sccAuxPath, this._sccAuxPath, StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(sccProvider, this._sccProvider, StringComparison.OrdinalIgnoreCase))
             {
                 changed = true;
-                this.sccProjectName = sccProjectName;
-                this.sccLocalPath = sccLocalPath;
-                this.sccAuxPath = sccAuxPath;
-                this.sccProvider = sccProvider;
+                this._sccProjectName = sccProjectName;
+                this._sccLocalPath = sccLocalPath;
+                this._sccAuxPath = sccAuxPath;
+                this._sccProvider = sccProvider;
             }
 
 
@@ -6873,10 +6873,10 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         private void InitSccInfo()
         {
-            this.sccProjectName = this.GetProjectProperty(ProjectFileConstants.SccProjectName, _PersistStorageType.PST_PROJECT_FILE);
-            this.sccLocalPath = this.GetProjectProperty(ProjectFileConstants.SccLocalPath, _PersistStorageType.PST_PROJECT_FILE);
-            this.sccProvider = this.GetProjectProperty(ProjectFileConstants.SccProvider, _PersistStorageType.PST_PROJECT_FILE);
-            this.sccAuxPath = this.GetProjectProperty(ProjectFileConstants.SccAuxPath, _PersistStorageType.PST_PROJECT_FILE);
+            this._sccProjectName = this.GetProjectProperty(ProjectFileConstants.SccProjectName, _PersistStorageType.PST_PROJECT_FILE);
+            this._sccLocalPath = this.GetProjectProperty(ProjectFileConstants.SccLocalPath, _PersistStorageType.PST_PROJECT_FILE);
+            this._sccProvider = this.GetProjectProperty(ProjectFileConstants.SccProvider, _PersistStorageType.PST_PROJECT_FILE);
+            this._sccAuxPath = this.GetProjectProperty(ProjectFileConstants.SccAuxPath, _PersistStorageType.PST_PROJECT_FILE);
         }
 
         private void OnAfterProjectOpen(object sender, ProjectFileOpenedEventArgs e)
@@ -7225,7 +7225,7 @@ namespace Microsoft.VisualStudio.Project
 
 		protected virtual string GetComponentPickerDirectories()
 		{
-			IVsComponentEnumeratorFactory4 enumFactory = this.site.GetService(typeof(SCompEnumService)) as IVsComponentEnumeratorFactory4;
+			IVsComponentEnumeratorFactory4 enumFactory = this._site.GetService(typeof(SCompEnumService)) as IVsComponentEnumeratorFactory4;
 			if (enumFactory == null)
 			{
 				throw new InvalidOperationException("Missing the SCompEnumService service.");
@@ -7301,7 +7301,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </returns>
 		protected virtual bool ShowRetargetingDialog()
 		{
-			var retargetDialog = this.site.GetService(typeof(SVsFrameworkRetargetingDlg)) as IVsFrameworkRetargetingDlg;
+			var retargetDialog = this._site.GetService(typeof(SVsFrameworkRetargetingDlg)) as IVsFrameworkRetargetingDlg;
 			if (retargetDialog == null)
 			{
 				throw new InvalidOperationException("Missing SVsFrameworkRetargetingDlg service.");
@@ -7311,7 +7311,7 @@ namespace Microsoft.VisualStudio.Project
 			if (IsIdeInCommandLineMode)
 			{
 				string message = SR.GetString(SR.CannotLoadUnknownTargetFrameworkProject, this.FileName, this.TargetFrameworkMoniker);
-				var outputWindow = this.site.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
+				var outputWindow = this._site.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
 				if (outputWindow != null)
 				{
 					IVsOutputWindowPane outputPane;
@@ -7348,7 +7348,7 @@ namespace Microsoft.VisualStudio.Project
 						// the user can associate getting the checkout prompt with the "No Framework" dialog.
 						if (QueryEditProjectFile(false /* bSuppressUI */))
 						{
-							var retargetingService = this.site.GetService(typeof(SVsTrackProjectRetargeting)) as IVsTrackProjectRetargeting;
+							var retargetingService = this._site.GetService(typeof(SVsTrackProjectRetargeting)) as IVsTrackProjectRetargeting;
 							if (retargetingService != null)
 							{
 								// We surround our batch retargeting request with begin/end because in individual project load
@@ -7377,7 +7377,7 @@ namespace Microsoft.VisualStudio.Project
 
 		protected virtual bool IsFrameworkOnMachine()
 		{
-			var multiTargeting = this.site.GetService(typeof(SVsFrameworkMultiTargeting)) as IVsFrameworkMultiTargeting;
+			var multiTargeting = this._site.GetService(typeof(SVsFrameworkMultiTargeting)) as IVsFrameworkMultiTargeting;
 			Array frameworks;
 			Marshal.ThrowExceptionForHR(multiTargeting.GetSupportedFrameworks(out frameworks));
 			foreach (string fx in frameworks)

@@ -42,7 +42,7 @@ namespace Microsoft.VisualStudio.Project
         public const string AnyCPUPlatform = "Any CPU";
         public const string x86Platform = "x86";
 
-        private readonly ProjectNode project;
+        private readonly ProjectNode _project;
         private readonly EventSinkCollection cfgEventSinks = new EventSinkCollection();
         private List<KeyValuePair<KeyValuePair<string, string>, string>> newCfgProps = new List<KeyValuePair<KeyValuePair<string, string>, string>>();
         private readonly Dictionary<string, ProjectConfig> configurationsList = new Dictionary<string, ProjectConfig>();
@@ -56,7 +56,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.project;
+                return this._project;
             }
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace Microsoft.VisualStudio.Project
             if (manager == null)
                 throw new ArgumentNullException("manager");
 
-            this.project = manager;
+            this._project = manager;
         }
         #endregion
 
@@ -149,7 +149,7 @@ namespace Microsoft.VisualStudio.Project
             if (string.IsNullOrEmpty(platform))
                 throw new ArgumentException("platform cannot be null or empty");
 
-            return new ProjectConfig(this.project, configName, platform);
+            return new ProjectConfig(this._project, configName, platform);
         }
 
         #endregion
@@ -176,7 +176,7 @@ namespace Microsoft.VisualStudio.Project
                 return VSConstants.E_INVALIDARG;
             }
 
-            Debug.Assert(this.project != null && this.project.BuildProject != null);
+            Debug.Assert(this._project != null && this._project.BuildProject != null);
 
             string[] configs = GetPropertiesConditionedOn(ProjectFileConstants.Configuration);
             string[] platforms = GetPlatformsFromProject();
@@ -582,7 +582,7 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual IEnumerable<MSBuild.Project> GetBuildProjects(bool includeUserBuildProjects = true)
         {
-            IEnumerable<MSBuild.Project> result = new[] { project.BuildProject };
+            IEnumerable<MSBuild.Project> result = new[] { _project.BuildProject };
             if (!includeUserBuildProjects || ProjectManager.UserBuildProject == null)
                 return result;
 
@@ -771,7 +771,7 @@ namespace Microsoft.VisualStudio.Project
                  *  2. Need a way to specify NewConfigProperties for each type of build project (main, user, etc).
                  */
 
-                if (project == this.project.BuildProject)
+                if (project == this._project.BuildProject)
                 {
                     // Get the list of property name, condition value from the config provider
                     IEnumerable<KeyValuePair<KeyValuePair<string, string>, string>> propVals = this.NewConfigProperties;
@@ -902,7 +902,7 @@ namespace Microsoft.VisualStudio.Project
                  *  2. Need a way to specify NewConfigProperties for each type of build project (main, user, etc).
                  */
 
-                if (project == this.project.BuildProject)
+                if (project == this._project.BuildProject)
                 {
                     // Get the list of property name, condition value from the config provider
                     IEnumerable<KeyValuePair<KeyValuePair<string, string>, string>> propVals = this.NewConfigProperties;
@@ -1280,8 +1280,8 @@ namespace Microsoft.VisualStudio.Project
         protected virtual string[] GetPropertiesConditionedOn(string constant)
         {
             List<string> configurations = null;
-            this.project.BuildProject.ReevaluateIfNecessary();
-            this.project.BuildProject.ConditionedProperties.TryGetValue(constant, out configurations);
+            this._project.BuildProject.ReevaluateIfNecessary();
+            this._project.BuildProject.ConditionedProperties.TryGetValue(constant, out configurations);
 
             return (configurations == null) ? new string[] { } : configurations.ToArray();
         }

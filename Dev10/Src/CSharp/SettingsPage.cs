@@ -39,7 +39,7 @@ namespace Microsoft.VisualStudio.Project
 		private IPropertyPageSite site;
 		private ProjectConfig[] projectConfigs;
 		private IVSMDPropertyGrid grid;
-		private string name;
+		private string _name;
 		private static volatile object Mutex = new object();
 		private bool isDisposed;
 		#endregion
@@ -57,11 +57,11 @@ namespace Microsoft.VisualStudio.Project
 		{
 			get
 			{
-				return this.name;
+				return this._name;
 			}
 			set
 			{
-				this.name = value;
+				this._name = value;
 			}
 		}
 
@@ -272,7 +272,7 @@ namespace Microsoft.VisualStudio.Project
 			info.dwHelpContext = 0;
 			info.pszDocString = null;
 			info.pszHelpFile = null;
-			info.pszTitle = this.name;
+			info.pszTitle = this._name;
 			info.SIZE.cx = 550;
 			info.SIZE.cy = 300;
 			arrInfo[0] = info;

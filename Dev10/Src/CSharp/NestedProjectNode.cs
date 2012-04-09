@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudio.Project
 
         Guid projectInstanceGuid = Guid.Empty;
 
-        private string projectName = String.Empty;
+        private string _projectName = String.Empty;
 
         private string projectPath = String.Empty;
 
@@ -114,7 +114,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return Path.GetFileNameWithoutExtension(this.projectName);
+                return Path.GetFileNameWithoutExtension(this._projectName);
             }
         }
 
@@ -600,8 +600,8 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentException(SR.GetString(SR.ParameterCannotBeNullOrEmpty, CultureInfo.CurrentUICulture), "destination");
             }
 
-            this.projectName = Path.GetFileName(fileName);
-            this.ProjectPath = Path.Combine(destination, this.projectName);
+            this._projectName = Path.GetFileName(fileName);
+            this.ProjectPath = Path.Combine(destination, this._projectName);
 
             // get the IVsSolution interface from the global service provider
             IVsSolution solution = this.GetService(typeof(IVsSolution)) as IVsSolution;
@@ -869,8 +869,8 @@ namespace Microsoft.VisualStudio.Project
                 string projectDirectory = Path.GetDirectoryName(oldFileName);
 
                 // update state.
-                this.projectName = newFileName;
-                this.ProjectPath = Path.Combine(projectDirectory, this.projectName);
+                this._projectName = newFileName;
+                this.ProjectPath = Path.Combine(projectDirectory, this._projectName);
 
                 // Unload and lock the RDT entries
                 this.UnlockRDTEntry();

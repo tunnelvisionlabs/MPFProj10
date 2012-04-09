@@ -17,22 +17,22 @@ namespace Microsoft.VisualStudio.Project
 
 	public class EnumSTATDATA : IEnumSTATDATA
 	{
-		private readonly IEnumerable i;
+		private readonly IEnumerable _i;
 
-		private readonly IEnumerator e;
+		private readonly IEnumerator _e;
 
 		public EnumSTATDATA(IEnumerable i)
 		{
 			if (i == null)
 				throw new ArgumentNullException("i");
 
-			this.i = i;
-			this.e = i.GetEnumerator();
+			this._i = i;
+			this._e = i.GetEnumerator();
 		}
 
 		void IEnumSTATDATA.Clone(out IEnumSTATDATA clone)
 		{
-			clone = new EnumSTATDATA(i);
+			clone = new EnumSTATDATA(_i);
 		}
 
 		int IEnumSTATDATA.Next(uint celt, STATDATA[] d, out uint fetched)
@@ -41,9 +41,9 @@ namespace Microsoft.VisualStudio.Project
 			//uint size = (fetched != null) ? fetched[0] : 0;
 			for(uint i = 0; i < celt; i++)
 			{
-				if(e.MoveNext())
+				if(_e.MoveNext())
 				{
-					STATDATA sdata = (STATDATA)e.Current;
+					STATDATA sdata = (STATDATA)_e.Current;
 
 					rc++;
 					if(d != null && d.Length > i)
@@ -59,7 +59,7 @@ namespace Microsoft.VisualStudio.Project
 
 		int IEnumSTATDATA.Reset()
 		{
-			e.Reset();
+			_e.Reset();
 			return 0;
 		}
 
@@ -67,7 +67,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			for(uint i = 0; i < celt; i++)
 			{
-				e.MoveNext();
+				_e.MoveNext();
 			}
 
 			return 0;

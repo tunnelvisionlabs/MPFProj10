@@ -37,7 +37,7 @@ namespace Microsoft.VisualStudio.Project
 	{
 		#region fields
 		private uint copyPasteCookie;
-		private DropDataType dropDataType;
+		private DropDataType _dropDataType;
 		#endregion
 
 		#region override of IVsHierarchyDropDataTarget methods
@@ -58,10 +58,10 @@ namespace Microsoft.VisualStudio.Project
 				return VSConstants.S_OK;
 			}
 
-			this.dropDataType = QueryDropDataType(pDataObject);
-			if(this.dropDataType != DropDataType.None)
+			this._dropDataType = QueryDropDataType(pDataObject);
+			if(this._dropDataType != DropDataType.None)
 			{
-				pdwEffect = this.QueryDropEffect(this.dropDataType, grfKeyState);
+				pdwEffect = this.QueryDropEffect(this._dropDataType, grfKeyState);
 			}
 
 			return VSConstants.S_OK;
@@ -73,7 +73,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
 		public override int DragLeave()
 		{
-			this.dropDataType = DropDataType.None;
+			this._dropDataType = DropDataType.None;
 			return VSConstants.S_OK;
 		}
 
@@ -97,7 +97,7 @@ namespace Microsoft.VisualStudio.Project
 				return VSConstants.S_OK;
 			}
 
-			if(this.isClosed || this.site == null)
+			if(this.isClosed || this._site == null)
 			{
 				return VSConstants.E_UNEXPECTED;
 			}
@@ -108,9 +108,9 @@ namespace Microsoft.VisualStudio.Project
 				return VSConstants.E_NOTIMPL;
 			}
 
-			if(this.dropDataType != DropDataType.None)
+			if(this._dropDataType != DropDataType.None)
 			{
-				pdwEffect = this.QueryDropEffect(this.dropDataType, grfKeyState);
+				pdwEffect = this.QueryDropEffect(this._dropDataType, grfKeyState);
 			}
 
 			return VSConstants.S_OK;
@@ -458,7 +458,7 @@ namespace Microsoft.VisualStudio.Project
 				if (cutHighlightItems)
 				{
 					bool first = true;
-					IVsUIHierarchyWindow w = UIHierarchyUtilities.GetUIHierarchyWindow(this.site, HierarchyNode.SolutionExplorer);
+					IVsUIHierarchyWindow w = UIHierarchyUtilities.GetUIHierarchyWindow(this._site, HierarchyNode.SolutionExplorer);
 
 					// This happens in the context of cutting multiple items from the project.
 					// Since we are already in solution explorer, it is extremely unlikely that we get a null return.
@@ -1004,7 +1004,7 @@ namespace Microsoft.VisualStudio.Project
 
 			try
 			{
-				IVsUIHierarchyWindow w = UIHierarchyUtilities.GetUIHierarchyWindow(this.site, HierarchyNode.SolutionExplorer);
+				IVsUIHierarchyWindow w = UIHierarchyUtilities.GetUIHierarchyWindow(this._site, HierarchyNode.SolutionExplorer);
 				foreach(HierarchyNode node in this.ItemsDraggedOrCutOrCopied)
 				{
 					if((moved && (cut || dropped) && !justCleanup))
@@ -1052,7 +1052,7 @@ namespace Microsoft.VisualStudio.Project
 				}
 				finally
 				{
-					this.dropDataType = DropDataType.None;
+					this._dropDataType = DropDataType.None;
 				}
 			}
 		}
