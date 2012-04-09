@@ -1960,7 +1960,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        protected override QueryStatusResult QueryStatusCommandFromOleCommandTarget(Guid cmdGroup, uint cmd, out bool handled)
+        protected override vsCommandStatus QueryStatusCommandFromOleCommandTarget(Guid cmdGroup, uint cmd, out bool handled)
         {
             if (cmdGroup == VsMenus.guidStandardCommandSet2K)
             {
@@ -1968,7 +1968,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                 case ProjectFileConstants.CommandExploreFolderInWindows:
                     handled = true;
-                    return QueryStatusResult.ENABLED | QueryStatusResult.SUPPORTED;
+                    return vsCommandStatus.vsCommandStatusEnabled | vsCommandStatus.vsCommandStatusSupported;
                 }
             }
 
@@ -1983,7 +1983,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="pCmdText">Pointer to an OLECMDTEXT structure in which to return the name and/or status information of a single command. Can be NULL to indicate that the caller does not require this information.</param>
         /// <param name="result">An out parameter specifying the QueryStatusResult of the command.</param>
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-        protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref QueryStatusResult result)
+        protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref vsCommandStatus result)
         {
             if (cmdGroup == VsMenus.guidStandardCommandSet97)
             {
@@ -1997,33 +1997,33 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands.ProjectSettings:
                     case VsCommands.BuildSln:
                     case VsCommands.UnloadProject:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
 
                     case VsCommands.ViewForm:
                         if (this.HasDesigner)
                         {
-                            result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                            result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                             return VSConstants.S_OK;
                         }
                         break;
 
                     case VsCommands.CancelBuild:
-                        result |= QueryStatusResult.SUPPORTED;
+                        result |= vsCommandStatus.vsCommandStatusSupported;
                         if (this.buildInProcess)
-                            result |= QueryStatusResult.ENABLED;
+                            result |= vsCommandStatus.vsCommandStatusEnabled;
                         else
-                            result |= QueryStatusResult.INVISIBLE;
+                            result |= vsCommandStatus.vsCommandStatusInvisible;
                         return VSConstants.S_OK;
 
                     case VsCommands.NewFolder:
                     case VsCommands.AddNewItem:
                     case VsCommands.AddExistingItem:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
 
                     case VsCommands.SetStartupProject:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
                 }
             }
@@ -2033,13 +2033,13 @@ namespace Microsoft.VisualStudio.Project
                 switch ((VsCommands2K)cmd)
                 {
                     case VsCommands2K.ADDREFERENCE:
-                        result |= QueryStatusResult.SUPPORTED;
+                        result |= vsCommandStatus.vsCommandStatusSupported;
                         if (GetReferenceContainer() != null)
-                            result |= QueryStatusResult.ENABLED;
+                            result |= vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
 
                     case VsCommands2K.EXCLUDEFROMPROJECT:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.INVISIBLE;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusInvisible;
                         return VSConstants.S_OK;
                 }
             }

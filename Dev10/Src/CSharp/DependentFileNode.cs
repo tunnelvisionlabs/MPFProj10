@@ -18,6 +18,7 @@ namespace Microsoft.VisualStudio.Project
 	using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 	using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 	using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+	using vsCommandStatus = EnvDTE.vsCommandStatus;
 
 	/// <summary>
 	/// Defines the logic for all dependent file nodes (solution explorer icon, commands etc.)
@@ -79,7 +80,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Disable certain commands for dependent file nodes 
 		/// </summary>
-		protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref QueryStatusResult result)
+		protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref vsCommandStatus result)
 		{
 			if(cmdGroup == VsMenus.guidStandardCommandSet97)
 			{
@@ -89,13 +90,13 @@ namespace Microsoft.VisualStudio.Project
 					case VsCommands.Paste:
 					case VsCommands.Cut:
 					case VsCommands.Rename:
-						result |= QueryStatusResult.NOTSUPPORTED;
+						result |= vsCommandStatus.vsCommandStatusUnsupported;
 						return VSConstants.S_OK;
 
 					case VsCommands.ViewCode:
 					case VsCommands.Open:
 					case VsCommands.OpenWith:
-						result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+						result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 						return VSConstants.S_OK;
 				}
 			}
@@ -103,7 +104,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				if((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
 				{
-					result |= QueryStatusResult.NOTSUPPORTED;
+					result |= vsCommandStatus.vsCommandStatusUnsupported;
 					return VSConstants.S_OK;
 				}
 			}

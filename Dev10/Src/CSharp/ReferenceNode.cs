@@ -21,6 +21,7 @@ namespace Microsoft.VisualStudio.Project
 	using OLECMDEXECOPT = Microsoft.VisualStudio.OLE.Interop.OLECMDEXECOPT;
 	using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 	using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+	using vsCommandStatus = EnvDTE.vsCommandStatus;
 
 	[CLSCompliant(false), ComVisible(true)]
 	public abstract class ReferenceNode : HierarchyNode
@@ -122,13 +123,13 @@ namespace Microsoft.VisualStudio.Project
 			return null;
 		}
 
-		protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref QueryStatusResult result)
+		protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref vsCommandStatus result)
 		{
 			if(cmdGroup == VsMenus.guidStandardCommandSet2K)
 			{
 				if((VsCommands2K)cmd == VsCommands2K.QUICKOBJECTSEARCH)
 				{
-					result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+					result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 					return VSConstants.S_OK;
 				}
 			}

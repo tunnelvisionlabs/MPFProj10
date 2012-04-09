@@ -218,7 +218,6 @@
     <Compile Include="IProjectSourceNode.cs" />
     <Compile Include="LocalizableProperties.cs" />
     <Compile Include="PropPageStatus.cs" />
-    <Compile Include="QueryStatusResult.cs" />
     <Compile Include="ReferenceNodeProperties.cs" />
     <Compile Include="ReplaceBetweenPairToken.cs" />
     <Compile Include="ReplacePairToken.cs" />

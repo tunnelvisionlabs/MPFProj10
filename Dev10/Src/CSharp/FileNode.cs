@@ -24,6 +24,7 @@ namespace Microsoft.VisualStudio.Project
     using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
     using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
     using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+    using vsCommandStatus = EnvDTE.vsCommandStatus;
 
     [CLSCompliant(false)]
     [ComVisible(true)]
@@ -552,7 +553,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
 
-        protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref QueryStatusResult result)
+        protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref vsCommandStatus result)
         {
             if(cmdGroup == VsMenus.guidStandardCommandSet97)
             {
@@ -562,21 +563,21 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands.Paste:
                     case VsCommands.Cut:
                     case VsCommands.Rename:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
 
                     case VsCommands.ViewCode:
                         if (this.IsNonMemberItem)
-                            result |= QueryStatusResult.NOTSUPPORTED;
+                            result |= vsCommandStatus.vsCommandStatusUnsupported;
                         else
-                            result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                            result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 
                         return VSConstants.S_OK;
 
                     //case VsCommands.Delete: goto case VsCommands.OpenWith;
                     case VsCommands.Open:
                     case VsCommands.OpenWith:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
                 }
             }
@@ -587,7 +588,7 @@ namespace Microsoft.VisualStudio.Project
                     // if it is a non member item node, the we support "Include In Project" command
                     if (IsNonMemberItem)
                     {
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
                     }
                 }
@@ -596,19 +597,19 @@ namespace Microsoft.VisualStudio.Project
                     // if it is a non member item node, then we don't support "Exclude From Project" command
                     if (IsNonMemberItem)
                     {
-                        result |= QueryStatusResult.NOTSUPPORTED;
+                        result |= vsCommandStatus.vsCommandStatusUnsupported;
                         return VSConstants.S_OK;
                     }
 
                     string linkPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
                     if (string.IsNullOrEmpty(linkPath))
                     {
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
                     }
                     else
                     {
-                        result |= QueryStatusResult.NOTSUPPORTED;
+                        result |= vsCommandStatus.vsCommandStatusUnsupported;
                         return VSConstants.S_OK;
                     }
                 }
@@ -616,7 +617,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     if(string.IsNullOrEmpty(this.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon)) && (this.NodeProperties.Extender(SingleFileGeneratorNodeExtenderProvider.Name) != null))
                     {
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
                     }
                 }

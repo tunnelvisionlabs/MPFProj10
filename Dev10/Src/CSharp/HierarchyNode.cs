@@ -28,6 +28,7 @@ namespace Microsoft.VisualStudio.Project
 	using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 	using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 	using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+	using vsCommandStatus = EnvDTE.vsCommandStatus;
 
 	/// <summary>
 	/// An object that deals with user interaction via a GUI in the form a hierarchy: a parent node with zero or more child nodes, each of which
@@ -1698,7 +1699,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="cmd">The command to be executed.</param>
 		/// <param name="handled">Specifies whether the menu was handled.</param>
 		/// <returns>A QueryStatusResult describing the status of the menu.</returns>
-		protected virtual QueryStatusResult QueryStatusCommandFromOleCommandTarget(Guid cmdGroup, uint cmd, out bool handled)
+		protected virtual vsCommandStatus QueryStatusCommandFromOleCommandTarget(Guid cmdGroup, uint cmd, out bool handled)
 		{
 			handled = false;
 			// NOTE: We only want to support Cut/Copy/Paste/Delete/Rename commands
@@ -1716,7 +1717,7 @@ namespace Microsoft.VisualStudio.Project
 					case VsCommands.Cut:
 					case VsCommands.Rename:
 						handled = true;
-						return QueryStatusResult.NOTSUPPORTED;
+						return vsCommandStatus.vsCommandStatusUnsupported;
 				}
 			}
 			// The reference menu and the web reference menu should always be shown.
@@ -1726,10 +1727,10 @@ namespace Microsoft.VisualStudio.Project
 				{
 					case VsCommands2K.ADDREFERENCE:
 						handled = true;
-						return QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+						return vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 				}
 			}
-			return QueryStatusResult.NOTSUPPORTED;
+			return vsCommandStatus.vsCommandStatusUnsupported;
 		}
 
 		/// <summary>
@@ -1741,10 +1742,10 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="handled">Specifies whether the menu was handled.</param>
 		/// <returns>A QueryStatusResult describing the status of the menu.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
-		protected virtual QueryStatusResult DisableCommandOnNodesThatDoNotSupportMultiSelection(Guid cmdGroup, uint cmd, IList<HierarchyNode> selectedNodes, out bool handled)
+		protected virtual vsCommandStatus DisableCommandOnNodesThatDoNotSupportMultiSelection(Guid cmdGroup, uint cmd, IList<HierarchyNode> selectedNodes, out bool handled)
 		{
 			handled = false;
-			QueryStatusResult queryResult = QueryStatusResult.NOTSUPPORTED;
+			vsCommandStatus queryResult = vsCommandStatus.vsCommandStatusUnsupported;
 			if(selectedNodes == null || selectedNodes.Count == 1)
 			{
 				return queryResult;
@@ -1759,14 +1760,14 @@ namespace Microsoft.VisualStudio.Project
 						// If the project node is selected then cut and copy is not supported.
 						if(selectedNodes.Contains(this.projectMgr))
 						{
-							queryResult = QueryStatusResult.SUPPORTED | QueryStatusResult.INVISIBLE;
+							queryResult = vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusInvisible;
 							handled = true;
 						}
 						break;
 
 					case VsCommands.Paste:
 					case VsCommands.NewFolder:
-						queryResult = QueryStatusResult.SUPPORTED | QueryStatusResult.INVISIBLE;
+						queryResult = vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusInvisible;
 						handled = true;
 						break;
 				}
@@ -1778,7 +1779,7 @@ namespace Microsoft.VisualStudio.Project
 					case VsCommands2K.QUICKOBJECTSEARCH:
 					case VsCommands2K.SETASSTARTPAGE:
 					case VsCommands2K.ViewInClassDiagram:
-						queryResult = QueryStatusResult.SUPPORTED | QueryStatusResult.INVISIBLE;
+						queryResult = vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusInvisible;
 						handled = true;
 						break;
 				}
@@ -1796,15 +1797,15 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="result">An out parameter specifying the QueryStatusResult of the command.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "p")]
-		protected virtual int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref QueryStatusResult result)
+		protected virtual int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref vsCommandStatus result)
 		{
 			if(cmdGroup == VsMenus.guidStandardCommandSet2K)
 			{
 				if((VsCommands2K)cmd == VsCommands2K.SHOWALLFILES)
 				{
-					result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+					result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 					if (ProjectManager.ShowAllFilesEnabled)
-						result |= QueryStatusResult.LATCHED;
+						result |= vsCommandStatus.vsCommandStatusLatched;
 
 					return VSConstants.S_OK;
 				}
@@ -1912,7 +1913,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
 			uint cmd = prgCmds[0].cmdID;
-			QueryStatusResult queryResult = QueryStatusResult.NOTSUPPORTED;
+			vsCommandStatus queryResult = vsCommandStatus.vsCommandStatusUnsupported;
 
 			// For now ask this node (that is the project node) to disable or enable a node.
 			// This is an optimization. Why should we ask each node for its current state? They all are in the same state.
@@ -1923,7 +1924,7 @@ namespace Microsoft.VisualStudio.Project
 			// The nested project does not know about it, thus it shows it on the nested project as grayed.
 			if(this.DisableCmdInCurrentMode(cmdGroup, cmd))
 			{
-				queryResult = QueryStatusResult.SUPPORTED | QueryStatusResult.INVISIBLE;
+				queryResult = vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusInvisible;
 			}
 			else
 			{
@@ -1954,22 +1955,22 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			// Process the results set in the QueryStatusResult
-			if(queryResult != QueryStatusResult.NOTSUPPORTED)
+			if(queryResult != vsCommandStatus.vsCommandStatusUnsupported)
 			{
 				// Set initial value
 				prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED;
 
-				if((queryResult & QueryStatusResult.ENABLED) != 0)
+				if((queryResult & vsCommandStatus.vsCommandStatusEnabled) != 0)
 				{
 					prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
 				}
 
-				if((queryResult & QueryStatusResult.INVISIBLE) != 0)
+				if((queryResult & vsCommandStatus.vsCommandStatusInvisible) != 0)
 				{
 					prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_INVISIBLE;
 				}
 
-				if((queryResult & QueryStatusResult.LATCHED) != 0)
+				if((queryResult & vsCommandStatus.vsCommandStatusLatched) != 0)
 				{
 					prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_LATCHED;
 				}
@@ -1993,11 +1994,11 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="pCmdText">Pointer to an OLECMDTEXT structure in which to return the name and/or status information of a single command. Can be NULL to indicate that the caller does not require this information. </param>
 		/// <returns>Retuns the result of the query on the slected nodes.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "p")]
-		protected virtual QueryStatusResult QueryStatusSelectionOnNodes(IList<HierarchyNode> selectedNodes, Guid cmdGroup, uint cmd, IntPtr pCmdText)
+		protected virtual vsCommandStatus QueryStatusSelectionOnNodes(IList<HierarchyNode> selectedNodes, Guid cmdGroup, uint cmd, IntPtr pCmdText)
 		{
 			if(selectedNodes == null || selectedNodes.Count == 0)
 			{
-				return QueryStatusResult.NOTSUPPORTED;
+				return vsCommandStatus.vsCommandStatusUnsupported;
 			}
 
 			int result = 0;
@@ -2005,7 +2006,7 @@ namespace Microsoft.VisualStudio.Project
 			bool enabled = true;
 			bool invisible = false;
 			bool latched = true;
-			QueryStatusResult tempQueryResult = QueryStatusResult.NOTSUPPORTED;
+			vsCommandStatus tempQueryResult = vsCommandStatus.vsCommandStatusUnsupported;
 
 			foreach(HierarchyNode node in selectedNodes)
 			{
@@ -2019,31 +2020,31 @@ namespace Microsoft.VisualStudio.Project
 				// cmd is enabled iff all nodes enable cmd
 				// cmd is invisible iff any node sets invisibility
 				// cmd is latched only if all are latched.
-				supported = supported || ((tempQueryResult & QueryStatusResult.SUPPORTED) != 0);
-				enabled = enabled && ((tempQueryResult & QueryStatusResult.ENABLED) != 0);
-				invisible = invisible || ((tempQueryResult & QueryStatusResult.INVISIBLE) != 0);
-				latched = latched && ((tempQueryResult & QueryStatusResult.LATCHED) != 0);
+				supported = supported || ((tempQueryResult & vsCommandStatus.vsCommandStatusSupported) != 0);
+				enabled = enabled && ((tempQueryResult & vsCommandStatus.vsCommandStatusEnabled) != 0);
+				invisible = invisible || ((tempQueryResult & vsCommandStatus.vsCommandStatusInvisible) != 0);
+				latched = latched && ((tempQueryResult & vsCommandStatus.vsCommandStatusLatched) != 0);
 			}
 
-			QueryStatusResult queryResult = QueryStatusResult.NOTSUPPORTED;
+			vsCommandStatus queryResult = vsCommandStatus.vsCommandStatusUnsupported;
 
 			if(result >= 0 && supported)
 			{
-				queryResult = QueryStatusResult.SUPPORTED;
+				queryResult = vsCommandStatus.vsCommandStatusSupported;
 
 				if(enabled)
 				{
-					queryResult |= QueryStatusResult.ENABLED;
+					queryResult |= vsCommandStatus.vsCommandStatusEnabled;
 				}
 
 				if(invisible)
 				{
-					queryResult |= QueryStatusResult.INVISIBLE;
+					queryResult |= vsCommandStatus.vsCommandStatusInvisible;
 				}
 
 				if(latched)
 				{
-					queryResult |= QueryStatusResult.LATCHED;
+					queryResult |= vsCommandStatus.vsCommandStatusLatched;
 				}
 			}
 

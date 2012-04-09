@@ -26,6 +26,7 @@ namespace Microsoft.VisualStudio.Project
     using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
     using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
     using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
+    using vsCommandStatus = EnvDTE.vsCommandStatus;
 
     [CLSCompliant(false), ComVisible(true)]
     public class ReferenceContainerNode : HierarchyNode, IReferenceContainer
@@ -178,7 +179,7 @@ namespace Microsoft.VisualStudio.Project
             return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
-        protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref QueryStatusResult result)
+        protected override int QueryStatusOnNode(Guid cmdGroup, uint cmd, IntPtr pCmdText, ref vsCommandStatus result)
         {
             if(cmdGroup == VsMenus.guidStandardCommandSet97)
             {
@@ -186,7 +187,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     case VsCommands.AddNewItem:
                     case VsCommands.AddExistingItem:
-                        result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                         return VSConstants.S_OK;
                 }
             }
@@ -194,7 +195,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 if((VsCommands2K)cmd == VsCommands2K.ADDREFERENCE)
                 {
-                    result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
+                    result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                     return VSConstants.S_OK;
                 }
             }
