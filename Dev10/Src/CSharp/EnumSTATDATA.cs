@@ -11,6 +11,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
 	using System.Collections;
 	using Microsoft.VisualStudio.OLE.Interop;
 
@@ -22,6 +23,9 @@ namespace Microsoft.VisualStudio.Project
 
 		public EnumSTATDATA(IEnumerable i)
 		{
+			if (i == null)
+				throw new ArgumentNullException("i");
+
 			this.i = i;
 			this.e = i.GetEnumerator();
 		}

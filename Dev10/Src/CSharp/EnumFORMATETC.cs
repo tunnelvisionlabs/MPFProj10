@@ -11,9 +11,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
 	using System.Collections;
 	using Microsoft.VisualStudio.OLE.Interop;
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FORMATETC")]
 	public class EnumFORMATETC : IEnumFORMATETC
 	{
 		private readonly IEnumerable cache; // of DataCacheEntrys.
@@ -24,6 +26,9 @@ namespace Microsoft.VisualStudio.Project
 
 		public EnumFORMATETC(DATADIR dir, IEnumerable cache)
 		{
+			if (cache == null)
+				throw new ArgumentNullException("cache");
+
 			this.cache = cache;
 			this.dir = dir;
 			e = cache.GetEnumerator();

@@ -59,7 +59,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region ctors
 		public NodeProperties(HierarchyNode node)
-			: base(node.ProjectManager)
+			: base(GetProjectManager(node))
 		{
 			if(node == null)
 			{
@@ -68,6 +68,14 @@ namespace Microsoft.VisualStudio.Project
 			this.node = node;
 		}
 		#endregion
+
+		private static ProjectNode GetProjectManager(HierarchyNode node)
+		{
+			if (node == null)
+				throw new ArgumentNullException("node");
+
+			return node.ProjectManager;
+		}
 
 		#region ISpecifyPropertyPages methods
 		public virtual void GetPages(CAUUID[] pages)

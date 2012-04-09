@@ -48,7 +48,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
 			this.VirtualNodeName = relativePath.TrimEnd('\\');
-			this.isNonMemberItem = element.IsVirtual;
+			this.isNonMemberItem = ItemNode.IsVirtual;
 			ExcludeNodeFromScc = true;
 		}
 		#endregion

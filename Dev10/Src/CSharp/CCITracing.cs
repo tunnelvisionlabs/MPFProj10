@@ -11,6 +11,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
 	using System.Diagnostics;
 
 	public class CCITracing
@@ -47,6 +48,9 @@ namespace Microsoft.VisualStudio.Project
 		[ConditionalAttribute("CCI_TRACING")]
 		static public void Trace(System.Exception e)
 		{
+			if (e == null)
+				throw new ArgumentNullException("e");
+
 			CCITracing.InternalTraceCall(2);
 			System.Diagnostics.Trace.WriteLine("ExceptionInfo: \t" + e.ToString());
 		}

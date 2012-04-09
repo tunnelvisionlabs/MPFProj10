@@ -240,6 +240,11 @@ namespace Microsoft.VisualStudio.Project
 		/// <returns>full path of the file</returns>
 		protected virtual string UpdateGeneratedCodeFile(FileNode fileNode, byte[] data, int size, string fileName)
 		{
+			if (fileNode == null)
+				throw new ArgumentNullException("fileNode");
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			string filePath = Path.Combine(Path.GetDirectoryName(fileNode.GetMkDocument()), fileName);
 			IVsRunningDocumentTable rdt = this.projectMgr.GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
 

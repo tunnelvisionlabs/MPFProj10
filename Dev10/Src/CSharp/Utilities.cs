@@ -520,8 +520,6 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="name">File name</param>
         /// <returns>true if file name is invalid</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0",
-            Justification="The name is validated.")]
         public static bool ContainsInvalidFileNameChars(string name)
         {
             if(String.IsNullOrEmpty(name))

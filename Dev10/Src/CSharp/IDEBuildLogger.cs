@@ -191,6 +191,9 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="buildEvent"></param>
         protected virtual void BuildFinishedHandler(object sender, BuildFinishedEventArgs buildEvent)
         {
+            if (buildEvent == null)
+                throw new ArgumentNullException("buildEvent");
+
             // NOTE: This may run on a background thread!
             MessageImportance importance = buildEvent.Succeeded ? MessageImportance.Low : MessageImportance.High;
             QueueOutputText(importance, Environment.NewLine);
@@ -215,6 +218,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         protected virtual void ProjectFinishedHandler(object sender, ProjectFinishedEventArgs buildEvent)
         {
+            if (buildEvent == null)
+                throw new ArgumentNullException("buildEvent");
+
             // NOTE: This may run on a background thread!
             QueueOutputEvent(buildEvent.Succeeded ? MessageImportance.Low : MessageImportance.High, buildEvent);
         }
@@ -275,6 +281,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         protected virtual void ErrorHandler(object sender, BuildErrorEventArgs errorEvent)
         {
+            if (errorEvent == null)
+                throw new ArgumentNullException("errorEvent");
+
             // NOTE: This may run on a background thread!
             QueueOutputText(GetFormattedErrorMessage(errorEvent.File, errorEvent.LineNumber, errorEvent.ColumnNumber, false, errorEvent.Code, errorEvent.Message));
             QueueTaskEvent(errorEvent);
@@ -285,6 +294,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         protected virtual void WarningHandler(object sender, BuildWarningEventArgs warningEvent)
         {
+            if (warningEvent == null)
+                throw new ArgumentNullException("warningEvent");
+
             // NOTE: This may run on a background thread!
             QueueOutputText(MessageImportance.High, GetFormattedErrorMessage(warningEvent.File, warningEvent.LineNumber, warningEvent.ColumnNumber, true, warningEvent.Code, warningEvent.Message));
             QueueTaskEvent(warningEvent);
@@ -295,6 +307,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>		
         protected virtual void MessageHandler(object sender, BuildMessageEventArgs messageEvent)
         {
+            if (messageEvent == null)
+                throw new ArgumentNullException("messageEvent");
+
             // NOTE: This may run on a background thread!
             QueueOutputEvent(messageEvent.Importance, messageEvent);
         }
@@ -355,6 +370,9 @@ namespace Microsoft.VisualStudio.Project
 
         protected void QueueOutputEvent(MessageImportance importance, BuildEventArgs buildEvent)
         {
+            if (buildEvent == null)
+                throw new ArgumentNullException("buildEvent");
+
             // NOTE: This may run on a background thread!
             if (LogAtImportance(importance) && !string.IsNullOrEmpty(buildEvent.Message))
             {

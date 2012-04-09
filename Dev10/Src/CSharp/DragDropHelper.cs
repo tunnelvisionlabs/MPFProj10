@@ -39,6 +39,9 @@ namespace Microsoft.VisualStudio.Project
 
 		public static int QueryGetData(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, ref FORMATETC fmtetc)
 		{
+			if (pDataObject == null)
+				throw new ArgumentNullException("pDataObject");
+
 			int returnValue = VSConstants.E_FAIL;
 			FORMATETC[] af = new FORMATETC[1];
 			af[0] = fmtetc;
@@ -62,6 +65,9 @@ namespace Microsoft.VisualStudio.Project
 
 		public static STGMEDIUM GetData(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, ref FORMATETC fmtetc)
 		{
+			if (pDataObject == null)
+				throw new ArgumentNullException("pDataObject");
+
 			FORMATETC[] af = new FORMATETC[1];
 			af[0] = fmtetc;
 			STGMEDIUM[] sm = new STGMEDIUM[1];

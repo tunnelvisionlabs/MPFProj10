@@ -1035,6 +1035,9 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>The original string with the specified character at the end.</returns>
         public static string EnsureTrailingChar(string value, char charToEnsure)
         {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
             VerifyStringArgument(value, "value");
 
             if (value[value.Length - 1] != charToEnsure)
@@ -1193,15 +1196,16 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="folderList">List containing relative folder paths.</param>
         protected virtual void ExcludeProjectBuildItems(IList<string> fileList, IList<string> folderList)
         {
+            if (fileList == null)
+                throw new ArgumentNullException("fileList");
+            if (folderList == null)
+                throw new ArgumentNullException("folderList");
+
             ICollection<MSBuild.ProjectItem> projectItems = this.BuildProject.Items;
 
             if (projectItems == null)
             {
                 return; // do nothig, just ignore it.
-            }
-            else if (fileList == null && folderList == null)
-            {
-                throw new ArgumentNullException("folderList");
             }
 
             // we need these maps becuase we need to have both lowercase and actual case path information.
@@ -1472,6 +1476,7 @@ namespace Microsoft.VisualStudio.Project
         /// Expected:       g\h\i\j.txt
         /// Actual:         ..\..\..\..\..\c$\e\f\g\h\i\j.txt
         /// </remarks>
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentException.#ctor(System.String)")]
         public static string GetRelativePath(string basePath, string subPath)
         {
@@ -1560,6 +1565,9 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual bool IsFolderItem(MSBuild.ProjectItem buildItem)
         {
+            if (buildItem == null)
+                throw new ArgumentNullException("buildItem");
+
             if (string.Equals(buildItem.ItemType, ProjectFileConstants.Folder, StringComparison.OrdinalIgnoreCase))
                 return true;
 
@@ -2760,6 +2768,7 @@ namespace Microsoft.VisualStudio.Project
             if (string.IsNullOrWhiteSpace(condition))
             {
                 SetProjectProperty(propertyName, storageType, propertyValue);
+                return;
             }
 
             string conditionTrimmed = condition.Trim();

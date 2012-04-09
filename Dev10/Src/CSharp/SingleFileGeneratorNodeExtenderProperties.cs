@@ -10,9 +10,17 @@
         private readonly HierarchyNode _node;
 
         public SingleFileGeneratorNodeExtenderProperties(HierarchyNode node)
-            : base(node.ProjectManager)
+            : base(GetProjectManager(node))
         {
             _node = node;
+        }
+
+        private static ProjectNode GetProjectManager(HierarchyNode node)
+        {
+            if (node == null)
+                throw new ArgumentNullException("node");
+
+            return node.ProjectManager;
         }
 
         public event EventHandler<HierarchyNodeEventArgs> CustomToolChanged;

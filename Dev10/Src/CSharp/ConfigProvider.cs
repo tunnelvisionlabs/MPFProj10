@@ -603,6 +603,9 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual int RenameConfiguration(MSBuild.Project project, string oldConfigurationName, string newConfigurationName)
         {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
             // First create the condition that represent the configuration we want to rename
             string condition = GetConfigurationCondition(oldConfigurationName).Trim();
             string[] platforms = GetPlatformsFromProject();
@@ -635,6 +638,9 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual int DeleteConfiguration(MSBuild.Project project, string configurationName)
         {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
             // Verify that this config exist
             string[] configs = GetPropertiesConditionedOn(ProjectFileConstants.Configuration);
             if (!configs.Contains(configurationName, StringComparer.OrdinalIgnoreCase))
@@ -684,6 +690,9 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual int DeletePlatform(MSBuild.Project project, string platformName)
         {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
             // Verify that this config exist
             string[] platforms = GetPlatformsFromProject();
             if (!platforms.Contains(platformName, StringComparer.OrdinalIgnoreCase))
