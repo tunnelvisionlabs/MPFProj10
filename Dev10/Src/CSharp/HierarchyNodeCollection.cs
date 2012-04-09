@@ -38,7 +38,6 @@ namespace Microsoft.VisualStudio.Project
 
         public HierarchyNodeCollection(ProjectNode projectManager, IEqualityComparer<string> canonicalNameComparer)
         {
-            new ObjectReferenceEqualityComparer<HierarchyNode>();
             if (projectManager == null)
                 throw new ArgumentNullException("projectManager");
 

@@ -338,7 +338,8 @@ namespace Microsoft.VisualStudio.Project
                 return;
 
             object docData;
-            frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out docData);
+            if (Microsoft.VisualStudio.ErrorHandler.Failed(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out docData)))
+                return;
 
             // Get the VsTextBuffer
             VsTextBuffer buffer = docData as VsTextBuffer;
@@ -361,7 +362,7 @@ namespace Microsoft.VisualStudio.Project
             if (mgr == null)
                 return;
 
-            mgr.NavigateToLineAndColumn(buffer, ref logicalView, task.Line, task.Column, task.Line, task.Column);
+            Microsoft.VisualStudio.ErrorHandler.CallWithCOMConvention(() => mgr.NavigateToLineAndColumn(buffer, ref logicalView, task.Line, task.Column, task.Line, task.Column));
         }
 
         #endregion

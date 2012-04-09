@@ -1129,7 +1129,6 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="node">Node to be filtered.</param>
         /// <returns>Returns if the node is a non member item node or not.</returns>
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Boolean.TryParse(System.String,System.Boolean@)")]
         protected virtual bool IsNodeNonMemberItem(HierarchyNode node)
         {
             bool isNonMemberItem = false;
@@ -1138,7 +1137,8 @@ namespace Microsoft.VisualStudio.Project
                 object propObj = node.GetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem);
                 if (propObj != null)
                 {
-                    Boolean.TryParse(propObj.ToString(), out isNonMemberItem);
+                    if (!bool.TryParse(propObj.ToString(), out isNonMemberItem))
+                        isNonMemberItem = false;
                 }
             }
 
@@ -7004,7 +7004,12 @@ namespace Microsoft.VisualStudio.Project
             if (solution != null)
             {
                 // We do not want to throw. If we cannot set the solution related constants we set them to empty string.
-                solution.GetSolutionInfo(out solutionDirectory, out solutionFile, out userOptionsFile);
+                if (ErrorHandler.Failed(solution.GetSolutionInfo(out solutionDirectory, out solutionFile, out userOptionsFile)))
+                {
+                    solutionDirectory = null;
+                    solutionFile = null;
+                    userOptionsFile = null;
+                }
             }
 
             if (solutionDirectory == null)
@@ -7045,7 +7050,8 @@ namespace Microsoft.VisualStudio.Project
             if (shell != null)
             {
                 // We do not want to throw. If we cannot set the solution related constants we set them to empty string.
-                shell.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out installDirAsObject);
+                if (ErrorHandler.Failed(shell.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out installDirAsObject)))
+                    installDirAsObject = null;
             }
 
             string installDir = ((string)installDirAsObject);

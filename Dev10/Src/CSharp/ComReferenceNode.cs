@@ -92,7 +92,9 @@ namespace Microsoft.VisualStudio.Project
             get
             {
                 bool value;
-                bool.TryParse(this.ItemNode.GetMetadata(ProjectFileConstants.EmbedInteropTypes), out value);
+                if (!bool.TryParse(this.ItemNode.GetMetadata(ProjectFileConstants.EmbedInteropTypes), out value))
+                    return false;
+
                 return value;
             }
 

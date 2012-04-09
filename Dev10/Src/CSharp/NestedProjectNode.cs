@@ -340,13 +340,14 @@ namespace Microsoft.VisualStudio.Project
         /// the image list of the nested if that is supported. If neither of these is supported a default image will be shown.
         /// </summary>
         /// <returns>An object representing the icon.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.VisualStudio.Shell.Interop.IVsHierarchy.GetProperty(System.UInt32,System.Int32,System.Object@)")]
         public override object GetIconHandle(bool open)
         {
             Debug.Assert(this.nestedHierarchy != null, "The nested hierarchy object must be created before calling this method");
 
             object iconHandle = null;
-            this.nestedHierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_IconHandle, out iconHandle);
+            if (ErrorHandler.Failed(this.nestedHierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_IconHandle, out iconHandle)))
+                iconHandle = null;
+
             if (iconHandle == null)
             {
                 if (null == imageHandler)

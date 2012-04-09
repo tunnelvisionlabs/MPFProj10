@@ -117,7 +117,6 @@ namespace Microsoft.VisualStudio.Project
 		/// The method that does the cleanup.
 		/// </summary>
 		/// <param name="disposing"></param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.VisualStudio.Shell.Interop.IVsMonitorSelection.UnadviseSelectionEvents(System.UInt32)")]
 		protected virtual void Dispose(bool disposing)
 		{
 			// Everybody can go here.
@@ -128,7 +127,7 @@ namespace Microsoft.VisualStudio.Project
 				{
 					if(disposing && this.eventsCookie != (uint)ShellConstants.VSCOOKIE_NIL && this.SelectionMonitor != null)
 					{
-						this.SelectionMonitor.UnadviseSelectionEvents((uint)this.eventsCookie);
+						ErrorHandler.CallWithCOMConvention(() => this.SelectionMonitor.UnadviseSelectionEvents((uint)this.eventsCookie));
 						this.eventsCookie = (uint)ShellConstants.VSCOOKIE_NIL;
 					}
 

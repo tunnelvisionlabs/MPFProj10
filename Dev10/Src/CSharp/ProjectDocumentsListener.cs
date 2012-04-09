@@ -171,7 +171,6 @@ namespace Microsoft.VisualStudio.Project
 		/// The method that does the cleanup.
 		/// </summary>
 		/// <param name="disposing"></param>
-		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.VisualStudio.Shell.Interop.IVsTrackProjectDocuments2.UnadviseTrackProjectDocumentsEvents(System.UInt32)")]
 		protected virtual void Dispose(bool disposing)
 		{
 			// Everybody can go here.
@@ -182,7 +181,7 @@ namespace Microsoft.VisualStudio.Project
 				{
 					if(disposing && this.eventsCookie != (uint)ShellConstants.VSCOOKIE_NIL && this.ProjectDocumentTracker2 != null)
 					{
-						this.ProjectDocumentTracker2.UnadviseTrackProjectDocumentsEvents((uint)this.eventsCookie);
+						ErrorHandler.CallWithCOMConvention(() => this.ProjectDocumentTracker2.UnadviseTrackProjectDocumentsEvents((uint)this.eventsCookie));
 						this.eventsCookie = (uint)ShellConstants.VSCOOKIE_NIL;
 					}
 
