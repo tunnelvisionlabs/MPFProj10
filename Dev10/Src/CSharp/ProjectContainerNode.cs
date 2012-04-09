@@ -238,7 +238,7 @@ namespace Microsoft.VisualStudio.Project
 			try
 			{
 				this.DisableQueryEdit = true;
-				this.EventTriggeringFlag = ProjectNode.SuppressEvents.Hierarchy | ProjectNode.SuppressEvents.Tracker;
+				this.EventTriggeringFlag = SuppressEvents.Hierarchy | SuppressEvents.Tracker;
 				iUnKnownForSolution = Marshal.GetIUnknownForObject(solution);
 
 				// notify SolutionEvents listeners that we are about to add children
@@ -273,7 +273,7 @@ namespace Microsoft.VisualStudio.Project
 					Marshal.Release(iUnKnownForSolution);
 				}
 
-				this.EventTriggeringFlag = ProjectNode.SuppressEvents.None;
+				this.EventTriggeringFlag = SuppressEvents.None;
 			}
 
 			return returnValue;
@@ -688,7 +688,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				// (VS 2005 UPDATE) When deleting and re-adding the nested project,
 				// we do not want SCC to see this as a delete and add operation. 
-				this.EventTriggeringFlag = ProjectNode.SuppressEvents.Tracker;
+				this.EventTriggeringFlag = SuppressEvents.Tracker;
 
 				// notify SolutionEvents listeners that we are about to add children
 				IVsFireSolutionEvents fireSolutionEvents = solution as IVsFireSolutionEvents;
@@ -756,7 +756,7 @@ namespace Microsoft.VisualStudio.Project
 				}
 				else
 				{
-					this.EventTriggeringFlag = ProjectNode.SuppressEvents.None;
+					this.EventTriggeringFlag = SuppressEvents.None;
 				}
 			}
 		}

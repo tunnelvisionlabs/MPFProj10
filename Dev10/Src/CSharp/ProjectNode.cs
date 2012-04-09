@@ -3496,7 +3496,7 @@ namespace Microsoft.VisualStudio.Project
                 this.disableQueryEdit = true;
 
                 this.isClosed = false;
-                this.eventTriggeringFlag = ProjectNode.SuppressEvents.Hierarchy | ProjectNode.SuppressEvents.Tracker;
+                this.eventTriggeringFlag = SuppressEvents.Hierarchy | SuppressEvents.Tracker;
 
                 SetBuildProject(Utilities.ReinitializeMsBuildProject(this.buildEngine, this.FileName, this.buildProject));
 
@@ -3520,7 +3520,7 @@ namespace Microsoft.VisualStudio.Project
             finally
             {
                 this.SetProjectFileDirty(false);
-                this.eventTriggeringFlag = ProjectNode.SuppressEvents.None;
+                this.eventTriggeringFlag = SuppressEvents.None;
                 this.disableQueryEdit = false;
             }
         }

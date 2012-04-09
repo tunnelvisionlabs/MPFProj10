@@ -13,17 +13,14 @@ namespace Microsoft.VisualStudio.Project
 {
     using System;
 
-    partial class ProjectNode
+    /// <summary>
+    /// Flags for specifying which events to stop triggering.
+    /// </summary>
+    [Flags]
+    public enum SuppressEvents
     {
-        /// <summary>
-        /// Flags for specifying which events to stop triggering.
-        /// </summary>
-        [Flags]
-        public enum SuppressEvents
-        {
-            None = 0,
-            Hierarchy = 1,
-            Tracker = 2
-        }
-	}
+        None = 0,
+        Hierarchy = 1,
+        Tracker = 2
+    }
 }
