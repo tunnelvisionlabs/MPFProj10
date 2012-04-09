@@ -24,7 +24,6 @@ namespace Microsoft.VisualStudio.Project
 	{
 		Project,
 		Program,
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "URL")]
-		URL
+		Url
 	}
 }

@@ -13,8 +13,7 @@ namespace Microsoft.VisualStudio.Project
 {
 	using System.Diagnostics.CodeAnalysis;
 
-	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-	public static class MsBuildGeneratedItemType
+	public static class MSBuildGeneratedItemType
 	{
 		public const string ReferenceCopyLocalPaths = "ReferenceCopyLocalPaths";
 		public const string ComReferenceWrappers = "ComReferenceWrappers";

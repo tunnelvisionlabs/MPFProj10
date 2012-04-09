@@ -240,7 +240,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				Debug.Assert(filenodeids.Count > 0, "There is no file node availabale");
 				FileNode node = project.NodeFromItemId(filenodeids[0]) as FileNode;
 				ProjectElement element = node.ItemNode;
-				string path = node.GetMkDocument();
+				string path = node.GetMKDocument();
 				node.Remove(true);
 
 				//Now see if it is removed from the UI.
@@ -281,7 +281,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				{
 					FileNode node = project.NodeFromItemId(id) as FileNode;
 					Assert.IsNotNull(node);
-					string document = node.GetMkDocument();
+					string document = node.GetMKDocument();
 
 					if(String.Compare(Path.GetExtension(document), ".cs", StringComparison.OrdinalIgnoreCase) == 0)
 					{
@@ -294,7 +294,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 						Assert.IsTrue(manager.Close(__FRAMECLOSE.FRAMECLOSE_SaveIfDirty) == VSConstants.S_OK);
 
 						// Be sure the node is selected.
-						Utilities.ManipulateNode(project, node.ID, EXPANDFLAGS.EXPF_SelectItem);
+						Utilities.ManipulateNode(project, node.Id, EXPANDFLAGS.EXPF_SelectItem);
 
 						// Invoke opening of the node.
 						doDefaultAction.Invoke(node, new object[] { });
@@ -305,7 +305,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 						uint itemId;
 						IVsWindowFrame windowFrame;
 						Assert.IsTrue(VsShellUtilities.IsDocumentOpen(node.ProjectManager.Site, document, logicalView, out hierOpen, out itemId, out windowFrame), "DoDeafult action did not open the file");
-						Assert.IsTrue(itemId == node.ID, "We did not open the correct document");
+						Assert.IsTrue(itemId == node.Id, "We did not open the correct document");
 						Assert.IsNotNull(windowFrame, "Do deafult action did not retun a window frame");
 						Assert.IsTrue(windowFrame.IsVisible() == VSConstants.S_OK, "Do deafult action did not show a window frame");
 					}
@@ -408,7 +408,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				string destination = Path.Combine(TestContext.TestDir, TestContext.TestName);
 				ProjectNode project = Utilities.CreateMyNestedProject(sp, dte, TestContext.TestName, destination, true);
 
-				string projectName = project.GetMkDocument();
+				string projectName = project.GetMKDocument();
 				string newprojectName = Path.Combine(project.ProjectFolder, Path.GetFileNameWithoutExtension(projectName) + "_temp");
 
 				// Rename the project file on disk
@@ -474,7 +474,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				IVsSolution solutionService = (IVsSolution)sp.GetService(typeof(IVsSolution));
 				solutionService.SaveSolutionElement((uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_SaveIfDirty, project, 0);
 
-				string projectFullpath = project.GetMkDocument();
+				string projectFullpath = project.GetMKDocument();
 				object customin = null;
 				object customout = null;
 				dte.Commands.Raise(VsMenus.guidStandardCommandSet97.ToString("B"), (int)Microsoft.VisualStudio.VSConstants.VSStd97CmdID.UnloadProject, ref customin, ref customout);
@@ -511,7 +511,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				string destination = Path.Combine(TestContext.TestDir, TestContext.TestName);
 				ProjectNode project = Utilities.CreateMyNestedProject(sp, dte, TestContext.TestName, destination, true);
 
-				string path = project.GetMkDocument();
+				string path = project.GetMKDocument();
 
 				// It would be nice if we could just copy the embedded resource to the opened project file, but implicit reload of nested projects crashes on non SP1 versions.
 				// For now we are going to close the project and reopen it with the embedded project.
@@ -564,7 +564,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				// Get the id 
 				NestedProjectNode nestedProjectNode = Utilities.GetNodesOfType<NestedProjectNode>(project)[0];
 
-				project.SetProperty(nestedProjectNode.ID, (int)__VSHPROPID.VSHPROPID_EditLabel, "NewProject");
+				project.SetProperty(nestedProjectNode.Id, (int)__VSHPROPID.VSHPROPID_EditLabel, "NewProject");
 
 				this.VerifyNestedProjectRename(project, nestedProjectNode, nestedProjectHierarchy, "NewProject");
 

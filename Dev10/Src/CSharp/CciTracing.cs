@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Diagnostics;
 
-	public static class CCITracing
+	public static class CciTracing
 	{
 		[ConditionalAttribute("Enable_CCIDiagnostics")]
 		static void InternalTraceCall(int levels)
@@ -33,13 +33,13 @@ namespace Microsoft.VisualStudio.Project
 		static public void TraceCall()
 		{
 			// skip this one as well
-			CCITracing.InternalTraceCall(2);
+			CciTracing.InternalTraceCall(2);
 		}
 
 		[ConditionalAttribute("CCI_TRACING")]
 		static public void TraceCall(string parameters)
 		{
-			CCITracing.InternalTraceCall(2);
+			CciTracing.InternalTraceCall(2);
 			System.Diagnostics.Trace.WriteLine("\tParameters: \t" + parameters);
 		}
 
@@ -49,7 +49,7 @@ namespace Microsoft.VisualStudio.Project
 			if (exception == null)
 				throw new ArgumentNullException("exception");
 
-			CCITracing.InternalTraceCall(2);
+			CciTracing.InternalTraceCall(2);
 			System.Diagnostics.Trace.WriteLine("ExceptionInfo: \t" + exception.ToString());
 		}
 

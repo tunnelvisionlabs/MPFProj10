@@ -154,9 +154,9 @@
     <Compile Include="ISingleFileGenerator.cs" />
     <Compile Include="LocDisplayNameAttribute.cs" />
     <Compile Include="ModuleKind.cs" />
-    <Compile Include="MsBuildGeneratedItemType.cs" />
+    <Compile Include="MSBuildGeneratedItemType.cs" />
     <Compile Include="MSBuildResult.cs" />
-    <Compile Include="MsBuildTarget.cs" />
+    <Compile Include="MSBuildTarget.cs" />
     <Compile Include="ObjectReferenceEqualityComparer`1.cs" />
     <Compile Include="OleServiceProvider.ServiceData.cs" />
     <Compile Include="OutputType.cs" />
@@ -212,7 +212,7 @@
     <Compile Include="GlobalAllocFlags.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HierarchyNode.cs" />
-    <Compile Include="IDEBuildLogger.cs" />
+    <Compile Include="IdeBuildLogger.cs" />
     <Compile Include="ImageHandler.cs" />
     <Compile Include="IProjectSourceNode.cs" />
     <Compile Include="LocalizableProperties.cs" />
@@ -269,7 +269,7 @@
     <Compile Include="SolutionListenerForProjectReferenceUpdate.cs" />
     <Compile Include="SuspendFileChanges.cs" />
     <Compile Include="TokenProcessor.cs" />
-    <Compile Include="CCITracing.cs" />
+    <Compile Include="CciTracing.cs" />
     <Compile Include="TrackDocumentsHelper.cs" />
     <Compile Include="UpdateSolutionEventsListener.cs" />
     <Compile Include="Utilities.cs" />

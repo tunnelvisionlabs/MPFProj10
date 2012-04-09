@@ -33,7 +33,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 				int locale = 0;
 				try
 				{
-					locale = int.Parse(BaseReferenceNode.LCID, CultureInfo.InvariantCulture);
+					locale = int.Parse(BaseReferenceNode.Lcid, CultureInfo.InvariantCulture);
 				}
 				catch(System.FormatException)
 				{

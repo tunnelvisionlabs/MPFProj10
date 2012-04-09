@@ -68,7 +68,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 				// Get the wizard to run, we will get called again and use the alternate code path
 				ProjectElement newElement = new ProjectElement(this.node.ProjectManager, System.IO.Path.Combine(destination, projectName), ProjectFileConstants.SubProject);
 				newElement.SetMetadata(ProjectFileConstants.Template, fileName);
-				((ProjectContainerNode)this.node.ProjectManager).RunVsTemplateWizard(newElement, false);
+				((ProjectContainerNode)this.node.ProjectManager).RunVSTemplateWizard(newElement, false);
 			}
 			else
 			{

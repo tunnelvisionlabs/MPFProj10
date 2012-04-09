@@ -354,7 +354,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 			else
 			{
-				Uri uri = new Uri(this.ProjectManager.BaseURI.Uri, path);
+				Uri uri = new Uri(this.ProjectManager.BaseUri.Uri, path);
 
 				if(uri != null)
 				{
@@ -377,7 +377,7 @@ namespace Microsoft.VisualStudio.Project
 			string privateValue = this.ItemNode.GetMetadata(ProjectFileConstants.Private);
 
 			// Get the list of items which require HintPath
-            IEnumerable<MSBuild.ProjectItem> references = this.ProjectManager.BuildProject.GetItems(MsBuildGeneratedItemType.ReferenceCopyLocalPaths);
+            IEnumerable<MSBuild.ProjectItem> references = this.ProjectManager.BuildProject.GetItems(MSBuildGeneratedItemType.ReferenceCopyLocalPaths);
 
 			// Remove the HintPath, we will re-add it below if it is needed
 			if(!String.IsNullOrEmpty(this.AssemblyPath))
@@ -398,7 +398,7 @@ namespace Microsoft.VisualStudio.Project
 					{
 						if(Path.IsPathRooted(hintPath))
 						{
-							hintPath = PackageUtilities.GetPathDistance(this.ProjectManager.BaseURI.Uri, new Uri(hintPath));
+							hintPath = PackageUtilities.GetPathDistance(this.ProjectManager.BaseUri.Uri, new Uri(hintPath));
 						}
 
 						this.ItemNode.SetMetadata(ProjectFileConstants.HintPath, hintPath);
@@ -425,7 +425,7 @@ namespace Microsoft.VisualStudio.Project
 
 			// Resolve assembly referernces. This is needed to make sure that properties like the full path
 			// to the assembly or the hint path are set.
-			if(this.ProjectManager.Build(MsBuildTarget.ResolveAssemblyReferences) != MSBuildResult.Successful)
+			if(this.ProjectManager.Build(MSBuildTarget.ResolveAssemblyReferences) != MSBuildResult.Successful)
 			{
 				return;
 			}

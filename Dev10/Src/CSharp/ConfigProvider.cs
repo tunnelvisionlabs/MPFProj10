@@ -39,8 +39,8 @@ namespace Microsoft.VisualStudio.Project
     public class ConfigProvider : IVsCfgProvider2, IVsProjectCfgProvider, IVsExtensibleObject
     {
         #region fields
-        public const string AnyCPUPlatform = "Any CPU";
-        public const string x86Platform = "x86";
+        public const string AnyCpuPlatform = "Any CPU";
+        public const string X86Platform = "x86";
 
         private readonly ProjectNode _project;
         private readonly EventSinkCollection cfgEventSinks = new EventSinkCollection();
@@ -1169,7 +1169,7 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual string[] GetDefaultPlatforms()
         {
-            return new string[] { AnyCPUPlatform };
+            return new string[] { AnyCpuPlatform };
         }
 
         /// <summary>
@@ -1203,7 +1203,7 @@ namespace Microsoft.VisualStudio.Project
         {
             if(String.Equals(platformProperty, ProjectFileValues.AnyCPU, StringComparison.OrdinalIgnoreCase))
             {
-                return AnyCPUPlatform;
+                return AnyCpuPlatform;
             }
 
             return platformProperty;
@@ -1216,7 +1216,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>The new name.</returns>
         public virtual string GetPlatformPropertyFromPlatformName(string platformName)
         {
-            if (String.Equals(platformName, AnyCPUPlatform, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(platformName, AnyCpuPlatform, StringComparison.OrdinalIgnoreCase))
             {
                 return ProjectFileValues.AnyCPU;
             }

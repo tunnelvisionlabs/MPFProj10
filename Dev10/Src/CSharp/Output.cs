@@ -49,7 +49,7 @@ namespace Microsoft.VisualStudio.Project
 			// Make sure we have a full path
 			if(!System.IO.Path.IsPathRooted(pbstrCanonicalName))
 			{
-				pbstrCanonicalName = new Url(project.BaseURI, pbstrCanonicalName).AbsoluteUrl;
+				pbstrCanonicalName = new Url(project.BaseUri, pbstrCanonicalName).AbsoluteUrl;
 			}
 			return VSConstants.S_OK;
 		}

@@ -26,7 +26,8 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The VS installation directory. This is the same as the $(DevEnvDir) macro.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Env")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Env",
+			Justification = "The name of this value is used as a key in the MSBuild project.")]
 		DevEnvDir,
 
 		/// <summary>
@@ -62,7 +63,8 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The ResolvedNonMSBuildProjectOutputs msbuild property
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "VSIDE")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "VSIDE",
+			Justification = "The name of this value is used as a key in the MSBuild project.")]
 		VSIDEResolvedNonMSBuildProjectOutputs,
 
 		/// <summary>

@@ -448,7 +448,7 @@ namespace Microsoft.VisualStudio.Project
 				dataObject.SetData(fmt, ptrToItems);
 
 				// Now add the project path that sourced data. We just write the project file path.
-				SafeGlobalAllocHandle ptrToProjectPath = this.PackageSelectionData(new StringBuilder(this.GetMkDocument()), true);
+				SafeGlobalAllocHandle ptrToProjectPath = this.PackageSelectionData(new StringBuilder(this.GetMKDocument()), true);
 
 				if(ptrToProjectPath != null)
 				{
@@ -467,7 +467,7 @@ namespace Microsoft.VisualStudio.Project
 					{
 						foreach (HierarchyNode node in this.ItemsDraggedOrCutOrCopied)
 						{
-							ErrorHandler.ThrowOnFailure(w.ExpandItem((IVsUIHierarchy)this, node.ID, first ? EXPANDFLAGS.EXPF_CutHighlightItem : EXPANDFLAGS.EXPF_AddCutHighlightItem));
+							ErrorHandler.ThrowOnFailure(w.ExpandItem((IVsUIHierarchy)this, node.Id, first ? EXPANDFLAGS.EXPF_CutHighlightItem : EXPANDFLAGS.EXPF_AddCutHighlightItem));
 							first = false;
 						}
 					}
@@ -537,7 +537,7 @@ namespace Microsoft.VisualStudio.Project
 				HierarchyNode cursorNode = targetNode;
 				while(cursorNode != null)
 				{
-					if(String.Equals(folder, cursorNode.GetMkDocument(), StringComparison.OrdinalIgnoreCase))
+					if(String.Equals(folder, cursorNode.GetMKDocument(), StringComparison.OrdinalIgnoreCase))
 						throw new InvalidOperationException();
 					cursorNode = cursorNode.Parent;
 				}
@@ -625,7 +625,7 @@ namespace Microsoft.VisualStudio.Project
 			if(File.Exists(targetPath))
 			{
 				VSADDRESULT[] result = new VSADDRESULT[1];
-				ErrorHandler.ThrowOnFailure(this.AddItem(parentNode.ID, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, name, 1, new string[] { targetPath }, IntPtr.Zero, result));
+				ErrorHandler.ThrowOnFailure(this.AddItem(parentNode.Id, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, name, 1, new string[] { targetPath }, IntPtr.Zero, result));
 				if(result[0] != VSADDRESULT.ADDRESULT_Success)
 					throw new InvalidOperationException();
 				newNode = this.FindChild(targetPath);
@@ -879,7 +879,7 @@ namespace Microsoft.VisualStudio.Project
 					// This is the code path when source is windows explorer
 					VSADDRESULT[] vsaddresults = new VSADDRESULT[1];
 					vsaddresults[0] = VSADDRESULT.ADDRESULT_Failure;
-					int addResult = AddItem(node.ID, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, null, (uint)filesDropped.Count, filesDroppedAsArray, IntPtr.Zero, vsaddresults);
+					int addResult = AddItem(node.Id, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, null, (uint)filesDropped.Count, filesDroppedAsArray, IntPtr.Zero, vsaddresults);
 					if(addResult != VSConstants.S_OK && addResult != VSConstants.S_FALSE && addResult != (int)OleConstants.OLECMDERR_E_CANCELED
 						&& vsaddresults[0] != VSADDRESULT.ADDRESULT_Success)
 					{
@@ -927,13 +927,13 @@ namespace Microsoft.VisualStudio.Project
 			if(DragDropHelper.QueryGetData(pDataObject, ref fmt) == VSConstants.S_OK)
 			{
 				// Data is from a Ref-based project.
-				return DropDataType.VsRef;
+				return DropDataType.VSReference;
 			}
 
 			fmt.cfFormat = DragDropHelper.CF_VSSTGPROJECTITEMS;
 			if(DragDropHelper.QueryGetData(pDataObject, ref fmt) == VSConstants.S_OK)
 			{
-				return DropDataType.VsStg;
+				return DropDataType.VSStorage;
 			}
 
 			return DropDataType.None;
@@ -954,7 +954,7 @@ namespace Microsoft.VisualStudio.Project
 		internal DropEffects QueryDropEffect(DropDataType dropDataType, uint grfKeyState)
 		{
 			//Validate the dropdatatype
-			if((dropDataType != DropDataType.Shell) && (dropDataType != DropDataType.VsRef) && (dropDataType != DropDataType.VsStg))
+			if((dropDataType != DropDataType.Shell) && (dropDataType != DropDataType.VSReference) && (dropDataType != DropDataType.VSStorage))
 			{
 				return DropEffects.None;
 			}
@@ -1033,7 +1033,7 @@ namespace Microsoft.VisualStudio.Project
 					}
 					else if(w != null)
 					{
-						ErrorHandler.ThrowOnFailure(w.ExpandItem((IVsUIHierarchy)this, node.ID, EXPANDFLAGS.EXPF_UnCutHighlightItem));
+						ErrorHandler.ThrowOnFailure(w.ExpandItem((IVsUIHierarchy)this, node.Id, EXPANDFLAGS.EXPF_UnCutHighlightItem));
 					}
 				}
 			}
@@ -1114,7 +1114,7 @@ namespace Microsoft.VisualStudio.Project
 
 			string sourceProjectPath = DragDropHelper.GetSourceProjectPath(oleDataObject);
 
-			if(!String.IsNullOrEmpty(sourceProjectPath) && NativeMethods.IsSamePath(sourceProjectPath, this.GetMkDocument()))
+			if(!String.IsNullOrEmpty(sourceProjectPath) && NativeMethods.IsSamePath(sourceProjectPath, this.GetMKDocument()))
 			{
 				ErrorHandler.ThrowOnFailure(UnsafeNativeMethods.OleFlushClipboard());
 				int clipboardOpened = 0;

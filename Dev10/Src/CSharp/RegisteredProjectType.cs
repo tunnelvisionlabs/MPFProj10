@@ -92,7 +92,7 @@ namespace Microsoft.VisualStudio.Project
 		/// 
 		/// You can pass in a string such as: "Windows\Console Application"
 		/// </summary>
-		public string GetVsTemplateFile(string templateFile)
+		public string GetVSTemplateFile(string templateFile)
 		{
 			// First see if this use the vstemplate model
 			if(!String.IsNullOrEmpty(DefaultProjectExtensionValue))

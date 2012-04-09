@@ -119,7 +119,7 @@ namespace Microsoft.VisualStudio.Project
 				throw new InvalidOperationException();
 			}
 			hier = HierarchyNode.GetOuterHierarchy(this.node.ProjectManager);
-			itemid = this.node.ID;
+			itemid = this.node.Id;
 			return VSConstants.S_OK;
 		}
 		#endregion
@@ -251,7 +251,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			get
 			{
-				Guid catid = this.Node.ProjectManager.GetCATIDForType(this.GetType());
+				Guid catid = this.Node.ProjectManager.GetCatIdForType(this.GetType());
 				if(Guid.Empty.CompareTo(catid) == 0)
 				{
 					return null;

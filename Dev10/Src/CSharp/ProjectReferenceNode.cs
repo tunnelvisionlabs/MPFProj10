@@ -337,7 +337,7 @@ namespace Microsoft.VisualStudio.Project
 				Debug.Assert(!String.IsNullOrEmpty(this.referencedProjectName), "Could not retrive referenced project name form project file");
 			}
 
-			Uri uri = new Uri(this.ProjectManager.BaseURI.Uri, this.referencedProjectRelativePath);
+			Uri uri = new Uri(this.ProjectManager.BaseUri.Uri, this.referencedProjectRelativePath);
 
 			if(uri != null)
 			{
@@ -392,7 +392,7 @@ namespace Microsoft.VisualStudio.Project
 			// Did we get just a file or a relative path?
 			Uri uri = new Uri(projectPath);
 
-			string referenceDir = PackageUtilities.GetPathDistance(this.ProjectManager.BaseURI.Uri, uri);
+			string referenceDir = PackageUtilities.GetPathDistance(this.ProjectManager.BaseUri.Uri, uri);
 
 			Debug.Assert(!String.IsNullOrEmpty(referenceDir), "Can not add a project reference because the input for adding one is invalid.");
 

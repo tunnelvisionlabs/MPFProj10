@@ -161,7 +161,7 @@ namespace Microsoft.VisualStudio.Project
                 }
 
                 bool boolValue = false;
-                CCITracing.TraceCall(this.ID + "," + id.ToString());
+                CciTracing.TraceCall(this.Id + "," + id.ToString());
                 if (bool.TryParse(value.ToString(), out boolValue))
                 {
                     this.IsNonMemberItem = boolValue;
@@ -358,7 +358,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-		public override string GetMkDocument()
+		public override string GetMKDocument()
 		{
 			Debug.Assert(this.Url != null, "No url sepcified for this node");
 
@@ -498,7 +498,7 @@ namespace Microsoft.VisualStudio.Project
                     return ((IProjectSourceNode)this).ExcludeFromProject();
 
                 case ProjectFileConstants.CommandExploreFolderInWindows:
-                    ProjectNode.ExploreFolderInWindows(GetMkDocument());
+                    ProjectNode.ExploreFolderInWindows(GetMKDocument());
                     return VSConstants.S_OK;
                 }
             }
@@ -517,7 +517,7 @@ namespace Microsoft.VisualStudio.Project
                 return; // do nothing
             }
 
-            this.ItemNode = ProjectManager.AddFileToMsBuild(this.Url);
+            this.ItemNode = ProjectManager.AddFileToMSBuild(this.Url);
             this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, false);
             if (recursive)
             {
@@ -549,7 +549,7 @@ namespace Microsoft.VisualStudio.Project
             if (!Utilities.IsInAutomationFunction(this.ProjectManager.Site))
             {
                 IVsUIHierarchyWindow uiWindow = UIHierarchyUtilities.GetUIHierarchyWindow(this.ProjectManager.Site, SolutionExplorer);
-                int result = uiWindow.ExpandItem(this.ProjectManager, this.ID, expanded ? EXPANDFLAGS.EXPF_ExpandFolder : EXPANDFLAGS.EXPF_CollapseFolder);
+                int result = uiWindow.ExpandItem(this.ProjectManager, this.Id, expanded ? EXPANDFLAGS.EXPF_ExpandFolder : EXPANDFLAGS.EXPF_CollapseFolder);
                 ErrorHandler.ThrowOnFailure(result);
 
                 // then post the expand command to the shell. Folder verification and creation will
@@ -622,7 +622,7 @@ namespace Microsoft.VisualStudio.Project
                 this.ItemNode = new ProjectElement(this.ProjectManager, null, true);  // now we have to create a new ItemNode to indicate that this is virtual node.
                 this.ItemNode.Rename(url);
                 this.ItemNode.SetMetadata(ProjectFileConstants.Name, this.Url);
-                this.ReDraw(UIHierarchyElement.Icon); // we have to redraw the icon of the node as it is now not a member of the project and shoul be drawn using a different icon.
+                this.Redraw(UIHierarchyElement.Icon); // we have to redraw the icon of the node as it is now not a member of the project and shoul be drawn using a different icon.
             }
             else if (this.Parent != null) // the project node has no parentNode
             {
@@ -683,7 +683,7 @@ namespace Microsoft.VisualStudio.Project
 
             // now add this node to the project.
             this.AddToMSBuild(recursive);
-            this.ReDraw(UIHierarchyElement.Icon);
+            this.Redraw(UIHierarchyElement.Icon);
 
             // refresh property browser...
             ProjectNode.RefreshPropertyBrowser();
@@ -722,7 +722,7 @@ namespace Microsoft.VisualStudio.Project
 			//TODO - this should not digest all exceptions.
 			catch(System.Exception e)
 			{
-				CCITracing.Trace(e);
+				CciTracing.Trace(e);
 				throw;
 			}
 		}
@@ -761,7 +761,7 @@ namespace Microsoft.VisualStudio.Project
 			//TODO - this should not digest all exceptions.
 			catch(System.Exception e)
 			{
-				CCITracing.Trace(e);
+				CciTracing.Trace(e);
 				throw;
 			}
 		}
@@ -821,7 +821,7 @@ namespace Microsoft.VisualStudio.Project
 			// renamed node.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.ID, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
 
             ProjectManager.ItemIdMap.UpdateCanonicalName(this);

@@ -18,8 +18,7 @@ namespace Microsoft.VisualStudio.Project
 	/// </summary>
 	public enum CommandOrigin
 	{
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ui")]
-		UiHierarchy,
+		UIHierarchy,
 		OleCommandTarget
 	}
 }

@@ -104,7 +104,7 @@ namespace Microsoft.VisualStudio.Project
 				{
 					NestedProjectNode p = n as NestedProjectNode;
 
-					if(p != null && p.ID == itemId)
+					if(p != null && p.Id == itemId)
 					{
 						if(p.NestedHierarchy != null)
 						{
@@ -404,7 +404,7 @@ namespace Microsoft.VisualStudio.Project
 						bool isVsTemplate = Utilities.IsTemplateFile(GetProjectTemplatePath(null));
 						if(isVsTemplate)
 						{
-							RunVsTemplateWizard(null, true);
+							RunVSTemplateWizard(null, true);
 						}
 						else
 						{
@@ -448,8 +448,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="element">The project item to use as the base of the nested project.</param>
 		/// <param name="silent">true if the wizard should run silently, otherwise false.</param>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Vs")]
-		protected internal void RunVsTemplateWizard(ProjectElement element, bool silent)
+		protected internal void RunVSTemplateWizard(ProjectElement element, bool silent)
 		{
 			ProjectElement elementToUse = (element == null) ? this.nestedProjectElement : element;
 
@@ -622,7 +621,7 @@ namespace Microsoft.VisualStudio.Project
 				Debug.Assert(registeredProjectType != null && (!String.IsNullOrEmpty(registeredProjectType.DefaultProjectExtensionValue) || !String.IsNullOrEmpty(registeredProjectType.WizardTemplatesDirValue)), " Registered wizard directory value not set in the registry.");
 
 				// See if this specify a VsTemplate file
-				fullPath = registeredProjectType.GetVsTemplateFile(templateFile);
+				fullPath = registeredProjectType.GetVSTemplateFile(templateFile);
 				if(String.IsNullOrEmpty(fullPath))
 				{
 					// Default to using the WizardTemplateDir to calculate the absolute path
@@ -738,7 +737,7 @@ namespace Microsoft.VisualStudio.Project
 
 #if DEBUG
 				IVsHierarchy nestedHierarchy;
-				ErrorHandler.ThrowOnFailure(solution.GetProjectOfUniqueName(newNode.GetMkDocument(), out nestedHierarchy));
+				ErrorHandler.ThrowOnFailure(solution.GetProjectOfUniqueName(newNode.GetMKDocument(), out nestedHierarchy));
 				Debug.Assert(nestedHierarchy != null && Utilities.IsSameComObject(nestedHierarchy, newNode.NestedHierarchy), "The nested hierrachy was not reloaded correctly.");
 #endif
 				this.SetProjectFileDirty(isDirty);

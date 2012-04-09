@@ -176,7 +176,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="value">value of property</param>
 		public void SetConfigProperty(string name, _PersistStorageType storageType, string value)
 		{
-			CCITracing.TraceCall();
+			CciTracing.TraceCall();
 			if(value == null)
 			{
 				value = String.Empty;

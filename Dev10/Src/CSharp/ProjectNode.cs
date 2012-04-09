@@ -81,11 +81,11 @@ namespace Microsoft.VisualStudio.Project
 
         private static readonly FrameworkName DefaultTargetFrameworkMoniker = new FrameworkName(".NETFramework", new Version(4, 0));
 
-		protected static Guid addComponentLastActiveTab = VSConstants.GUID_SolutionPage;
+		protected static Guid AddComponentLastActiveTab = VSConstants.GUID_SolutionPage;
 
-		protected static uint addComponentDialogSizeX = 0;
+		protected static uint AddComponentDialogSizeX = 0;
 
-		protected static uint addComponentDialogSizeY = 0;
+		protected static uint AddComponentDialogSizeY = 0;
 
 		/// <summary>
         /// List of output groups names and their associated target
@@ -290,8 +290,7 @@ namespace Microsoft.VisualStudio.Project
         /// This is the project instance guid that is peristed in the project file
         /// </summary>
         [System.ComponentModel.BrowsableAttribute(false)]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ID")]
-        public virtual Guid ProjectIDGuid
+        public virtual Guid ProjectIdGuid
         {
             get
             {
@@ -335,7 +334,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return this.GetMkDocument();
+                return this.GetMKDocument();
             }
         }
 
@@ -425,9 +424,7 @@ namespace Microsoft.VisualStudio.Project
         /// Example: The language projrcts are triggering a build with the Compile target whenever 
         /// the project system changes.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ReEvaluate")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Re")]
-        protected internal virtual string ReEvaluateProjectFileTargetName
+        protected internal virtual string ReevaluateProjectFileTargetName
         {
             get
             {
@@ -453,7 +450,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                string document = this.GetMkDocument();
+                string document = this.GetMKDocument();
 
                 if (String.IsNullOrEmpty(document))
                 {
@@ -625,8 +622,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets the Base Uniform Resource Identifier (URI).
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "URI")]
-        public Microsoft.VisualStudio.Shell.Url BaseURI
+        public Microsoft.VisualStudio.Shell.Url BaseUri
         {
             get
             {
@@ -1339,7 +1335,7 @@ namespace Microsoft.VisualStudio.Project
 
                 string canonicalName = fileKey;
                 if (!Path.IsPathRooted(canonicalName))
-                    canonicalName = Path.Combine(ProjectManager.BaseURI.AbsoluteUrl, fileKey);
+                    canonicalName = Path.Combine(ProjectManager.BaseUri.AbsoluteUrl, fileKey);
 
                 if (fileKey.IndexOfAny(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }) < 0)
                 {
@@ -1729,7 +1725,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>A success or failure value.</returns>
         public override int SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider site)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             this._site = new ServiceProvider(site);
 			ServiceProvider = this._site;
 
@@ -1808,7 +1804,7 @@ namespace Microsoft.VisualStudio.Project
             guid = Guid.Empty;
             if ((__VSHPROPID)propid == __VSHPROPID.VSHPROPID_ProjectIDGuid)
             {
-                guid = this.ProjectIDGuid;
+                guid = this.ProjectIdGuid;
             }
             else if (propid == (int)__VSHPROPID.VSHPROPID_CmdUIGuid)
             {
@@ -1842,10 +1838,10 @@ namespace Microsoft.VisualStudio.Project
             switch ((__VSHPROPID)propid)
             {
                 case __VSHPROPID.VSHPROPID_ProjectIDGuid:
-                    this.ProjectIDGuid = guid;
+                    this.ProjectIdGuid = guid;
                     return VSConstants.S_OK;
             }
-            CCITracing.TraceCall(String.Format(CultureInfo.CurrentCulture, "Property {0} not found", propid));
+            CciTracing.TraceCall(String.Format(CultureInfo.CurrentCulture, "Property {0} not found", propid));
             return VSConstants.DISP_E_MEMBERNOTFOUND;
         }
 
@@ -1871,11 +1867,11 @@ namespace Microsoft.VisualStudio.Project
         /// Gets the moniker for the project node. That is the full path of the project file.
         /// </summary>
         /// <returns>The moniker for the project file.</returns>
-        public override string GetMkDocument()
+        public override string GetMKDocument()
         {
             Debug.Assert(!String.IsNullOrEmpty(this.FileName));
-            Debug.Assert(this.BaseURI != null && !String.IsNullOrEmpty(this.BaseURI.AbsoluteUrl));
-            return Path.Combine(this.BaseURI.AbsoluteUrl, this.FileName);
+            Debug.Assert(this.BaseUri != null && !String.IsNullOrEmpty(this.BaseUri.AbsoluteUrl));
+            return Path.Combine(this.BaseUri.AbsoluteUrl, this.FileName);
         }
 
         protected virtual HierarchyNodeCollection CreateHierarchyNodeCollection()
@@ -1898,7 +1894,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 try
                 {
-                    this.UnRegisterProject();
+                    this.UnregisterProject();
                 }
                 finally
                 {
@@ -2292,10 +2288,10 @@ namespace Microsoft.VisualStudio.Project
         /// <returns></returns>
         public virtual int AddProjectReference()
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             IVsComponentSelectorDlg4 componentDialog;
-            string strBrowseLocations = Path.GetDirectoryName(this.BaseURI.Uri.LocalPath);
+            string strBrowseLocations = Path.GetDirectoryName(this.BaseUri.Uri.LocalPath);
             var tabInitList = GetComponentSelectorTabList().ToArray();
             for (int i = 0; i < tabInitList.Length; i++)
                 tabInitList[i].dwSize = (uint)Marshal.SizeOf(typeof(VSCOMPONENTSELECTORTABINIT));
@@ -2317,11 +2313,11 @@ namespace Microsoft.VisualStudio.Project
 						null,
 						SR.GetString(SR.AddReferenceDialogTitle, CultureInfo.CurrentUICulture),   // Title
                         "VS.AddReference",                          // Help topic
-                        addComponentDialogSizeX,
-                        addComponentDialogSizeY,
+                        AddComponentDialogSizeX,
+                        AddComponentDialogSizeY,
                         (uint)tabInitList.Length,
                         tabInitList.ToArray(),
-                        ref addComponentLastActiveTab,
+                        ref AddComponentLastActiveTab,
 						browseFilters,
                         ref strBrowseLocations,
 						this.TargetFrameworkMoniker.FullName));
@@ -2653,9 +2649,9 @@ namespace Microsoft.VisualStudio.Project
             ProjectOptions options = this.GetProjectOptions(config, platform);
             string outputPath = Path.GetDirectoryName(options.OutputAssembly);
 
-            if (cleanBuild && this.currentConfig.Targets.ContainsKey(MsBuildTarget.Clean))
+            if (cleanBuild && this.currentConfig.Targets.ContainsKey(MSBuildTarget.Clean))
             {
-                this.InvokeMsBuild(MsBuildTarget.Clean);
+                this.InvokeMSBuild(MSBuildTarget.Clean);
             }
 
             PackageUtilities.EnsureOutputPath(outputPath);
@@ -2683,7 +2679,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     this.SetBuildConfigurationProperties(config, platform);
 
-                    result = this.InvokeMsBuild(target);
+                    result = this.InvokeMSBuild(target);
                 }
                 finally
                 {
@@ -3152,7 +3148,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>File node added</returns>
         public virtual FileNode CreateFileNode(string file)
         {
-            ProjectElement item = this.AddFileToMsBuild(file);
+            ProjectElement item = this.AddFileToMSBuild(file);
             return this.CreateFileNode(item);
         }
 
@@ -3173,7 +3169,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>Dependent node added</returns>
         public virtual DependentFileNode CreateDependentFileNode(string file)
         {
-            ProjectElement item = this.AddFileToMsBuild(file);
+            ProjectElement item = this.AddFileToMSBuild(file);
             return this.CreateDependentFileNode(item);
         }
 
@@ -3277,7 +3273,7 @@ namespace Microsoft.VisualStudio.Project
         {
             FolderNode folderNode = null;
             uint uiItemId;
-            Url url = new Url(this.BaseURI, path);
+            Url url = new Url(this.BaseUri, path);
             string strFullPath = url.AbsoluteUrl;
 
             HierarchyNode cachedNode = null;
@@ -3311,7 +3307,7 @@ namespace Microsoft.VisualStudio.Project
 
                 // If MSBuild did not know about it, create a new one
                 if (item == null)
-                    item = this.AddFolderToMsBuild(path);
+                    item = this.AddFolderToMSBuild(path);
 
                 folderNode = this.CreateFolderNode(path, item);
                 parent.AddChild(folderNode);
@@ -3692,7 +3688,7 @@ namespace Microsoft.VisualStudio.Project
                         Marshal.Release(unknown);
                 }
                 // Create the logger
-                this.BuildLogger = new IDEBuildLogger(output, this.TaskProvider, hierarchy);
+                this.BuildLogger = new IdeBuildLogger(output, this.TaskProvider, hierarchy);
 
                 // To retrive the verbosity level, the build logger depends on the registry root 
                 // (otherwise it will used an hardcoded default)
@@ -3701,7 +3697,7 @@ namespace Microsoft.VisualStudio.Project
                 {
                     string registryRoot;
                     ErrorHandler.ThrowOnFailure(registry.GetLocalRegistryRoot(out registryRoot));
-                    IDEBuildLogger logger = this.BuildLogger as IDEBuildLogger;
+                    IdeBuildLogger logger = this.BuildLogger as IdeBuildLogger;
                     if (!String.IsNullOrEmpty(registryRoot) && (null != logger))
                     {
                         logger.BuildVerbosityRegistryRoot = registryRoot;
@@ -3712,7 +3708,7 @@ namespace Microsoft.VisualStudio.Project
             }
             else
             {
-                ((IDEBuildLogger)this.BuildLogger).OutputWindowPane = output;
+                ((IdeBuildLogger)this.BuildLogger).OutputWindowPane = output;
             }
         }
 
@@ -3746,8 +3742,7 @@ namespace Microsoft.VisualStudio.Project
         /// you should be aware that any call to BuildTarget on any project
         /// will reset the list of generated items/properties
         /// </remarks>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        protected virtual MSBuildResult InvokeMsBuild(string target)
+        protected virtual MSBuildResult InvokeMSBuild(string target)
         {
             MSBuildResult result = MSBuildResult.Failed;
             const bool designTime = true;
@@ -4090,31 +4085,29 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="file">The file to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added file.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToMs")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        public ProjectElement AddFileToMsBuild(string file)
+        public ProjectElement AddFileToMSBuild(string file)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
             if (string.IsNullOrEmpty(file))
                 throw new ArgumentException("file cannot be null or empty");
 
-            string itemPath = PackageUtilities.MakeRelativeIfRooted(file, this.BaseURI);
+            string itemPath = PackageUtilities.MakeRelativeIfRooted(file, this.BaseUri);
             Debug.Assert(!Path.IsPathRooted(itemPath), "Cannot add item with full path.");
 
             ProjectElement newItem;
 
             if (this.IsCodeFile(itemPath))
             {
-                newItem = AddFileToMsBuild(file, ProjectFileConstants.Compile, ProjectFileAttributeValue.Code);
+                newItem = AddFileToMSBuild(file, ProjectFileConstants.Compile, ProjectFileAttributeValue.Code);
             }
             else if (this.IsEmbeddedResource(itemPath))
             {
-                newItem = AddFileToMsBuild(file, ProjectFileConstants.EmbeddedResource, null);
+                newItem = AddFileToMSBuild(file, ProjectFileConstants.EmbeddedResource, null);
             }
             else
             {
-                newItem = AddFileToMsBuild(file, ProjectFileConstants.Content, ProjectFileConstants.Content);
+                newItem = AddFileToMSBuild(file, ProjectFileConstants.Content, ProjectFileConstants.Content);
             }
 
             return newItem;
@@ -4125,9 +4118,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="file">The file to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added file.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToMs")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        public virtual ProjectElement AddFileToMsBuild(string file, string itemType, string subType)
+        public virtual ProjectElement AddFileToMSBuild(string file, string itemType, string subType)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -4138,10 +4129,10 @@ namespace Microsoft.VisualStudio.Project
             if (string.IsNullOrEmpty(itemType))
                 throw new ArgumentException("itemType cannot be null or empty");
 
-            string itemPath = PackageUtilities.MakeRelativeIfRooted(file, this.BaseURI);
+            string itemPath = PackageUtilities.MakeRelativeIfRooted(file, this.BaseUri);
             Debug.Assert(!Path.IsPathRooted(itemPath), "Cannot add item with full path.");
 
-            ProjectElement newItem = this.CreateMsBuildFileItem(itemPath, itemType);
+            ProjectElement newItem = this.CreateMSBuildFileItem(itemPath, itemType);
             if (!string.IsNullOrEmpty(subType))
                 newItem.SetMetadata(ProjectFileConstants.SubType, subType);
 
@@ -4153,16 +4144,14 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="folder">The folder to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added folder.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToMs")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        protected ProjectElement AddFolderToMsBuild(string folder)
+        protected ProjectElement AddFolderToMSBuild(string folder)
         {
             if (folder == null)
                 throw new ArgumentNullException("folder");
             if (string.IsNullOrEmpty(folder))
                 throw new ArgumentException("folder cannot be null or empty");
 
-            return AddFolderToMsBuild(folder, ProjectFileConstants.Folder);
+            return AddFolderToMSBuild(folder, ProjectFileConstants.Folder);
         }
 
         /// <summary>
@@ -4170,9 +4159,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="folder">The folder to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added folder.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToMs")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        protected virtual ProjectElement AddFolderToMsBuild(string folder, string itemType)
+        protected virtual ProjectElement AddFolderToMSBuild(string folder, string itemType)
         {
             if (folder == null)
                 throw new ArgumentNullException("folder");
@@ -4183,10 +4170,10 @@ namespace Microsoft.VisualStudio.Project
             if (string.IsNullOrEmpty(itemType))
                 throw new ArgumentException("itemType cannot be null or empty");
 
-            string itemPath = PackageUtilities.MakeRelativeIfRooted(folder, this.BaseURI);
+            string itemPath = PackageUtilities.MakeRelativeIfRooted(folder, this.BaseUri);
             Debug.Assert(!Path.IsPathRooted(itemPath), "Cannot add item with full path.");
 
-            ProjectElement newItem = this.CreateMsBuildFileItem(itemPath, itemType);
+            ProjectElement newItem = this.CreateMSBuildFileItem(itemPath, itemType);
 
             return newItem;
         }
@@ -4641,7 +4628,7 @@ namespace Microsoft.VisualStudio.Project
 
             // If the platform is "Any CPU" then it should be set to AnyCPU, since that is the property value in MsBuild terms.
             platform = ConfigProvider.GetPlatformPropertyFromPlatformName(platform);
-            if (String.Equals(platform, ConfigProvider.AnyCPUPlatform, StringComparison.Ordinal))
+            if (String.Equals(platform, ConfigProvider.AnyCpuPlatform, StringComparison.Ordinal))
             {
                 platform = ProjectFileValues.AnyCPU;
             }
@@ -4864,8 +4851,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="file">file name</param>
         /// <param name="itemType">MSBuild item type</param>
         /// <returns>new project element</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        public ProjectElement CreateMsBuildFileItem(string file, string itemType)
+        public ProjectElement CreateMSBuildFileItem(string file, string itemType)
         {
             return new ProjectElement(this, file, itemType);
         }
@@ -4887,7 +4873,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>FolderNode created that can be added to the hierarchy</returns>
         protected internal FolderNode CreateFolderNode(string path)
         {
-            ProjectElement item = this.AddFolderToMsBuild(path);
+            ProjectElement item = this.AddFolderToMSBuild(path);
             FolderNode folderNode = CreateFolderNode(path, item);
             return folderNode;
         }
@@ -5079,9 +5065,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         ///  Unregisters us from the SCC manager
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnRegister")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Un")]
-        protected void UnRegisterProject()
+        protected void UnregisterProject()
         {
             if (this.IsSccDisabled || !this.isRegisteredWithScc)
             {
@@ -5102,8 +5086,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="type">Type of the object for which you want the CATID</param>
         /// <returns>CATID</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CATID")]
-        protected internal Guid GetCATIDForType(Type type)
+        protected internal Guid GetCatIdForType(Type type)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -5121,12 +5104,10 @@ namespace Microsoft.VisualStudio.Project
         /// provide a different GUID.
         /// </summary>
         /// <param name="type">Type of the extensible object</param>
-        /// <param name="catid">GUID that extender can use to uniquely identify your object type</param>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "catid")]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CATID")]
-        protected void AddCATIDMapping(Type type, Guid catid)
+        /// <param name="catId">GUID that extender can use to uniquely identify your object type</param>
+        protected void AddCatIdMapping(Type type, Guid catId)
         {
-            catidMapping.Add(type, catid);
+            catidMapping.Add(type, catId);
         }
 
         /// <summary>
@@ -5207,8 +5188,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Retrieve all XML fragments that need to be saved from the flavors and store the information in msbuild.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "XML")]
-        protected void PersistXMLFragments()
+        protected void PersistXmlFragments()
         {
             if (this.IsFlavorDirty() != 0)
             {
@@ -5288,7 +5268,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int GetCfgProvider(out IVsCfgProvider p)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             // Be sure to call the property here since that is doing a polymorhic ProjectConfig creation.
             p = this.ConfigProvider;
             return (p == null ? VSConstants.E_NOTIMPL : VSConstants.S_OK);
@@ -5408,7 +5388,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // Update the project with the latest flavor data (if needed)
-            PersistXMLFragments();
+            PersistXmlFragments();
 
             int result = VSConstants.S_OK;
             bool saveAs = true;
@@ -5483,7 +5463,7 @@ namespace Microsoft.VisualStudio.Project
                 return VSConstants.E_INVALIDARG;
             }
 
-            mkDoc = n.GetMkDocument();
+            mkDoc = n.GetMKDocument();
 
             if (String.IsNullOrEmpty(mkDoc))
             {
@@ -5726,11 +5706,11 @@ namespace Microsoft.VisualStudio.Project
                             if (editorType == Guid.Empty)
                             {
                                 Guid view = Guid.Empty;
-                                ErrorHandler.ThrowOnFailure(this.OpenItem(child.ID, ref view, IntPtr.Zero, out frame));
+                                ErrorHandler.ThrowOnFailure(this.OpenItem(child.Id, ref view, IntPtr.Zero, out frame));
                             }
                             else
                             {
-                                ErrorHandler.ThrowOnFailure(this.OpenItemWithSpecific(child.ID, editorFlags, ref editorType, physicalView, ref logicalView, IntPtr.Zero, out frame));
+                                ErrorHandler.ThrowOnFailure(this.OpenItemWithSpecific(child.Id, editorFlags, ref editorType, physicalView, ref logicalView, IntPtr.Zero, out frame));
                             }
 
                             // Show the window frame in the UI and make it the active window
@@ -5834,7 +5814,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int GetItemContext(uint itemId, out Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             psp = null;
             HierarchyNode child = this.NodeFromItemId(itemId);
             if (child != null)
@@ -5847,7 +5827,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int IsDocumentInProject(string mkDoc, out int found, VSDOCUMENTPRIORITY[] pri, out uint itemId)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             if (pri != null && pri.Length >= 1)
             {
                 pri[0] = VSDOCUMENTPRIORITY.DP_Unsupported;
@@ -5856,7 +5836,7 @@ namespace Microsoft.VisualStudio.Project
             itemId = 0;
 
             // If it is the project file just return.
-            if (NativeMethods.IsSamePath(mkDoc, this.GetMkDocument()))
+            if (NativeMethods.IsSamePath(mkDoc, this.GetMKDocument()))
             {
                 found = 1;
                 itemId = VSConstants.VSITEMID_ROOT;
@@ -5867,7 +5847,7 @@ namespace Microsoft.VisualStudio.Project
                 if (child != null)
                 {
                     found = 1;
-                    itemId = child.ID;
+                    itemId = child.Id;
                 }
             }
 
@@ -6264,7 +6244,7 @@ namespace Microsoft.VisualStudio.Project
             // if all the paramaters are null adn the count is 0, it means scc wants us to updated everything
             if (affectedNodes == 0 && itemidAffectedNodes == null && newGlyphs == null && newSccStatus == null)
             {
-                this.ReDraw(UIHierarchyElement.SccState);
+                this.Redraw(UIHierarchyElement.SccState);
                 this.UpdateSccStateIcons();
             }
             else if (affectedNodes > 0 && itemidAffectedNodes != null && newGlyphs != null && newSccStatus != null)
@@ -6277,7 +6257,7 @@ namespace Microsoft.VisualStudio.Project
                         throw new ArgumentException(SR.GetString(SR.InvalidParameter, CultureInfo.CurrentUICulture), "itemidAffectedNodes");
                     }
 
-                    n.ReDraw(UIHierarchyElement.SccState);
+                    n.Redraw(UIHierarchyElement.SccState);
                 }
             }
             return VSConstants.S_OK;

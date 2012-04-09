@@ -44,7 +44,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int AdviseBuildStatusCallback(IVsBuildStatusCallback callback, out uint cookie)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             cookie = callbacks.Add(callback);
             return VSConstants.S_OK;
@@ -52,7 +52,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int get_ProjectCfg(out IVsProjectCfg p)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             p = config;
             return VSConstants.S_OK;
@@ -60,7 +60,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int QueryStartBuild(uint options, int[] supported, int[] ready)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             if(supported != null && supported.Length > 0)
                 supported[0] = 1;
             if(ready != null && ready.Length > 0)
@@ -70,7 +70,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int QueryStartClean(uint options, int[] supported, int[] ready)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             config.PrepareBuild(false);
             if(supported != null && supported.Length > 0)
                 supported[0] = 1;
@@ -81,7 +81,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int QueryStartUpToDateCheck(uint options, int[] supported, int[] ready)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             config.PrepareBuild(false);
             if(supported != null && supported.Length > 0)
                 supported[0] = 0; // TODO:
@@ -92,7 +92,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int QueryStatus(out int done)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             done = (this.config.ProjectManager.BuildInProgress) ? 0 : 1;
             return VSConstants.S_OK;
@@ -100,44 +100,44 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int StartBuild(IVsOutputWindowPane pane, uint options)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             config.PrepareBuild(false);
 
             // Current version of MSBuild wish to be called in an STA
             uint flags = VSConstants.VS_BUILDABLEPROJECTCFGOPTS_REBUILD;
 
             // If we are not asked for a rebuild, then we build the default target (by passing null)
-            this.Build(options, pane, ((options & flags) != 0) ? MsBuildTarget.Rebuild : null);
+            this.Build(options, pane, ((options & flags) != 0) ? MSBuildTarget.Rebuild : null);
 
             return VSConstants.S_OK;
         }
 
         public virtual int StartClean(IVsOutputWindowPane pane, uint options)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             config.PrepareBuild(true);
             // Current version of MSBuild wish to be called in an STA
-            this.Build(options, pane, MsBuildTarget.Clean);
+            this.Build(options, pane, MSBuildTarget.Clean);
             return VSConstants.S_OK;
         }
 
         public virtual int StartUpToDateCheck(IVsOutputWindowPane pane, uint options)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             return VSConstants.E_NOTIMPL;
         }
 
         public virtual int Stop(int fsync)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             return VSConstants.S_OK;
         }
 
         public virtual int UnadviseBuildStatusCallback(uint cookie)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
 
             callbacks.RemoveAt(cookie);
@@ -146,7 +146,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int Wait(uint ms, int fTickWhenMessageQNotEmpty)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             return VSConstants.E_NOTIMPL;
         }
@@ -197,7 +197,7 @@ namespace Microsoft.VisualStudio.Project
                 finally
                 {
                     // We want to refresh the references if we are building with the Build or Rebuild target or if the project was opened for browsing only.
-                    bool shouldRepaintReferences = (buildTarget == null || buildTarget == MsBuildTarget.Build || buildTarget == MsBuildTarget.Rebuild);
+                    bool shouldRepaintReferences = (buildTarget == null || buildTarget == MSBuildTarget.Build || buildTarget == MSBuildTarget.Rebuild);
 
                     // Now repaint references if that is needed. 
                     // We hardly rely here on the fact the ResolveAssemblyReferences target has been run as part of the build.

@@ -146,7 +146,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			{
 				if(n is FileNode)
 				{
-					string nodeFileName = Path.GetFileName(n.GetMkDocument());
+					string nodeFileName = Path.GetFileName(n.GetMKDocument());
 
 					if(nodeFileName == fileName)
 					{
@@ -179,8 +179,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			{
 				foreach(T node in nodes)
 				{
-					uiHierarchy.ExpandItem(project, node.ID, (select) ? EXPANDFLAGS.EXPF_SelectItem : EXPANDFLAGS.EXPF_UnSelectItem);
-					selectedNodeIds.Add(node.ID);
+					uiHierarchy.ExpandItem(project, node.Id, (select) ? EXPANDFLAGS.EXPF_SelectItem : EXPANDFLAGS.EXPF_UnSelectItem);
+					selectedNodeIds.Add(node.Id);
 				}
 			}
 
@@ -205,7 +205,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			List<T> nodes = GetNodesOfType<T>(project);
 			if(nodes.Count > 0)
 			{
-				uiHierarchy.ExpandItem(project, nodes[0].ID, EXPANDFLAGS.EXPF_SelectItem);
+				uiHierarchy.ExpandItem(project, nodes[0].Id, EXPANDFLAGS.EXPF_SelectItem);
 				return nodes[0];
 			}
 
@@ -259,7 +259,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 
 			MethodInfo mi = typeof(ReferenceContainerNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
 
-			return mi.Invoke(container, new object[] { projectReference.GetMkDocument() }) as ProjectReferenceNode;
+			return mi.Invoke(container, new object[] { projectReference.GetMKDocument() }) as ProjectReferenceNode;
 		}
 
 		internal static AssemblyReferenceNode AddAssemblyReference(ProjectNode project, string assemblyReference)

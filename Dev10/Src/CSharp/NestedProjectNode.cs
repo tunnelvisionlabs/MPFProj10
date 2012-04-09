@@ -185,7 +185,7 @@ namespace Microsoft.VisualStudio.Project
                     this.RenameNestedProjectInParentProject(Path.GetFileNameWithoutExtension(document));
 
                     // We need to redraw the caption since for some reason, by intervining to the OnChanged event the Caption is not updated.
-                    this.ReDraw(UIHierarchyElement.Caption);
+                    this.Redraw(UIHierarchyElement.Caption);
                 }
             }
         }
@@ -263,7 +263,7 @@ namespace Microsoft.VisualStudio.Project
                     return base.GetGuidProperty(propid, out guid);
             }
 
-            CCITracing.TraceCall(String.Format(CultureInfo.CurrentCulture, "Guid for {0} property", propid));
+            CciTracing.TraceCall(String.Format(CultureInfo.CurrentCulture, "Guid for {0} property", propid));
             if (guid.CompareTo(Guid.Empty) == 0)
             {
                 return VSConstants.DISP_E_MEMBERNOTFOUND;
@@ -392,7 +392,7 @@ namespace Microsoft.VisualStudio.Project
         /// Returns the moniker of the nested project.
         /// </summary>
         /// <returns></returns>
-        public override string GetMkDocument()
+        public override string GetMKDocument()
         {
             Debug.Assert(this.nestedHierarchy != null, "The nested hierarchy object must be created before calling this method");
             if (this.isDisposed || this.ProjectManager == null || this.ProjectManager.IsClosed)
@@ -659,9 +659,9 @@ namespace Microsoft.VisualStudio.Project
 
             // Link into the nested VS hierarchy.
             ErrorHandler.ThrowOnFailure(this.nestedHierarchy.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchy, this.ProjectManager));
-            ErrorHandler.ThrowOnFailure(this.nestedHierarchy.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchyItemid, (object)(int)this.ID));
+            ErrorHandler.ThrowOnFailure(this.nestedHierarchy.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchyItemid, (object)(int)this.Id));
 
-            this.LockRDTEntry();
+            this.LockRdtEntry();
 
             this.ConnectPropertyNotifySink();
         }
@@ -751,8 +751,7 @@ namespace Microsoft.VisualStudio.Project
         /// By default this document is marked as "Dont Save as". That means the menu File->SaveAs is disabled for the
         /// nested project node.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "RDT")]
-        protected virtual void LockRDTEntry()
+        protected virtual void LockRdtEntry()
         {
             // Define flags for the nested project document
             _VSRDTFLAGS flags = _VSRDTFLAGS.RDT_VirtualDocument | _VSRDTFLAGS.RDT_ProjSlnDocument; ;
@@ -790,7 +789,7 @@ namespace Microsoft.VisualStudio.Project
                     // get inptr for hierarchy
                     projectPtr = Marshal.GetIUnknownForObject(this.nestedHierarchy);
                     Debug.Assert(projectPtr != IntPtr.Zero, " Project pointer for the nested hierarchy has not been initialized");
-                    ErrorHandler.ThrowOnFailure(rdt.RegisterAndLockDocument((uint)flags, this.ProjectPath, this.ProjectManager, this.ID, projectPtr, out docCookie));
+                    ErrorHandler.ThrowOnFailure(rdt.RegisterAndLockDocument((uint)flags, this.ProjectPath, this.ProjectManager, this.Id, projectPtr, out docCookie));
 
                     this.DocCookie = docCookie;
                     Debug.Assert(this.DocCookie != (uint)ShellConstants.VSDOCCOOKIE_NIL, "Invalid cookie when registering document in the running document table.");
@@ -817,8 +816,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Unlock the RDT entry for the nested project
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "RDT")]
-        protected virtual void UnlockRDTEntry()
+        protected virtual void UnlockRdtEntry()
         {
             if (this.isDisposed || this.ProjectManager == null || this.ProjectManager.IsClosed)
             {
@@ -874,8 +872,8 @@ namespace Microsoft.VisualStudio.Project
                 this.ProjectPath = Path.Combine(projectDirectory, this._projectName);
 
                 // Unload and lock the RDT entries
-                this.UnlockRDTEntry();
-                this.LockRDTEntry();
+                this.UnlockRdtEntry();
+                this.LockRdtEntry();
 
                 // Since actually this is a rename in our hierarchy notify the tracker that a rename has happened.
                 this.ProjectManager.Tracker.OnItemRenamed(oldPath, this.ProjectPath, VSRENAMEFILEFLAGS.VSRENAMEFILEFLAGS_IsNestedProjectFile);
@@ -883,7 +881,7 @@ namespace Microsoft.VisualStudio.Project
             finally
             {
                 this.ObserveNestedProjectFile();
-                this.ProjectManager.ResumeMSBuild(this.ProjectManager.ReEvaluateProjectFileTargetName);
+                this.ProjectManager.ResumeMSBuild(this.ProjectManager.ReevaluateProjectFileTargetName);
             }
         }
         /// <summary>
@@ -923,7 +921,7 @@ namespace Microsoft.VisualStudio.Project
 
                 if (itemid == VSConstants.VSITEMID_NIL)
                 {
-                    this.UnlockRDTEntry();
+                    this.UnlockRdtEntry();
                 }
 
                 IVsSolution solution = this.GetService(typeof(IVsSolution)) as IVsSolution;
@@ -942,7 +940,7 @@ namespace Microsoft.VisualStudio.Project
                 // if we haven't already release the RDT cookie, do so now.
                 if (itemid == VSConstants.VSITEMID_NIL)
                 {
-                    this.UnlockRDTEntry();
+                    this.UnlockRdtEntry();
                 }
 
                 this.Dispose(true);
@@ -1086,7 +1084,7 @@ namespace Microsoft.VisualStudio.Project
         {
             ProjectContainerNode parent = this.ProjectManager as ProjectContainerNode;
             Debug.Assert(parent != null, "The parent project for nested projects should be subclassed from ProjectContainerNode");
-            parent.NestedProjectNodeReloader.ObserveItem(this.GetMkDocument(), this.ID);
+            parent.NestedProjectNodeReloader.ObserveItem(this.GetMKDocument(), this.Id);
         }
 
         /// <summary>
@@ -1096,7 +1094,7 @@ namespace Microsoft.VisualStudio.Project
         {
             ProjectContainerNode parent = this.ProjectManager as ProjectContainerNode;
             Debug.Assert(parent != null, "The parent project for nested projects should be subclassed from ProjectContainerNode");
-            parent.NestedProjectNodeReloader.StopObservingItem(this.GetMkDocument());
+            parent.NestedProjectNodeReloader.StopObservingItem(this.GetMKDocument());
         }
 
         /// <summary>
@@ -1107,7 +1105,7 @@ namespace Microsoft.VisualStudio.Project
         {
             ProjectContainerNode parent = this.ProjectManager as ProjectContainerNode;
             Debug.Assert(parent != null, "The parent project for nested projects should be subclassed from ProjectContainerNode");
-            parent.NestedProjectNodeReloader.IgnoreItemChanges(this.GetMkDocument(), ignoreFlag);
+            parent.NestedProjectNodeReloader.IgnoreItemChanges(this.GetMKDocument(), ignoreFlag);
         }
 
         /// <summary>

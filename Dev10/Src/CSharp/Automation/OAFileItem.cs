@@ -163,7 +163,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 					ErrorHandler.ThrowOnFailure(rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_NoLock, this.Node.Url, out ivsHierarchy, out itemid, out docData, out docCookie));
 
 					// Open the file using the IVsProject3 interface
-					ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.OpenItem(this.Node.ID, ref logicalViewGuid, docData, out windowFrame));
+					ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.OpenItem(this.Node.Id, ref logicalViewGuid, docData, out windowFrame));
 
 				}
 				finally
@@ -311,7 +311,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 					// If an empty file name is passed in for Save then make the file name the project name.
 					if(!isCalledFromSaveAs && fileName.Length == 0)
 					{
-						ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.SaveItem(VSSAVEFLAGS.VSSAVE_SilentSave, url, this.Node.ID, docData, out canceled));
+						ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.SaveItem(VSSAVEFLAGS.VSSAVE_SilentSave, url, this.Node.Id, docData, out canceled));
 					}
 					else
 					{
@@ -332,11 +332,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 								throw new InvalidOperationException();
 							}
 
-							ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.SaveItem(VSSAVEFLAGS.VSSAVE_SilentSave, fullPath, this.Node.ID, docData, out canceled));
+							ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.SaveItem(VSSAVEFLAGS.VSSAVE_SilentSave, fullPath, this.Node.Id, docData, out canceled));
 						}
 						else
 						{
-							ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.SaveItem(VSSAVEFLAGS.VSSAVE_SilentSave, fullPath, this.Node.ID, docData, out canceled));
+							ErrorHandler.ThrowOnFailure(this.Node.ProjectManager.SaveItem(VSSAVEFLAGS.VSSAVE_SilentSave, fullPath, this.Node.Id, docData, out canceled));
 						}
 					}
 

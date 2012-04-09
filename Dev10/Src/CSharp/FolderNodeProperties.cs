@@ -34,7 +34,7 @@ namespace Microsoft.VisualStudio.Project
 			set
 			{
 				this.Node.SetEditLabel(value);
-				this.Node.ReDraw(UIHierarchyElement.Caption);
+				this.Node.Redraw(UIHierarchyElement.Caption);
 			}
 		}
 
@@ -59,7 +59,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			get
 			{
-				string fullPath = this.Node.GetMkDocument();
+				string fullPath = this.Node.GetMKDocument();
 				if(!fullPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
 				{
 					return fullPath + Path.DirectorySeparatorChar;

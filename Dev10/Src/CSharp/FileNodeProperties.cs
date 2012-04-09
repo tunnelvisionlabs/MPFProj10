@@ -85,7 +85,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 if (Node.ItemNode.IsVirtual && value != CopyToOutputDirectoryBehavior.DoNotCopy)
                 {
-                    Node.ItemNode = Node.ProjectManager.AddFileToMsBuild(Node.VirtualNodeName, ProjectFileConstants.Content, null);
+                    Node.ItemNode = Node.ProjectManager.AddFileToMSBuild(Node.VirtualNodeName, ProjectFileConstants.Content, null);
                 }
 
                 if (this.Node.ItemNode.Item != null)

@@ -185,7 +185,7 @@ namespace Microsoft.VisualStudio.Project
 						uint[] sccStatus = new uint[1] { 0 };
 						// Get the glyph from the scc manager. Note that it will fail in command line
 						// scenarios.
-						if(ErrorHandler.Succeeded(sccManager.GetSccGlyph(1, new string[] { this.GetMkDocument() }, statIcons, sccStatus)))
+						if(ErrorHandler.Succeeded(sccManager.GetSccGlyph(1, new string[] { this.GetMKDocument() }, statIcons, sccStatus)))
 						{
 							return statIcons[0];
 						}
@@ -319,8 +319,7 @@ namespace Microsoft.VisualStudio.Project
 
 
 		[System.ComponentModel.BrowsableAttribute(false)]
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ID")]
-		public uint ID
+		public uint Id
 		{
 			get
 			{
@@ -591,7 +590,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			// make sure the node is in the map.
-			Object nodeWithSameID = this.projectMgr.ItemIdMap[node.ID];
+			Object nodeWithSameID = this.projectMgr.ItemIdMap[node.Id];
 			if(!Object.ReferenceEquals(node, nodeWithSameID))
 			{
                 throw new InvalidOperationException();
@@ -714,14 +713,14 @@ namespace Microsoft.VisualStudio.Project
 					goto case __VSHPROPID.VSHPROPID_NextSibling;
 
 				case __VSHPROPID.VSHPROPID_NextSibling:
-					result = (int)((this.NextSibling != null) ? this.NextSibling.ID : VSConstants.VSITEMID_NIL);
+					result = (int)((this.NextSibling != null) ? this.NextSibling.Id : VSConstants.VSITEMID_NIL);
 					break;
 
 				case __VSHPROPID.VSHPROPID_FirstChild:
 					goto case __VSHPROPID.VSHPROPID_FirstVisibleChild;
 
 				case __VSHPROPID.VSHPROPID_FirstVisibleChild:
-					result = (int)((this.FirstChild != null) ? this.FirstChild.ID : VSConstants.VSITEMID_NIL);
+					result = (int)((this.FirstChild != null) ? this.FirstChild.Id : VSConstants.VSITEMID_NIL);
 					break;
 
 				case __VSHPROPID.VSHPROPID_Parent:
@@ -731,7 +730,7 @@ namespace Microsoft.VisualStudio.Project
 					}
 					else
 					{
-						result = new IntPtr((int)this.parentNode.ID);  // see bug 176470
+						result = new IntPtr((int)this.parentNode.Id);  // see bug 176470
 					}
 					break;
 
@@ -803,7 +802,7 @@ namespace Microsoft.VisualStudio.Project
 							DispatchWrapper dispatchWrapper = browseObject as DispatchWrapper;
 							if(dispatchWrapper != null)
 								browseObject = dispatchWrapper.WrappedObject;
-							result = this.ProjectManager.GetCATIDForType(browseObject.GetType()).ToString("B");
+							result = this.ProjectManager.GetCatIdForType(browseObject.GetType()).ToString("B");
 							if(String.Equals(result as string, Guid.Empty.ToString("B"), StringComparison.Ordinal))
 								result = null;
 						}
@@ -818,7 +817,7 @@ namespace Microsoft.VisualStudio.Project
 							DispatchWrapper dispatchWrapper = extObject as DispatchWrapper;
 							if(dispatchWrapper != null)
 								extObject = dispatchWrapper.WrappedObject;
-							result = this.ProjectManager.GetCATIDForType(extObject.GetType()).ToString("B");
+							result = this.ProjectManager.GetCatIdForType(extObject.GetType()).ToString("B");
 							if(String.Equals(result as string, Guid.Empty.ToString("B"), StringComparison.Ordinal))
 								result = null;
 						}
@@ -837,7 +836,7 @@ namespace Microsoft.VisualStudio.Project
 #if DEBUG
 			if(propId != LastTracedProperty)
 			{
-				CCITracing.TraceCall(string.Format("{0},{1} = {2}", ID, propId, result ?? "null"));
+				CciTracing.TraceCall(string.Format("{0},{1} = {2}", Id, propId, result ?? "null"));
 				LastTracedProperty = propId; // some basic filtering here...
 			}
 #endif
@@ -855,7 +854,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			__VSHPROPID id = (__VSHPROPID)propid;
 
-			CCITracing.TraceCall(this.ID + "," + id.ToString());
+			CciTracing.TraceCall(this.Id + "," + id.ToString());
 			switch(id)
 			{
 				case __VSHPROPID.VSHPROPID_Expanded:
@@ -874,7 +873,7 @@ namespace Microsoft.VisualStudio.Project
 					return SetEditLabel((string)value);
 
 				default:
-					CCITracing.TraceCall(" unhandled");
+					CciTracing.TraceCall(" unhandled");
 					break;
 			}
 
@@ -947,8 +946,7 @@ namespace Microsoft.VisualStudio.Project
 		/// This method is called by the interface method GetMkDocument to specify the item moniker.
 		/// </summary>
 		/// <returns>The moniker for this item</returns>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Mk")]
-		public virtual string GetMkDocument()
+		public virtual string GetMKDocument()
 		{
 			return String.Empty;
 		}
@@ -959,7 +957,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="removeFromStorage"></param>
 		public virtual void Remove(bool removeFromStorage)
 		{
-			string documentToRemove = this.GetMkDocument();
+			string documentToRemove = this.GetMKDocument();
 
 			// Ask Document tracker listeners if we can remove the item.
 			string[] filesToBeDeleted = new string[1] { documentToRemove };
@@ -1013,7 +1011,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			// We save here the path to delete since this.Url might call the Include which will be deleted by the RemoveFromProjectFile call.
-			string pathToDelete = this.GetMkDocument();
+			string pathToDelete = this.GetMKDocument();
 
 			if (single)
 			{
@@ -1113,7 +1111,7 @@ namespace Microsoft.VisualStudio.Project
 										 out ppunkDocData));
 
 					// Is this one of our documents?
-					if(Utilities.IsSameComObject(srpOurHier, srpHier) && itemid == node.ID)
+					if(Utilities.IsSameComObject(srpOurHier, srpHier) && itemid == node.Id)
 					{
 						IVsSolution soln = GetService(typeof(SVsSolution)) as IVsSolution;
 						ErrorHandler.ThrowOnFailure(soln.CloseSolutionElement(saveOptions, srpOurHier, cookie[0]));
@@ -1133,7 +1131,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if(!this.ExcludeNodeFromScc)
 			{
-				this.ReDraw(UIHierarchyElement.SccState);
+				this.Redraw(UIHierarchyElement.SccState);
 			}
 		}
 
@@ -1174,7 +1172,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				// Generate a new folder name
 				string newFolderName;
-				ErrorHandler.ThrowOnFailure(this.projectMgr.GenerateUniqueItemName(this.ID, String.Empty, String.Empty, out newFolderName));
+				ErrorHandler.ThrowOnFailure(this.projectMgr.GenerateUniqueItemName(this.Id, String.Empty, String.Empty, out newFolderName));
 
 				// create the project part of it, the project file
 				HierarchyNode child = this.ProjectManager.CreateFolderNodes(Path.Combine(this.VirtualNodeName, newFolderName));
@@ -1197,7 +1195,7 @@ namespace Microsoft.VisualStudio.Project
 					{
 						// we need to get into label edit mode now...
 						// so first select the new guy...
-						ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.projectMgr, child.ID, EXPANDFLAGS.EXPF_SelectItem));
+						ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.projectMgr, child.Id, EXPANDFLAGS.EXPF_SelectItem));
 						// them post the rename command to the shell. Folder verification and creation will
 						// happen in the setlabel code...
 						IVsUIShell shell = this.projectMgr.Site.GetService(typeof(SVsUIShell)) as IVsUIShell;
@@ -1225,7 +1223,7 @@ namespace Microsoft.VisualStudio.Project
 
 		protected virtual int AddItemToHierarchy(HierarchyAddType addType)
 		{
-			CCITracing.TraceCall();
+			CciTracing.TraceCall();
 			IVsAddProjectItemDlg addItemDialog;
 
 			string strFilter = String.Empty;
@@ -1233,7 +1231,7 @@ namespace Microsoft.VisualStudio.Project
 			uint uiFlags;
 			IVsProject3 project = (IVsProject3)this.projectMgr;
 
-			string strBrowseLocations = Path.GetDirectoryName(this.projectMgr.BaseURI.Uri.LocalPath);
+			string strBrowseLocations = Path.GetDirectoryName(this.projectMgr.BaseUri.Uri.LocalPath);
 
 			System.Guid projectGuid = this.projectMgr.ProjectGuid;
 
@@ -1244,7 +1242,7 @@ namespace Microsoft.VisualStudio.Project
 			else
 				uiFlags = (uint)(__VSADDITEMFLAGS.VSADDITEM_AddExistingItems | __VSADDITEMFLAGS.VSADDITEM_AllowMultiSelect | __VSADDITEMFLAGS.VSADDITEM_AllowStickyFilter | __VSADDITEMFLAGS.VSADDITEM_ProjectHandlesLinks);
 
-			ErrorHandler.ThrowOnFailure(addItemDialog.AddProjectItemDlg(this.ID, ref projectGuid, project, uiFlags, null, null, ref strBrowseLocations, ref strFilter, out iDontShowAgain)); /*&fDontShowAgain*/
+			ErrorHandler.ThrowOnFailure(addItemDialog.AddProjectItemDlg(this.Id, ref projectGuid, project, uiFlags, null, null, ref strBrowseLocations, ref strFilter, out iDontShowAgain)); /*&fDontShowAgain*/
 
 			return VSConstants.S_OK;
 		}
@@ -1254,7 +1252,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		protected virtual void DoDefaultAction()
 		{
-			CCITracing.TraceCall();
+			CciTracing.TraceCall();
 		}
 
 		/// <summary>
@@ -1290,7 +1288,7 @@ namespace Microsoft.VisualStudio.Project
 			Debug.Assert(this.ProjectManager.ItemsDraggedOrCutOrCopied != null, " The itemsdragged list should have been initialized prior calling this method");
 			StringBuilder sb = new StringBuilder();
 
-			if(this.ID == VSConstants.VSITEMID_ROOT)
+			if(this.Id == VSConstants.VSITEMID_ROOT)
 			{
 				if(this.ProjectManager.ItemsDraggedOrCutOrCopied != null)
 				{
@@ -1308,7 +1306,7 @@ namespace Microsoft.VisualStudio.Project
 			IVsSolution solution = this.GetService(typeof(IVsSolution)) as IVsSolution;
 			if(solution != null)
 			{
-				ErrorHandler.ThrowOnFailure(solution.GetProjrefOfItem(this.ProjectManager, this.ID, out projref));
+				ErrorHandler.ThrowOnFailure(solution.GetProjrefOfItem(this.ProjectManager, this.Id, out projref));
 				if(String.IsNullOrEmpty(projref))
 				{
 					if(this.ProjectManager.ItemsDraggedOrCutOrCopied != null)
@@ -1332,7 +1330,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <returns>Cannonical Name</returns>
 		protected virtual string GetCanonicalName()
 		{
-			return this.GetMkDocument();
+			return this.GetMKDocument();
 		}
 
 		/// <summary>
@@ -1623,7 +1621,7 @@ namespace Microsoft.VisualStudio.Project
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
 		protected virtual int InternalExecCommand(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin)
 		{
-			CCITracing.TraceCall(cmdGroup.ToString() + "," + cmdId.ToString());
+			CciTracing.TraceCall(cmdGroup.ToString() + "," + cmdId.ToString());
 			if(this.projectMgr == null || this.projectMgr.IsClosed)
 			{
 				return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
@@ -2212,7 +2210,7 @@ namespace Microsoft.VisualStudio.Project
 				return;
 			}
 
-			files.Add(this.GetMkDocument());
+			files.Add(this.GetMKDocument());
 
 			tagVsSccFilesFlags flagsToAdd = (this.FirstChild != null && (this.FirstChild is DependentFileNode)) ? tagVsSccFilesFlags.SFF_HasSpecialFiles : tagVsSccFilesFlags.SFF_NoFlags;
 
@@ -2354,12 +2352,12 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			HierarchyNode prev = child.PreviousSibling;
-			uint prevId = (prev != null) ? prev.ID : VSConstants.VSITEMID_NIL;
+			uint prevId = (prev != null) ? prev.Id : VSConstants.VSITEMID_NIL;
 			foreach(IVsHierarchyEvents sink in foo.hierarchyEventSinks.OfType<IVsHierarchyEvents>().ToArray())
 			{
                 try
                 {
-                    int result = sink.OnItemAdded(parent.ID, prevId, child.ID);
+                    int result = sink.OnItemAdded(parent.Id, prevId, child.Id);
                     if (ErrorHandler.Failed(result) && result != VSConstants.E_NOTIMPL)
                         ErrorHandler.ThrowOnFailure(result);
                 }
@@ -2387,7 +2385,7 @@ namespace Microsoft.VisualStudio.Project
 			{
                 try
                 {
-                    int result = clonedEvent.OnItemDeleted(this.ID);
+                    int result = clonedEvent.OnItemDeleted(this.Id);
                     if (ErrorHandler.Failed(result) && result != VSConstants.E_NOTIMPL)
                         ErrorHandler.ThrowOnFailure(result);
                 }
@@ -2416,7 +2414,7 @@ namespace Microsoft.VisualStudio.Project
 			{
                 try
                 {
-                    int result = sink.OnItemsAppended(parent.ID);
+                    int result = sink.OnItemsAppended(parent.Id);
                     if (ErrorHandler.Failed(result) && result != VSConstants.E_NOTIMPL)
                         ErrorHandler.ThrowOnFailure(result);
                 }
@@ -2446,7 +2444,7 @@ namespace Microsoft.VisualStudio.Project
 			{
                 try
                 {
-                    int result = sink.OnPropertyChanged(node.ID, propid, flags);
+                    int result = sink.OnPropertyChanged(node.Id, propid, flags);
                     if (ErrorHandler.Failed(result) && result != VSConstants.E_NOTIMPL)
                         ErrorHandler.ThrowOnFailure(result);
                 }
@@ -2475,7 +2473,7 @@ namespace Microsoft.VisualStudio.Project
 			{
                 try
                 {
-                    int result = sink.OnInvalidateItems(parent.ID);
+                    int result = sink.OnInvalidateItems(parent.Id);
                     if (ErrorHandler.Failed(result) && result != VSConstants.E_NOTIMPL)
                         ErrorHandler.ThrowOnFailure(result);
                 }
@@ -2489,29 +2487,27 @@ namespace Microsoft.VisualStudio.Project
 		/// Causes the hierarchy to be redrawn.
 		/// </summary>
 		/// <param name="element">Used by the hierarchy to decide which element to redraw</param>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Re")]
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ReDraw")]
-		public virtual void ReDraw(UIHierarchyElement element)
+		public virtual void Redraw(UIHierarchyElement element)
 		{
 			foreach(IVsHierarchyEvents sink in this.projectMgr.hierarchyEventSinks.OfType<IVsHierarchyEvents>().ToArray())
 			{
 				int result;
 				if((element & UIHierarchyElement.Icon) != 0)
 				{
-					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.ID, (int)__VSHPROPID.VSHPROPID_IconIndex, 0));
-					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMkDocument());
+					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.Id, (int)__VSHPROPID.VSHPROPID_IconIndex, 0));
+					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMKDocument());
 				}
 
 				if((element & UIHierarchyElement.Caption) != 0)
 				{
-					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.ID, (int)__VSHPROPID.VSHPROPID_Caption, 0));
-					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMkDocument());
+					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.Id, (int)__VSHPROPID.VSHPROPID_Caption, 0));
+					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMKDocument());
 				}
 
 				if((element & UIHierarchyElement.SccState) != 0)
 				{
-					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.ID, (int)__VSHPROPID.VSHPROPID_StateIconIndex, 0));
-					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMkDocument());
+					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.Id, (int)__VSHPROPID.VSHPROPID_StateIconIndex, 0));
+					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMKDocument());
 				}
 			}
 
@@ -2614,7 +2610,7 @@ namespace Microsoft.VisualStudio.Project
 			if(n != null)
 			{
 				int hr = n.GetGuidProperty(propid, out guid);
-				CCITracing.TraceCall(string.Format("{0}={1}", (__VSHPROPID)propid, guid));
+				CciTracing.TraceCall(string.Format("{0}={1}", (__VSHPROPID)propid, guid));
 				return hr;
 			}
 
@@ -2687,7 +2683,7 @@ namespace Microsoft.VisualStudio.Project
                 return VSConstants.E_FAIL;
             }
 
-            itemId = nodes[0].ID;
+            itemId = nodes[0].Id;
             return VSConstants.S_OK;
 		}
 
@@ -2827,12 +2823,12 @@ namespace Microsoft.VisualStudio.Project
 
 		public virtual int ExecCommand(uint itemId, ref Guid commandGroup, uint commandId, OLECMDEXECOPT commandExecOptions, IntPtr dataIn, IntPtr dataOut)
 		{
-			return this.InternalExecCommand(commandGroup, commandId, (OLECMDEXECOPT)commandExecOptions, dataIn, dataOut, CommandOrigin.UiHierarchy);
+			return this.InternalExecCommand(commandGroup, commandId, (OLECMDEXECOPT)commandExecOptions, dataIn, dataOut, CommandOrigin.UIHierarchy);
 		}
 
 		public virtual int QueryStatusCommand(uint itemId, ref Guid guidCmdGroup, uint cCmds, OLECMD[] cmds, IntPtr pCmdText)
 		{
-			return this.QueryStatusSelection(guidCmdGroup, cCmds, cmds, pCmdText, CommandOrigin.UiHierarchy);
+			return this.QueryStatusSelection(guidCmdGroup, cCmds, cmds, pCmdText, CommandOrigin.UIHierarchy);
 		}
 		#endregion
 
@@ -2882,7 +2878,7 @@ namespace Microsoft.VisualStudio.Project
 				return VSConstants.E_FAIL;
 			}
 
-			string existingFileMoniker = node.GetMkDocument();
+			string existingFileMoniker = node.GetMKDocument();
 
 			// We can only perform save if the document is open
 			if(docData == IntPtr.Zero)
@@ -3296,7 +3292,7 @@ namespace Microsoft.VisualStudio.Project
 				}
 				// If it is a foldernode then it has a virtual name but we want to find folder nodes by the document moniker or url
 				else if((String.IsNullOrEmpty(child.VirtualNodeName) || (child is FolderNode)) &&
-						(NativeMethods.IsSamePath(child.GetMkDocument(), name) || NativeMethods.IsSamePath(child.Url, name)))
+						(NativeMethods.IsSamePath(child.GetMKDocument(), name) || NativeMethods.IsSamePath(child.Url, name)))
 				{
 					return child;
 				}
@@ -3376,7 +3372,7 @@ namespace Microsoft.VisualStudio.Project
 			string[] files = new String[1] { moniker };
 			VSADDRESULT[] vsaddresult = new VSADDRESULT[1];
 			vsaddresult[0] = VSADDRESULT.ADDRESULT_Failure;
-			int addResult = targetNode.ProjectManager.AddItem(targetNode.ID, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, null, 0, files, IntPtr.Zero, vsaddresult);
+			int addResult = targetNode.ProjectManager.AddItem(targetNode.Id, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, null, 0, files, IntPtr.Zero, vsaddresult);
 			if(addResult != VSConstants.S_OK && addResult != VSConstants.S_FALSE && addResult != (int)OleConstants.OLECMDERR_E_CANCELED)
 			{
 				ErrorHandler.ThrowOnFailure(addResult);

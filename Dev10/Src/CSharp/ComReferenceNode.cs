@@ -69,8 +69,7 @@ namespace Microsoft.VisualStudio.Project
             get { return this.installedFilePath; }
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LCID")]
-        public string LCID
+        public string Lcid
         {
             get { return lcid; }
         }
@@ -334,12 +333,12 @@ namespace Microsoft.VisualStudio.Project
         {
             // Call MSBuild to build the target ResolveComReferences
             bool success;
-            ErrorHandler.ThrowOnFailure(this.ProjectManager.BuildTarget(MsBuildTarget.ResolveComReferences, out success));
+            ErrorHandler.ThrowOnFailure(this.ProjectManager.BuildTarget(MSBuildTarget.ResolveComReferences, out success));
             if(!success)
                 throw new InvalidOperationException();
 
             // Now loop through the generated COM References to find the corresponding one
-            IEnumerable<ProjectItem> comReferences = this.ProjectManager.BuildProject.GetItems(MsBuildGeneratedItemType.ComReferenceWrappers);
+            IEnumerable<ProjectItem> comReferences = this.ProjectManager.BuildProject.GetItems(MSBuildGeneratedItemType.ComReferenceWrappers);
             foreach (ProjectItem reference in comReferences)
             {
                 if(String.Equals(reference.GetMetadataValue(ProjectFileConstants.Guid), this.typeGuid.ToString("B"), StringComparison.OrdinalIgnoreCase)
@@ -383,7 +382,7 @@ namespace Microsoft.VisualStudio.Project
                         this.typeName = typeLib.GetValue(string.Empty) as string;
                     }
                     // Now get the path to the file that contains this type library.
-                    using(RegistryKey installKey = typeLib.OpenSubKey(string.Format(CultureInfo.InvariantCulture, @"{0}\win32", this.LCID)))
+                    using(RegistryKey installKey = typeLib.OpenSubKey(string.Format(CultureInfo.InvariantCulture, @"{0}\win32", this.Lcid)))
                     {
                         this.installedFilePath = installKey.GetValue(String.Empty) as String;
                     }

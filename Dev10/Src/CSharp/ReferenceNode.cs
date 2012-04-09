@@ -102,7 +102,7 @@ namespace Microsoft.VisualStudio.Project
 		/// This method is called by the interface method GetMkDocument to specify the item moniker.
 		/// </summary>
 		/// <returns>The moniker for this item</returns>
-		public override string GetMkDocument()
+		public override string GetMKDocument()
 		{
 			return this.Url;
 		}
@@ -195,7 +195,7 @@ namespace Microsoft.VisualStudio.Project
 		internal virtual void RefreshReference()
 		{
 			this.ResolveReference();
-			this.ReDraw(UIHierarchyElement.Icon);
+			this.Redraw(UIHierarchyElement.Icon);
 		}
 
 		/// <summary>

@@ -107,7 +107,7 @@ namespace Microsoft.VisualStudio.Project
 				uint[] itemIdOpen = new uint[1];
 				IVsWindowFrame windowFrame;
 				int fOpen;
-				ErrorHandler.ThrowOnFailure(shell.IsDocumentOpen(this.Node.ProjectManager, this.Node.ID, this.Node.Url, ref logicalView, grfIDO, out pHierOpen, itemIdOpen, out windowFrame, out fOpen));
+				ErrorHandler.ThrowOnFailure(shell.IsDocumentOpen(this.Node.ProjectManager, this.Node.Id, this.Node.Url, ref logicalView, grfIDO, out pHierOpen, itemIdOpen, out windowFrame, out fOpen));
 
 				if(windowFrame != null)
 				{
@@ -190,7 +190,7 @@ namespace Microsoft.VisualStudio.Project
 			Debug.Assert(this.node != null, "No node has been initialized for the document manager");
 
 			object pvar;
-			ErrorHandler.ThrowOnFailure(this.node.GetProperty(this.node.ID, (int)__VSHPROPID.VSHPROPID_Caption, out pvar));
+			ErrorHandler.ThrowOnFailure(this.node.GetProperty(this.node.Id, (int)__VSHPROPID.VSHPROPID_Caption, out pvar));
 
 			return (pvar as string);
 		}
@@ -217,9 +217,9 @@ namespace Microsoft.VisualStudio.Project
 			Debug.Assert(this.node != null, "No node has been initialized for the document manager");
 
 			// Get the URL representing the item
-			fullPath = this.node.GetMkDocument();
+			fullPath = this.node.GetMKDocument();
 
-			Debug.Assert(!String.IsNullOrEmpty(fullPath), "Could not retrive the fullpath for the node" + this.Node.ID.ToString(CultureInfo.CurrentCulture));
+			Debug.Assert(!String.IsNullOrEmpty(fullPath), "Could not retrive the fullpath for the node" + this.Node.Id.ToString(CultureInfo.CurrentCulture));
 			return fullPath;
 		}
 

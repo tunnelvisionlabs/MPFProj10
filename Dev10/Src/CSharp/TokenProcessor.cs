@@ -344,7 +344,7 @@ namespace Microsoft.VisualStudio.Project
 			// This is done so that class names from 2 files with the same name but different
 			// directories don't conflict.
 			string relativePath = Path.GetDirectoryName(fileFullPath);
-			string projectPath = Path.GetDirectoryName(node.GetMkDocument());
+			string projectPath = Path.GetDirectoryName(node.GetMKDocument());
 			// Our project system only support adding files that are sibling of the project file or that are in subdirectories.
 			if(String.Compare(projectPath, 0, relativePath, 0, projectPath.Length, true, CultureInfo.CurrentCulture) == 0)
 			{

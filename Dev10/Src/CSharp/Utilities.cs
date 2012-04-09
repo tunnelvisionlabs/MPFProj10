@@ -42,11 +42,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <returns></returns>
         [CLSCompliant(false)]
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "msbuild")]
-        public static string GetMsBuildPath(IServiceProvider serviceProvider)
+        public static string GetMSBuildPath(IServiceProvider serviceProvider)
         {
-            return GetMsBuildPath(serviceProvider, defaultMSBuildVersion);
+            return GetMSBuildPath(serviceProvider, defaultMSBuildVersion);
         }
 
         /// <summary>
@@ -55,8 +53,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="version">Msbuild version.</param>
         /// <returns>The msbuild tools path</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-        public static string GetMsBuildPath(IServiceProvider serviceProvider, string version)
+        public static string GetMSBuildPath(IServiceProvider serviceProvider, string version)
         {
             string msBuildPath = null;
             using(RegistryKey root = VSRegistry.RegistryRoot(serviceProvider, __VsLocalRegistryType.RegType_Configuration, false))

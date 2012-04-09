@@ -74,7 +74,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 				// It is not a very good idea to throw since the AddItem might return Cancel or Abort.
 				// The problem is that up in the call stack the wizard code does not check whether it has received a ProjectItem or not and will crash.
 				// The other problem is that we cannot get add wizard dialog back if a cancel or abort was returned because we throw and that code will never be executed. Typical catch 22.
-				ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.ID, op, name, 0, new string[1] { fileName }, IntPtr.Zero, result));
+				ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.Id, op, name, 0, new string[1] { fileName }, IntPtr.Zero, result));
 
 				string fileDirectory = proj.GetBaseDirectoryForAddingFiles(this.NodeWithItems);
 				string templateFilePath = System.IO.Path.Combine(fileDirectory, name);
@@ -184,7 +184,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
 			{
 				VSADDRESULT[] result = new VSADDRESULT[1];
-				ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.ID, op, path, 0, new string[1] { path }, IntPtr.Zero, result));
+				ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.Id, op, path, 0, new string[1] { path }, IntPtr.Zero, result));
 
 				string fileName = System.IO.Path.GetFileName(path);
 				string fileDirectory = proj.GetBaseDirectoryForAddingFiles(this.NodeWithItems);

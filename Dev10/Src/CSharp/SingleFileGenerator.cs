@@ -117,7 +117,7 @@ namespace Microsoft.VisualStudio.Project
 				if(!this.runningGenerator)
 				{
 					//Get the buffer contents for the current node
-					string moniker = fileNode.GetMkDocument();
+					string moniker = fileNode.GetMKDocument();
 
 					this.runningGenerator = true;
 
@@ -167,7 +167,7 @@ namespace Microsoft.VisualStudio.Project
 					if(dependentNode != null)
 					{
 						//Then check out the node and dependent node from SCC
-						if(!this.CanEditFile(dependentNode.GetMkDocument()))
+						if(!this.CanEditFile(dependentNode.GetMKDocument()))
 						{
 							throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
 						}
@@ -245,7 +245,7 @@ namespace Microsoft.VisualStudio.Project
 			if (data == null)
 				throw new ArgumentNullException("data");
 
-			string filePath = Path.Combine(Path.GetDirectoryName(fileNode.GetMkDocument()), fileName);
+			string filePath = Path.Combine(Path.GetDirectoryName(fileNode.GetMKDocument()), fileName);
 			IVsRunningDocumentTable rdt = this.projectMgr.GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
 
 			// (kberes) Shouldn't this be an InvalidOperationException instead with some not to annoying errormessage to the user?

@@ -330,8 +330,8 @@ namespace Microsoft.VisualStudio.Project
             {
                 if(String.IsNullOrEmpty(exception.Message))
                 {
-                    Debug.Assert(!String.IsNullOrEmpty(this.ProjectManager.BaseURI.AbsoluteUrl), "Cannot retrieve an attribute for a project that does not have a name");
-                    string message = String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.AttributeLoad, CultureInfo.CurrentUICulture), attributeName, this.ProjectManager.BaseURI.AbsoluteUrl);
+                    Debug.Assert(!String.IsNullOrEmpty(this.ProjectManager.BaseUri.AbsoluteUrl), "Cannot retrieve an attribute for a project that does not have a name");
+                    string message = String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.AttributeLoad, CultureInfo.CurrentUICulture), attributeName, this.ProjectManager.BaseUri.AbsoluteUrl);
                     throw new InvalidOperationException(message, exception);
                 }
 

@@ -404,7 +404,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 					throw new InvalidOperationException();
 				}
 
-				ErrorHandler.ThrowOnFailure(uiHierarchy.ExpandItem(this.node.ProjectManager, this.node.ID, EXPANDFLAGS.EXPF_ExpandFolder));
+				ErrorHandler.ThrowOnFailure(uiHierarchy.ExpandItem(this.node.ProjectManager, this.node.Id, EXPANDFLAGS.EXPF_ExpandFolder));
 
 			}
 		}

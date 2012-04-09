@@ -15,6 +15,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Collections;
 	using Microsoft.VisualStudio.OLE.Interop;
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "STATDATA")]
 	public class EnumSTATDATA : IEnumSTATDATA
 	{
 		private readonly IEnumerable _i;

@@ -17,8 +17,20 @@ namespace Microsoft.VisualStudio.Project
     public enum DropDataType
     {
         None,
+
+        /// <summary>
+        /// Windows Explorer
+        /// </summary>
         Shell,
-        VsStg,
-        VsRef
+
+        /// <summary>
+        /// VSProject storage items
+        /// </summary>
+        VSStorage,
+
+        /// <summary>
+        /// VSProject reference items
+        /// </summary>
+        VSReference
     }
 }

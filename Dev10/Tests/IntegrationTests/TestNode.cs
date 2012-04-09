@@ -42,7 +42,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				ProjectNode project = Utilities.CreateMyNestedProject(sp, dte, TestContext.TestName, destination, true);
 
 				string newFileName = TestUtils.GetNewFileName(project.ProjectFolder, "test", "cs");
-				ProjectElement item = project.CreateMsBuildFileItem(newFileName, "Compile");
+				ProjectElement item = project.CreateMSBuildFileItem(newFileName, "Compile");
 				FileNode node = project.CreateFileNode(item);
 				Assert.IsNotNull(node);
 			});
@@ -64,7 +64,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				ProjectNode project = Utilities.CreateMyNestedProject(sp, dte, TestContext.TestName, destination, true);
 
 				string newFileName = TestUtils.GetNewFileName(project.ProjectFolder, "test", "cs");
-				ProjectElement item = project.CreateMsBuildFileItem(newFileName, "Content");
+				ProjectElement item = project.CreateMSBuildFileItem(newFileName, "Content");
 				FileNode node = project.CreateFileNode(item);
 				FileNodeProperties props = node.NodeProperties as FileNodeProperties;
 				Assert.IsNotNull(props);
@@ -129,7 +129,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				foreach(FileNode node in nodes)
 				{
 					ISingleFileGenerator generator = mi.Invoke(node, new object[] { }) as ISingleFileGenerator;
-					string extension = Path.GetExtension(node.GetMkDocument());
+					string extension = Path.GetExtension(node.GetMKDocument());
 					if(String.Compare(extension, ".moxl", StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						Assert.IsNull(generator, "There should be no single file generators defined for a moxl file");
@@ -213,7 +213,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				FolderNode folderNode = Utilities.CreateFolder(project, folderPath, project);
 
 				//Add new item in folder
-				string newFileName = TestUtils.GetNewFileName(folderNode.GetMkDocument(), "test", "cs");
+				string newFileName = TestUtils.GetNewFileName(folderNode.GetMKDocument(), "test", "cs");
 				ProjectItem item = ((OAFolderItem)folderNode.GetAutomationObject()).ProjectItems.AddFromFile(newFileName);
 				Assert.IsNotNull(item, "Could not get the project item for the file just added");
 
@@ -369,7 +369,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 
 			foreach(FileNode node in nodes)
 			{
-				if(String.Compare(Path.GetExtension(node.GetMkDocument()), ".cs", StringComparison.OrdinalIgnoreCase) == 0)
+				if(String.Compare(Path.GetExtension(node.GetMKDocument()), ".cs", StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					return node;
 				}

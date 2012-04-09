@@ -17,7 +17,6 @@ namespace Microsoft.VisualStudio.Project
 	/// <summary>
 	/// Defines the constant strings used with project files.
 	/// </summary>
-	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM")]
 	public static class ProjectFileConstants
 	{
 		public const VsCommands2K CommandExploreFolderInWindows = (VsCommands2K)1635;
@@ -57,7 +56,8 @@ namespace Microsoft.VisualStudio.Project
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubProject")]
 		public const string SubProject = "SubProject";
 		public const string BuildAction = "BuildAction";
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM",
+			Justification = "The name matches the key as it appears in the MSBuild project.")]
 		public const string COMReference = "COMReference";
 		public const string Guid = "Guid";
 		public const string VersionMajor = "VersionMajor";

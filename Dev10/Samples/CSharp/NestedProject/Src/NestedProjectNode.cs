@@ -36,10 +36,10 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
             this.CanProjectDeleteItems = true;
 
 			// Add Category IDs mapping in order to support properties for project items
-			AddCATIDMapping(typeof(FileNodeProperties), typeof(FileNodeProperties).GUID);
-			AddCATIDMapping(typeof(ProjectNodeProperties), typeof(ProjectNodeProperties).GUID);
-			AddCATIDMapping(typeof(FolderNodeProperties), typeof(FolderNodeProperties).GUID);
-			AddCATIDMapping(typeof(ReferenceNodeProperties), typeof(ReferenceNodeProperties).GUID);
+			AddCatIdMapping(typeof(FileNodeProperties), typeof(FileNodeProperties).GUID);
+			AddCatIdMapping(typeof(ProjectNodeProperties), typeof(ProjectNodeProperties).GUID);
+			AddCatIdMapping(typeof(FolderNodeProperties), typeof(FolderNodeProperties).GUID);
+			AddCatIdMapping(typeof(ReferenceNodeProperties), typeof(ReferenceNodeProperties).GUID);
 		}
 		#endregion Constructors
 

@@ -195,7 +195,7 @@ namespace Microsoft.VisualStudio.Project
 
 				if(openWith)
 				{
-					result = uiShellOpenDocument.OpenStandardEditor((uint)__VSOSEFLAGS.OSE_UseOpenWithDialog, fullPath, ref logicalView, caption, this.Node.ProjectManager, this.Node.ID, docDataExisting, serviceProvider, out windowFrame);
+					result = uiShellOpenDocument.OpenStandardEditor((uint)__VSOSEFLAGS.OSE_UseOpenWithDialog, fullPath, ref logicalView, caption, this.Node.ProjectManager, this.Node.Id, docDataExisting, serviceProvider, out windowFrame);
 				}
 				else
 				{
@@ -209,12 +209,12 @@ namespace Microsoft.VisualStudio.Project
 					// of the node being opened, otherwise the debugger doesn't work.
 					if(editorType != Guid.Empty)
 					{
-						result = uiShellOpenDocument.OpenSpecificEditor(editorFlags, fullPath, ref editorType, physicalView, ref logicalView, caption, this.Node.ProjectManager, this.Node.ID, docDataExisting, serviceProvider, out windowFrame);
+						result = uiShellOpenDocument.OpenSpecificEditor(editorFlags, fullPath, ref editorType, physicalView, ref logicalView, caption, this.Node.ProjectManager, this.Node.Id, docDataExisting, serviceProvider, out windowFrame);
 					}
 					else
 					{
 						openFlags |= __VSOSEFLAGS.OSE_ChooseBestStdEditor;
-						result = uiShellOpenDocument.OpenStandardEditor((uint)openFlags, fullPath, ref logicalView, caption, this.Node.ProjectManager, this.Node.ID, docDataExisting, serviceProvider, out windowFrame);
+						result = uiShellOpenDocument.OpenStandardEditor((uint)openFlags, fullPath, ref logicalView, caption, this.Node.ProjectManager, this.Node.Id, docDataExisting, serviceProvider, out windowFrame);
 					}
 				}
 

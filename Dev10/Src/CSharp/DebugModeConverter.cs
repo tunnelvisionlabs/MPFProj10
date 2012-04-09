@@ -40,7 +40,7 @@ namespace Microsoft.VisualStudio.Project
 
 				if(str == SR.GetString(SR.Project, culture)) return DebugMode.Project;
 
-				if(str == SR.GetString(SR.URL, culture)) return DebugMode.URL;
+				if(str == SR.GetString(SR.URL, culture)) return DebugMode.Url;
 			}
 
 			return base.ConvertFrom(context, culture, value);
@@ -75,7 +75,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext context)
 		{
-			return new StandardValuesCollection(new DebugMode[] { DebugMode.Program, DebugMode.Project, DebugMode.URL });
+			return new StandardValuesCollection(new DebugMode[] { DebugMode.Program, DebugMode.Project, DebugMode.Url });
 		}
 	}
 }

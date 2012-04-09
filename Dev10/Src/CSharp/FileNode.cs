@@ -39,10 +39,10 @@ namespace Microsoft.VisualStudio.Project
                 { ".asax", (int)ImageName.GlobalApplicationClass },
                 { ".asmx", (int)ImageName.WebService },
                 { ".ascx", (int)ImageName.WebUserControl },
-                { ".asp", (int)ImageName.ASPPage },
+                { ".asp", (int)ImageName.AspPage },
                 { ".config", (int)ImageName.WebConfig },
-                { ".htm", (int)ImageName.HTMLPage },
-                { ".html", (int)ImageName.HTMLPage },
+                { ".htm", (int)ImageName.HtmlPage },
+                { ".html", (int)ImageName.HtmlPage },
                 { ".css", (int)ImageName.StyleSheet },
                 { ".xsl", (int)ImageName.StyleSheet },
                 { ".vbs", (int)ImageName.ScriptFile },
@@ -64,13 +64,13 @@ namespace Microsoft.VisualStudio.Project
                 { ".mov", (int)ImageName.Video },
                 { ".mpg", (int)ImageName.Video },
                 { ".mpeg", (int)ImageName.Video },
-                { ".cab", (int)ImageName.CAB },
-                { ".jar", (int)ImageName.JAR },
-                { ".xslt", (int)ImageName.XSLTFile },
-                { ".xsd", (int)ImageName.XMLSchema },
-                { ".xml", (int)ImageName.XMLFile },
-                { ".pfx", (int)ImageName.PFX },
-                { ".snk", (int)ImageName.SNK },
+                { ".cab", (int)ImageName.Cab },
+                { ".jar", (int)ImageName.Jar },
+                { ".xslt", (int)ImageName.XsltFile },
+                { ".xsd", (int)ImageName.XmlSchema },
+                { ".xml", (int)ImageName.XmlFile },
+                { ".pfx", (int)ImageName.Pfx },
+                { ".snk", (int)ImageName.Snk },
             };
         #endregion
 
@@ -186,7 +186,7 @@ namespace Microsoft.VisualStudio.Project
                 else
                 {
                     // Path is relative, so make it relative to project path
-                    url = new Url(this.ProjectManager.BaseURI, path);
+                    url = new Url(this.ProjectManager.BaseUri, path);
                 }
 
                 return url.AbsoluteUrl;
@@ -369,7 +369,7 @@ namespace Microsoft.VisualStudio.Project
             return SetEditLabel(label, strRelPath);
         }
 
-        public override string GetMkDocument()
+        public override string GetMKDocument()
         {
             Debug.Assert(this.Url != null, "No url sepcified for this node");
 
@@ -395,12 +395,12 @@ namespace Microsoft.VisualStudio.Project
         protected internal override int SetEditLabel(string label, string relativePath)
         {
             int returnValue = VSConstants.S_OK;
-            uint oldId = this.ID;
+            uint oldId = this.Id;
             string strSavePath = Path.GetDirectoryName(relativePath);
 
             if(!Path.IsPathRooted(relativePath))
             {
-                strSavePath = Path.Combine(Path.GetDirectoryName(this.ProjectManager.BaseURI.Uri.LocalPath), strSavePath);
+                strSavePath = Path.Combine(Path.GetDirectoryName(this.ProjectManager.BaseUri.Uri.LocalPath), strSavePath);
             }
 
             string newName = Path.Combine(strSavePath, label);
@@ -459,7 +459,7 @@ namespace Microsoft.VisualStudio.Project
             // hierarchy item id.
             if(returnValue == (int)VSConstants.S_OK || returnValue == (int)VSConstants.S_FALSE || returnValue == VSConstants.OLE_E_PROMPTSAVECANCELLED)
             {
-                return (oldId == this.ID) ? VSConstants.S_OK : (int)VSConstants.S_FALSE;
+                return (oldId == this.Id) ? VSConstants.S_OK : (int)VSConstants.S_FALSE;
             }
 
             return returnValue;
@@ -632,7 +632,7 @@ namespace Microsoft.VisualStudio.Project
 
         protected override void DoDefaultAction()
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             FileDocumentManager manager = this.GetDocumentManager() as FileDocumentManager;
             Debug.Assert(manager != null, "Could not get the FileDocumentManager");
             manager.Open(false, false, WindowFrameShowAction.Show);
@@ -659,7 +659,7 @@ namespace Microsoft.VisualStudio.Project
             Uri newDirectoryUri = new Uri(newDirectoryName);
             string newCanonicalDirectoryName = newDirectoryUri.LocalPath;
             newCanonicalDirectoryName = newCanonicalDirectoryName.TrimEnd(Path.DirectorySeparatorChar);
-            string oldCanonicalDirectoryName = new Uri(Path.GetDirectoryName(this.GetMkDocument())).LocalPath;
+            string oldCanonicalDirectoryName = new Uri(Path.GetDirectoryName(this.GetMKDocument())).LocalPath;
             oldCanonicalDirectoryName = oldCanonicalDirectoryName.TrimEnd(Path.DirectorySeparatorChar);
             string errorMessage = String.Empty;
             bool isSamePath = NativeMethods.IsSamePath(newCanonicalDirectoryName, oldCanonicalDirectoryName);
@@ -707,8 +707,8 @@ namespace Microsoft.VisualStudio.Project
             if(targetContainer == null)
             {
                 // Add a chain of subdirectories to the project.
-                string relativeUri = PackageUtilities.GetPathDistance(this.ProjectManager.BaseURI.Uri, newDirectoryUri);
-                Debug.Assert(!String.IsNullOrEmpty(relativeUri) && relativeUri != newDirectoryUri.LocalPath, "Could not make pat distance of " + this.ProjectManager.BaseURI.Uri.LocalPath + " and " + newDirectoryUri);
+                string relativeUri = PackageUtilities.GetPathDistance(this.ProjectManager.BaseUri.Uri, newDirectoryUri);
+                Debug.Assert(!String.IsNullOrEmpty(relativeUri) && relativeUri != newDirectoryUri.LocalPath, "Could not make pat distance of " + this.ProjectManager.BaseUri.Uri.LocalPath + " and " + newDirectoryUri);
                 targetContainer = this.ProjectManager.CreateFolderNodes(relativeUri);
             }
             Debug.Assert(targetContainer != null, "We should have found a target node by now");
@@ -726,7 +726,7 @@ namespace Microsoft.VisualStudio.Project
                 // Check if the file name was actually changed.
                 // In same cases (e.g. if the item is a file and the user has changed its encoding) this function
                 // is called even if there is no real rename.
-                if(!isSameFile || (this.Parent.ID != targetContainer.ID))
+                if(!isSameFile || (this.Parent.Id != targetContainer.Id))
                 {
                     // The path of the file is changed or its parent is changed; in both cases we have
                     // to rename the item.
@@ -755,7 +755,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns></returns>
         protected override bool CanShowDefaultIcon()
         {
-            string moniker = this.GetMkDocument();
+            string moniker = this.GetMKDocument();
 
             if(String.IsNullOrEmpty(moniker) || !File.Exists(moniker))
             {
@@ -851,7 +851,7 @@ namespace Microsoft.VisualStudio.Project
             VSADDRESULT[] result = new VSADDRESULT[1];
             Guid emptyGuid = Guid.Empty;
             VSADDITEMOPERATION op = (String.IsNullOrEmpty(linkPath) ? VSADDITEMOPERATION.VSADDITEMOP_OPENFILE : VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE);
-            ErrorHandler.ThrowOnFailure(this.ProjectManager.AddItemWithSpecific(newParent.ID, op, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
+            ErrorHandler.ThrowOnFailure(this.ProjectManager.AddItemWithSpecific(newParent.Id, op, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
             FileNode childAdded = this.ProjectManager.FindChild(newFileName) as FileNode;
             Debug.Assert(childAdded != null, "Could not find the renamed item in the hierarchy");
 
@@ -892,7 +892,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             //Update the new document in the RDT.
-            DocumentManager.RenameDocument(this.ProjectManager.Site, oldFileName, newFileName, childAdded.ID);
+            DocumentManager.RenameDocument(this.ProjectManager.Site, oldFileName, newFileName, childAdded.Id);
 
             //Select the new node in the hierarchy
             IVsUIHierarchyWindow uiWindow = UIHierarchyUtilities.GetUIHierarchyWindow(this.ProjectManager.Site, SolutionExplorer);
@@ -902,7 +902,7 @@ namespace Microsoft.VisualStudio.Project
 			// renamed node.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.ID, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
 
             //Update FirstChild
@@ -937,14 +937,14 @@ namespace Microsoft.VisualStudio.Project
                     string relationalName = childNode.Parent.GetRelationalName();
                     string extension = childNode.GetRelationNameExtension();
                     newfilename = relationalName + extension;
-                    newfilename = Path.Combine(Path.GetDirectoryName(childNode.Parent.GetMkDocument()), newfilename);
+                    newfilename = Path.Combine(Path.GetDirectoryName(childNode.Parent.GetMKDocument()), newfilename);
                 }
                 else
                 {
-                    newfilename = Path.Combine(Path.GetDirectoryName(childNode.Parent.GetMkDocument()), childNode.Caption);
+                    newfilename = Path.Combine(Path.GetDirectoryName(childNode.Parent.GetMKDocument()), childNode.Caption);
                 }
 
-                childNode.RenameDocument(childNode.GetMkDocument(), newfilename);
+                childNode.RenameDocument(childNode.GetMKDocument(), newfilename);
 
                 //We must update the DependsUpon property since the rename operation will not do it if the childNode is not renamed
                 //which happens if the is no name relation between the parent and the child
@@ -1023,7 +1023,7 @@ namespace Microsoft.VisualStudio.Project
 
             foreach(HierarchyNode node in this.Children)
             {
-                files.Add(node.GetMkDocument());
+                files.Add(node.GetMKDocument());
             }
         }
 
@@ -1046,7 +1046,7 @@ namespace Microsoft.VisualStudio.Project
                 }
 
                 bool boolValue;
-                CCITracing.TraceCall(this.ID + "," + id.ToString());
+                CciTracing.TraceCall(this.Id + "," + id.ToString());
                 if (Boolean.TryParse(value.ToString(), out boolValue))
                 {
                     this.IsNonMemberItem = boolValue;
@@ -1119,7 +1119,7 @@ namespace Microsoft.VisualStudio.Project
 
             // Ask Document tracker listeners if we can remove the item.
             { // just to limit the scope.
-                string documentToRemove = this.GetMkDocument();
+                string documentToRemove = this.GetMKDocument();
                 string[] filesToBeDeleted = new string[1] { documentToRemove };
                 VSQUERYREMOVEFILEFLAGS[] queryRemoveFlags = this.GetQueryRemoveFileFlags(filesToBeDeleted);
                 if (!this.ProjectManager.Tracker.CanRemoveItems(filesToBeDeleted, queryRemoveFlags))
@@ -1161,8 +1161,8 @@ namespace Microsoft.VisualStudio.Project
                 this.ItemNode.SetMetadata(ProjectFileConstants.Name, url);
 
                 ////this.ProjectManager.OnItemAdded(this.Parent, this);
-                this.ReDraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now not a member of the project and should be drawn using a different icon.
-                this.ReDraw(UIHierarchyElement.SccState); // update the SCC state icon.
+                this.Redraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now not a member of the project and should be drawn using a different icon.
+                this.Redraw(UIHierarchyElement.SccState); // update the SCC state icon.
             }
             else if (this.Parent != null) // the project node has no parentNode
             {
@@ -1207,13 +1207,13 @@ namespace Microsoft.VisualStudio.Project
 
             // now add this node to the project.
             this.SetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem, false);
-            this.ItemNode = ProjectManager.AddFileToMsBuild(this.Url);
+            this.ItemNode = ProjectManager.AddFileToMSBuild(this.Url);
             this.ProjectManager.Tracker.OnItemAdded(this.Url, VSADDFILEFLAGS.VSADDFILEFLAGS_NoFlags);
 
             // notify others
             ////projectNode.OnItemAdded(this.Parent, this);
-            this.ReDraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now a member of the project and should be drawn using a different icon.
-            this.ReDraw(UIHierarchyElement.SccState); // update the SCC state icon.
+            this.Redraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now a member of the project and should be drawn using a different icon.
+            this.Redraw(UIHierarchyElement.SccState); // update the SCC state icon.
 
             //this.ResetProperties();
 
@@ -1307,7 +1307,7 @@ namespace Microsoft.VisualStudio.Project
                 }
                 finally
                 {
-                    this.ProjectManager.ResumeMSBuild(this.ProjectManager.ReEvaluateProjectFileTargetName);
+                    this.ProjectManager.ResumeMSBuild(this.ProjectManager.ReevaluateProjectFileTargetName);
                 }
 
                 this.ProjectManager.Tracker.OnItemRenamed(oldName, newName, renameflag);
@@ -1349,7 +1349,7 @@ namespace Microsoft.VisualStudio.Project
 
             this.ItemNode.RefreshProperties();
 
-            this.ReDraw(UIHierarchyElement.Caption);
+            this.Redraw(UIHierarchyElement.Caption);
             this.RenameChildNodes(this);
 
             // Refresh the property browser.
@@ -1368,7 +1368,7 @@ namespace Microsoft.VisualStudio.Project
             // Since we are already in solution explorer, it is extremely unlikely that we get a null return.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.ID, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
         }
 

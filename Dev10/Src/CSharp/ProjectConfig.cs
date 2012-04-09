@@ -312,7 +312,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsReleaseOnly(out int fRelease)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             fRelease = 0;
             if(this.ConfigName == "Release")
             {
@@ -327,14 +327,14 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int EnumOutputs(out IVsEnumOutputs eo)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             eo = null;
             return VSConstants.E_NOTIMPL;
         }
 
         public virtual int get_BuildableProjectCfg(out IVsBuildableProjectCfg pb)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             if(buildableCfg == null)
                 buildableCfg = new BuildableProjectConfig(this);
 
@@ -350,7 +350,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsPackaged(out int pkgd)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             pkgd = 0;
             return VSConstants.S_OK;
         }
@@ -358,7 +358,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsSpecifyingOutputSupported(out int f)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             f = 1;
             return VSConstants.S_OK;
         }
@@ -366,7 +366,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_Platform(out Guid platform)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             platform = Guid.Empty;
             return VSConstants.E_NOTIMPL;
         }
@@ -374,7 +374,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_ProjectCfgProvider(out IVsProjectCfgProvider p)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             p = null;
             IVsCfgProvider cfgProvider = null;
             this._project.GetCfgProvider(out cfgProvider);
@@ -388,7 +388,7 @@ namespace Microsoft.VisualStudio.Project
 
         public virtual int get_RootURL(out string root)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             root = null;
             return VSConstants.S_OK;
         }
@@ -396,7 +396,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_TargetCodePage(out uint target)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             target = (uint)System.Text.Encoding.Default.CodePage;
             return VSConstants.S_OK;
         }
@@ -409,7 +409,7 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentNullException("li");
             }
 
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             li[0] = new ULARGE_INTEGER();
             li[0].QuadPart = 0;
             return VSConstants.S_OK;
@@ -418,7 +418,7 @@ namespace Microsoft.VisualStudio.Project
         [Obsolete("Obsolete method. Do not use.")]
         public virtual int OpenOutput(string name, out IVsOutput output)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             output = null;
             return VSConstants.E_NOTIMPL;
         }
@@ -434,7 +434,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code</returns>
         public virtual int DebugLaunch(uint grfLaunch)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
 
             try
             {
@@ -511,7 +511,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>S_OK if the method succeeds, otherwise an error code</returns>
         public virtual int QueryDebugLaunch(uint flags, out int fCanLaunch)
         {
-            CCITracing.TraceCall();
+            CciTracing.TraceCall();
             string assembly = this._project.GetAssemblyName(this.ConfigName, this.Platform);
             fCanLaunch = (assembly != null && assembly.ToUpperInvariant().EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) ? 1 : 0;
             if(fCanLaunch == 0)

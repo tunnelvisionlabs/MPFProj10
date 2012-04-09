@@ -161,7 +161,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 
 				__VSHIERARCHYITEMSTATE state;
 				uint stateAsInt;
-				uiHierarchy.GetItemState(project, (uint)containerNode.ID, (uint)__VSHIERARCHYITEMSTATE.HIS_Expanded, out stateAsInt);
+				uiHierarchy.GetItemState(project, (uint)containerNode.Id, (uint)__VSHIERARCHYITEMSTATE.HIS_Expanded, out stateAsInt);
 				state = (__VSHIERARCHYITEMSTATE)stateAsInt;
 				Assert.IsTrue(state == __VSHIERARCHYITEMSTATE.HIS_Expanded, "The References folder has not been expanded");
 			});

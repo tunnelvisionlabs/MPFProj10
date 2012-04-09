@@ -16,8 +16,7 @@ namespace Microsoft.VisualStudio.Project
 	/// <summary>
 	/// Defines the constant strings for various msbuild targets
 	/// </summary>
-	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms")]
-	public static class MsBuildTarget
+	public static class MSBuildTarget
 	{
 		public const string ResolveProjectReferences = "ResolveProjectReferences";
 		public const string ResolveAssemblyReferences = "ResolveAssemblyReferences";
