@@ -494,7 +494,7 @@ namespace Microsoft.VisualStudio.Project
 				EnvDTE.IVsExtensibility extensibilityService = (EnvDTE.IVsExtensibility)GetService(typeof(EnvDTE.IVsExtensibility));
 				EnvDTE.wizardResult result = extensibilityService.RunWizardFile(template, 0, ref wizParams);
 				if(result == EnvDTE.wizardResult.wizardResultFailure)
-					throw new COMException();
+					ErrorHandler.ThrowOnFailure(VSConstants.E_FAIL);
 			}
 			finally
 			{

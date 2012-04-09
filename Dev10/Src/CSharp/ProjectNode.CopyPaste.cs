@@ -537,7 +537,7 @@ namespace Microsoft.VisualStudio.Project
 				while(cursorNode != null)
 				{
 					if(String.Equals(folder, cursorNode.GetMkDocument(), StringComparison.OrdinalIgnoreCase))
-						throw new Exception();
+						throw new InvalidOperationException();
 					cursorNode = cursorNode.Parent;
 				}
 			}
@@ -626,10 +626,10 @@ namespace Microsoft.VisualStudio.Project
 				VSADDRESULT[] result = new VSADDRESULT[1];
 				ErrorHandler.ThrowOnFailure(this.AddItem(parentNode.ID, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, name, 1, new string[] { targetPath }, IntPtr.Zero, result));
 				if(result[0] != VSADDRESULT.ADDRESULT_Success)
-					throw new Exception();
+					throw new InvalidOperationException();
 				newNode = this.FindChild(targetPath);
 				if(newNode == null)
-					throw new Exception();
+					throw new InvalidOperationException();
 			}
 			else if(Directory.Exists(targetPath))
 			{

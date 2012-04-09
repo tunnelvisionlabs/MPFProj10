@@ -158,7 +158,7 @@ namespace Microsoft.VisualStudio.Project
                 IVsProjectFlavorCfgProvider flavorCfgProvider = (IVsProjectFlavorCfgProvider)Marshal.GetTypedObjectForIUnknown(projectUnknown, typeof(IVsProjectFlavorCfgProvider));
                 ErrorHandler.ThrowOnFailure(flavorCfgProvider.CreateProjectFlavorCfg(this, out flavoredCfg));
                 if(flavoredCfg == null)
-                    throw new COMException();
+                    ErrorHandler.ThrowOnFailure(VSConstants.E_FAIL);
             }
             finally
             {
@@ -685,7 +685,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             if (this.currentConfig == null)
-                throw new Exception("Failed to retrieve properties");
+                throw new InvalidOperationException("Failed to retrieve properties");
 
             // return property asked for
             return this.currentConfig.GetProperty(propertyName);

@@ -184,7 +184,6 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="root">The Project node</param>
         /// <param name="selectorData">The component selctor data.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         public ComReferenceNode(ProjectNode root, VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null)
             : base(root)
         {
