@@ -1050,8 +1050,7 @@ namespace Microsoft.VisualStudio.Project
         /// Adds non member items to the hierarchy.
         /// </summary>
         /// <param name="project">The project to modify.</param>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
-        public virtual void AddNonMemberItems()
+        public virtual void AddNonmemberItems()
         {
             IList<string> files = new List<string>();
             IList<string> folders = new List<string>();
@@ -1066,8 +1065,8 @@ namespace Microsoft.VisualStudio.Project
             EventTriggeringFlag = SuppressEvents.Hierarchy;
             try
             {
-                this.AddNonMemberFolderItems(folders);
-                this.AddNonMemberFileItems(files);
+                this.AddNonmemberFolderItems(folders);
+                this.AddNonmemberFileItems(files);
             }
             finally
             {
@@ -1107,11 +1106,10 @@ namespace Microsoft.VisualStudio.Project
         /// Removes non member item nodes from hierarchy.
         /// </summary>
         /// <param name="project">The project to modify.</param>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
-        public virtual void RemoveNonMemberItems()
+        public virtual void RemoveNonmemberItems()
         {
             IList<HierarchyNode> nodeList = new List<HierarchyNode>();
-            FindNodes(nodeList, this, IsNodeNonMemberItem);
+            FindNodes(nodeList, this, IsNodeNonmemberItem);
             for (int index = nodeList.Count - 1; index >= 0; index--)
             {
                 HierarchyNode parent = nodeList[index].Parent;
@@ -1125,20 +1123,20 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="node">Node to be filtered.</param>
         /// <returns>Returns if the node is a non member item node or not.</returns>
-        protected virtual bool IsNodeNonMemberItem(HierarchyNode node)
+        protected virtual bool IsNodeNonmemberItem(HierarchyNode node)
         {
-            bool isNonMemberItem = false;
+            bool isNonmemberItem = false;
             if (node != null)
             {
                 object propObj = node.GetProperty((int)__VSHPROPID.VSHPROPID_IsNonMemberItem);
                 if (propObj != null)
                 {
-                    if (!bool.TryParse(propObj.ToString(), out isNonMemberItem))
-                        isNonMemberItem = false;
+                    if (!bool.TryParse(propObj.ToString(), out isNonmemberItem))
+                        isNonmemberItem = false;
                 }
             }
 
-            return isNonMemberItem;
+            return isNonmemberItem;
         }
 
         /// <summary>
@@ -1273,8 +1271,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="project">The project to modify.</param>
         /// <param name="folderList">Folders list containing the folder names.</param>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
-        protected virtual void AddNonMemberFolderItems(IList<string> folderList)
+        protected virtual void AddNonmemberFolderItems(IList<string> folderList)
         {
             if (folderList == null)
             {
@@ -1295,7 +1292,7 @@ namespace Microsoft.VisualStudio.Project
                         if (topFolderNode == null)
                         {
                             topFolderNode = parentNode as FolderNode;
-                            if (topFolderNode != null && (!topFolderNode.IsNonMemberItem) && topFolderNode.IsExpanded)
+                            if (topFolderNode != null && (!topFolderNode.IsNonmemberItem) && topFolderNode.IsExpanded)
                             {
                                 topFolderNode = null;
                             }
@@ -1322,8 +1319,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="project">The project to modify.</param>
         /// <param name="fileList">Files containing the information about the non member file items.</param>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
-        protected virtual void AddNonMemberFileItems(IList<string> fileList)
+        protected virtual void AddNonmemberFileItems(IList<string> fileList)
         {
             if (fileList == null)
                 throw new ArgumentNullException("fileList");
@@ -1357,7 +1353,7 @@ namespace Microsoft.VisualStudio.Project
                                 topFolderNode = folderNode;
                         }
 
-                        if (topFolderNode != null && !topFolderNode.IsNonMemberItem && topFolderNode.IsExpanded)
+                        if (topFolderNode != null && !topFolderNode.IsNonmemberItem && topFolderNode.IsExpanded)
                             topFolderNode = null;
                     }
                 }
@@ -1391,7 +1387,7 @@ namespace Microsoft.VisualStudio.Project
 
             // Find out the parent folder nodes if any.
             FolderNode parentFolderNode = node.Parent as FolderNode;
-            while (parentFolderNode != null && parentFolderNode.IsNonMemberItem)
+            while (parentFolderNode != null && parentFolderNode.IsNonmemberItem)
             {
                 stack.Push(parentFolderNode);
                 parentFolderNode.CreateDirectory(); // ensure that the folder is there on file system
@@ -1445,7 +1441,7 @@ namespace Microsoft.VisualStudio.Project
         /// Makes subPath relative with respect to basePath.
         /// </summary>
         /// <param name="basePath">Base folder path.</param>
-        /// <param name="subPath">Path of the sub folder or file.</param>
+        /// <param name="subpath">Path of the sub folder or file.</param>
         /// <returns>The relative path for the subPath if it shares the same root with basePath or subPath otherwise.</returns>
         /// <remarks>
         /// We introduced GetRelativePath method because the Microsoft.VisualStudio.Shell.PackageUtilities.MakeRelative() doesn't
@@ -1478,25 +1474,25 @@ namespace Microsoft.VisualStudio.Project
         [SuppressMessage("Microsoft.Interoperability", "CA1407:AvoidStaticMembersInComVisibleTypes")]
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentException.#ctor(System.String)")]
-        public static string GetRelativePath(string basePath, string subPath)
+        public static string GetRelativePath(string basePath, string subpath)
         {
             VerifyStringArgument(basePath, "basePath");
-            VerifyStringArgument(subPath, "subPath");
+            VerifyStringArgument(subpath, "subpath");
 
             if (!Path.IsPathRooted(basePath))
             {
                 throw new ArgumentException("The 'basePath' is not rooted.");
             }
 
-            if (!Path.IsPathRooted(subPath))
+            if (!Path.IsPathRooted(subpath))
             {
-                return subPath;
+                return subpath;
             }
 
-            if (!String.Equals(Path.GetPathRoot(basePath), Path.GetPathRoot(subPath), StringComparison.OrdinalIgnoreCase))
+            if (!String.Equals(Path.GetPathRoot(basePath), Path.GetPathRoot(subpath), StringComparison.OrdinalIgnoreCase))
             {
                 // both paths have different roots so we can't make them relative
-                return subPath;
+                return subpath;
             }
 
             // Url.MakeRelative method requires the base path to be ended with a '\' if it is a folder,
@@ -1504,7 +1500,7 @@ namespace Microsoft.VisualStudio.Project
             basePath = EnsureTrailingDirectoryChar(basePath.Trim());
 
             Url url = new Url(basePath);
-            return url.MakeRelative(new Url(subPath));
+            return url.MakeRelative(new Url(subpath));
         }
 
         internal static void RefreshPropertyBrowser()
@@ -3211,7 +3207,7 @@ namespace Microsoft.VisualStudio.Project
                 if (parts[i].Length > 0)
                 {
                     path += parts[i] + "\\";
-                    curParent = VerifySubFolderExists(path, curParent, nodeCache);
+                    curParent = VerifySubfolderExists(path, curParent, nodeCache);
                 }
             }
             return curParent;
@@ -3262,14 +3258,12 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="path">full path to the subfolder we want to verify.</param>
         /// <param name="parent">the parent node where to add the subfolder if it does not exist.</param>
         /// <returns>the foldernode correcsponding to the path.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubFolder")]
-        protected virtual FolderNode VerifySubFolderExists(string path, HierarchyNode parent)
+        protected virtual FolderNode VerifySubfolderExists(string path, HierarchyNode parent)
         {
-            return VerifySubFolderExists(path, parent, null);
+            return VerifySubfolderExists(path, parent, null);
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubFolder")]
-        protected virtual FolderNode VerifySubFolderExists(string path, HierarchyNode parent, IDictionary<string, HierarchyNode> nodeCache)
+        protected virtual FolderNode VerifySubfolderExists(string path, HierarchyNode parent, IDictionary<string, HierarchyNode> nodeCache)
         {
             FolderNode folderNode = null;
             uint uiItemId;
@@ -3472,11 +3466,11 @@ namespace Microsoft.VisualStudio.Project
 
             if (this.ShowAllFilesEnabled)
             {
-                this.AddNonMemberItems();
+                this.AddNonmemberItems();
             }
             else
             {
-                this.RemoveNonMemberItems();
+                this.RemoveNonmemberItems();
             }
             //}
 
@@ -4118,7 +4112,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="file">The file to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added file.</returns>
-        public virtual ProjectElement AddFileToMSBuild(string file, string itemType, string subType)
+        public virtual ProjectElement AddFileToMSBuild(string file, string itemType, string subtype)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -4133,8 +4127,8 @@ namespace Microsoft.VisualStudio.Project
             Debug.Assert(!Path.IsPathRooted(itemPath), "Cannot add item with full path.");
 
             ProjectElement newItem = this.CreateMSBuildFileItem(itemPath, itemType);
-            if (!string.IsNullOrEmpty(subType))
-                newItem.SetMetadata(ProjectFileConstants.SubType, subType);
+            if (!string.IsNullOrEmpty(subtype))
+                newItem.SetMetadata(ProjectFileConstants.SubType, subtype);
 
             return newItem;
         }

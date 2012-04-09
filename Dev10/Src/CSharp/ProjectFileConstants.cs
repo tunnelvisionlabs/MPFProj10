@@ -42,7 +42,8 @@ namespace Microsoft.VisualStudio.Project
 		public const string EmbeddedResource = "EmbeddedResource";
 		public const string RootNamespace = "RootNamespace";
 		public const string OutputType = "OutputType";
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubType")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubType",
+			Justification = "The name matches the key as it appears in the MSBuild project.")]
 		public const string SubType = "SubType";
 		public const string DependentUpon = "DependentUpon";
 		public const string Compile = "Compile";
@@ -53,7 +54,8 @@ namespace Microsoft.VisualStudio.Project
 		public const string AvailablePlatforms = "AvailablePlatforms";
 		public const string BuildVerbosity = "BuildVerbosity";
 		public const string Template = "Template";
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubProject")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubProject",
+			Justification = "The name matches the key as it appears in the MSBuild project.")]
 		public const string SubProject = "SubProject";
 		public const string BuildAction = "BuildAction";
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM",

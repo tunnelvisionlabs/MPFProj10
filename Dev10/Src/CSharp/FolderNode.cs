@@ -64,7 +64,7 @@ namespace Microsoft.VisualStudio.Project
 			get
 			{
 				// Non member items donot participate in SCC.
-				if (this.IsNonMemberItem)
+				if (this.IsNonmemberItem)
 				{
 					return true;
 				}
@@ -104,7 +104,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Flag that indicates if this node is not a member of the project.
 		/// </summary>
 		/// <value>true if the item is not a member of the project build, false otherwise.</value>
-		public bool IsNonMemberItem
+		public bool IsNonmemberItem
 		{
 			get
 			{
@@ -164,7 +164,7 @@ namespace Microsoft.VisualStudio.Project
                 CciTracing.TraceCall(this.Id + "," + id.ToString());
                 if (bool.TryParse(value.ToString(), out boolValue))
                 {
-                    this.IsNonMemberItem = boolValue;
+                    this.IsNonmemberItem = boolValue;
                 }
                 else
                 {
@@ -192,7 +192,7 @@ namespace Microsoft.VisualStudio.Project
             switch ((__VSHPROPID)propId)
             {
             case __VSHPROPID.VSHPROPID_IsNonMemberItem:
-                return this.IsNonMemberItem;
+                return this.IsNonmemberItem;
             }
 
             return base.GetProperty(propId);
@@ -205,7 +205,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>Caption of the folder node if the node is a member item, null otherwise.</returns>
         public override string GetEditLabel()
         {
-            if (this.IsNonMemberItem)
+            if (this.IsNonmemberItem)
             {
                 return null;
             }
@@ -215,7 +215,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public override object GetIconHandle(bool open)
 		{
-            if (this.IsNonMemberItem)
+            if (this.IsNonmemberItem)
             {
                 return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ImageName.OpenExcludedFolder : (int)ImageName.ExcludedFolder);
             }
@@ -294,7 +294,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                if (this.IsNonMemberItem)
+                if (this.IsNonmemberItem)
                 {
                     return VsMenus.IDM_VS_CTXT_XPROJ_MULTIITEM;
                 }
@@ -452,7 +452,7 @@ namespace Microsoft.VisualStudio.Project
                 if ((VsCommands2K)cmd == VsCommands2K.INCLUDEINPROJECT)
                 {
                     // if it is a non member item node, the we support "Include In Project" command
-                    if (IsNonMemberItem)
+                    if (IsNonmemberItem)
                     {
                         result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
                     }
@@ -466,7 +466,7 @@ namespace Microsoft.VisualStudio.Project
                 else if ((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
 				{
                     // if it is a non member item node, then we don't support "Exclude From Project" command
-                    if (IsNonMemberItem)
+                    if (IsNonmemberItem)
                     {
                         result |= vsCommandStatus.vsCommandStatusUnsupported;
                     }
@@ -587,7 +587,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
             }
-            else if (this.IsNonMemberItem)
+            else if (this.IsNonmemberItem)
             {
                 return VSConstants.S_OK; // do nothing, just ignore it.
             }
@@ -665,7 +665,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
             }
-            else if (!this.IsNonMemberItem)
+            else if (!this.IsNonmemberItem)
             {
                 return VSConstants.S_OK; // do nothing, just ignore it.
             }

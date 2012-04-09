@@ -167,7 +167,7 @@ namespace Microsoft.VisualStudio.Project
         /// References node cannot be dragged.
         /// </summary>
         /// <returns>A stringbuilder.</returns>
-        protected internal override StringBuilder PrepareSelectedNodesForClipBoard()
+        protected internal override StringBuilder PrepareSelectedNodesForClipboard()
         {
             return null;
         }

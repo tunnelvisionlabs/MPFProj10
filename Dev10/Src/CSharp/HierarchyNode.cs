@@ -1281,8 +1281,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <returns>A stringbuilder.</returns>
 		/// <devremark>This method has to be public since seleceted nodes will call it.</devremark>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ClipBoard")]
-		protected internal virtual StringBuilder PrepareSelectedNodesForClipBoard()
+		protected internal virtual StringBuilder PrepareSelectedNodesForClipboard()
 		{
 			Debug.Assert(this.ProjectManager != null, " No project mananager available for this node " + ToString());
 			Debug.Assert(this.ProjectManager.ItemsDraggedOrCutOrCopied != null, " The itemsdragged list should have been initialized prior calling this method");
@@ -1487,14 +1486,13 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="cmdGroup">Unique identifier of the command group</param>
 		/// <param name="cmdId">The command to be executed.</param>
 		/// <param name="cmdExecOpt">Values describe how the object should execute the command.</param>
-		/// <param name="vaIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
-		/// <param name="vaOut">VARIANTARG structure to receive command output. Can be NULL.</param>
+		/// <param name="dataIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
+		/// <param name="dataOut">VARIANTARG structure to receive command output. Can be NULL.</param>
 		/// <param name="commandOrigin">The origin of the command. From IOleCommandTarget or hierarchy.</param>
 		/// <param name="selectedNodes">The list of the selected nodes.</param>
 		/// <param name="handled">An out parameter specifying that the command was handled.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
-		protected virtual int ExecCommandThatDependsOnSelectedNodes(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin, IList<HierarchyNode> selectedNodes, out bool handled)
+		protected virtual int ExecCommandThatDependsOnSelectedNodes(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr dataIn, IntPtr dataOut, CommandOrigin commandOrigin, IList<HierarchyNode> selectedNodes, out bool handled)
 		{
 			handled = false;
 			if(cmdGroup == VsMenus.guidVsUIHierarchyWindowCmds)
@@ -1514,7 +1512,7 @@ namespace Microsoft.VisualStudio.Project
 						//			memcpy((void*)&pts, &ulPts, sizeof(POINTS));
 						// You then pass that POINTS into DisplayContextMenu.
 						handled = true;
-						return this.DisplayContextMenu(selectedNodes, vaIn);
+						return this.DisplayContextMenu(selectedNodes, dataIn);
 					default:
 						break;
 				}
@@ -1538,13 +1536,12 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="cmdGroup">Unique identifier of the command group</param>
 		/// <param name="cmdId">The command to be executed.</param>
 		/// <param name="cmdExecOpt">Values describe how the object should execute the command.</param>
-		/// <param name="vaIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
-		/// <param name="vaOut">VARIANTARG structure to receive command output. Can be NULL.</param>
+		/// <param name="dataIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
+		/// <param name="dataOut">VARIANTARG structure to receive command output. Can be NULL.</param>
 		/// <param name="commandOrigin">The origin of the command. From IOleCommandTarget or hierarchy.</param>
 		/// <param name="handled">An out parameter specifying that the command was handled.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
-		protected virtual int ExecCommandIndependentOfSelection(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin, out bool handled)
+		protected virtual int ExecCommandIndependentOfSelection(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr dataIn, IntPtr dataOut, CommandOrigin commandOrigin, out bool handled)
 		{
 			handled = false;
 
@@ -1614,12 +1611,11 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="cmdGroup">Unique identifier of the command group</param>
 		/// <param name="cmdId">The command to be executed.</param>
 		/// <param name="cmdExecOpt">Values describe how the object should execute the command.</param>
-		/// <param name="vaIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
-		/// <param name="vaOut">VARIANTARG structure to receive command output. Can be NULL.</param>
+		/// <param name="dataIn">Pointer to a VARIANTARG structure containing input arguments. Can be NULL</param>
+		/// <param name="dataOut">VARIANTARG structure to receive command output. Can be NULL.</param>
 		/// <param name="commandOrigin">The origin of the command. From IOleCommandTarget or hierarchy.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "vaIn")]
-		protected virtual int InternalExecCommand(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin)
+		protected virtual int InternalExecCommand(Guid cmdGroup, uint cmdId, OLECMDEXECOPT cmdExecOpt, IntPtr dataIn, IntPtr dataOut, CommandOrigin commandOrigin)
 		{
 			CciTracing.TraceCall(cmdGroup.ToString() + "," + cmdId.ToString());
 			if(this.projectMgr == null || this.projectMgr.IsClosed)
@@ -1645,7 +1641,7 @@ namespace Microsoft.VisualStudio.Project
 
 			// Handle commands that are independent of a selection.
 			bool handled = false;
-			int returnValue = this.ExecCommandIndependentOfSelection(cmdGroup, cmdId, cmdExecOpt, vaIn, vaOut, commandOrigin, out handled);
+			int returnValue = this.ExecCommandIndependentOfSelection(cmdGroup, cmdId, cmdExecOpt, dataIn, dataOut, commandOrigin, out handled);
 			if(handled)
 			{
 				return returnValue;
@@ -1653,7 +1649,7 @@ namespace Microsoft.VisualStudio.Project
 
 
 			// Now handle commands that need the selected nodes as input parameter.
-			returnValue = this.ExecCommandThatDependsOnSelectedNodes(cmdGroup, cmdId, cmdExecOpt, vaIn, vaOut, commandOrigin, selectedNodes, out handled);
+			returnValue = this.ExecCommandThatDependsOnSelectedNodes(cmdGroup, cmdId, cmdExecOpt, dataIn, dataOut, commandOrigin, selectedNodes, out handled);
 			if(handled)
 			{
 				return returnValue;
@@ -1666,7 +1662,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				try
 				{
-					returnValue = node.ExecCommandOnNode(cmdGroup, cmdId, cmdExecOpt, vaIn, vaOut);
+					returnValue = node.ExecCommandOnNode(cmdGroup, cmdId, cmdExecOpt, dataIn, dataOut);
 				}
 				catch(COMException e)
 				{
@@ -1818,7 +1814,8 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="commandGroup">Unique identifier of the command group</param>
 		/// <param name="command">The command to be executed.</param>
 		/// <returns>A QueryStatusResult describing the status of the menu.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InCurrent")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InCurrent")]
 		protected virtual bool DisableCmdInCurrentMode(Guid commandGroup, uint command)
 		{
 			if(this.ProjectManager == null || this.ProjectManager.IsClosed)

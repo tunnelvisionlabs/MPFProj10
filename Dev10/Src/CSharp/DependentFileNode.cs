@@ -120,7 +120,7 @@ namespace Microsoft.VisualStudio.Project
 		/// DependentFileNodes node cannot be dragged.
 		/// </summary>
 		/// <returns>null</returns>
-		protected internal override StringBuilder PrepareSelectedNodesForClipBoard()
+		protected internal override StringBuilder PrepareSelectedNodesForClipboard()
 		{
 			return null;
 		}

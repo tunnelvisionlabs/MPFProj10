@@ -418,7 +418,7 @@ namespace Microsoft.VisualStudio.Project
 					{
 						foreach(HierarchyNode node in selectedNodes)
 						{
-							selectionContent = node.PrepareSelectedNodesForClipBoard();
+							selectionContent = node.PrepareSelectedNodesForClipboard();
 							if(selectionContent != null)
 							{
 								sb.Append(selectionContent);
@@ -428,7 +428,7 @@ namespace Microsoft.VisualStudio.Project
 					else if(selectedNodes.Count == 1)
 					{
 						HierarchyNode selectedNode = selectedNodes[0];
-						selectionContent = selectedNode.PrepareSelectedNodesForClipBoard();
+						selectionContent = selectedNode.PrepareSelectedNodesForClipboard();
 						if(selectionContent != null)
 						{
 							sb.Append(selectionContent);

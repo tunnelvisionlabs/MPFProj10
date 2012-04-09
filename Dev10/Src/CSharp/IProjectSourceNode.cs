@@ -29,8 +29,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets if the item is not a member of the project.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonMember")]
-        bool IsNonMemberItem
+        bool IsNonmemberItem
         {
             get;
         }
