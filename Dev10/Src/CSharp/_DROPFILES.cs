@@ -21,7 +21,47 @@ namespace Microsoft.VisualStudio.Project
         public int pFiles;
         public int X;
         public int Y;
-        public int fNC;
-        public int fWide;
+        [MarshalAs(UnmanagedType.Bool)]
+        public bool fNC;
+        [MarshalAs(UnmanagedType.Bool)]
+        public bool fWide;
+
+        public static bool operator ==(_DROPFILES left, _DROPFILES right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(_DROPFILES left, _DROPFILES right)
+        {
+            return !left.Equals(right);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is _DROPFILES))
+                return false;
+
+            return this.Equals((_DROPFILES)obj);
+        }
+
+        public bool Equals(_DROPFILES other)
+        {
+            return this.pFiles == other.pFiles
+                && this.X == other.X
+                && this.Y == other.Y
+                && this.fNC == other.fNC
+                && this.fWide == other.fWide;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 5;
+            hashCode = 31 * hashCode ^ pFiles;
+            hashCode = 31 * hashCode ^ X;
+            hashCode = 31 * hashCode ^ Y;
+            hashCode = 31 * hashCode ^ (fNC ? 1 : 0);
+            hashCode = 31 * hashCode ^ (fWide ? 1 : 0);
+            return hashCode;
+        }
     }
 }

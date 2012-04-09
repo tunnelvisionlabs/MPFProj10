@@ -1159,7 +1159,7 @@ namespace Microsoft.VisualStudio.Project
 			int structSize = dwSize + ((sb.Length + 1) * dwChar);
 			SafeGlobalAllocHandle ptr = UnsafeNativeMethods.GlobalAlloc(0, (UIntPtr)structSize);
 			df.pFiles = dwSize;
-			df.fWide = 1;
+			df.fWide = true;
 			IntPtr data = IntPtr.Zero;
 			try
 			{

@@ -162,7 +162,7 @@ namespace Microsoft.VisualStudio.Project
 			try
 			{
 				_DROPFILES df = (_DROPFILES)Marshal.PtrToStructure(data, typeof(_DROPFILES));
-				if(df.fWide != 0)
+				if(df.fWide)
 				{
 					IntPtr pdata = new IntPtr((long)data + df.pFiles);
 					return Marshal.PtrToStringUni(pdata);
