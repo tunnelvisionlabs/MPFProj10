@@ -50,7 +50,7 @@
             {
                 if (CustomTool != value)
                 {
-                    this.Node.ItemNode.SetMetadata(ProjectFileConstants.Generator, value != string.Empty ? value : null);
+                    this.Node.ItemNode.SetMetadata(ProjectFileConstants.Generator, !string.IsNullOrEmpty(value) ? value : null);
                     HierarchyNodeEventArgs args = new HierarchyNodeEventArgs(this.Node);
                     OnCustomToolChanged(args);
                 }
@@ -71,7 +71,7 @@
             {
                 if (CustomToolNamespace != value)
                 {
-                    this.Node.ItemNode.SetMetadata(ProjectFileConstants.CustomToolNamespace, value != String.Empty ? value : null);
+                    this.Node.ItemNode.SetMetadata(ProjectFileConstants.CustomToolNamespace, !string.IsNullOrEmpty(value) ? value : null);
                     HierarchyNodeEventArgs args = new HierarchyNodeEventArgs(this.Node);
                     OnCustomToolNamespaceChanged(args);
                 }
