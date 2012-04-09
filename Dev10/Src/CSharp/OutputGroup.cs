@@ -122,7 +122,7 @@ namespace Microsoft.VisualStudio.Project
 
             // Now that the group is built we have to check if it is invalidated by a property
             // change on the project.
-            project.OnProjectPropertyChanged += new EventHandler<ProjectPropertyChangedArgs>(OnProjectPropertyChanged);
+            project.ProjectPropertyChanged += new EventHandler<ProjectPropertyChangedArgs>(OnProjectPropertyChanged);
         }
 
         public virtual void InvalidateGroup()
@@ -132,7 +132,7 @@ namespace Microsoft.VisualStudio.Project
             if(null != keyOutput)
             {
                 // Once the group is invalidated there is no more reason to listen for events.
-                project.OnProjectPropertyChanged -= new EventHandler<ProjectPropertyChangedArgs>(OnProjectPropertyChanged);
+                project.ProjectPropertyChanged -= new EventHandler<ProjectPropertyChangedArgs>(OnProjectPropertyChanged);
             }
             keyOutput = null;
         }

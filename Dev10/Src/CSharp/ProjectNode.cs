@@ -2756,7 +2756,7 @@ namespace Microsoft.VisualStudio.Project
 
                 MSBuild.Project project = (storageType == _PersistStorageType.PST_PROJECT_FILE) ? this.BuildProject : this.GetOrCreateUserBuildProject();
                 project.SetProperty(propertyName, propertyValue);
-                RaiseProjectPropertyChanged(propertyName, oldValue, propertyValue);
+                OnProjectPropertyChanged(new ProjectPropertyChangedArgs(propertyName, oldValue, propertyValue));
 
                 // property cache will need to be updated
                 this.currentConfig = null;
