@@ -301,6 +301,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.SettingsPage")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.SingleFileGeneratorNodeProperties")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.Automation.OAVSProjectItem")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.SingleFileGeneratorNodeExtenderProperties")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.EnumConnectionPoints")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.ComReferenceProperties")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.BuildPropertyPage")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.LocalizableProperties")]
 
 //PInvoke suppressions
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1414:MarkBooleanPInvokeArgumentsWithMarshalAs", Scope = "member", Target = "Microsoft.VisualStudio.Project.NativeMethods.#DestroyIcon(System.IntPtr)")]
