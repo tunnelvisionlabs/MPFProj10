@@ -285,7 +285,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Checks if an assembly is already added. The method parses all references and compares the full assemblynames, or the location of the assemblies to decide whether two assemblies are the same.
 		/// </summary>
 		/// <returns>true if the assembly has already been added.</returns>
-		protected internal override bool IsAlreadyAdded(out ReferenceNode existingReference)
+		protected internal override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
 		{
 			ReferenceContainerNode referencesFolder = this.ProjectManager.FindChild(ReferenceContainerNode.ReferencesNodeVirtualName) as ReferenceContainerNode;
 			Debug.Assert(referencesFolder != null, "Could not find the References node");
@@ -300,13 +300,13 @@ namespace Microsoft.VisualStudio.Project
 					if(String.Equals(assemblyReferenceNode.AssemblyName.FullName, this.assemblyName.FullName, StringComparison.OrdinalIgnoreCase) ||
 						(shouldCheckPath && NativeMethods.IsSamePath(assemblyReferenceNode.Url, this.Url)))
 					{
-						existingReference = assemblyReferenceNode;
+						existingEquivalentNode = assemblyReferenceNode;
 						return true;
 					}
 				}
 			}
 
-			existingReference = null;
+			existingEquivalentNode = null;
 			return false;
 		}
 

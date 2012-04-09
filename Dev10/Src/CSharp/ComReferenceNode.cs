@@ -248,7 +248,7 @@ namespace Microsoft.VisualStudio.Project
         /// Checks if a reference is already added. The method parses all references and compares the the FinalItemSpec and the Guid.
         /// </summary>
         /// <returns>true if the assembly has already been added.</returns>
-		protected internal override bool IsAlreadyAdded(out ReferenceNode existingReference)
+		protected internal override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
         {
             ReferenceContainerNode referencesFolder = this.ProjectManager.FindChild(ReferenceContainerNode.ReferencesNodeVirtualName) as ReferenceContainerNode;
             Debug.Assert(referencesFolder != null, "Could not find the References node");
@@ -262,13 +262,13 @@ namespace Microsoft.VisualStudio.Project
                     // We check if the name and guids are the same
                     if(referenceNode.TypeGuid == this.TypeGuid && String.Equals(referenceNode.Caption, this.Caption, StringComparison.OrdinalIgnoreCase))
                     {
-						existingReference = referenceNode;
+						existingEquivalentNode = referenceNode;
                         return true;
                     }
                 }
             }
 
-			existingReference = null;
+			existingEquivalentNode = null;
             return false;
         }
 
