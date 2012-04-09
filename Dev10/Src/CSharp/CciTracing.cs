@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Diagnostics;
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cci")]
 	public static class CciTracing
 	{
 		[ConditionalAttribute("Enable_CCIDiagnostics")]

@@ -43,6 +43,7 @@ namespace Microsoft.VisualStudio.Project
 			return fmt;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "fmtetc")]
 		public static int QueryGetData(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject, ref FORMATETC fmtetc)
 		{
 			if (dataObject == null)
@@ -69,6 +70,7 @@ namespace Microsoft.VisualStudio.Project
 			return returnValue;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "fmtetc")]
 		public static STGMEDIUM GetData(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject, ref FORMATETC fmtetc)
 		{
 			if (dataObject == null)

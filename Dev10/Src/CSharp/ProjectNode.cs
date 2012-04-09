@@ -72,9 +72,7 @@ namespace Microsoft.VisualStudio.Project
         /// The user file extension.
         /// </summary>
         private const string _perUserFileExtension = ".user";
-     
-		protected Guid GUID_MruPage = new Guid("{19B97F03-9594-4c1c-BE28-25FF030113B3}");
-		
+
 		#endregion
 
         #region fields
@@ -2360,7 +2358,7 @@ namespace Microsoft.VisualStudio.Project
 					guidTab = VSConstants.GUID_BrowseFilePage,
 				},
 				new VSCOMPONENTSELECTORTABINIT {
-				    guidTab = GUID_MruPage,
+					guidTab = new Guid(ComponentSelectorGuids80.MRUPage),
 				},
 			}.AsReadOnly();
         }
