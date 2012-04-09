@@ -16,7 +16,16 @@ namespace Microsoft.VisualStudio.Project
 
     public class ObjectReferenceEqualityComparer<T> : IEqualityComparer<T>
     {
-        public static ObjectReferenceEqualityComparer<T> Default = new ObjectReferenceEqualityComparer<T>();
+        private static readonly ObjectReferenceEqualityComparer<T> _default = new ObjectReferenceEqualityComparer<T>();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
+        public static ObjectReferenceEqualityComparer<T> Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
 
         public bool Equals(T x, T y)
         {
