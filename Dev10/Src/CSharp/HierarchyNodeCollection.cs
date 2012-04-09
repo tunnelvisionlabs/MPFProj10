@@ -15,11 +15,13 @@ namespace Microsoft.VisualStudio.Project
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using IEnumerable = System.Collections.IEnumerable;
+    using IEnumerator = System.Collections.IEnumerator;
     using Interlocked = System.Threading.Interlocked;
     using LockRecursionPolicy = System.Threading.LockRecursionPolicy;
     using ReaderWriterLockSlim = System.Threading.ReaderWriterLockSlim;
 
-    public class HierarchyNodeCollection
+    public class HierarchyNodeCollection : IEnumerable<KeyValuePair<uint, HierarchyNode>>
     {
         private readonly ProjectNode _projectManager;
         private readonly IEqualityComparer<string> _canonicalNameComparer;
@@ -256,6 +258,24 @@ namespace Microsoft.VisualStudio.Project
 
                 return;
             }
+        }
+
+        public IEnumerator<KeyValuePair<uint, HierarchyNode>> GetEnumerator()
+        {
+            _syncObject.EnterReadLock();
+            try
+            {
+                return new Dictionary<uint, HierarchyNode>(_nodes).GetEnumerator();
+            }
+            finally
+            {
+                _syncObject.ExitReadLock();
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
