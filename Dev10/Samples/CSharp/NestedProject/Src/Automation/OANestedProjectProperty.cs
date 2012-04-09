@@ -84,8 +84,6 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <param name="Index3">The index of the item to display. Reserved for future use.</param>
 		/// <param name="Index4">The index of the item to display. Reserved for future use.</param>
 		/// <returns>The value of a property</returns>
-		// The message is suppressed to follow the csharp naming conventions instead of the base's naming convention that is using c++
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration")]
 		public object get_IndexedValue(object Index1, object Index2, object Index3, object Index4)
 		{
 			return null;
@@ -119,8 +117,6 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <summary>
 		/// Sets or gets the object supporting the Property object.
 		/// </summary>
-		// The message is suppressed to follow the csharp naming conventions instead of the base's naming convention that is using c++
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration")]
 		public object Object
 		{
 			get

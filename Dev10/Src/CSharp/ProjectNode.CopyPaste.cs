@@ -44,24 +44,24 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Called as soon as the mouse drags an item over a new hierarchy or hierarchy window
 		/// </summary>
-		/// <param name="pDataObject">reference to interface IDataObject of the item being dragged</param>
-		/// <param name="grfKeyState">Current state of the keyboard and the mouse modifier keys. See docs for a list of possible values</param>
-		/// <param name="itemid">Item identifier for the item currently being dragged</param>
-		/// <param name="pdwEffect">On entry, a pointer to the current DropEffect. On return, must contain the new valid DropEffect</param>
+		/// <param name="dataObject">reference to interface IDataObject of the item being dragged</param>
+		/// <param name="keyState">Current state of the keyboard and the mouse modifier keys. See docs for a list of possible values</param>
+		/// <param name="itemId">Item identifier for the item currently being dragged</param>
+		/// <param name="effect">On entry, a pointer to the current DropEffect. On return, must contain the new valid DropEffect</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public override int DragEnter(IOleDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects pdwEffect)
+		public override int DragEnter(IOleDataObject dataObject, uint keyState, uint itemId, ref DropEffects effect)
 		{
-			pdwEffect = DropEffects.None;
+			effect = DropEffects.None;
 
 			if(this.SourceDraggedOrCutOrCopied)
 			{
 				return VSConstants.S_OK;
 			}
 
-			this._dropDataType = QueryDropDataType(pDataObject);
+			this._dropDataType = QueryDropDataType(dataObject);
 			if(this._dropDataType != DropDataType.None)
 			{
-				pdwEffect = this.QueryDropEffect(this._dropDataType, grfKeyState);
+				effect = this.QueryDropEffect(this._dropDataType, keyState);
 			}
 
 			return VSConstants.S_OK;
@@ -80,12 +80,12 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Called when one or more items are dragged over the target hierarchy or hierarchy window. 
 		/// </summary>
-		/// <param name="grfKeyState">Current state of the keyboard keys and the mouse modifier buttons. See <seealso cref="IVsHierarchyDropDataTarget"/></param>
-		/// <param name="itemid">Item identifier of the drop data target over which the item is being dragged</param>
+		/// <param name="keyState">Current state of the keyboard keys and the mouse modifier buttons. See <seealso cref="IVsHierarchyDropDataTarget"/></param>
+		/// <param name="itemId">Item identifier of the drop data target over which the item is being dragged</param>
 		/// <param name="effect"> On entry, reference to the value of the pdwEffect parameter of the IVsHierarchy object, identifying all effects that the hierarchy supports. 
 		/// On return, the pdwEffect parameter must contain one of the effect flags that indicate the result of the drop operation. For a list of pwdEffects values, see <seealso cref="DragEnter"/></param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public override int DragOver(uint grfKeyState, uint itemid, ref DropEffects effect)
+		public override int DragOver(uint keyState, uint itemId, ref DropEffects effect)
 		{
 			effect = (uint)DropEffects.None;
 
@@ -103,14 +103,14 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			// We should also analyze if the node being dragged over can accept the drop.
-			if(!this.CanTargetNodeAcceptDrop(itemid))
+			if(!this.CanTargetNodeAcceptDrop(itemId))
 			{
 				return VSConstants.E_NOTIMPL;
 			}
 
 			if(this._dropDataType != DropDataType.None)
 			{
-				effect = this.QueryDropEffect(this._dropDataType, grfKeyState);
+				effect = this.QueryDropEffect(this._dropDataType, keyState);
 			}
 
 			return VSConstants.S_OK;
@@ -119,16 +119,16 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Called when one or more items are dropped into the target hierarchy or hierarchy window when the mouse button is released.
 		/// </summary>
-		/// <param name="pDataObject">Reference to the IDataObject interface on the item being dragged. This data object contains the data being transferred in the drag-and-drop operation. 
+		/// <param name="dataObject">Reference to the IDataObject interface on the item being dragged. This data object contains the data being transferred in the drag-and-drop operation. 
 		/// If the drop occurs, then this data object (item) is incorporated into the target hierarchy or hierarchy window.</param>
-		/// <param name="grfKeyState">Current state of the keyboard and the mouse modifier keys. See <seealso cref="IVsHierarchyDropDataTarget"/></param>
-		/// <param name="itemid">Item identifier of the drop data target over which the item is being dragged</param>
+		/// <param name="keyState">Current state of the keyboard and the mouse modifier keys. See <seealso cref="IVsHierarchyDropDataTarget"/></param>
+		/// <param name="itemId">Item identifier of the drop data target over which the item is being dragged</param>
 		/// <param name="effect">Visual effects associated with the drag-and drop-operation, such as a cursor, bitmap, and so on. 
 		/// The value of dwEffects passed to the source object via the OnDropNotify method is the value of pdwEffects returned by the Drop method</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
-		public override int Drop(IOleDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects effect)
+		public override int Drop(IOleDataObject dataObject, uint keyState, uint itemId, ref DropEffects effect)
 		{
-			if(pDataObject == null)
+			if(dataObject == null)
 			{
 				return VSConstants.E_INVALIDARG;
 			}
@@ -136,7 +136,7 @@ namespace Microsoft.VisualStudio.Project
 			effect = DropEffects.None;
 
 			// Get the node that is being dragged over and ask it which node should handle this call
-			HierarchyNode targetNode = NodeFromItemId(itemid);
+			HierarchyNode targetNode = NodeFromItemId(itemId);
 			if(targetNode != null)
 			{
 				targetNode = targetNode.GetDragTargetHandlerNode();
@@ -151,8 +151,8 @@ namespace Microsoft.VisualStudio.Project
 			try
 			{
 				DropDataType dropDataType = DropDataType.None;
-				dropDataType = ProcessSelectionDataObject(pDataObject, targetNode);
-				effect = this.QueryDropEffect(dropDataType, grfKeyState);
+				dropDataType = ProcessSelectionDataObject(dataObject, targetNode);
+				effect = this.QueryDropEffect(dropDataType, keyState);
 
 				// If it is a drop from windows and we get any kind of error we return S_FALSE and dropeffect none. This
 				// prevents bogus messages from the shell from being displayed
@@ -183,34 +183,34 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Returns information about one or more of the items being dragged
 		/// </summary>
-		/// <param name="pdwOKEffects">Pointer to a DWORD value describing the effects displayed while the item is being dragged, 
+		/// <param name="effects">Pointer to a DWORD value describing the effects displayed while the item is being dragged, 
 		/// such as cursor icons that change during the drag-and-drop operation. 
 		/// For example, if the item is dragged over an invalid target point 
 		/// (such as the item's original location), the cursor icon changes to a circle with a line through it. 
 		/// Similarly, if the item is dragged over a valid target point, the cursor icon changes to a file or folder.</param>
-		/// <param name="ppDataObject">Pointer to the IDataObject interface on the item being dragged. 
+		/// <param name="dataObject">Pointer to the IDataObject interface on the item being dragged. 
 		/// This data object contains the data being transferred in the drag-and-drop operation. 
 		/// If the drop occurs, then this data object (item) is incorporated into the target hierarchy or hierarchy window.</param>
-		/// <param name="ppDropSource">Pointer to the IDropSource interface of the item being dragged.</param>
+		/// <param name="dropSource">Pointer to the IDropSource interface of the item being dragged.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public override int GetDropInfo(out DropEffects pdwOKEffects, out IOleDataObject ppDataObject, out IDropSource ppDropSource)
+		public override int GetDropInfo(out DropEffects effects, out IOleDataObject dataObject, out IDropSource dropSource)
 		{
 			//init out params
-			pdwOKEffects = (uint)DropEffects.None;
-			ppDataObject = null;
-			ppDropSource = null;
+			effects = (uint)DropEffects.None;
+			dataObject = null;
+			dropSource = null;
 
-			IOleDataObject dataObject = PackageSelectionDataObject(false);
-			if(dataObject == null)
+			IOleDataObject selectionDataObject = PackageSelectionDataObject(false);
+			if(selectionDataObject == null)
 			{
 				return VSConstants.E_NOTIMPL;
 			}
 
 			this.SourceDraggedOrCutOrCopied = true;
 
-			pdwOKEffects = DropEffects.Move | DropEffects.Copy;
+			effects = DropEffects.Move | DropEffects.Copy;
 
-			ppDataObject = dataObject;
+			dataObject = selectionDataObject;
 			return VSConstants.S_OK;
 		}
 
@@ -240,13 +240,13 @@ namespace Microsoft.VisualStudio.Project
 		/// Notifies the source hierarchy that information dragged from it is about to be dropped on a target. 
 		/// This method is called immediately after the mouse button is released on a drop. 
 		/// </summary>
-		/// <param name="pDataObject">Reference to the IDataObject interface on the item being dragged. 
+		/// <param name="dataObject">Reference to the IDataObject interface on the item being dragged. 
 		/// This data object contains the data being transferred in the drag-and-drop operation. 
 		/// If the drop occurs, then this data object (item) is incorporated into the hierarchy window of the new hierarchy.</param>
 		/// <param name="effect">Current state of the keyboard and the mouse modifier keys.</param>
 		/// <param name="cancelDrop">If true, then the drop is cancelled by the source hierarchy. If false, then the drop can continue.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
-		public override int OnBeforeDropNotify(IOleDataObject pDataObject, DropEffects effect, out bool cancelDrop)
+		public override int OnBeforeDropNotify(IOleDataObject dataObject, DropEffects effect, out bool cancelDrop)
 		{
 			// If there is nothing to be dropped just return that drop should be cancelled.
 			if(this.ItemsDraggedOrCutOrCopied == null)
