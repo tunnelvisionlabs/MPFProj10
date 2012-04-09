@@ -751,6 +751,7 @@ namespace Microsoft.VisualStudio.Project
         /// By default this document is marked as "Dont Save as". That means the menu File->SaveAs is disabled for the
         /// nested project node.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rdt")]
         protected virtual void LockRdtEntry()
         {
             // Define flags for the nested project document
@@ -816,6 +817,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Unlock the RDT entry for the nested project
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rdt")]
         protected virtual void UnlockRdtEntry()
         {
             if (this.isDisposed || this.ProjectManager == null || this.ProjectManager.IsClosed)

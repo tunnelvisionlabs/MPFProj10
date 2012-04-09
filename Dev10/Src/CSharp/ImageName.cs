@@ -65,7 +65,9 @@ namespace Microsoft.VisualStudio.Project
         Data = 47,
         Application = 48,
         DataSet = 49,
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pfx")]
         Pfx = 50,
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Snk")]
         Snk = 51,
 
         ImageLast = 51
