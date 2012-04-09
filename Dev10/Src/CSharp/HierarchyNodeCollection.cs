@@ -21,7 +21,7 @@ namespace Microsoft.VisualStudio.Project
     using LockRecursionPolicy = System.Threading.LockRecursionPolicy;
     using ReaderWriterLockSlim = System.Threading.ReaderWriterLockSlim;
 
-    public class HierarchyNodeCollection : IEnumerable<KeyValuePair<uint, HierarchyNode>>
+    public class HierarchyNodeCollection : IEnumerable<KeyValuePair<uint, HierarchyNode>>, IDisposable
     {
         private readonly ProjectNode _projectManager;
         private readonly IEqualityComparer<string> _canonicalNameComparer;
@@ -83,6 +83,20 @@ namespace Microsoft.VisualStudio.Project
                 {
                     _syncObject.ExitReadLock();
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _syncObject.Dispose();
             }
         }
 

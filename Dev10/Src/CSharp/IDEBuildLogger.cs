@@ -32,7 +32,7 @@ namespace Microsoft.VisualStudio.Project
     /// This class implements an MSBuild logger that output events to VS outputwindow and tasklist.
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "IDE")]
-    public class IDEBuildLogger : Logger
+    public class IDEBuildLogger : Logger, IDisposable
     {
         #region fields
 
@@ -47,7 +47,7 @@ namespace Microsoft.VisualStudio.Project
         private string warningString = SR.GetString(SR.Warning, CultureInfo.CurrentUICulture);
         private TaskProvider taskProvider;
         private IVsHierarchy hierarchy;
-        private IServiceProvider serviceProvider;
+        private ServiceProvider serviceProvider;
         private Dispatcher dispatcher;
         private bool haveCachedVerbosity = false;
 
@@ -168,6 +168,23 @@ namespace Microsoft.VisualStudio.Project
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (serviceProvider != null)
+                {
+                    serviceProvider.Dispose();
+                }
+            }
+        }
 
         #region event delegates
 
@@ -318,7 +335,7 @@ namespace Microsoft.VisualStudio.Project
         {
             Microsoft.VisualStudio.Shell.Task task = sender as Microsoft.VisualStudio.Shell.Task;
             if (task == null)
-                throw new ArgumentException("sender");
+                throw new ArgumentException("The sender should be a Task.", "sender");
 
             // Get the doc data for the task's document
             if (String.IsNullOrEmpty(task.Document))

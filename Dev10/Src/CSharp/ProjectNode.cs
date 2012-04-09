@@ -1931,6 +1931,11 @@ namespace Microsoft.VisualStudio.Project
                             {
                                 this._site.Dispose();
                             }
+
+                            if (this.itemIdMap != null)
+                            {
+                                this.itemIdMap.Dispose();
+                            }
                         }
                         finally
                         {
