@@ -237,6 +237,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Returns an object that is a special view over this object; this is the value
 		/// returned by the Object property of the automation objects.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Object")]
 		public virtual object Object
 		{
 			get { return this; }
