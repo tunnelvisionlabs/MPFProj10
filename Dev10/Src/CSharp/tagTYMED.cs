@@ -11,6 +11,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+
+	[Flags]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
 	public enum tagTYMED
 	{
 		TYMED_HGLOBAL = 1,

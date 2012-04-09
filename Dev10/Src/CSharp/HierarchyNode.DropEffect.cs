@@ -11,11 +11,14 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+
 	partial class HierarchyNode
 	{
 		/// <summary>
 		/// DropEffect as defined in oleidl.h
 		/// </summary>
+		[Flags]
 		public enum DropEffect
 		{
 			None,
