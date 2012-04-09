@@ -62,7 +62,7 @@ namespace Microsoft.VisualStudio.Project
 		internal bool CanAddItems(string[] files, VSQUERYADDFILEFLAGS[] flags)
 		{
 			// If we are silent then we assume that the file can be added, since we do not want to trigger this event.
-			if((this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerTrackerEvents) != 0)
+			if((this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Tracker) != 0)
 			{
 				return true;
 			}
@@ -88,7 +88,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		internal void OnItemAdded(string file, VSADDFILEFLAGS flag)
 		{
-			if((this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerTrackerEvents) == 0)
+			if((this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Tracker) == 0)
 			{
 				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterAddFilesEx(this.projectMgr, 1, new string[1] { file }, new VSADDFILEFLAGS[1] { flag }));
 			}
@@ -103,7 +103,7 @@ namespace Microsoft.VisualStudio.Project
 		internal bool CanRemoveItems(string[] files, VSQUERYREMOVEFILEFLAGS[] flags)
 		{
 			// If we are silent then we assume that the file can be removed, since we do not want to trigger this event.
-			if((this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerTrackerEvents) != 0)
+			if((this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Tracker) != 0)
 			{
 				return true;
 			}
@@ -130,7 +130,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		internal void OnItemRemoved(string file, VSREMOVEFILEFLAGS flag)
 		{
-			if((this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerTrackerEvents) == 0)
+			if((this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Tracker) == 0)
 			{
 				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterRemoveFiles(this.projectMgr, 1, new string[1] { file }, new VSREMOVEFILEFLAGS[1] { flag }));
 			}
@@ -146,7 +146,7 @@ namespace Microsoft.VisualStudio.Project
 		internal bool CanRenameItem(string oldFileName, string newFileName, VSRENAMEFILEFLAGS flag)
 		{
 			// If we are silent then we assume that the file can be renamed, since we do not want to trigger this event.
-			if((this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerTrackerEvents) != 0)
+			if((this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Tracker) != 0)
 			{
 				return true;
 			}
@@ -162,7 +162,7 @@ namespace Microsoft.VisualStudio.Project
 		/// 
 		internal void OnItemRenamed(string strOldName, string strNewName, VSRENAMEFILEFLAGS flag)
 		{
-			if((this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerTrackerEvents) == 0)
+			if((this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Tracker) == 0)
 			{
 				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterRenameFile(this.projectMgr, strOldName, strNewName, flag));
 			}

@@ -19,11 +19,11 @@ namespace Microsoft.VisualStudio.Project
         /// Flags for specifying which events to stop triggering.
         /// </summary>
         [Flags]
-        public enum EventTriggering
+        public enum SuppressEvents
         {
-            TriggerAll = 0,
-            DoNotTriggerHierarchyEvents = 1,
-            DoNotTriggerTrackerEvents = 2
+            None = 0,
+            Hierarchy = 1,
+            Tracker = 2
         }
 	}
 }

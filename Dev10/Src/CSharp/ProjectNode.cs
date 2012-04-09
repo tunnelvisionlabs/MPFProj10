@@ -186,7 +186,7 @@ namespace Microsoft.VisualStudio.Project
 
         private bool isClosed;
 
-        private EventTriggering eventTriggeringFlag = EventTriggering.TriggerAll;
+        private SuppressEvents eventTriggeringFlag = SuppressEvents.None;
 
         private bool invokeMSBuildWhenResumed;
 
@@ -925,7 +925,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets or sets event triggering flags.
         /// </summary>
-        internal EventTriggering EventTriggeringFlag
+        internal SuppressEvents EventTriggeringFlag
         {
             get
             {
@@ -1074,7 +1074,7 @@ namespace Microsoft.VisualStudio.Project
             this.ExcludeProjectBuildItems(files, folders);
 
             var oldEventTriggeringFlag = EventTriggeringFlag;
-            EventTriggeringFlag = EventTriggering.DoNotTriggerHierarchyEvents;
+            EventTriggeringFlag = SuppressEvents.Hierarchy;
             try
             {
                 this.AddNonMemberFolderItems(folders);
@@ -3510,7 +3510,7 @@ namespace Microsoft.VisualStudio.Project
                 this.disableQueryEdit = true;
 
                 this.isClosed = false;
-                this.eventTriggeringFlag = ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents | ProjectNode.EventTriggering.DoNotTriggerTrackerEvents;
+                this.eventTriggeringFlag = ProjectNode.SuppressEvents.Hierarchy | ProjectNode.SuppressEvents.Tracker;
 
                 SetBuildProject(Utilities.ReinitializeMsBuildProject(this.buildEngine, this.FileName, this.buildProject));
 
@@ -3534,7 +3534,7 @@ namespace Microsoft.VisualStudio.Project
             finally
             {
                 this.SetProjectFileDirty(false);
-                this.eventTriggeringFlag = ProjectNode.EventTriggering.TriggerAll;
+                this.eventTriggeringFlag = ProjectNode.SuppressEvents.None;
                 this.disableQueryEdit = false;
             }
         }

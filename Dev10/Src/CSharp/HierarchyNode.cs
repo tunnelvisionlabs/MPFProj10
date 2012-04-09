@@ -2347,7 +2347,7 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
 
-			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
+			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Hierarchy) != 0)
 			{
 				return;
 			}
@@ -2374,7 +2374,7 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
 
-			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
+			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Hierarchy) != 0)
 			{
 				return;
 			}
@@ -2406,7 +2406,7 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
 
-			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
+			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Hierarchy) != 0)
 			{
 				return;
 			}
@@ -2436,7 +2436,7 @@ namespace Microsoft.VisualStudio.Project
 
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
-			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
+			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Hierarchy) != 0)
 			{
 				return;
 			}
@@ -2465,7 +2465,7 @@ namespace Microsoft.VisualStudio.Project
 
 			HierarchyNode foo;
 			foo = this.projectMgr == null ? this : this.projectMgr;
-			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.EventTriggering.DoNotTriggerHierarchyEvents) != 0)
+			if(foo == this.projectMgr && (this.projectMgr.EventTriggeringFlag & ProjectNode.SuppressEvents.Hierarchy) != 0)
 			{
 				return;
 			}
