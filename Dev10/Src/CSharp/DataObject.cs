@@ -79,6 +79,7 @@ namespace Microsoft.VisualStudio.Project
 			throw new System.Runtime.InteropServices.COMException("", DATA_S_SAMEFORMATETC);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Runtime.InteropServices.SafeHandle.DangerousGetHandle")]
 		void IDataObject.GetData(FORMATETC[] fmt, STGMEDIUM[] m)
 		{
 			STGMEDIUM retMedium = new STGMEDIUM();
