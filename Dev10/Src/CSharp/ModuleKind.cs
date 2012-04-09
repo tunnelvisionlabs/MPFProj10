@@ -11,22 +11,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
-	using System;
-	using System.Diagnostics.CodeAnalysis;
-
-	[Flags]
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-	public enum ModuleKindFlags
+	public enum ModuleKind
 	{
-
 		ConsoleApplication,
-
 		WindowsApplication,
-
 		DynamicallyLinkedLibrary,
-
 		ManifestResourceFile,
-
 		UnmanagedDynamicallyLinkedLibrary
 	}
 }

@@ -11,8 +11,12 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 namespace Microsoft.VisualStudio.Project
 {
+	using System;
+
+	[Flags]
 	public enum tagDVASPECT
 	{
+		None = 0,
 		DVASPECT_CONTENT = 1,
 		DVASPECT_THUMBNAIL = 2,
 		DVASPECT_ICON = 4,

@@ -2900,7 +2900,7 @@ namespace Microsoft.VisualStudio.Project
 
             // Set some default values
             options.OutputAssembly = outputPath + this.Caption + ".exe";
-            options.ModuleKind = ModuleKindFlags.ConsoleApplication;
+            options.ModuleKind = ModuleKind.ConsoleApplication;
 
             options.RootNamespace = GetProjectProperty(ProjectFileConstants.RootNamespace, _PersistStorageType.PST_PROJECT_FILE, false);
             options.OutputAssembly = outputPath + this.GetAssemblyName(config, platform);
@@ -2913,13 +2913,13 @@ namespace Microsoft.VisualStudio.Project
 
             if (outputtype == "library")
             {
-                options.ModuleKind = ModuleKindFlags.DynamicallyLinkedLibrary;
+                options.ModuleKind = ModuleKind.DynamicallyLinkedLibrary;
                 options.GenerateExecutable = false; // DLL's have no entry point.
             }
             else if (outputtype == "winexe")
-                options.ModuleKind = ModuleKindFlags.WindowsApplication;
+                options.ModuleKind = ModuleKind.WindowsApplication;
             else
-                options.ModuleKind = ModuleKindFlags.ConsoleApplication;
+                options.ModuleKind = ModuleKind.ConsoleApplication;
 
             options.Win32Icon = GetProjectProperty("ApplicationIcon", _PersistStorageType.PST_PROJECT_FILE, false);
             options.MainClass = GetProjectProperty("StartupObject", _PersistStorageType.PST_PROJECT_FILE, false);

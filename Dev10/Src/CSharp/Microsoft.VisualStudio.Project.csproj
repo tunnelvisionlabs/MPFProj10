@@ -153,7 +153,7 @@
     <Compile Include="IReferenceContainerProvider.cs" />
     <Compile Include="ISingleFileGenerator.cs" />
     <Compile Include="LocDisplayNameAttribute.cs" />
-    <Compile Include="ModuleKindFlags.cs" />
+    <Compile Include="ModuleKind.cs" />
     <Compile Include="MsBuildGeneratedItemType.cs" />
     <Compile Include="MSBuildResult.cs" />
     <Compile Include="MsBuildTarget.cs" />

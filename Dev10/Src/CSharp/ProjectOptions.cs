@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public string Platform { get; set; }
 
-		public ModuleKindFlags ModuleKind { get; set; }
+		public ModuleKind ModuleKind { get; set; }
 
 		public bool EmitManifest { get; set; }
 
@@ -85,7 +85,7 @@ namespace Microsoft.VisualStudio.Project
 		public ProjectOptions()
 		{
 			EmitManifest = true;
-			ModuleKind = ModuleKindFlags.ConsoleApplication;
+			ModuleKind = ModuleKind.ConsoleApplication;
 		}
 
 		public virtual string GetOptionHelp()
