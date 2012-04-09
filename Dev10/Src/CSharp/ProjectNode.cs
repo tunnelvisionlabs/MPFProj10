@@ -1022,6 +1022,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="path">The string to add the trailing directory separator character to.</param>
         /// <returns>The original string with the specified character at the end.</returns>
+        [SuppressMessage("Microsoft.Interoperability", "CA1407:AvoidStaticMembersInComVisibleTypes")]
         public static string EnsureTrailingDirectoryChar(string path)
         {
             return EnsureTrailingChar(path, Path.DirectorySeparatorChar);
@@ -1033,6 +1034,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="value">The string to add the trailing character to.</param>
         /// <param name="charToEnsure">The character that will be at the end of the string upon return.</param>
         /// <returns>The original string with the specified character at the end.</returns>
+        [SuppressMessage("Microsoft.Interoperability", "CA1407:AvoidStaticMembersInComVisibleTypes")]
         public static string EnsureTrailingChar(string value, char charToEnsure)
         {
             if (value == null)
@@ -1414,6 +1416,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="currentList">List to be populated with the nodes.</param>
         /// <param name="parent">Parent node under which the nodes should be searched.</param>
         /// <param name="filter">Filter to be used while selecting the node.</param>
+        [SuppressMessage("Microsoft.Interoperability", "CA1407:AvoidStaticMembersInComVisibleTypes")]
         public static void FindNodes(IList<HierarchyNode> currentList, HierarchyNode parent, Func<HierarchyNode, bool> filter)
         {
             if (currentList == null)
@@ -1476,6 +1479,7 @@ namespace Microsoft.VisualStudio.Project
         /// Expected:       g\h\i\j.txt
         /// Actual:         ..\..\..\..\..\c$\e\f\g\h\i\j.txt
         /// </remarks>
+        [SuppressMessage("Microsoft.Interoperability", "CA1407:AvoidStaticMembersInComVisibleTypes")]
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentException.#ctor(System.String)")]
         public static string GetRelativePath(string basePath, string subPath)
@@ -1580,6 +1584,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="argument">The argument to check.</param>
         /// <param name="argumentName">The name of the argument.</param>
+        [SuppressMessage("Microsoft.Interoperability", "CA1407:AvoidStaticMembersInComVisibleTypes")]
         public static void VerifyStringArgument(string argument, string argumentName)
         {
             if (argument == null || argument.Length == 0 || argument.Trim().Length == 0)
