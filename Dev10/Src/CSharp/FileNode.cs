@@ -30,7 +30,47 @@ namespace Microsoft.VisualStudio.Project
     public class FileNode : HierarchyNode, IProjectSourceNode
     {
         #region static fiels
-        private static Dictionary<string, int> extensionIcons;
+        // Build the dictionary with the mapping between some well known extensions
+        // and the index of the icons inside the standard image list.
+        private static Dictionary<string, int> extensionIcons = new Dictionary<string, int>()
+            {
+                { ".aspx", (int)ProjectNode.ImageName.WebForm },
+                { ".asax", (int)ProjectNode.ImageName.GlobalApplicationClass },
+                { ".asmx", (int)ProjectNode.ImageName.WebService },
+                { ".ascx", (int)ProjectNode.ImageName.WebUserControl },
+                { ".asp", (int)ProjectNode.ImageName.ASPPage },
+                { ".config", (int)ProjectNode.ImageName.WebConfig },
+                { ".htm", (int)ProjectNode.ImageName.HTMLPage },
+                { ".html", (int)ProjectNode.ImageName.HTMLPage },
+                { ".css", (int)ProjectNode.ImageName.StyleSheet },
+                { ".xsl", (int)ProjectNode.ImageName.StyleSheet },
+                { ".vbs", (int)ProjectNode.ImageName.ScriptFile },
+                { ".js", (int)ProjectNode.ImageName.ScriptFile },
+                { ".wsf", (int)ProjectNode.ImageName.ScriptFile },
+                { ".txt", (int)ProjectNode.ImageName.TextFile },
+                { ".resx", (int)ProjectNode.ImageName.Resources },
+                { ".rc", (int)ProjectNode.ImageName.Resources },
+                { ".bmp", (int)ProjectNode.ImageName.Bitmap },
+                { ".ico", (int)ProjectNode.ImageName.Icon },
+                { ".gif", (int)ProjectNode.ImageName.Image },
+                { ".jpg", (int)ProjectNode.ImageName.Image },
+                { ".png", (int)ProjectNode.ImageName.Image },
+                { ".map", (int)ProjectNode.ImageName.ImageMap },
+                { ".wav", (int)ProjectNode.ImageName.Audio },
+                { ".mid", (int)ProjectNode.ImageName.Audio },
+                { ".midi", (int)ProjectNode.ImageName.Audio },
+                { ".avi", (int)ProjectNode.ImageName.Video },
+                { ".mov", (int)ProjectNode.ImageName.Video },
+                { ".mpg", (int)ProjectNode.ImageName.Video },
+                { ".mpeg", (int)ProjectNode.ImageName.Video },
+                { ".cab", (int)ProjectNode.ImageName.CAB },
+                { ".jar", (int)ProjectNode.ImageName.JAR },
+                { ".xslt", (int)ProjectNode.ImageName.XSLTFile },
+                { ".xsd", (int)ProjectNode.ImageName.XMLSchema },
+                { ".xml", (int)ProjectNode.ImageName.XMLFile },
+                { ".pfx", (int)ProjectNode.ImageName.PFX },
+                { ".snk", (int)ProjectNode.ImageName.SNK },
+            };
         #endregion
 
         private bool isNonMemberItem;
@@ -163,50 +203,6 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region ctor
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
-        static FileNode()
-        {
-            // Build the dictionary with the mapping between some well known extensions
-            // and the index of the icons inside the standard image list.
-            extensionIcons = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            extensionIcons.Add(".aspx", (int)ProjectNode.ImageName.WebForm);
-            extensionIcons.Add(".asax", (int)ProjectNode.ImageName.GlobalApplicationClass);
-            extensionIcons.Add(".asmx", (int)ProjectNode.ImageName.WebService);
-            extensionIcons.Add(".ascx", (int)ProjectNode.ImageName.WebUserControl);
-            extensionIcons.Add(".asp", (int)ProjectNode.ImageName.ASPPage);
-            extensionIcons.Add(".config", (int)ProjectNode.ImageName.WebConfig);
-            extensionIcons.Add(".htm", (int)ProjectNode.ImageName.HTMLPage);
-            extensionIcons.Add(".html", (int)ProjectNode.ImageName.HTMLPage);
-            extensionIcons.Add(".css", (int)ProjectNode.ImageName.StyleSheet);
-            extensionIcons.Add(".xsl", (int)ProjectNode.ImageName.StyleSheet);
-            extensionIcons.Add(".vbs", (int)ProjectNode.ImageName.ScriptFile);
-            extensionIcons.Add(".js", (int)ProjectNode.ImageName.ScriptFile);
-            extensionIcons.Add(".wsf", (int)ProjectNode.ImageName.ScriptFile);
-            extensionIcons.Add(".txt", (int)ProjectNode.ImageName.TextFile);
-            extensionIcons.Add(".resx", (int)ProjectNode.ImageName.Resources);
-            extensionIcons.Add(".rc", (int)ProjectNode.ImageName.Resources);
-            extensionIcons.Add(".bmp", (int)ProjectNode.ImageName.Bitmap);
-            extensionIcons.Add(".ico", (int)ProjectNode.ImageName.Icon);
-            extensionIcons.Add(".gif", (int)ProjectNode.ImageName.Image);
-            extensionIcons.Add(".jpg", (int)ProjectNode.ImageName.Image);
-            extensionIcons.Add(".png", (int)ProjectNode.ImageName.Image);
-            extensionIcons.Add(".map", (int)ProjectNode.ImageName.ImageMap);
-            extensionIcons.Add(".wav", (int)ProjectNode.ImageName.Audio);
-            extensionIcons.Add(".mid", (int)ProjectNode.ImageName.Audio);
-            extensionIcons.Add(".midi", (int)ProjectNode.ImageName.Audio);
-            extensionIcons.Add(".avi", (int)ProjectNode.ImageName.Video);
-            extensionIcons.Add(".mov", (int)ProjectNode.ImageName.Video);
-            extensionIcons.Add(".mpg", (int)ProjectNode.ImageName.Video);
-            extensionIcons.Add(".mpeg", (int)ProjectNode.ImageName.Video);
-            extensionIcons.Add(".cab", (int)ProjectNode.ImageName.CAB);
-            extensionIcons.Add(".jar", (int)ProjectNode.ImageName.JAR);
-            extensionIcons.Add(".xslt", (int)ProjectNode.ImageName.XSLTFile);
-            extensionIcons.Add(".xsd", (int)ProjectNode.ImageName.XMLSchema);
-            extensionIcons.Add(".xml", (int)ProjectNode.ImageName.XMLFile);
-            extensionIcons.Add(".pfx", (int)ProjectNode.ImageName.PFX);
-            extensionIcons.Add(".snk", (int)ProjectNode.ImageName.SNK);
-        }
-
         /// <summary>
         /// Constructor for the FileNode
         /// </summary>

@@ -21,23 +21,9 @@ namespace Microsoft.VisualStudio.Project
 	[SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 	public static class DragDropHelper
 	{
-#pragma warning disable 414
-		public static readonly ushort CF_VSREFPROJECTITEMS;
-		public static readonly ushort CF_VSSTGPROJECTITEMS;
-		public static readonly ushort CF_VSPROJECTCLIPDESCRIPTOR;
-#pragma warning restore 414
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
-		static DragDropHelper()
-		{
-			checked
-			{
-				CF_VSREFPROJECTITEMS = (ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_VSREFPROJECTITEMS");
-				CF_VSSTGPROJECTITEMS = (ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_VSSTGPROJECTITEMS");
-				CF_VSPROJECTCLIPDESCRIPTOR = (ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_PROJECTCLIPBOARDDESCRIPTOR");
-			}
-		}
-
+		public static readonly ushort CF_VSREFPROJECTITEMS = checked((ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_VSREFPROJECTITEMS"));
+		public static readonly ushort CF_VSSTGPROJECTITEMS = checked((ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_VSSTGPROJECTITEMS"));
+		public static readonly ushort CF_VSPROJECTCLIPDESCRIPTOR = checked((ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_PROJECTCLIPBOARDDESCRIPTOR"));
 
 		public static FORMATETC CreateFormatEtc(ushort iFormat)
 		{

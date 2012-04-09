@@ -19,19 +19,11 @@ namespace Microsoft.VisualStudio.Project
 
 	public class ImageHandler : IDisposable
 	{
+		private static readonly object Mutex = new object();
+
 		private ImageList imageList;
 		private List<IntPtr> iconHandles;
-		private static volatile object Mutex;
 		private bool isDisposed;
-
-		/// <summary>
-		/// Initializes the <see cref="RDTListener"/> class.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
-		static ImageHandler()
-		{
-			Mutex = new object();
-		}
 
 		/// <summary>
 		/// Builds an empty ImageHandler object.
