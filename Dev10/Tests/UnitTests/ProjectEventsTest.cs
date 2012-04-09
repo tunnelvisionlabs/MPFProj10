@@ -51,23 +51,23 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 				BeforeClosed,
 				AnyEvent
 			}
-			public event EventHandler<ProjectFileOpenedEventArgs> AfterProjectFileOpened;
-			public event EventHandler<ProjectFileClosingEventArgs> BeforeProjectFileClosed;
+			public event EventHandler<ProjectFileOpenedEventArgs> ProjectFileOpened;
+			public event EventHandler<ProjectFileClosingEventArgs> ProjectFileClosing;
 
 			public void SignalOpenStatus(bool isOpened)
 			{
 				if(isOpened)
 				{
-					if(null != AfterProjectFileOpened)
+					if(null != ProjectFileOpened)
 					{
-						AfterProjectFileOpened(this, ProjectEventsUtilities.CreateAfterProjectFileOpenedEventArgs(true));
+						ProjectFileOpened(this, ProjectEventsUtilities.CreateAfterProjectFileOpenedEventArgs(true));
 					}
 				}
 				else
 				{
-					if(null != BeforeProjectFileClosed)
+					if(null != ProjectFileClosing)
 					{
-						BeforeProjectFileClosed(this, ProjectEventsUtilities.CreateBeforeProjectFileClosedEventArgs(true));
+						ProjectFileClosing(this, ProjectEventsUtilities.CreateBeforeProjectFileClosedEventArgs(true));
 					}
 				}
 			}
@@ -76,13 +76,13 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 			{
 				if(ProjectEventsSinkType.AfterOpened == sinkType)
 				{
-					return (null != AfterProjectFileOpened);
+					return (null != ProjectFileOpened);
 				}
 				if(ProjectEventsSinkType.BeforeClosed == sinkType)
 				{
-					return (null != BeforeProjectFileClosed);
+					return (null != ProjectFileClosing);
 				}
-				return (null != AfterProjectFileOpened) || (null != BeforeProjectFileClosed);
+				return (null != ProjectFileOpened) || (null != ProjectFileClosing);
 			}
 
 			public void Dispose()

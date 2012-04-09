@@ -1912,7 +1912,7 @@ namespace Microsoft.VisualStudio.Project
                         {
                             if (this.projectEventsProvider != null)
                             {
-                                this.projectEventsProvider.AfterProjectFileOpened -= this.OnAfterProjectOpen;
+                                this.projectEventsProvider.ProjectFileOpened -= this.OnAfterProjectOpen;
                             }
                             if (this.taskProvider != null)
                             {
@@ -6427,12 +6427,12 @@ namespace Microsoft.VisualStudio.Project
             {
                 if (null != this.projectEventsProvider)
                 {
-                    this.projectEventsProvider.AfterProjectFileOpened -= this.OnAfterProjectOpen;
+                    this.projectEventsProvider.ProjectFileOpened -= this.OnAfterProjectOpen;
                 }
                 this.projectEventsProvider = value;
                 if (null != this.projectEventsProvider)
                 {
-                    this.projectEventsProvider.AfterProjectFileOpened += this.OnAfterProjectOpen;
+                    this.projectEventsProvider.ProjectFileOpened += this.OnAfterProjectOpen;
                 }
             }
         }
