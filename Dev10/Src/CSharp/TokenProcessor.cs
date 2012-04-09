@@ -88,7 +88,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="source">File of the source file</param>
 		/// <param name="destination">File of the destination file</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Untoken")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Untoken")]
 		public virtual void UntokenFile(string source, string destination)
 		{
 			if(string.IsNullOrEmpty(source))
@@ -127,12 +127,26 @@ namespace Microsoft.VisualStudio.Project
 				}
 				foreach(object pair in tokenlist)
 				{
-					if(pair is DeleteToken)
-						DeleteTokens(ref buffer, (DeleteToken)pair);
-					if(pair is ReplaceBetweenPairToken)
-						ReplaceBetweenTokens(ref buffer, (ReplaceBetweenPairToken)pair);
-					if(pair is ReplacePairToken)
-						ReplaceTokens(ref buffer, (ReplacePairToken)pair);
+					DeleteToken deleteToken = pair as DeleteToken;
+					if (deleteToken != null)
+					{
+						DeleteTokens(ref buffer, deleteToken);
+						continue;
+					}
+
+					ReplaceBetweenPairToken replaceBetween = pair as ReplaceBetweenPairToken;
+					if (replaceBetween != null)
+					{
+						ReplaceBetweenTokens(ref buffer, replaceBetween);
+						continue;
+					}
+
+					ReplacePairToken replacePair = pair as ReplacePairToken;
+					if (replacePair != null)
+					{
+						ReplaceTokens(ref buffer, replacePair);
+						continue;
+					}
 				}
 				File.WriteAllText(destination, buffer, encoding);
 			}

@@ -478,10 +478,12 @@ namespace Microsoft.VisualStudio.Project
 		{
             if (itemId != VSConstants.VSITEMID.Root)
                 throw new NotSupportedException();
-            if (!(this is ProjectNode))
+
+            ProjectNode projectNode = this as ProjectNode;
+            if (projectNode == null)
                 throw new NotSupportedException();
 
-            this.projectMgr = (ProjectNode)this;
+            this.projectMgr = projectNode;
             this._hierarchyId = (uint)itemId;
 			this.IsExpanded = true;
 		}
@@ -659,7 +661,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="propId">the property id of the property requested</param>
 		/// <returns>the property object requested</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		public virtual object GetProperty(int propId)
 		{
 			object result = null;
@@ -796,8 +798,9 @@ namespace Microsoft.VisualStudio.Project
 						object browseObject = this.GetProperty((int)__VSHPROPID.VSHPROPID_BrowseObject);
 						if(browseObject != null)
 						{
-							if(browseObject is DispatchWrapper)
-								browseObject = ((DispatchWrapper)browseObject).WrappedObject;
+							DispatchWrapper dispatchWrapper = browseObject as DispatchWrapper;
+							if(dispatchWrapper != null)
+								browseObject = dispatchWrapper.WrappedObject;
 							result = this.ProjectManager.GetCATIDForType(browseObject.GetType()).ToString("B");
 							if(String.Equals(result as string, Guid.Empty.ToString("B"), StringComparison.Ordinal))
 								result = null;
@@ -810,8 +813,9 @@ namespace Microsoft.VisualStudio.Project
 						object extObject = this.GetProperty((int)__VSHPROPID.VSHPROPID_ExtObject);
 						if(extObject != null)
 						{
-							if(extObject is DispatchWrapper)
-								extObject = ((DispatchWrapper)extObject).WrappedObject;
+							DispatchWrapper dispatchWrapper = extObject as DispatchWrapper;
+							if(dispatchWrapper != null)
+								extObject = dispatchWrapper.WrappedObject;
 							result = this.ProjectManager.GetCATIDForType(extObject.GetType()).ToString("B");
 							if(String.Equals(result as string, Guid.Empty.ToString("B"), StringComparison.Ordinal))
 								result = null;
@@ -1157,7 +1161,6 @@ namespace Microsoft.VisualStudio.Project
 		/// Add a new Folder to the project hierarchy.
 		/// </summary>
 		/// <returns>S_OK if succeeded, otherwise an error</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		protected virtual int AddNewFolder()
 		{
 			// Check out the project file.
@@ -1175,9 +1178,10 @@ namespace Microsoft.VisualStudio.Project
 				// create the project part of it, the project file
 				HierarchyNode child = this.ProjectManager.CreateFolderNodes(Path.Combine(this.VirtualNodeName, newFolderName));
 
-				if (child is FolderNode)
+				FolderNode folderNode = child as FolderNode;
+				if (folderNode != null)
 				{
-					((FolderNode)child).CreateDirectory();
+					folderNode.CreateDirectory();
 				}
 
 				// If we are in automation mode then skip the ui part which is about renaming the folder

@@ -202,7 +202,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <param name="result">The <paramref name="VSADDRESULT"/> returned by the Add methods</param>
 		/// <param name="path">The full path of the item added.</param>
 		/// <returns>A ProjectItem object.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		protected virtual EnvDTE.ProjectItem EvaluateAddResult(VSADDRESULT result, string path)
 		{
 			if(result == VSADDRESULT.ADDRESULT_Success)
@@ -212,17 +211,22 @@ namespace Microsoft.VisualStudio.Project.Automation
 				if(nodeAdded != null)
 				{
 					EnvDTE.ProjectItem item = null;
-					if(nodeAdded is FileNode)
+					FileNode fileNode = nodeAdded as FileNode;
+					if(fileNode != null)
 					{
-						item = new OAFileItem(this.Project, nodeAdded as FileNode);
-					}
-					else if(nodeAdded is NestedProjectNode)
-					{
-						item = new OANestedProjectItem(this.Project, nodeAdded as NestedProjectNode);
+						item = new OAFileItem(this.Project, fileNode);
 					}
 					else
 					{
-						item = new OAProjectItem<HierarchyNode>(this.Project, nodeAdded);
+						NestedProjectNode projectNode = nodeAdded as NestedProjectNode;
+						if (projectNode != null)
+						{
+							item = new OANestedProjectItem(this.Project, projectNode);
+						}
+						else
+						{
+							item = new OAProjectItem<HierarchyNode>(this.Project, nodeAdded);
+						}
 					}
 
 					this.Items.Add(item);

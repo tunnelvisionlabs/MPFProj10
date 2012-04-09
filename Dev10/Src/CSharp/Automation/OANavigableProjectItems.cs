@@ -218,7 +218,6 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// </summary>
 		/// <param name="index">Either index by number (1-based) or by name can be used to get the item</param>
 		/// <returns>Project Item. null is return if invalid index is specified</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		public virtual EnvDTE.ProjectItem Item(object index)
 		{
 			if(index is int)
@@ -226,13 +225,14 @@ namespace Microsoft.VisualStudio.Project.Automation
 				int realIndex = (int)index - 1;
 				if(realIndex >= 0 && realIndex < this.items.Count)
 				{
-					return (EnvDTE.ProjectItem)items[realIndex];
+					return items[realIndex];
 				}
 				return null;
 			}
-			else if(index is string)
+
+			string name = index as string;
+			if (name != null)
 			{
-				string name = (string)index;
 				foreach(EnvDTE.ProjectItem item in items)
 				{
 					if(String.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase))
@@ -241,6 +241,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 					}
 				}
 			}
+
 			return null;
 		}
 

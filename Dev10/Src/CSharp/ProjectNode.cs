@@ -2152,7 +2152,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="wizardToRun">The name of the wizard to run.</param>
         /// <param name="dlgOwner">The owner of the dialog box.</param>
         /// <returns>A VSADDRESULT enum value describing success or failure.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dlg")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dlg")]
         public virtual VSADDRESULT RunWizard(HierarchyNode parentNode, string itemName, string wizardToRun, IntPtr dlgOwner)
         {
             Debug.Assert(!String.IsNullOrEmpty(itemName), "The Add item dialog was passing in a null or empty item to be added to the hierrachy.");
@@ -2201,9 +2201,9 @@ namespace Microsoft.VisualStudio.Project
             contextParams[0] = EnvDTE.Constants.vsWizardAddItem;
             contextParams[1] = this.Caption;
             object automationObject = parentNode.GetAutomationObject();
-            if (automationObject is EnvDTE.Project)
+            EnvDTE.Project project = automationObject as EnvDTE.Project;
+            if (project != null)
             {
-                EnvDTE.Project project = (EnvDTE.Project)automationObject;
                 contextParams[2] = project.ProjectItems;
             }
             else

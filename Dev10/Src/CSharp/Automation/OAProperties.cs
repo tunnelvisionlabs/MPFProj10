@@ -145,18 +145,9 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// </summary>
 		/// <param name="index">The index at which to return a mamber.</param>
 		/// <returns>A Property object.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		public virtual EnvDTE.Property Item(object index)
 		{
-			if(index is string)
-			{
-				string indexAsString = (string)index;
-				if(this.properties.ContainsKey(indexAsString))
-				{
-					return (EnvDTE.Property)this.properties[indexAsString];
-				}
-			}
-			else if(index is int)
+			if(index is int)
 			{
 				int realIndex = (int)index - 1;
 				if(realIndex >= 0 && realIndex < this.properties.Count)
@@ -171,6 +162,15 @@ namespace Microsoft.VisualStudio.Project.Automation
 							return (EnvDTE.Property)enumerator.Current;
 						}
 					}
+				}
+			}
+
+			string indexAsString = index as string;
+			if(indexAsString != null)
+			{
+				if(this.properties.ContainsKey(indexAsString))
+				{
+					return this.properties[indexAsString];
 				}
 			}
 

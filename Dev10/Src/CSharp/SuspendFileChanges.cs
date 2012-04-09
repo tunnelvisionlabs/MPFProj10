@@ -38,7 +38,6 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		public void Suspend()
 		{
 			if(this.isSuspending)
@@ -70,21 +69,12 @@ namespace Microsoft.VisualStudio.Project
 					ErrorHandler.ThrowOnFailure(fileChange.IgnoreFile(0, this.documentFileName, 1));
 					if(docData != IntPtr.Zero)
 					{
-						IVsPersistDocData persistDocData = null;
-
 						// if interface is not supported, return null
 						object unknown = Marshal.GetObjectForIUnknown(docData);
-						if(unknown is IVsPersistDocData)
+						this.fileChangeControl = unknown as IVsDocDataFileChangeControl;
+						if(this.fileChangeControl != null)
 						{
-							persistDocData = (IVsPersistDocData)unknown;
-							if(persistDocData is IVsDocDataFileChangeControl)
-							{
-								this.fileChangeControl = (IVsDocDataFileChangeControl)persistDocData;
-								if(this.fileChangeControl != null)
-								{
-									ErrorHandler.ThrowOnFailure(this.fileChangeControl.IgnoreFileChanges(1));
-								}
-							}
+							ErrorHandler.ThrowOnFailure(this.fileChangeControl.IgnoreFileChanges(1));
 						}
 					}
 				}
