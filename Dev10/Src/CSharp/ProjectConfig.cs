@@ -298,7 +298,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsDebugOnly(out int fDebug)
         {
             fDebug = 0;
@@ -309,7 +309,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsReleaseOnly(out int fRelease)
         {
             CCITracing.TraceCall();
@@ -324,7 +324,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region IVsProjectCfg methods
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int EnumOutputs(out IVsEnumOutputs eo)
         {
             CCITracing.TraceCall();
@@ -347,7 +347,7 @@ namespace Microsoft.VisualStudio.Project
             return ((IVsCfg)this).get_DisplayName(out name);
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsPackaged(out int pkgd)
         {
             CCITracing.TraceCall();
@@ -355,7 +355,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_IsSpecifyingOutputSupported(out int f)
         {
             CCITracing.TraceCall();
@@ -363,7 +363,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_Platform(out Guid platform)
         {
             CCITracing.TraceCall();
@@ -371,7 +371,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.E_NOTIMPL;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_ProjectCfgProvider(out IVsProjectCfgProvider p)
         {
             CCITracing.TraceCall();
@@ -393,7 +393,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_TargetCodePage(out uint target)
         {
             CCITracing.TraceCall();
@@ -401,7 +401,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int get_UpdateSequenceNumber(ULARGE_INTEGER[] li)
         {
             if (li == null)
@@ -415,7 +415,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        [Obsolete]
+        [Obsolete("Obsolete method. Do not use.")]
         public virtual int OpenOutput(string name, out IVsOutput output)
         {
             CCITracing.TraceCall();
