@@ -15,6 +15,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 	public sealed class EmptyReferencesEvents : ConnectionPointContainer, IEventSource<_dispReferencesEvents>, ReferencesEvents
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
 		public static readonly EmptyReferencesEvents Instance = new EmptyReferencesEvents();
 
 		public EmptyReferencesEvents()
