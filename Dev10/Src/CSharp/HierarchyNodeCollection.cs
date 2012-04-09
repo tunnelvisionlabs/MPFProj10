@@ -13,6 +13,7 @@ namespace Microsoft.VisualStudio.Project
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using Interlocked = System.Threading.Interlocked;
     using LockRecursionPolicy = System.Threading.LockRecursionPolicy;
@@ -148,7 +149,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public List<HierarchyNode> GetNodesByName(string canonicalName)
+        public ReadOnlyCollection<HierarchyNode> GetNodesByName(string canonicalName)
         {
             List<HierarchyNode> nodes = new List<HierarchyNode>();
 
@@ -166,7 +167,7 @@ namespace Microsoft.VisualStudio.Project
                 _syncObject.ExitReadLock();
             }
 
-            return nodes;
+            return nodes.AsReadOnly();
         }
 
         public void UpdateAllCanonicalNames()

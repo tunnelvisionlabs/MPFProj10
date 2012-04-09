@@ -21,6 +21,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Diagnostics;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
@@ -63,18 +64,17 @@ namespace Microsoft.VisualStudio.Project
         /// they provide us with this data.
         /// Returns/sets the [(<propName, propCondition>) <propValue>] collection
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual List<KeyValuePair<KeyValuePair<string, string>, string>> NewConfigProperties
+        public virtual ReadOnlyCollection<KeyValuePair<KeyValuePair<string, string>, string>> NewConfigProperties
         {
             get
             {
-                return newCfgProps;
+                return newCfgProps.AsReadOnly();
             }
 
             set
             {
-                newCfgProps = value;
+                newCfgProps = value.ToList();
             }
         }
 
@@ -771,7 +771,7 @@ namespace Microsoft.VisualStudio.Project
                 if (project == this.project.BuildProject)
                 {
                     // Get the list of property name, condition value from the config provider
-                    IList<KeyValuePair<KeyValuePair<string, string>, string>> propVals = this.NewConfigProperties;
+                    IEnumerable<KeyValuePair<KeyValuePair<string, string>, string>> propVals = this.NewConfigProperties;
                     foreach (KeyValuePair<KeyValuePair<string, string>, string> data in propVals)
                     {
                         KeyValuePair<string, string> propData = data.Key;
@@ -902,7 +902,7 @@ namespace Microsoft.VisualStudio.Project
                 if (project == this.project.BuildProject)
                 {
                     // Get the list of property name, condition value from the config provider
-                    IList<KeyValuePair<KeyValuePair<string, string>, string>> propVals = this.NewConfigProperties;
+                    IEnumerable<KeyValuePair<KeyValuePair<string, string>, string>> propVals = this.NewConfigProperties;
                     foreach (KeyValuePair<KeyValuePair<string, string>, string> data in propVals)
                     {
                         KeyValuePair<string, string> propData = data.Key;

@@ -13,6 +13,7 @@ namespace Microsoft.VisualStudio.Project
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Diagnostics;
 	using System.Runtime.InteropServices;
 	using System.Security.Permissions;
@@ -72,7 +73,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Retrives data from a VS format.
 		/// </summary>
-		public static List<string> GetDroppedFiles(ushort format, Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject, out DropDataType ddt)
+		public static ReadOnlyCollection<string> GetDroppedFiles(ushort format, Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject, out DropDataType ddt)
 		{
 			ddt = DropDataType.None;
 			List<string> droppedFiles = new List<string>();
@@ -114,7 +115,7 @@ namespace Microsoft.VisualStudio.Project
 				}
 			}
 
-			return droppedFiles;
+			return droppedFiles.AsReadOnly();
 		}
 
 		public static string GetSourceProjectPath(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject)

@@ -17,6 +17,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Diagnostics;
 	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 	using System.Runtime.InteropServices;
 	using System.Security.Permissions;
 	using System.Text;
@@ -855,7 +856,7 @@ namespace Microsoft.VisualStudio.Project
 			bool isWindowsFormat = false;
 
 			// Try to get it as a directory based project.
-			List<string> filesDropped = DragDropHelper.GetDroppedFiles(DragDropHelper.CF_VSSTGPROJECTITEMS, dataObject, out dropDataType);
+			ICollection<string> filesDropped = DragDropHelper.GetDroppedFiles(DragDropHelper.CF_VSSTGPROJECTITEMS, dataObject, out dropDataType);
 			if(filesDropped.Count == 0)
 			{
 				filesDropped = DragDropHelper.GetDroppedFiles(DragDropHelper.CF_VSREFPROJECTITEMS, dataObject, out dropDataType);

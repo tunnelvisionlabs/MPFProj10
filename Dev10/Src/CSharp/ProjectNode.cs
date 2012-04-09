@@ -1356,7 +1356,7 @@ namespace Microsoft.VisualStudio.Project
                 else
                 {
                     string directoryCanonicalName = Path.GetDirectoryName(canonicalName) + '\\';
-                    List<HierarchyNode> parentFolderNodes = itemIdMap.GetNodesByName(directoryCanonicalName);
+                    ReadOnlyCollection<HierarchyNode> parentFolderNodes = itemIdMap.GetNodesByName(directoryCanonicalName);
                     if (parentFolderNodes.Count == 1)
                     {
                         parentNode = parentFolderNodes[0];
@@ -2291,8 +2291,9 @@ namespace Microsoft.VisualStudio.Project
 
             IVsComponentSelectorDlg4 componentDialog;
             string strBrowseLocations = Path.GetDirectoryName(this.BaseURI.Uri.LocalPath);
-            var tabInitList = GetComponentSelectorTabList();
-			tabInitList.ForEach(tab => tab.dwSize = (uint)Marshal.SizeOf(typeof(VSCOMPONENTSELECTORTABINIT)));
+            var tabInitList = GetComponentSelectorTabList().ToArray();
+            for (int i = 0; i < tabInitList.Length; i++)
+                tabInitList[i].dwSize = (uint)Marshal.SizeOf(typeof(VSCOMPONENTSELECTORTABINIT));
 
             componentDialog = this.GetService(typeof(IVsComponentSelectorDlg)) as IVsComponentSelectorDlg4;
             try
@@ -2313,7 +2314,7 @@ namespace Microsoft.VisualStudio.Project
                         "VS.AddReference",                          // Help topic
                         addComponentDialogSizeX,
                         addComponentDialogSizeY,
-                        (uint)tabInitList.Count,
+                        (uint)tabInitList.Length,
                         tabInitList.ToArray(),
                         ref addComponentLastActiveTab,
 						browseFilters,
@@ -2339,7 +2340,7 @@ namespace Microsoft.VisualStudio.Project
             return "Component Files (*.exe;*.dll)\0*.exe;*.dll\0";
         }
 
-        protected virtual List<VSCOMPONENTSELECTORTABINIT> GetComponentSelectorTabList()
+        protected virtual ReadOnlyCollection<VSCOMPONENTSELECTORTABINIT> GetComponentSelectorTabList()
         {
             return new List<VSCOMPONENTSELECTORTABINIT>()
 			{
@@ -2364,7 +2365,7 @@ namespace Microsoft.VisualStudio.Project
 				new VSCOMPONENTSELECTORTABINIT {
 				    guidTab = GUID_MruPage,
 				},
-			};
+			}.AsReadOnly();
         }
 
         /// <summary>

@@ -2676,7 +2676,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="itemId"></param>
 		public int ParseCanonicalName(string name, out uint itemId)
 		{
-            List<HierarchyNode> nodes = ProjectManager.ItemIdMap.GetNodesByName(name);
+            List<HierarchyNode> nodes = ProjectManager.ItemIdMap.GetNodesByName(name).ToList();
 
             if (this.Parent != null)
                 nodes.RemoveAll(i => object.ReferenceEquals(this, i) || i.IsDescendentOf(this));
@@ -3312,7 +3312,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <typeparam name="T">The type of hierachy node being serched for</typeparam>
 		/// <param name="nodes">A list of nodes of type T</param>
-		public void FindNodesOfType<T>(List<T> nodes)
+		public void FindNodesOfType<T>(ICollection<T> nodes)
 			where T : HierarchyNode
 		{
             if (nodes == null)
