@@ -217,10 +217,10 @@ namespace Microsoft.VisualStudio.Project
 		{
             if (this.IsNonMemberItem)
             {
-                return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ProjectNode.ImageName.OpenExcludedFolder : (int)ProjectNode.ImageName.ExcludedFolder);
+                return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ImageName.OpenExcludedFolder : (int)ImageName.ExcludedFolder);
             }
 
-			return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ProjectNode.ImageName.OpenFolder : (int)ProjectNode.ImageName.Folder);
+			return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ImageName.OpenFolder : (int)ImageName.Folder);
 		}
 
         /// <summary>

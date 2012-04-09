@@ -397,7 +397,7 @@ namespace Microsoft.VisualStudio.Project
         {
             get
             {
-                return (int)ProjectNode.ImageName.Application;
+                return (int)ImageName.Application;
             }
         }
 

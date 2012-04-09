@@ -93,7 +93,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public override object GetIconHandle(bool open)
 		{
-			int offset = (this.CanShowDefaultIcon() ? (int)ProjectNode.ImageName.Reference : (int)ProjectNode.ImageName.DanglingReference);
+			int offset = (this.CanShowDefaultIcon() ? (int)ImageName.Reference : (int)ImageName.DanglingReference);
 			return this.ProjectManager.ImageHandler.GetIconHandle(offset);
 		}
 

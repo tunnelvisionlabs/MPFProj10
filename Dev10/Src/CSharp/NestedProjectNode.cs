@@ -370,7 +370,7 @@ namespace Microsoft.VisualStudio.Project
 
                 if (null == iconHandle)
                 {
-                    iconHandle = this.ProjectManager.ImageHandler.GetIconHandle((int)ProjectNode.ImageName.Application);
+                    iconHandle = this.ProjectManager.ImageHandler.GetIconHandle((int)ImageName.Application);
                 }
             }
 

@@ -35,42 +35,42 @@ namespace Microsoft.VisualStudio.Project
         // and the index of the icons inside the standard image list.
         private static Dictionary<string, int> extensionIcons = new Dictionary<string, int>()
             {
-                { ".aspx", (int)ProjectNode.ImageName.WebForm },
-                { ".asax", (int)ProjectNode.ImageName.GlobalApplicationClass },
-                { ".asmx", (int)ProjectNode.ImageName.WebService },
-                { ".ascx", (int)ProjectNode.ImageName.WebUserControl },
-                { ".asp", (int)ProjectNode.ImageName.ASPPage },
-                { ".config", (int)ProjectNode.ImageName.WebConfig },
-                { ".htm", (int)ProjectNode.ImageName.HTMLPage },
-                { ".html", (int)ProjectNode.ImageName.HTMLPage },
-                { ".css", (int)ProjectNode.ImageName.StyleSheet },
-                { ".xsl", (int)ProjectNode.ImageName.StyleSheet },
-                { ".vbs", (int)ProjectNode.ImageName.ScriptFile },
-                { ".js", (int)ProjectNode.ImageName.ScriptFile },
-                { ".wsf", (int)ProjectNode.ImageName.ScriptFile },
-                { ".txt", (int)ProjectNode.ImageName.TextFile },
-                { ".resx", (int)ProjectNode.ImageName.Resources },
-                { ".rc", (int)ProjectNode.ImageName.Resources },
-                { ".bmp", (int)ProjectNode.ImageName.Bitmap },
-                { ".ico", (int)ProjectNode.ImageName.Icon },
-                { ".gif", (int)ProjectNode.ImageName.Image },
-                { ".jpg", (int)ProjectNode.ImageName.Image },
-                { ".png", (int)ProjectNode.ImageName.Image },
-                { ".map", (int)ProjectNode.ImageName.ImageMap },
-                { ".wav", (int)ProjectNode.ImageName.Audio },
-                { ".mid", (int)ProjectNode.ImageName.Audio },
-                { ".midi", (int)ProjectNode.ImageName.Audio },
-                { ".avi", (int)ProjectNode.ImageName.Video },
-                { ".mov", (int)ProjectNode.ImageName.Video },
-                { ".mpg", (int)ProjectNode.ImageName.Video },
-                { ".mpeg", (int)ProjectNode.ImageName.Video },
-                { ".cab", (int)ProjectNode.ImageName.CAB },
-                { ".jar", (int)ProjectNode.ImageName.JAR },
-                { ".xslt", (int)ProjectNode.ImageName.XSLTFile },
-                { ".xsd", (int)ProjectNode.ImageName.XMLSchema },
-                { ".xml", (int)ProjectNode.ImageName.XMLFile },
-                { ".pfx", (int)ProjectNode.ImageName.PFX },
-                { ".snk", (int)ProjectNode.ImageName.SNK },
+                { ".aspx", (int)ImageName.WebForm },
+                { ".asax", (int)ImageName.GlobalApplicationClass },
+                { ".asmx", (int)ImageName.WebService },
+                { ".ascx", (int)ImageName.WebUserControl },
+                { ".asp", (int)ImageName.ASPPage },
+                { ".config", (int)ImageName.WebConfig },
+                { ".htm", (int)ImageName.HTMLPage },
+                { ".html", (int)ImageName.HTMLPage },
+                { ".css", (int)ImageName.StyleSheet },
+                { ".xsl", (int)ImageName.StyleSheet },
+                { ".vbs", (int)ImageName.ScriptFile },
+                { ".js", (int)ImageName.ScriptFile },
+                { ".wsf", (int)ImageName.ScriptFile },
+                { ".txt", (int)ImageName.TextFile },
+                { ".resx", (int)ImageName.Resources },
+                { ".rc", (int)ImageName.Resources },
+                { ".bmp", (int)ImageName.Bitmap },
+                { ".ico", (int)ImageName.Icon },
+                { ".gif", (int)ImageName.Image },
+                { ".jpg", (int)ImageName.Image },
+                { ".png", (int)ImageName.Image },
+                { ".map", (int)ImageName.ImageMap },
+                { ".wav", (int)ImageName.Audio },
+                { ".mid", (int)ImageName.Audio },
+                { ".midi", (int)ImageName.Audio },
+                { ".avi", (int)ImageName.Video },
+                { ".mov", (int)ImageName.Video },
+                { ".mpg", (int)ImageName.Video },
+                { ".mpeg", (int)ImageName.Video },
+                { ".cab", (int)ImageName.CAB },
+                { ".jar", (int)ImageName.JAR },
+                { ".xslt", (int)ImageName.XSLTFile },
+                { ".xsd", (int)ImageName.XMLSchema },
+                { ".xml", (int)ImageName.XMLFile },
+                { ".pfx", (int)ImageName.PFX },
+                { ".snk", (int)ImageName.SNK },
             };
         #endregion
 
@@ -102,13 +102,13 @@ namespace Microsoft.VisualStudio.Project
             {
                 if (this.IsNonMemberItem)
                 {
-                    return (int)ProjectNode.ImageName.ExcludedFile;
+                    return (int)ImageName.ExcludedFile;
                 }
 
                 // Check if the file is there.
                 if(!this.CanShowDefaultIcon())
                 {
-                    return (int)ProjectNode.ImageName.MissingFile;
+                    return (int)ImageName.MissingFile;
                 }
 
                 //Check for known extensions

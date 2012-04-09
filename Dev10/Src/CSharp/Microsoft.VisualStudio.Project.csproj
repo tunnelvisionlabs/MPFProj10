@@ -164,7 +164,7 @@
     <Compile Include="ProjectFileAttributeValue.cs" />
     <Compile Include="ProjectFileValues.cs" />
     <Compile Include="ProjectNode.SuppressEvents.cs" />
-    <Compile Include="ProjectNode.ImageName.cs" />
+    <Compile Include="ImageName.cs" />
     <Compile Include="ProjectNodeProperties.cs" />
     <Compile Include="ProjectPropertyChangedArgs.cs" />
     <Compile Include="ProjectReferencesProperties.cs" />

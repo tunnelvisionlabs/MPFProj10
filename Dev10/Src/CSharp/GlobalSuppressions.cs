@@ -411,7 +411,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Scope = "type", Target = "Microsoft.VisualStudio.Project.Automation.OAProjectItems")]
 
 //Other suppressions
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Microsoft.VisualStudio.Project.ProjectNode+ImageName")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "trailer", Scope = "member", Target = "Microsoft.VisualStudio.Project.HierarchyNode.#GetProperty(System.Int32)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "vspropId", Scope = "member", Target = "Microsoft.VisualStudio.Project.HierarchyNode.#GetGuidProperty(System.UInt32,System.Int32,System.Guid&)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Scope = "member", Target = "Microsoft.VisualStudio.Project.NativeMethods+ConnectionPointCookie.#.ctor(System.Object,System.Object,System.Type,System.Boolean)")]

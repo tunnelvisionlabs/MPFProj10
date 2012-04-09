@@ -37,7 +37,7 @@ namespace Microsoft.VisualStudio.Project
 		#region Properties
 		public override int ImageIndex
 		{
-			get { return (this.CanShowDefaultIcon() ? (int)ProjectNode.ImageName.DependentFile : (int)ProjectNode.ImageName.MissingFile); }
+			get { return (this.CanShowDefaultIcon() ? (int)ImageName.DependentFile : (int)ImageName.MissingFile); }
 		}
 		#endregion
 

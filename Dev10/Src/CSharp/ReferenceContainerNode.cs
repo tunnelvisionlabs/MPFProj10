@@ -158,7 +158,7 @@ namespace Microsoft.VisualStudio.Project
 
         public override object GetIconHandle(bool open)
         {
-            return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ProjectNode.ImageName.OpenReferenceFolder : (int)ProjectNode.ImageName.ReferenceFolder);
+            return this.ProjectManager.ImageHandler.GetIconHandle(open ? (int)ImageName.OpenReferenceFolder : (int)ImageName.ReferenceFolder);
         }
 
 
