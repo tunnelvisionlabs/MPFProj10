@@ -57,6 +57,7 @@ namespace Microsoft.VisualStudio.Project
 		internal static extern int ImageList_GetImageCount(HandleRef himl);
 
 		[DllImport(ExternDll.Comctl32, CharSet = CharSet.Auto)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ImageList_Draw(HandleRef himl, int i, HandleRef hdcDst, int x, int y, int fStyle);
 
 		[DllImport(ExternDll.Shell32, EntryPoint = "DragQueryFileW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]

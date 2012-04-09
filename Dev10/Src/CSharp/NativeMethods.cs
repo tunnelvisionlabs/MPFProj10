@@ -79,9 +79,11 @@ namespace Microsoft.VisualStudio.Project
 		public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
 
 		[DllImport(ExternDll.User32)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool DestroyIcon(IntPtr handle);
 
 		[DllImport("user32.dll", EntryPoint = "IsDialogMessageA", SetLastError = true, CharSet = CharSet.Ansi, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool IsDialogMessageA(IntPtr hDlg, ref MSG msg);
 
 		/// <summary>
@@ -91,6 +93,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="lpBinaryType">If file isbianry the bitness of the app is indicated by lpBinaryType value.</param>
 		/// <returns>True if the file is binary false otherwise</returns>
 		[DllImport(ExternDll.Kernel32)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool GetBinaryType([MarshalAs(UnmanagedType.LPWStr)]string lpApplicationName, out uint lpBinaryType);
 
 	}
