@@ -274,7 +274,7 @@ namespace Microsoft.VisualStudio.Project
             if (name == null)
                 throw new ArgumentNullException("name");
             if (string.IsNullOrEmpty(name))
-                throw new ArgumentException();
+                throw new ArgumentException("name cannot be null or empty");
 
             // We need to QE/QS the project file
             if(!this.ProjectManager.QueryEditProjectFile(false))
@@ -308,7 +308,7 @@ namespace Microsoft.VisualStudio.Project
             if (platName == null)
                 throw new ArgumentNullException("platName");
             if (string.IsNullOrEmpty(platName))
-                throw new ArgumentException();
+                throw new ArgumentException("platName cannot be null or empty");
 
             // We need to QE/QS the project file
             if (!this.ProjectManager.QueryEditProjectFile(false))
@@ -518,8 +518,10 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentNullException("old");
             if (newname == null)
                 throw new ArgumentNullException("newname");
-            if (string.IsNullOrEmpty(old) || string.IsNullOrEmpty(newname))
-                throw new ArgumentException();
+            if (string.IsNullOrEmpty(old))
+                throw new ArgumentException("old cannot be null or empty");
+            if (string.IsNullOrEmpty(newname))
+                throw new ArgumentException("newname cannot be null or empty");
 
             // We need to QE/QS the project file
             if (!this.ProjectManager.QueryEditProjectFile(false))

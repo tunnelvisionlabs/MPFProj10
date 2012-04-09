@@ -218,7 +218,7 @@ namespace Microsoft.VisualStudio.Project
 
 			byte[] stringData = System.Text.Encoding.Unicode.GetBytes(s);
 			if (bufferSize < stringData.Length + 2)
-				throw new ArgumentException();
+				throw new ArgumentException("The encoded string does not fit in the buffer.");
 
 			Marshal.Copy(stringData, 0, data, stringData.Length);
 			Marshal.WriteInt16(data, stringData.Length, 0);

@@ -2830,10 +2830,11 @@ namespace Microsoft.VisualStudio.Project
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         public virtual ProjectOptions GetProjectOptions(string config, string platform)
         {
-            if (!string.IsNullOrEmpty(config) && string.IsNullOrEmpty(platform))
-                throw new ArgumentException();
-            if (string.IsNullOrEmpty(config) && !string.IsNullOrEmpty(platform))
-                throw new ArgumentException();
+            if ((!string.IsNullOrEmpty(config) && string.IsNullOrEmpty(platform))
+                || (string.IsNullOrEmpty(config) && !string.IsNullOrEmpty(platform)))
+            {
+                throw new ArgumentException("Either both or neither the configuration and platform should be specified.");
+            }
 
 			if (string.IsNullOrEmpty(config))
 			{
