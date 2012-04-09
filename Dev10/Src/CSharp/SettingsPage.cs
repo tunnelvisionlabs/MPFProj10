@@ -44,7 +44,7 @@ namespace Microsoft.VisualStudio.Project
 		private bool isDisposed;
 		#endregion
 
-		public SettingsPage(ProjectNode projectManager)
+		protected SettingsPage(ProjectNode projectManager)
 			: base(projectManager)
 		{
 		}
