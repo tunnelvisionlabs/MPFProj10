@@ -837,8 +837,7 @@ namespace Microsoft.VisualStudio.Project
 #if DEBUG
 			if(propId != LastTracedProperty)
 			{
-				string trailer = (result == null) ? "null" : result.ToString();
-				CCITracing.TraceCall(this.ID + "," + propId.ToString() + " = " + trailer);
+				CCITracing.TraceCall(string.Format("{0},{1} = {2}", ID, propId, result ?? "null"));
 				LastTracedProperty = propId; // some basic filtering here...
 			}
 #endif
@@ -2615,8 +2614,7 @@ namespace Microsoft.VisualStudio.Project
 			if(n != null)
 			{
 				int hr = n.GetGuidProperty(propid, out guid);
-				__VSHPROPID vspropId = (__VSHPROPID)propid;
-				CCITracing.TraceCall(vspropId.ToString() + "=" + guid.ToString());
+				CCITracing.TraceCall(string.Format("{0}={1}", (__VSHPROPID)propid, guid));
 				return hr;
 			}
 

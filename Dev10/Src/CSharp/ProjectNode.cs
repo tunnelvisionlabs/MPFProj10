@@ -6784,7 +6784,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // return property asked for
-            return GetMsBuildProperty(this.currentConfig, propertyName);
+            return GetMsBuildProperty(projectInstance, propertyName);
         }
 
         private static ProjectPropertyInstance GetMsBuildProperty(ProjectInstance projectInstance, string propertyName)

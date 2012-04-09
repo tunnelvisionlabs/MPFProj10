@@ -377,8 +377,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Scope = "type", Target = "Microsoft.VisualStudio.Project.Automation.OAProjectItems")]
 
 //Other suppressions
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "trailer", Scope = "member", Target = "Microsoft.VisualStudio.Project.HierarchyNode.#GetProperty(System.Int32)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "vspropId", Scope = "member", Target = "Microsoft.VisualStudio.Project.HierarchyNode.#GetGuidProperty(System.UInt32,System.Int32,System.Guid&)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Scope = "member", Target = "Microsoft.VisualStudio.Project.NativeMethods+ConnectionPointCookie.#.ctor(System.Object,System.Object,System.Type,System.Boolean)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "Microsoft.VisualStudio.Project.ConnectionPointContainer.#Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer.FindConnectionPoint(System.Guid&,Microsoft.VisualStudio.OLE.Interop.IConnectionPoint&)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "Microsoft.VisualStudio.Project.NodeProperties.#EnvDTE80.IInternalExtenderProvider.CanExtend(System.String,System.String,System.Object)")]

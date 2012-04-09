@@ -92,10 +92,6 @@ namespace Microsoft.VisualStudio.Project
             if (node == null)
                 throw new ArgumentNullException("node");
 
-            string canonicalName = null;
-            if (node.CanCacheCanonicalName)
-                canonicalName = node.CanonicalName;
-
             _syncObject.EnterWriteLock();
             try
             {
