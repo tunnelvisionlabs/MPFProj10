@@ -17,9 +17,17 @@ namespace Microsoft.VisualStudio.Project
 	public enum tagDVASPECT
 	{
 		None = 0,
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
 		DVASPECT_CONTENT = 1,
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
 		DVASPECT_THUMBNAIL = 2,
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
 		DVASPECT_ICON = 4,
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
 		DVASPECT_DOCPRINT = 8
 	}
 }

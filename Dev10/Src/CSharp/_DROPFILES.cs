@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.Project
     using System.Runtime.InteropServices;
 
     [StructLayout(LayoutKind.Sequential)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
     public struct _DROPFILES
     {
         public int pFiles;
