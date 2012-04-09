@@ -580,7 +580,12 @@ namespace Microsoft.VisualStudio.Project
         }
         #endregion
 
-        protected virtual IEnumerable<MSBuild.Project> GetBuildProjects(bool includeUserBuildProjects = true)
+        protected IEnumerable<MSBuild.Project> GetBuildProjects()
+        {
+            return GetBuildProjects(true);
+        }
+
+        protected virtual IEnumerable<MSBuild.Project> GetBuildProjects(bool includeUserBuildProjects)
         {
             IEnumerable<MSBuild.Project> result = new[] { _project.BuildProject };
             if (!includeUserBuildProjects || ProjectManager.UserBuildProject == null)

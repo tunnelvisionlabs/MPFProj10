@@ -3181,7 +3181,12 @@ namespace Microsoft.VisualStudio.Project
         /// Walks the subpaths of a project relative path and checks if the folder nodes hierarchy is already there, if not creates it.
         /// </summary>
         /// <param name="strPath">Path of the folder, can be relative to project or absolute</param>
-        public virtual HierarchyNode CreateFolderNodes(string path, IDictionary<string, HierarchyNode> nodeCache = null)
+        public virtual HierarchyNode CreateFolderNodes(string path)
+        {
+            return CreateFolderNodes(path, null);
+        }
+
+        public virtual HierarchyNode CreateFolderNodes(string path, IDictionary<string, HierarchyNode> nodeCache)
         {
             if (String.IsNullOrEmpty(path))
             {
@@ -3262,7 +3267,13 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="parent">the parent node where to add the subfolder if it does not exist.</param>
         /// <returns>the foldernode correcsponding to the path.</returns>
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubFolder")]
-        protected virtual FolderNode VerifySubFolderExists(string path, HierarchyNode parent, IDictionary<string, HierarchyNode> nodeCache = null)
+        protected virtual FolderNode VerifySubFolderExists(string path, HierarchyNode parent)
+        {
+            return VerifySubFolderExists(path, parent, null);
+        }
+
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SubFolder")]
+        protected virtual FolderNode VerifySubFolderExists(string path, HierarchyNode parent, IDictionary<string, HierarchyNode> nodeCache)
         {
             FolderNode folderNode = null;
             uint uiItemId;

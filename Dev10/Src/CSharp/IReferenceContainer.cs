@@ -25,7 +25,8 @@ namespace Microsoft.VisualStudio.Project
 	public interface IReferenceContainer
 	{
 		IList<ReferenceNode> EnumReferences();
-		ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null);
+		ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData);
+		ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool);
 		void LoadReferencesFromBuildProject(MSBuild.Project buildProject);
 	}
 }

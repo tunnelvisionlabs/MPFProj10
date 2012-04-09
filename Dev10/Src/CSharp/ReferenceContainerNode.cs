@@ -309,7 +309,17 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="selectorData">data describing selected component</param>
         /// <returns>Reference in case of a valid reference node has been created. Otherwise null</returns>
-        public ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null)
+        public ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData)
+        {
+            return AddReferenceFromSelectorData(selectorData, null);
+        }
+
+        /// <summary>
+        /// Adds a reference to this container using the selector data structure to identify it.
+        /// </summary>
+        /// <param name="selectorData">data describing selected component</param>
+        /// <returns>Reference in case of a valid reference node has been created. Otherwise null</returns>
+        public ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
         {
             //Make sure we can edit the project file
             if(!this.ProjectManager.QueryEditProjectFile(false))
@@ -373,7 +383,12 @@ namespace Microsoft.VisualStudio.Project
             return node;
         }
 
-        protected virtual ReferenceNode CreateReferenceNode(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null)
+        protected virtual ReferenceNode CreateReferenceNode(VSCOMPONENTSELECTORDATA selectorData)
+        {
+            return CreateReferenceNode(selectorData, null);
+        }
+
+        protected virtual ReferenceNode CreateReferenceNode(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
         {
             ReferenceNode node = null;
             switch(selectorData.type)
@@ -414,9 +429,17 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Creates an assemby or com reference node given a selector data.
         /// </summary>
-        protected virtual ReferenceNode CreateFileComponent(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null)
+        protected ReferenceNode CreateFileComponent(VSCOMPONENTSELECTORDATA selectorData)
         {
-            if(null == selectorData.bstrFile)
+            return CreateFileComponent(selectorData, null);
+        }
+
+        /// <summary>
+        /// Creates an assemby or com reference node given a selector data.
+        /// </summary>
+        protected virtual ReferenceNode CreateFileComponent(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
+        {
+            if (null == selectorData.bstrFile)
             {
                 throw new ArgumentNullException("selectorData");
             }
@@ -549,10 +572,19 @@ namespace Microsoft.VisualStudio.Project
         {
             return new ComReferenceNode(this.ProjectManager, reference);
         }
+
         /// <summary>
         /// Creates a com reference node from a selector data.
         /// </summary>
-        protected virtual ComReferenceNode CreateComReferenceNode(Microsoft.VisualStudio.Shell.Interop.VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null)
+        protected ComReferenceNode CreateComReferenceNode(Microsoft.VisualStudio.Shell.Interop.VSCOMPONENTSELECTORDATA selectorData)
+        {
+            return CreateComReferenceNode(selectorData, null);
+        }
+
+        /// <summary>
+        /// Creates a com reference node from a selector data.
+        /// </summary>
+        protected virtual ComReferenceNode CreateComReferenceNode(Microsoft.VisualStudio.Shell.Interop.VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
         {
             ComReferenceNode node = new ComReferenceNode(this.ProjectManager, selectorData);
             return node;

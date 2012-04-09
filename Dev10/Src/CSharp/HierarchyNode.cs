@@ -3275,7 +3275,12 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helper methods
-		public HierarchyNode FindChild(string name, bool recursive = true)
+		public HierarchyNode FindChild(string name)
+		{
+			return FindChild(name, true);
+		}
+
+		public HierarchyNode FindChild(string name, bool recursive)
 		{
 			if(String.IsNullOrEmpty(name))
 			{

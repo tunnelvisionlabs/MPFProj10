@@ -186,7 +186,17 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="root">The Project node</param>
         /// <param name="selectorData">The component selctor data.</param>
-        public ComReferenceNode(ProjectNode root, VSCOMPONENTSELECTORDATA selectorData, string wrapperTool = null)
+        public ComReferenceNode(ProjectNode root, VSCOMPONENTSELECTORDATA selectorData)
+            : this(root, selectorData, null)
+        {
+        }
+
+        /// <summary>
+        /// Overloaded constructor for creating a ComReferenceNode from selector data
+        /// </summary>
+        /// <param name="root">The Project node</param>
+        /// <param name="selectorData">The component selctor data.</param>
+        public ComReferenceNode(ProjectNode root, VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
             : base(root)
         {
             if(root == null)
