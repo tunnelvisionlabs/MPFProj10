@@ -113,17 +113,14 @@ namespace Microsoft.VisualStudio.Project
             {
                 throw new ArgumentNullException("flags");
             }
-			
-            if(this.FileChangedOnDisk != null)
+
+			for(int i = 0; i < numberOfFilesChanged; i++)
 			{
-				for(int i = 0; i < numberOfFilesChanged; i++)
+				string fullFileName = Utilities.CanonicalizeFileName(filesChanged[i]);
+				if(this.observedItems.ContainsKey(fullFileName))
 				{
-					string fullFileName = Utilities.CanonicalizeFileName(filesChanged[i]);
-					if(this.observedItems.ContainsKey(fullFileName))
-					{
-						ObservedItemInfo info = this.observedItems[fullFileName];
-						this.FileChangedOnDisk(this, new FileChangedOnDiskEventArgs(fullFileName, info.ItemID, (_VSFILECHANGEFLAGS)flags[i]));
-					}
+					ObservedItemInfo info = this.observedItems[fullFileName];
+					this.OnFileChangedOnDisk(new FileChangedOnDiskEventArgs(fullFileName, info.ItemID, (_VSFILECHANGEFLAGS)flags[i]));
 				}
 			}
 
@@ -140,6 +137,13 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.S_OK;
 		}
 		#endregion
+
+		protected virtual void OnFileChangedOnDisk(FileChangedOnDiskEventArgs e)
+		{
+			var t = FileChangedOnDisk;
+			if (t != null)
+				t(this, e);
+		}
 
 		#region helpers
 		/// <summary>
