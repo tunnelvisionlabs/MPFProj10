@@ -325,6 +325,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region properties
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public ReadOnlyCollection<KeyValuePair<string, prjBuildAction>> AvailableFileBuildActions
         {
             get
