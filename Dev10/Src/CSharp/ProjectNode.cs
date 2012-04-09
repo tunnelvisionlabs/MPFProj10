@@ -67,18 +67,6 @@ namespace Microsoft.VisualStudio.Project
 		IVsDesignTimeAssemblyResolution,
 		IVsSetTargetFrameworkWorkerCallback
     {
-        #region nested types
-
-        /// <summary>
-        /// This is the node filter delegate.
-        /// </summary>
-        /// <param name="node">Node to be tested.</param>
-        /// <param name="criteria">Filter criteria.</param>
-        /// <returns>Returns if the node should be filtered or not.</returns>
-        public delegate bool NodeFilter(HierarchyNode node, object criteria);
-
-        #endregion
-
         #region constants
         /// <summary>
         /// The user file extension.
@@ -1122,7 +1110,7 @@ namespace Microsoft.VisualStudio.Project
         public virtual void RemoveNonMemberItems()
         {
             IList<HierarchyNode> nodeList = new List<HierarchyNode>();
-            FindNodes(nodeList, this, IsNodeNonMemberItem, null);
+            FindNodes(nodeList, this, IsNodeNonMemberItem);
             for (int index = nodeList.Count - 1; index >= 0; index--)
             {
                 HierarchyNode parent = nodeList[index].Parent;
@@ -1135,10 +1123,9 @@ namespace Microsoft.VisualStudio.Project
         /// This is the filter for non member items.
         /// </summary>
         /// <param name="node">Node to be filtered.</param>
-        /// <param name="criteria">Filter criteria.</param>
         /// <returns>Returns if the node is a non member item node or not.</returns>
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Boolean.TryParse(System.String,System.Boolean@)")]
-        protected virtual bool IsNodeNonMemberItem(HierarchyNode node, object criteria)
+        protected virtual bool IsNodeNonMemberItem(HierarchyNode node)
         {
             bool isNonMemberItem = false;
             if (node != null)
@@ -1423,8 +1410,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="currentList">List to be populated with the nodes.</param>
         /// <param name="parent">Parent node under which the nodes should be searched.</param>
         /// <param name="filter">Filter to be used while selecting the node.</param>
-        /// <param name="criteria">Criteria to be used by the filter.</param>
-        public static void FindNodes(IList<HierarchyNode> currentList, HierarchyNode parent, NodeFilter filter, object criteria)
+        public static void FindNodes(IList<HierarchyNode> currentList, HierarchyNode parent, Func<HierarchyNode, bool> filter)
         {
             if (currentList == null)
             {
@@ -1443,12 +1429,12 @@ namespace Microsoft.VisualStudio.Project
 
             for (HierarchyNode child = parent.FirstChild; child != null; child = child.NextSibling)
             {
-                if (filter(child, criteria))
+                if (filter(child))
                 {
                     currentList.Add(child);
                 }
 
-                FindNodes(currentList, child, filter, criteria);
+                FindNodes(currentList, child, filter);
             }
         }
 
