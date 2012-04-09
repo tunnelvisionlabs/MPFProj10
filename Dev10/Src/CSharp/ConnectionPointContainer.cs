@@ -26,18 +26,18 @@ namespace Microsoft.VisualStudio.Project
 			connectionPoints = new Dictionary<Guid, IConnectionPoint>();
 		}
 
-		protected internal void AddEventSource<SinkType>(IEventSource<SinkType> source)
-			where SinkType : class
+		protected internal void AddEventSource<TSink>(IEventSource<TSink> source)
+			where TSink : class
 		{
 			if(null == source)
 			{
 				throw new ArgumentNullException("source");
 			}
-			if(connectionPoints.ContainsKey(typeof(SinkType).GUID))
+			if(connectionPoints.ContainsKey(typeof(TSink).GUID))
 			{
 				throw new ArgumentException("EventSource guid already added to the list of connection points", "source");
 			}
-			connectionPoints.Add(typeof(SinkType).GUID, new ConnectionPoint<SinkType>(this, source));
+			connectionPoints.Add(typeof(TSink).GUID, new ConnectionPoint<TSink>(this, source));
 		}
 
 		#region IConnectionPointContainer Members

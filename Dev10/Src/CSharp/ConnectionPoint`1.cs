@@ -17,15 +17,15 @@ namespace Microsoft.VisualStudio.Project
 	using Microsoft.VisualStudio;
 	using Microsoft.VisualStudio.OLE.Interop;
 
-	public class ConnectionPoint<SinkType> : IConnectionPoint
-		where SinkType : class
+	public class ConnectionPoint<TSink> : IConnectionPoint
+		where TSink : class
 	{
-		private readonly Dictionary<uint, SinkType> sinks;
+		private readonly Dictionary<uint, TSink> sinks;
 		private readonly ConnectionPointContainer container;
-		private readonly IEventSource<SinkType> source;
+		private readonly IEventSource<TSink> source;
 		private uint nextCookie;
 
-		internal ConnectionPoint(ConnectionPointContainer container, IEventSource<SinkType> source)
+		internal ConnectionPoint(ConnectionPointContainer container, IEventSource<TSink> source)
 		{
 			if(null == container)
 			{
@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudio.Project
 				throw new ArgumentNullException("source");
 			}
 
-			this.sinks = new Dictionary<uint, SinkType>();
+			this.sinks = new Dictionary<uint, TSink>();
 			this.container = container;
 			this.source = source;
 			this.nextCookie = 1;
@@ -45,7 +45,7 @@ namespace Microsoft.VisualStudio.Project
 		#region IConnectionPoint Members
 		public void Advise(object pUnkSink, out uint pdwCookie)
 		{
-			SinkType sink = pUnkSink as SinkType;
+			TSink sink = pUnkSink as TSink;
 			if (sink == null)
 				Marshal.ThrowExceptionForHR(VSConstants.E_NOINTERFACE);
 
@@ -57,12 +57,12 @@ namespace Microsoft.VisualStudio.Project
 
 		public void EnumConnections(out IEnumConnections ppEnum)
 		{
-			ppEnum = new EnumConnections<SinkType>(sinks);
+			ppEnum = new EnumConnections<TSink>(sinks);
 		}
 
 		public void GetConnectionInterface(out Guid pIID)
 		{
-			pIID = typeof(SinkType).GUID;
+			pIID = typeof(TSink).GUID;
 		}
 
 		public void GetConnectionPointContainer(out IConnectionPointContainer ppCPC)
@@ -73,7 +73,7 @@ namespace Microsoft.VisualStudio.Project
 		public void Unadvise(uint dwCookie)
 		{
 			// This will throw if the cookie is not in the list.
-			SinkType sink = sinks[dwCookie];
+			TSink sink = sinks[dwCookie];
 			sinks.Remove(dwCookie);
 			source.OnSinkRemoved(sink);
 		}

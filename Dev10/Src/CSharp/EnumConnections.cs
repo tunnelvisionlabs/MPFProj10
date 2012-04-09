@@ -19,21 +19,21 @@ namespace Microsoft.VisualStudio.Project
 	using IEnumConnections = Microsoft.VisualStudio.OLE.Interop.IEnumConnections;
 
 	[ComVisible(true)]
-	public class EnumConnections<SinkType> : IEnumConnections
-		where SinkType : class
+	public class EnumConnections<TSink> : IEnumConnections
+		where TSink : class
 	{
-		private readonly ReadOnlyCollection<KeyValuePair<uint, SinkType>> _connections;
+		private readonly ReadOnlyCollection<KeyValuePair<uint, TSink>> _connections;
 		private int _currentIndex;
 
-		public EnumConnections(IEnumerable<KeyValuePair<uint, SinkType>> connections)
+		public EnumConnections(IEnumerable<KeyValuePair<uint, TSink>> connections)
 		{
 			if (connections == null)
 				throw new ArgumentNullException("connections");
 
-			_connections = new List<KeyValuePair<uint, SinkType>>(connections).AsReadOnly();
+			_connections = new List<KeyValuePair<uint, TSink>>(connections).AsReadOnly();
 		}
 
-		private EnumConnections(ReadOnlyCollection<KeyValuePair<uint, SinkType>> connections, int currentIndex)
+		private EnumConnections(ReadOnlyCollection<KeyValuePair<uint, TSink>> connections, int currentIndex)
 		{
 			if (connections == null)
 				throw new ArgumentNullException("connections");
@@ -46,7 +46,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public void Clone(out IEnumConnections ppEnum)
 		{
-			ppEnum = new EnumConnections<SinkType>(_connections, _currentIndex);
+			ppEnum = new EnumConnections<TSink>(_connections, _currentIndex);
 		}
 
 		public int Next(uint cConnections, CONNECTDATA[] rgcd, out uint pcFetched)

@@ -16,11 +16,10 @@ namespace Microsoft.VisualStudio.Project
 	/// <summary>
 	/// Class used to identify a source of events of type SinkType.
 	/// </summary>
-	[ComVisible(false)]
-	public interface IEventSource<SinkType>
-		where SinkType : class
+	public interface IEventSource<TSink>
+		where TSink : class
 	{
-		void OnSinkAdded(SinkType sink);
-		void OnSinkRemoved(SinkType sink);
+		void OnSinkAdded(TSink sink);
+		void OnSinkRemoved(TSink sink);
 	}
 }
