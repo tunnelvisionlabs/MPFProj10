@@ -14,10 +14,8 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Diagnostics;
 
-	public class CCITracing
+	public static class CCITracing
 	{
-		private CCITracing() { }
-
 		[ConditionalAttribute("Enable_CCIDiagnostics")]
 		static void InternalTraceCall(int levels)
 		{
