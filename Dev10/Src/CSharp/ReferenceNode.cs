@@ -195,7 +195,7 @@ namespace Microsoft.VisualStudio.Project
 		internal virtual void RefreshReference()
 		{
 			this.ResolveReference();
-			this.Redraw(UIHierarchyElement.Icon);
+			this.Redraw(UIHierarchyElements.Icon);
 		}
 
 		/// <summary>

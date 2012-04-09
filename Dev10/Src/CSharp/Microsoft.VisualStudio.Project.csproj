@@ -227,7 +227,7 @@
     <Compile Include="tagDVASPECT.cs" />
     <Compile Include="tagTYMED.cs" />
     <Compile Include="TokenReplaceType.cs" />
-    <Compile Include="UIHierarchyElement.cs" />
+    <Compile Include="UIHierarchyElements.cs" />
     <Compile Include="UIThread.cs" />
     <Compile Include="VisualStudio.Project.cs" />
     <Compile Include="ConnectionPointContainer.cs" />

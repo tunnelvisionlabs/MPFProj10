@@ -622,7 +622,7 @@ namespace Microsoft.VisualStudio.Project
                 this.ItemNode = new ProjectElement(this.ProjectManager, null, true);  // now we have to create a new ItemNode to indicate that this is virtual node.
                 this.ItemNode.Rename(url);
                 this.ItemNode.SetMetadata(ProjectFileConstants.Name, this.Url);
-                this.Redraw(UIHierarchyElement.Icon); // we have to redraw the icon of the node as it is now not a member of the project and shoul be drawn using a different icon.
+                this.Redraw(UIHierarchyElements.Icon); // we have to redraw the icon of the node as it is now not a member of the project and shoul be drawn using a different icon.
             }
             else if (this.Parent != null) // the project node has no parentNode
             {
@@ -683,7 +683,7 @@ namespace Microsoft.VisualStudio.Project
 
             // now add this node to the project.
             this.AddToMSBuild(recursive);
-            this.Redraw(UIHierarchyElement.Icon);
+            this.Redraw(UIHierarchyElements.Icon);
 
             // refresh property browser...
             ProjectNode.RefreshPropertyBrowser();

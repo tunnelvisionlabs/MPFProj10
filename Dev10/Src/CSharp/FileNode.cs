@@ -1161,8 +1161,8 @@ namespace Microsoft.VisualStudio.Project
                 this.ItemNode.SetMetadata(ProjectFileConstants.Name, url);
 
                 ////this.ProjectManager.OnItemAdded(this.Parent, this);
-                this.Redraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now not a member of the project and should be drawn using a different icon.
-                this.Redraw(UIHierarchyElement.SccState); // update the SCC state icon.
+                this.Redraw(UIHierarchyElements.Icon); // We have to redraw the icon of the node as it is now not a member of the project and should be drawn using a different icon.
+                this.Redraw(UIHierarchyElements.SccState); // update the SCC state icon.
             }
             else if (this.Parent != null) // the project node has no parentNode
             {
@@ -1212,8 +1212,8 @@ namespace Microsoft.VisualStudio.Project
 
             // notify others
             ////projectNode.OnItemAdded(this.Parent, this);
-            this.Redraw(UIHierarchyElement.Icon); // We have to redraw the icon of the node as it is now a member of the project and should be drawn using a different icon.
-            this.Redraw(UIHierarchyElement.SccState); // update the SCC state icon.
+            this.Redraw(UIHierarchyElements.Icon); // We have to redraw the icon of the node as it is now a member of the project and should be drawn using a different icon.
+            this.Redraw(UIHierarchyElements.SccState); // update the SCC state icon.
 
             //this.ResetProperties();
 
@@ -1349,7 +1349,7 @@ namespace Microsoft.VisualStudio.Project
 
             this.ItemNode.RefreshProperties();
 
-            this.Redraw(UIHierarchyElement.Caption);
+            this.Redraw(UIHierarchyElements.Caption);
             this.RenameChildNodes(this);
 
             // Refresh the property browser.

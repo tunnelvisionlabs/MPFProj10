@@ -1131,7 +1131,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if(!this.ExcludeNodeFromScc)
 			{
-				this.Redraw(UIHierarchyElement.SccState);
+				this.Redraw(UIHierarchyElements.SccState);
 			}
 		}
 
@@ -2484,24 +2484,24 @@ namespace Microsoft.VisualStudio.Project
 		/// Causes the hierarchy to be redrawn.
 		/// </summary>
 		/// <param name="element">Used by the hierarchy to decide which element to redraw</param>
-		public virtual void Redraw(UIHierarchyElement element)
+		public virtual void Redraw(UIHierarchyElements element)
 		{
 			foreach(IVsHierarchyEvents sink in this.projectMgr.hierarchyEventSinks.OfType<IVsHierarchyEvents>().ToArray())
 			{
 				int result;
-				if((element & UIHierarchyElement.Icon) != 0)
+				if((element & UIHierarchyElements.Icon) != 0)
 				{
 					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.Id, (int)__VSHPROPID.VSHPROPID_IconIndex, 0));
 					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMKDocument());
 				}
 
-				if((element & UIHierarchyElement.Caption) != 0)
+				if((element & UIHierarchyElements.Caption) != 0)
 				{
 					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.Id, (int)__VSHPROPID.VSHPROPID_Caption, 0));
 					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMKDocument());
 				}
 
-				if((element & UIHierarchyElement.SccState) != 0)
+				if((element & UIHierarchyElements.SccState) != 0)
 				{
 					result = ErrorHandler.CallWithCOMConvention(() => sink.OnPropertyChanged(this.Id, (int)__VSHPROPID.VSHPROPID_StateIconIndex, 0));
 					Debug.Assert(ErrorHandler.Succeeded(result), "Redraw failed for node " + this.GetMKDocument());

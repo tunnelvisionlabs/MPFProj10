@@ -6238,7 +6238,7 @@ namespace Microsoft.VisualStudio.Project
             // if all the paramaters are null adn the count is 0, it means scc wants us to updated everything
             if (affectedNodes == 0 && itemidAffectedNodes == null && newGlyphs == null && newSccStatus == null)
             {
-                this.Redraw(UIHierarchyElement.SccState);
+                this.Redraw(UIHierarchyElements.SccState);
                 this.UpdateSccStateIcons();
             }
             else if (affectedNodes > 0 && itemidAffectedNodes != null && newGlyphs != null && newSccStatus != null)
@@ -6251,7 +6251,7 @@ namespace Microsoft.VisualStudio.Project
                         throw new ArgumentException(SR.GetString(SR.InvalidParameter, CultureInfo.CurrentUICulture), "itemidAffectedNodes");
                     }
 
-                    n.Redraw(UIHierarchyElement.SccState);
+                    n.Redraw(UIHierarchyElements.SccState);
                 }
             }
             return VSConstants.S_OK;

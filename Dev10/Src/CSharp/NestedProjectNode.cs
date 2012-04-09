@@ -185,7 +185,7 @@ namespace Microsoft.VisualStudio.Project
                     this.RenameNestedProjectInParentProject(Path.GetFileNameWithoutExtension(document));
 
                     // We need to redraw the caption since for some reason, by intervining to the OnChanged event the Caption is not updated.
-                    this.Redraw(UIHierarchyElement.Caption);
+                    this.Redraw(UIHierarchyElements.Caption);
                 }
             }
         }

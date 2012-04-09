@@ -18,8 +18,7 @@ namespace Microsoft.VisualStudio.Project
 	/// Used by the hierarchy node to decide which element to redraw.
 	/// </summary>
 	[Flags]
-	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames")]
-	public enum UIHierarchyElement
+	public enum UIHierarchyElements
 	{
 		None = 0,
 

@@ -34,7 +34,7 @@ namespace Microsoft.VisualStudio.Project
 			set
 			{
 				this.Node.SetEditLabel(value);
-				this.Node.Redraw(UIHierarchyElement.Caption);
+				this.Node.Redraw(UIHierarchyElements.Caption);
 			}
 		}
 

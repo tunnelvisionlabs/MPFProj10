@@ -138,7 +138,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if(!this.ExcludeNodeFromScc)
 			{
-				this.Parent.Redraw(UIHierarchyElement.SccState);
+				this.Parent.Redraw(UIHierarchyElements.SccState);
 			}
 		}
 		#endregion
