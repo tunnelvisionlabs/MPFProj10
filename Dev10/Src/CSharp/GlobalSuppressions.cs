@@ -307,11 +307,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.BuildPropertyPage")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1409:ComVisibleTypesShouldBeCreatable", Scope = "type", Target = "Microsoft.VisualStudio.Project.LocalizableProperties")]
 
-//PInvoke suppressions
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Scope = "member", Target = "Microsoft.VisualStudio.Project.UnsafeNativeMethods.#RegisterClipboardFormat(System.String)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Scope = "member", Target = "Microsoft.VisualStudio.Project.UnsafeNativeMethods.#GlobalSize(System.IntPtr)")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Scope = "member", Target = "Microsoft.VisualStudio.Project.UnsafeNativeMethods.#GlobalSize(System.Runtime.InteropServices.HandleRef)")]
-
 //'Flags' naming suppressions
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Scope = "type", Target = "Microsoft.VisualStudio.Project.ModuleKindFlags")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Scope = "member", Target = "Microsoft.VisualStudio.Project.NestedProjectNode.#VirtualProjectFlags")]

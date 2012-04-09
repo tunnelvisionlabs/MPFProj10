@@ -60,11 +60,11 @@ namespace Microsoft.VisualStudio.Project
 		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ImageList_Draw(HandleRef himl, int i, HandleRef hdcDst, int x, int y, int fStyle);
 
-		[DllImport(ExternDll.Shell32, EntryPoint = "DragQueryFileW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+		[DllImport(ExternDll.Shell32, SetLastError = true, CharSet = CharSet.Unicode)]
 		internal static extern uint DragQueryFile(IntPtr hDrop, uint iFile, char[] lpszFile, uint cch);
 
-		[DllImport(ExternDll.User32, EntryPoint = "RegisterClipboardFormatW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-		internal static extern ushort RegisterClipboardFormat(string format);
+		[DllImport(ExternDll.User32, SetLastError = true, CharSet = CharSet.Unicode)]
+		internal static extern uint RegisterClipboardFormat(string format);
 	}
 }
 
