@@ -64,17 +64,11 @@ namespace Microsoft.VisualStudio.Project
         /// they provide us with this data.
         /// Returns/sets the [(<propName, propCondition>) <propValue>] collection
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ReadOnlyCollection<KeyValuePair<KeyValuePair<string, string>, string>> NewConfigProperties
         {
             get
             {
                 return newCfgProps.AsReadOnly();
-            }
-
-            set
-            {
-                newCfgProps = value.ToList();
             }
         }
 
