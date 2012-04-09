@@ -15,6 +15,7 @@ namespace Microsoft.VisualStudio.Project
 
     [Flags]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags")]
     public enum GlobalAllocFlags
     {
         None = 0,

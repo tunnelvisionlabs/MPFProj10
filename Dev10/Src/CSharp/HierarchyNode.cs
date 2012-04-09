@@ -3007,9 +3007,9 @@ namespace Microsoft.VisualStudio.Project
 		/// Flag indicating that changes to a file can be ignored when item is saved or reloaded. 
 		/// </summary>
 		/// <param name="itemId">Specifies the item id from VSITEMID.</param>
-		/// <param name="ignoreFlag">Flag indicating whether or not to ignore changes (1 to ignore, 0 to stop ignoring).</param>
+		/// <param name="ignore">true to ignore, false to stop ignoring.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public virtual int IgnoreItemFileChanges(uint itemId, bool ignoreFlag)
+		public virtual int IgnoreItemFileChanges(uint itemId, bool ignore)
 		{
 			#region precondition
 			if(this.ProjectManager == null || this.ProjectManager.IsClosed)
@@ -3021,7 +3021,7 @@ namespace Microsoft.VisualStudio.Project
 			HierarchyNode n = this.ProjectManager.NodeFromItemId(itemId);
 			if(n != null)
 			{
-				n.IgnoreItemFileChanges(ignoreFlag);
+				n.IgnoreItemFileChanges(ignore);
 			}
 
 			return VSConstants.S_OK;
