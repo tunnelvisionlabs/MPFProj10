@@ -20,23 +20,23 @@ namespace Microsoft.VisualStudio.Project
 			private readonly Type serviceType;
 			private readonly bool shouldDispose;
 			private object instance;
-			private ServiceCreatorCallback creator;
+			private Func<Type, object> creator;
 
-			public ServiceData(Type serviceType, object instance, ServiceCreatorCallback callback, bool shouldDispose)
+			public ServiceData(Type serviceType, object instance, Func<Type, object> serviceFactory, bool shouldDispose)
 			{
 				if(null == serviceType)
 				{
 					throw new ArgumentNullException("serviceType");
 				}
 
-				if((null == instance) && (null == callback))
+				if((null == instance) && (null == serviceFactory))
 				{
 					throw new ArgumentNullException("instance");
 				}
 
 				this.serviceType = serviceType;
 				this.instance = instance;
-				this.creator = callback;
+				this.creator = serviceFactory;
 				this.shouldDispose = shouldDispose;
 			}
 

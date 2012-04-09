@@ -53,9 +53,9 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		#endregion
 
 		#region Private implementation
-		internal OleServiceProvider.ServiceCreatorCallback ServiceCreator
+		internal Func<Type, object> ServiceFactory
 		{
-			get { return new OleServiceProvider.ServiceCreatorCallback(this.CreateServices); }
+			get { return this.CreateServices; }
 		}
 
 		private object CreateServices(Type serviceType)

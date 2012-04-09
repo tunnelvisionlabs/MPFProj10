@@ -158,7 +158,6 @@
     <Compile Include="MSBuildResult.cs" />
     <Compile Include="MsBuildTarget.cs" />
     <Compile Include="ObjectReferenceEqualityComparer`1.cs" />
-    <Compile Include="OleServiceProvider.ServiceCreatorCallback.cs" />
     <Compile Include="OleServiceProvider.ServiceData.cs" />
     <Compile Include="OutputType.cs" />
     <Compile Include="OutputTypeConverter.cs" />

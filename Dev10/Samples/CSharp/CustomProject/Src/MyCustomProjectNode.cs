@@ -150,9 +150,9 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		{
 			MyCustomProjectFileNode node = new MyCustomProjectFileNode(this, item);
 
-			node.OleServiceProvider.AddService(typeof(EnvDTE.Project), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
-			node.OleServiceProvider.AddService(typeof(ProjectItem), node.ServiceCreator, false);
-			node.OleServiceProvider.AddService(typeof(VSProject), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
+			node.OleServiceProvider.AddService(typeof(EnvDTE.Project), this.CreateServices, false);
+			node.OleServiceProvider.AddService(typeof(ProjectItem), node.ServiceFactory, false);
+			node.OleServiceProvider.AddService(typeof(VSProject), this.CreateServices, false);
 
 			return node;
 		}

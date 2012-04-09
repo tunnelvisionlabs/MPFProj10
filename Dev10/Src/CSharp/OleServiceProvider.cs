@@ -115,11 +115,11 @@ namespace Microsoft.VisualStudio.Project
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
             Justification="The services created here will be disposed in the Dispose method of this type.")]
-        public void AddService(Type serviceType, ServiceCreatorCallback callback, bool shouldDisposeServiceInstance)
+        public void AddService(Type serviceType, Func<Type, object> serviceFactory, bool shouldDisposeServiceInstance)
 		{
 			// Create the description of this service. Note that we don't do any validation
 			// of the parameter here because the constructor of ServiceData will do it for us.
-			ServiceData service = new ServiceData(serviceType, null, callback, shouldDisposeServiceInstance);
+			ServiceData service = new ServiceData(serviceType, null, serviceFactory, shouldDisposeServiceInstance);
 
 			// Now add the service desctription to the dictionary.
 			AddService(service);
