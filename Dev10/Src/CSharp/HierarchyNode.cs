@@ -2820,14 +2820,14 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IVsUIHierarchy methods
 
-		int IVsUIHierarchy.ExecCommand(uint itemId, ref Guid guidCmdGroup, uint nCmdId, uint nCmdExecOpt, IntPtr pvain, IntPtr p)
+		int IVsUIHierarchy.ExecCommand(uint itemId, ref Guid guidCmdGroup, uint nCmdId, uint nCmdExecOpt, IntPtr pvaIn, IntPtr pvaOut)
 		{
-			return this.ExecCommand(itemId, ref guidCmdGroup, nCmdId, (OLECMDEXECOPT)nCmdExecOpt, pvain, p);
+			return this.ExecCommand(itemId, ref guidCmdGroup, nCmdId, (OLECMDEXECOPT)nCmdExecOpt, pvaIn, pvaOut);
 		}
 
-		public virtual int ExecCommand(uint itemId, ref Guid guidCmdGroup, uint nCmdId, OLECMDEXECOPT nCmdExecOpt, IntPtr pvain, IntPtr p)
+		public virtual int ExecCommand(uint itemId, ref Guid commandGroup, uint commandId, OLECMDEXECOPT commandExecOptions, IntPtr dataIn, IntPtr dataOut)
 		{
-			return this.InternalExecCommand(guidCmdGroup, nCmdId, (OLECMDEXECOPT)nCmdExecOpt, pvain, p, CommandOrigin.UiHierarchy);
+			return this.InternalExecCommand(commandGroup, commandId, (OLECMDEXECOPT)commandExecOptions, dataIn, dataOut, CommandOrigin.UiHierarchy);
 		}
 
 		public virtual int QueryStatusCommand(uint itemId, ref Guid guidCmdGroup, uint cCmds, OLECMD[] cmds, IntPtr pCmdText)
@@ -3095,9 +3095,9 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// CommandTarget.Exec is called for most major operations if they are NOT UI based. Otherwise IVSUInode::exec is called first
 		/// </summary>
-		public virtual int Exec(ref Guid guidCmdGroup, uint nCmdId, OLECMDEXECOPT nCmdExecOpt, IntPtr pvaIn, IntPtr pvaOut)
+		public virtual int Exec(ref Guid commandGroup, uint commandId, OLECMDEXECOPT commandExecOptions, IntPtr dataIn, IntPtr dataOut)
 		{
-			return this.InternalExecCommand(guidCmdGroup, nCmdId, nCmdExecOpt, pvaIn, pvaOut, CommandOrigin.OleCommandTarget);
+			return this.InternalExecCommand(commandGroup, commandId, commandExecOptions, dataIn, dataOut, CommandOrigin.OleCommandTarget);
 		}
 
 		/// <summary>
@@ -3189,11 +3189,11 @@ namespace Microsoft.VisualStudio.Project
 			return result;
 		}
 
-		public virtual int GetDropInfo(out DropEffects pdwOKEffects, out IDataObject ppDataObject, out IDropSource ppDropSource)
+		public virtual int GetDropInfo(out DropEffects effects, out IDataObject dataObject, out IDropSource dropSource)
 		{
-			pdwOKEffects = (uint)DropEffects.None;
-			ppDataObject = null;
-			ppDropSource = null;
+			effects = (uint)DropEffects.None;
+			dataObject = null;
+			dropSource = null;
 			return VSConstants.E_NOTIMPL;
 		}
 
@@ -3220,7 +3220,7 @@ namespace Microsoft.VisualStudio.Project
 			return result;
 		}
 
-		public virtual int OnBeforeDropNotify(IDataObject pDataObject, DropEffects effect, out bool cancelDrop)
+		public virtual int OnBeforeDropNotify(IDataObject dataObject, DropEffects effect, out bool cancelDrop)
 		{
 			cancelDrop = false;
 			return VSConstants.E_NOTIMPL;
@@ -3237,7 +3237,7 @@ namespace Microsoft.VisualStudio.Project
 			return result;
 		}
 
-		public virtual int DragEnter(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects pdwEffect)
+		public virtual int DragEnter(IDataObject dataObject, uint keyState, uint itemId, ref DropEffects effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -3255,7 +3255,7 @@ namespace Microsoft.VisualStudio.Project
 			return result;
 		}
 
-		public virtual int DragOver(uint grfKeyState, uint itemid, ref DropEffects effect)
+		public virtual int DragOver(uint keyState, uint itemId, ref DropEffects effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -3268,7 +3268,7 @@ namespace Microsoft.VisualStudio.Project
 			return result;
 		}
 
-		public virtual int Drop(IDataObject pDataObject, uint grfKeyState, uint itemid, ref DropEffects effect)
+		public virtual int Drop(IDataObject dataObject, uint keyState, uint itemId, ref DropEffects effect)
 		{
 			return VSConstants.E_NOTIMPL;
 		}

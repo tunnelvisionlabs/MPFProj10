@@ -102,13 +102,13 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Runs an action asynchronously on an associated forms synchronization context.
         /// </summary>
-        /// <param name="a">The action to run</param>
+        /// <param name="action">The action to run</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public void Run(Action a)
+        public void Run(Action action)
         {
             if (IsUnitTest)
             {
-                a();
+                action();
                 return;
             }
             Debug.Assert(this.synchronizationContext != null, "The SynchronizationContext must be captured before calling this method");
@@ -120,7 +120,7 @@ namespace Microsoft.VisualStudio.Project
                 try
                 {
                     this.MustBeCalledFromUIThread();
-                    a();
+                    action();
                 }
 #if DEBUG
                 catch (Exception e)
@@ -141,13 +141,13 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Runs an action synchronously on an associated forms synchronization context
         /// </summary>
-        /// <param name="a">The action to run.</param>
+        /// <param name="action">The action to run.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public void RunSync(Action a)
+        public void RunSync(Action action)
         {
             if (IsUnitTest)
             {
-                a();
+                action();
                 return;
             }
             Exception exn = null; ;
@@ -159,7 +159,7 @@ namespace Microsoft.VisualStudio.Project
                 try
                 {
                     this.MustBeCalledFromUIThread();
-                    a();
+                    action();
                 }
                 catch (Exception e)
                 {

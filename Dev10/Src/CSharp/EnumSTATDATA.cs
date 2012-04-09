@@ -21,13 +21,13 @@ namespace Microsoft.VisualStudio.Project
 
 		private readonly IEnumerator _e;
 
-		public EnumSTATDATA(IEnumerable i)
+		public EnumSTATDATA(IEnumerable data)
 		{
-			if (i == null)
-				throw new ArgumentNullException("i");
+			if (data == null)
+				throw new ArgumentNullException("data");
 
-			this._i = i;
-			this._e = i.GetEnumerator();
+			this._i = data;
+			this._e = data.GetEnumerator();
 		}
 
 		void IEnumSTATDATA.Clone(out IEnumSTATDATA clone)

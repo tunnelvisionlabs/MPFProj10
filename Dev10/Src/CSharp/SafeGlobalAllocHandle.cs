@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.Project
     using System;
     using Microsoft.Win32.SafeHandles;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Alloc")]
     public sealed class SafeGlobalAllocHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         public SafeGlobalAllocHandle(IntPtr handle, bool ownsHandle)

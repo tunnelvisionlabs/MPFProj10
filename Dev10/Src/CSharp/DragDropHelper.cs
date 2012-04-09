@@ -26,10 +26,10 @@ namespace Microsoft.VisualStudio.Project
 		public static readonly ushort CF_VSSTGPROJECTITEMS = checked((ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_VSSTGPROJECTITEMS"));
 		public static readonly ushort CF_VSPROJECTCLIPDESCRIPTOR = checked((ushort)UnsafeNativeMethods.RegisterClipboardFormat("CF_PROJECTCLIPBOARDDESCRIPTOR"));
 
-		public static FORMATETC CreateFormatEtc(ushort iFormat)
+		public static FORMATETC CreateFormatEtc(ushort format)
 		{
 			FORMATETC fmt = new FORMATETC();
-			fmt.cfFormat = iFormat;
+			fmt.cfFormat = format;
 			fmt.ptd = IntPtr.Zero;
 			fmt.dwAspect = (uint)DVASPECT.DVASPECT_CONTENT;
 			fmt.lindex = -1;
@@ -37,17 +37,17 @@ namespace Microsoft.VisualStudio.Project
 			return fmt;
 		}
 
-		public static int QueryGetData(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, ref FORMATETC fmtetc)
+		public static int QueryGetData(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject, ref FORMATETC fmtetc)
 		{
-			if (pDataObject == null)
-				throw new ArgumentNullException("pDataObject");
+			if (dataObject == null)
+				throw new ArgumentNullException("dataObject");
 
 			int returnValue = VSConstants.E_FAIL;
 			FORMATETC[] af = new FORMATETC[1];
 			af[0] = fmtetc;
 			try
 			{
-				int result = ErrorHandler.ThrowOnFailure(pDataObject.QueryGetData(af));
+				int result = ErrorHandler.ThrowOnFailure(dataObject.QueryGetData(af));
 				if(result == VSConstants.S_OK)
 				{
 					fmtetc = af[0];
@@ -63,15 +63,15 @@ namespace Microsoft.VisualStudio.Project
 			return returnValue;
 		}
 
-		public static STGMEDIUM GetData(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObject, ref FORMATETC fmtetc)
+		public static STGMEDIUM GetData(Microsoft.VisualStudio.OLE.Interop.IDataObject dataObject, ref FORMATETC fmtetc)
 		{
-			if (pDataObject == null)
-				throw new ArgumentNullException("pDataObject");
+			if (dataObject == null)
+				throw new ArgumentNullException("dataObject");
 
 			FORMATETC[] af = new FORMATETC[1];
 			af[0] = fmtetc;
 			STGMEDIUM[] sm = new STGMEDIUM[1];
-			pDataObject.GetData(af, sm);
+			dataObject.GetData(af, sm);
 			fmtetc = af[0];
 			return sm[0];
 		}
@@ -200,6 +200,7 @@ namespace Microsoft.VisualStudio.Project
 			return ptr;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "s")]
 		public static void CopyStringToHGlobal(string s, IntPtr data, int bufferSize)
 		{
 			if (s == null)
