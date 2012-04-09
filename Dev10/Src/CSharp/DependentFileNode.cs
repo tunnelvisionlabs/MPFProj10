@@ -19,6 +19,7 @@ namespace Microsoft.VisualStudio.Project
 	using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 	using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 	using vsCommandStatus = EnvDTE.vsCommandStatus;
+	using VsMenus = Microsoft.VisualStudio.Shell.VsMenus;
 
 	/// <summary>
 	/// Defines the logic for all dependent file nodes (solution explorer icon, commands etc.)

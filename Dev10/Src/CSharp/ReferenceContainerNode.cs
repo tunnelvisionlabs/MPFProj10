@@ -27,6 +27,7 @@ namespace Microsoft.VisualStudio.Project
     using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
     using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
     using vsCommandStatus = EnvDTE.vsCommandStatus;
+    using VsMenus = Microsoft.VisualStudio.Shell.VsMenus;
 
     [CLSCompliant(false), ComVisible(true)]
     public class ReferenceContainerNode : HierarchyNode, IReferenceContainer

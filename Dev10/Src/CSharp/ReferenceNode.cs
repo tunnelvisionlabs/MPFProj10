@@ -22,6 +22,7 @@ namespace Microsoft.VisualStudio.Project
 	using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 	using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 	using vsCommandStatus = EnvDTE.vsCommandStatus;
+	using VsMenus = Microsoft.VisualStudio.Shell.VsMenus;
 
 	[CLSCompliant(false), ComVisible(true)]
 	public abstract class ReferenceNode : HierarchyNode

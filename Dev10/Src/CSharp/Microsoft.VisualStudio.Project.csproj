@@ -273,7 +273,6 @@
     <Compile Include="TrackDocumentsHelper.cs" />
     <Compile Include="UpdateSolutionEventsListener.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="VsMenus.cs" />
     <Compile Include="UIHierarchyUtilities.cs" />
     <Compile Include="WindowFrameShowAction.cs" />
     <Compile Include="WrapperToolAttributeValue.cs" />
