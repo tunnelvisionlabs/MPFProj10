@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.Project
 	public sealed class LocDisplayNameAttribute : DisplayNameAttribute
 	{
 		#region fields
-		string name;
+		private readonly string name;
 		#endregion
 
 		#region ctors
@@ -31,6 +31,14 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region properties
+		public string Name
+		{
+			get
+			{
+				return name;
+			}
+		}
+
 		public override string DisplayName
 		{
 			get
