@@ -112,8 +112,6 @@
     <Compile Include="AvailableFileBuildActionConverter.cs" />
     <Compile Include="ProjectFileClosingEventArgs.cs" />
     <Compile Include="BuildableProjectConfig.cs" />
-    <Compile Include="BuildAction.cs" />
-    <Compile Include="BuildActionConverter.cs" />
     <Compile Include="BuildKind.cs" />
     <Compile Include="BuildPropertyPageTag.cs" />
     <Compile Include="BuildStatus.cs" />
