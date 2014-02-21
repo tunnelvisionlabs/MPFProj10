@@ -1941,6 +1941,13 @@ namespace Microsoft.VisualStudio.Project
                     this.buildProject = null;
                 }
 
+                if (this._userBuildProject != null)
+                {
+                    this._userBuildProject.ProjectCollection.UnloadProject(this._userBuildProject);
+                    this._userBuildProject.ProjectCollection.UnloadProject(this._userBuildProject.Xml);
+                    this._userBuildProject = null;
+                }
+
                 if (null != imageHandler)
                 {
                     imageHandler.Close();
@@ -6765,7 +6772,7 @@ namespace Microsoft.VisualStudio.Project
                     projectInstance = UserBuildProject.CreateProjectInstance();
             }
 
-            if (this.currentConfig == null)
+            if (projectInstance == null)
             {
                 if (storageType == _PersistStorageType.PST_PROJECT_FILE)
                     throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.FailedToRetrieveProperties, CultureInfo.CurrentUICulture), propertyName));
