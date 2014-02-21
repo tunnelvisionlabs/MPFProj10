@@ -90,35 +90,48 @@ namespace Microsoft.VisualStudio.Project.Automation
 			ProjectNode proj = this.Project.Project;
 			EnvDTE.ProjectItem itemAdded = null;
 
-			using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
+			return UIThread.DoOnUIThread(delegate()
 			{
-				// Determine the operation based on the extension of the filename.
-				// We should run the wizard only if the extension is vstemplate
-				// otherwise it's a clone operation
-				VSADDITEMOPERATION op;
-
-				if(Utilities.IsTemplateFile(fileName))
+				using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
 				{
-					op = VSADDITEMOPERATION.VSADDITEMOP_RUNWIZARD;
+					string fixedFileName = fileName;
+					if(!File.Exists(fileName))
+					{
+						string tempFileName = GetTemplateNoZip(fileName);
+						if(File.Exists(tempFileName))
+						{
+							fixedFileName = tempFileName;
+						}
+					}
+
+					// Determine the operation based on the extension of the filename.
+					// We should run the wizard only if the extension is vstemplate
+					// otherwise it's a clone operation
+					VSADDITEMOPERATION op;
+
+					if(Utilities.IsTemplateFile(fixedFileName))
+					{
+						op = VSADDITEMOPERATION.VSADDITEMOP_RUNWIZARD;
+					}
+					else
+					{
+						op = VSADDITEMOPERATION.VSADDITEMOP_CLONEFILE;
+					}
+
+					VSADDRESULT[] result = new VSADDRESULT[1];
+
+					// It is not a very good idea to throw since the AddItem might return Cancel or Abort.
+					// The problem is that up in the call stack the wizard code does not check whether it has received a ProjectItem or not and will crash.
+					// The other problem is that we cannot get add wizard dialog back if a cancel or abort was returned because we throw and that code will never be executed. Typical catch 22.
+					ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.Id, op, name, 0, new string[1] { fixedFileName }, IntPtr.Zero, result));
+
+					string fileDirectory = proj.GetBaseDirectoryForAddingFiles(this.NodeWithItems);
+					string templateFilePath = System.IO.Path.Combine(fileDirectory, name);
+					itemAdded = this.EvaluateAddResult(result[0], templateFilePath);
 				}
-				else
-				{
-					op = VSADDITEMOPERATION.VSADDITEMOP_CLONEFILE;
-				}
 
-				VSADDRESULT[] result = new VSADDRESULT[1];
-
-				// It is not a very good idea to throw since the AddItem might return Cancel or Abort.
-				// The problem is that up in the call stack the wizard code does not check whether it has received a ProjectItem or not and will crash.
-				// The other problem is that we cannot get add wizard dialog back if a cancel or abort was returned because we throw and that code will never be executed. Typical catch 22.
-				ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.Id, op, name, 0, new string[1] { fileName }, IntPtr.Zero, result));
-
-				string fileDirectory = proj.GetBaseDirectoryForAddingFiles(this.NodeWithItems);
-				string templateFilePath = System.IO.Path.Combine(fileDirectory, name);
-				itemAdded = this.EvaluateAddResult(result[0], templateFilePath);
-			}
-
-			return itemAdded;
+				return itemAdded;
+			});
 		}
 
 		/// <summary>
@@ -136,37 +149,41 @@ namespace Microsoft.VisualStudio.Project.Automation
 			{
 				throw new InvalidOperationException();
 			}
-			//Verify name is not null or empty
-			Utilities.ValidateFileName(this.Project.Project.Site, name);
 
-			//Verify that kind is null, empty, or a physical folder
-			if(!(string.IsNullOrEmpty(kind) || kind.Equals(EnvDTE.Constants.vsProjectItemKindPhysicalFolder)))
+			return UIThread.DoOnUIThread(delegate()
 			{
-				throw new ArgumentException("Parameter specification for AddFolder was not meet", "kind");
-			}
+				//Verify name is not null or empty
+				Utilities.ValidateFileName(this.Project.Project.Site, name);
 
-			for(HierarchyNode child = this.NodeWithItems.FirstChild; child != null; child = child.NextSibling)
-			{
-				if(child.Caption.Equals(name, StringComparison.OrdinalIgnoreCase))
+				//Verify that kind is null, empty, or a physical folder
+				if(!(string.IsNullOrEmpty(kind) || kind.Equals(EnvDTE.Constants.vsProjectItemKindPhysicalFolder)))
 				{
-					throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, "Folder already exists with the name '{0}'", name));
+					throw new ArgumentException("Parameter specification for AddFolder was not meet", "kind");
 				}
-			}
 
-			ProjectNode proj = this.Project.Project;
+				for(HierarchyNode child = this.NodeWithItems.FirstChild; child != null; child = child.NextSibling)
+				{
+					if(child.Caption.Equals(name, StringComparison.OrdinalIgnoreCase))
+					{
+						throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, "Folder already exists with the name '{0}'", name));
+					}
+				}
 
-			HierarchyNode newFolder = null;
-			using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
-			{
+				ProjectNode proj = this.Project.Project;
 
-				//In the case that we are adding a folder to a folder, we need to build up
-				//the path to the project node.
-				name = Path.Combine(this.NodeWithItems.VirtualNodeName, name);
+				HierarchyNode newFolder = null;
+				using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
+				{
 
-				newFolder = proj.CreateFolderNodes(name);
-			}
+					//In the case that we are adding a folder to a folder, we need to build up
+					//the path to the project node.
+					name = Path.Combine(this.NodeWithItems.VirtualNodeName, name);
 
-			return newFolder.GetAutomationObject() as ProjectItem;
+					newFolder = proj.CreateFolderNodes(name);
+				}
+
+				return newFolder.GetAutomationObject() as ProjectItem;
+			});
 		}
 
 		/// <summary>
@@ -215,22 +232,25 @@ namespace Microsoft.VisualStudio.Project.Automation
 				throw new InvalidOperationException();
 			}
 
-			ProjectNode proj = this.Project.Project;
-
-			EnvDTE.ProjectItem itemAdded = null;
-			using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
+			return UIThread.DoOnUIThread(delegate()
 			{
-				VSADDRESULT[] result = new VSADDRESULT[1];
-				ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.Id, op, path, 0, new string[1] { path }, IntPtr.Zero, result));
+				ProjectNode proj = this.Project.Project;
 
-				string fileName = System.IO.Path.GetFileName(path);
-				string fileDirectory = proj.GetBaseDirectoryForAddingFiles(this.NodeWithItems);
-				string filePathInProject = System.IO.Path.Combine(fileDirectory, fileName);
+				EnvDTE.ProjectItem itemAdded = null;
+				using(AutomationScope scope = new AutomationScope(this.Project.Project.Site))
+				{
+					VSADDRESULT[] result = new VSADDRESULT[1];
+					ErrorHandler.ThrowOnFailure(proj.AddItem(this.NodeWithItems.Id, op, path, 0, new string[1] { path }, IntPtr.Zero, result));
 
-				itemAdded = this.EvaluateAddResult(result[0], filePathInProject);
-			}
+					string fileName = System.IO.Path.GetFileName(path);
+					string fileDirectory = proj.GetBaseDirectoryForAddingFiles(this.NodeWithItems);
+					string filePathInProject = System.IO.Path.Combine(fileDirectory, fileName);
 
-			return itemAdded;
+					itemAdded = this.EvaluateAddResult(result[0], filePathInProject);
+				}
+
+				return itemAdded;
+			});
 		}
 
 		/// <summary>
@@ -241,37 +261,75 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <returns>A ProjectItem object.</returns>
 		protected virtual EnvDTE.ProjectItem EvaluateAddResult(VSADDRESULT result, string path)
 		{
-			if(result == VSADDRESULT.ADDRESULT_Success)
+			return UIThread.DoOnUIThread(delegate()
 			{
-				HierarchyNode nodeAdded = this.NodeWithItems.FindChild(path);
-				Debug.Assert(nodeAdded != null, "We should have been able to find the new element in the hierarchy");
-				if(nodeAdded != null)
+				if(result == VSADDRESULT.ADDRESULT_Success)
 				{
-					EnvDTE.ProjectItem item = null;
-					FileNode fileNode = nodeAdded as FileNode;
-					if(fileNode != null)
+					HierarchyNode nodeAdded = this.NodeWithItems.FindChild(path);
+					Debug.Assert(nodeAdded != null, "We should have been able to find the new element in the hierarchy");
+					if(nodeAdded != null)
 					{
-						item = new OAFileItem(this.Project, fileNode);
-					}
-					else
-					{
-						NestedProjectNode projectNode = nodeAdded as NestedProjectNode;
-						if (projectNode != null)
+						EnvDTE.ProjectItem item = null;
+						FileNode fileNode = nodeAdded as FileNode;
+						if(fileNode != null)
 						{
-							item = new OANestedProjectItem(this.Project, projectNode);
+							item = new OAFileItem(this.Project, fileNode);
 						}
 						else
 						{
-							item = new OAProjectItem<HierarchyNode>(this.Project, nodeAdded);
+							NestedProjectNode projectNode = nodeAdded as NestedProjectNode;
+							if (projectNode != null)
+							{
+								item = new OANestedProjectItem(this.Project, projectNode);
+							}
+							else
+							{
+								item = new OAProjectItem<HierarchyNode>(this.Project, nodeAdded);
+							}
 						}
-					}
 
-					this.Items.Add(item);
-					return item;
+						this.Items.Add(item);
+						return item;
+					}
+				}
+				return null;
+			});
+		}
+
+		/// <summary>
+		/// Removes .zip extensions from the components of a path.
+		/// </summary>
+		private static string GetTemplateNoZip(string fileName)
+		{
+			char[] separators = { '\\' };
+			string[] components = fileName.Split(separators);
+
+			for (int i = 0; i < components.Length; i++)
+			{
+				string component = components[i];
+
+				if (Path.GetExtension(component).Equals(".zip", StringComparison.InvariantCultureIgnoreCase))
+				{
+					component = Path.GetFileNameWithoutExtension(component);
+					components[i] = component;
 				}
 			}
-			return null;
+
+			// if first element is a drive, we need to combine the first and second.
+			// Path.Combine does not add a directory separator between the drive and the
+			// first directory.
+			if (components.Length > 1)
+			{
+				if (Path.IsPathRooted(components[0]))
+				{
+					components[0] = string.Format("{0}{1}{2}", components[0], Path.DirectorySeparatorChar, components[1]);
+					components[1] = string.Empty; // Path.Combine drops empty strings.
+				}
+			}
+
+			return Path.Combine(components);
 		}
+
 		#endregion
 	}
 }

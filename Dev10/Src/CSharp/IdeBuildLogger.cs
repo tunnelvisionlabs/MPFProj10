@@ -72,7 +72,7 @@ namespace Microsoft.VisualStudio.Project
     {
         #region fields
 
-        // TODO: Remove these constants when we have a version that suppoerts getting the verbosity using automation.
+        // TODO: Remove these constants when we have a version that supports getting the verbosity using automation.
         private string buildVerbosityRegistryRoot = @"Software\Microsoft\VisualStudio\10.0";
         private const string buildVerbosityRegistrySubKey = @"General";
         private const string buildVerbosityRegistryKey = "MSBuildLoggerVerbosity";

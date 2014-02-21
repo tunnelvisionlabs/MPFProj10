@@ -788,7 +788,7 @@ namespace Microsoft.VisualStudio.Project
 				// We should note that we rely here that if the unload fails then exceptions are not digested and are shown to the user.
 				if(newNode == null || newNode.NestedHierarchy == null)
 				{
-					ErrorHandler.ThrowOnFailure(solution.CloseSolutionElement((uint)__VSSLNCLOSEOPTIONS.SLNCLOSEOPT_UnloadProject | (uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave, this, 0));
+					ErrorHandler.ThrowOnFailure(solution.CloseSolutionElement((uint)__VSSLNCLOSEOPTIONS.SLNCLOSEOPT_UnloadProject | (uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave, this.InteropSafeIVsHierarchy, 0));
 				}
 				else
 				{

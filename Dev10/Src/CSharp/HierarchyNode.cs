@@ -562,31 +562,6 @@ namespace Microsoft.VisualStudio.Project
 
 		#endregion
 
-		#region static methods
-		/// <summary>
-		/// Get the outer IVsHierarchy implementation.
-		/// This is used for scenario where a flavor may be modifying the behavior
-		/// </summary>
-		internal static IVsHierarchy GetOuterHierarchy(HierarchyNode node)
-		{
-			IVsHierarchy hierarchy = null;
-			// The hierarchy of a node is its project node hierarchy
-			IntPtr projectUnknown = Marshal.GetIUnknownForObject(node.projectMgr);
-			try
-			{
-				hierarchy = (IVsHierarchy)Marshal.GetTypedObjectForIUnknown(projectUnknown, typeof(IVsHierarchy));
-			}
-			finally
-			{
-				if(projectUnknown != IntPtr.Zero)
-				{
-					Marshal.Release(projectUnknown);
-				}
-			}
-			return hierarchy;
-		}
-		#endregion
-
 		#region virtual methods
 
         protected virtual void SetParent(HierarchyNode parent, LinkedListNode<HierarchyNode> linkedNode)
@@ -1125,7 +1100,7 @@ namespace Microsoft.VisualStudio.Project
 				uint[] cookie = new uint[1];
 				uint fetched;
 				uint saveOptions = (uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_NoSave;
-				IVsHierarchy srpOurHier = node.projectMgr as IVsHierarchy;
+				IVsHierarchy srpOurHier = node.projectMgr.InteropSafeIVsHierarchy;
 
 				ErrorHandler.ThrowOnFailure(pEnumRdt.Reset());
 				while(VSConstants.S_OK == pEnumRdt.Next(1, cookie, out fetched))
@@ -1232,7 +1207,7 @@ namespace Microsoft.VisualStudio.Project
 					{
 						// we need to get into label edit mode now...
 						// so first select the new guy...
-						ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.projectMgr, child.Id, EXPANDFLAGS.EXPF_SelectItem));
+						ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.projectMgr.InteropSafeIVsUIHierarchy, child.Id, EXPANDFLAGS.EXPF_SelectItem));
 						// them post the rename command to the shell. Folder verification and creation will
 						// happen in the setlabel code...
 						IVsUIShell shell = this.projectMgr.Site.GetService(typeof(SVsUIShell)) as IVsUIShell;
@@ -1266,7 +1241,7 @@ namespace Microsoft.VisualStudio.Project
 			string strFilter = String.Empty;
 			int iDontShowAgain;
 			uint uiFlags;
-			IVsProject3 project = (IVsProject3)this.projectMgr;
+			IVsProject3 project = this.projectMgr.InteropSafeIVsProject3;
 
 			string strBrowseLocations = Path.GetDirectoryName(this.projectMgr.BaseUri.Uri.LocalPath);
 
@@ -1342,7 +1317,7 @@ namespace Microsoft.VisualStudio.Project
 			IVsSolution solution = this.GetService(typeof(IVsSolution)) as IVsSolution;
 			if(solution != null)
 			{
-				ErrorHandler.ThrowOnFailure(solution.GetProjrefOfItem(this.ProjectManager, this.Id, out projref));
+				ErrorHandler.ThrowOnFailure(solution.GetProjrefOfItem(this.ProjectManager.InteropSafeIVsHierarchy, this.Id, out projref));
 				if(String.IsNullOrEmpty(projref))
 				{
 					if(this.ProjectManager.ItemsDraggedOrCutOrCopied != null)
@@ -1448,7 +1423,7 @@ namespace Microsoft.VisualStudio.Project
 			POINTS[] pnts = new POINTS[1];
 			pnts[0].x = points.x;
 			pnts[0].y = points.y;
-			return shell.ShowContextMenu(0, ref menuGroup, menuId, pnts, (Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget)this);
+			return shell.ShowContextMenu(0, ref menuGroup, menuId, pnts, (IOleCommandTarget)this);
 		}
 
 		#region initiation of command execution

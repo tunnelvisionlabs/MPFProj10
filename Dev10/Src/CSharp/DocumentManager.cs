@@ -144,7 +144,7 @@ namespace Microsoft.VisualStudio.Project
 				uint[] itemIdOpen = new uint[1];
 				IVsWindowFrame windowFrame;
 				int fOpen;
-				ErrorHandler.ThrowOnFailure(shell.IsDocumentOpen(this.Node.ProjectManager, this.Node.Id, this.Node.Url, ref logicalView, grfIDO, out pHierOpen, itemIdOpen, out windowFrame, out fOpen));
+				ErrorHandler.ThrowOnFailure(shell.IsDocumentOpen(this.Node.ProjectManager.InteropSafeIVsUIHierarchy, this.Node.Id, this.Node.Url, ref logicalView, grfIDO, out pHierOpen, itemIdOpen, out windowFrame, out fOpen));
 
 				if(windowFrame != null)
 				{
@@ -209,7 +209,7 @@ namespace Microsoft.VisualStudio.Project
 
 			isOpen = true;
 			// check if the doc is opened by another project
-			if(Utilities.IsSameComObject(this.node.ProjectManager, hierarchy))
+			if(Utilities.IsSameComObject(this.node.ProjectManager.InteropSafeIVsHierarchy, hierarchy))
 			{
 				isOpenedByUs = true;
 			}

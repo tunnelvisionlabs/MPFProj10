@@ -70,8 +70,11 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				ProjectItems items = new OAProjectItems(this.Project, this.Node);
-				return items;
+				return UIThread.DoOnUIThread(delegate()
+				{
+					ProjectItems items = new OAProjectItems(this.Project, this.Node);
+					return items;
+				});
 			}
 		}
 

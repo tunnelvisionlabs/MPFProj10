@@ -827,7 +827,7 @@ namespace Microsoft.VisualStudio.Project
                     // get inptr for hierarchy
                     projectPtr = Marshal.GetIUnknownForObject(this.nestedHierarchy);
                     Debug.Assert(projectPtr != IntPtr.Zero, " Project pointer for the nested hierarchy has not been initialized");
-                    ErrorHandler.ThrowOnFailure(rdt.RegisterAndLockDocument((uint)flags, this.ProjectPath, this.ProjectManager, this.Id, projectPtr, out docCookie));
+                    ErrorHandler.ThrowOnFailure(rdt.RegisterAndLockDocument((uint)flags, this.ProjectPath, this.ProjectManager.InteropSafeIVsHierarchy, this.Id, projectPtr, out docCookie));
 
                     this.DocCookie = docCookie;
                     Debug.Assert(this.DocCookie != (uint)ShellConstants.VSDOCCOOKIE_NIL, "Invalid cookie when registering document in the running document table.");

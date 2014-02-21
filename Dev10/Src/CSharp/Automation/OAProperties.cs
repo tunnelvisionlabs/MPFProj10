@@ -144,12 +144,15 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				if(this.target == null || this.target.Node == null || this.target.Node.ProjectManager == null || this.target.Node.ProjectManager.IsClosed ||
-					this.target.Node.ProjectManager.Site == null)
+				return UIThread.DoOnUIThread(delegate()
 				{
-					throw new InvalidOperationException();
-				}
-				return this.target.Node.ProjectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+					if(this.target == null || this.target.Node == null || this.target.Node.ProjectManager == null || this.target.Node.ProjectManager.IsClosed ||
+						this.target.Node.ProjectManager.Site == null)
+					{
+						throw new InvalidOperationException();
+					}
+					return this.target.Node.ProjectManager.Site.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+				});
 			}
 		}
 

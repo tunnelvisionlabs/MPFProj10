@@ -111,7 +111,7 @@ namespace Microsoft.VisualStudio.Project
 
 			int len = files.Length;
 			VSQUERYADDFILERESULTS[] summary = new VSQUERYADDFILERESULTS[1];
-			ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnQueryAddFiles(this.projectMgr, len, files, flags, summary, null));
+			ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnQueryAddFiles(this.projectMgr.InteropSafeIVsProject3, len, files, flags, summary, null));
 			if(summary[0] == VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK)
 			{
 				return false;
@@ -127,7 +127,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) == 0)
 			{
-				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterAddFilesEx(this.projectMgr, 1, new string[1] { file }, new VSADDFILEFLAGS[1] { flag }));
+				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterAddFilesEx(this.projectMgr.InteropSafeIVsProject3, 1, new string[1] { file }, new VSADDFILEFLAGS[1] { flag }));
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace Microsoft.VisualStudio.Project
 
 			VSQUERYREMOVEFILERESULTS[] summary = new VSQUERYREMOVEFILERESULTS[1];
 
-			ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnQueryRemoveFiles(this.projectMgr, length, files, flags, summary, null));
+			ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnQueryRemoveFiles(this.projectMgr.InteropSafeIVsProject3, length, files, flags, summary, null));
 			if(summary[0] == VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveNotOK)
 			{
 				return false;
@@ -169,7 +169,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) == 0)
 			{
-				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterRemoveFiles(this.projectMgr, 1, new string[1] { file }, new VSREMOVEFILEFLAGS[1] { flag }));
+				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterRemoveFiles(this.projectMgr.InteropSafeIVsProject3, 1, new string[1] { file }, new VSREMOVEFILEFLAGS[1] { flag }));
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			int iCanContinue = 0;
-			ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnQueryRenameFile(this.projectMgr, oldFileName, newFileName, flag, out iCanContinue));
+			ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnQueryRenameFile(this.projectMgr.InteropSafeIVsProject3, oldFileName, newFileName, flag, out iCanContinue));
 			return (iCanContinue != 0);
 		}
 
@@ -201,7 +201,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) == 0)
 			{
-				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterRenameFile(this.projectMgr, strOldName, strNewName, flag));
+				ErrorHandler.ThrowOnFailure(this.GetIVsTrackProjectDocuments2().OnAfterRenameFile(this.projectMgr.InteropSafeIVsProject3, strOldName, strNewName, flag));
 			}
 		}
 		#endregion

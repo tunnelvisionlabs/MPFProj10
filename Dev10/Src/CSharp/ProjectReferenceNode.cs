@@ -574,7 +574,7 @@ namespace Microsoft.VisualStudio.Project
 
 			int circular;
 			Marshal.ThrowExceptionForHR(solutionBuildManager.CalculateProjectDependencies());
-			Marshal.ThrowExceptionForHR(solutionBuildManager.QueryProjectDependency(referencedHierarchy, this.ProjectManager, out circular));
+			Marshal.ThrowExceptionForHR(solutionBuildManager.QueryProjectDependency(referencedHierarchy, this.ProjectManager.InteropSafeIVsHierarchy, out circular));
 
 			return circular != 0;
 		}

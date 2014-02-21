@@ -858,7 +858,7 @@ namespace Microsoft.VisualStudio.Project
 			// renamed node.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.Id, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager.InteropSafeIVsUIHierarchy, this.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
 
             ProjectManager.ItemIdMap.UpdateCanonicalName(this);

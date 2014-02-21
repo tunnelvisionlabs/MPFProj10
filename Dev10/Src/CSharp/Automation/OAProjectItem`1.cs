@@ -143,11 +143,14 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				if(this.node.NodeProperties == null)
+				return UIThread.DoOnUIThread(delegate()
 				{
-					return null;
-				}
-				return new OAProperties(this.node.NodeProperties);
+					if(this.node.NodeProperties == null)
+					{
+						return null;
+					}
+					return new OAProperties(this.node.NodeProperties);
+				});
 			}
 		}
 
@@ -215,30 +218,33 @@ namespace Microsoft.VisualStudio.Project.Automation
 		{
 			get
 			{
-				// Get the parent node
-				HierarchyNode parentNode = this.node.Parent;
-				Debug.Assert(parentNode != null, "Failed to get the parent node");
+				return UIThread.DoOnUIThread(delegate()
+				{
+					// Get the parent node
+					HierarchyNode parentNode = this.node.Parent;
+					Debug.Assert(parentNode != null, "Failed to get the parent node");
 
-				// Get the ProjectItems object for the parent node
-				if(parentNode is ProjectNode)
-				{
-					// The root node for the project
-					return ((OAProject)parentNode.GetAutomationObject()).ProjectItems;
-				}
-				else if(parentNode is FileNode && parentNode.FirstChild != null)
-				{
-					// The item has children
-					return ((OAProjectItem<FileNode>)parentNode.GetAutomationObject()).ProjectItems;
-				}
-				else if(parentNode is FolderNode)
-				{
-					return ((OAProjectItem<FolderNode>)parentNode.GetAutomationObject()).ProjectItems;
-				}
-				else
-				{
-					// Not supported. Override this method in derived classes to return appropriate collection object
-					throw new NotSupportedException();
-				}
+					// Get the ProjectItems object for the parent node
+					if(parentNode is ProjectNode)
+					{
+						// The root node for the project
+						return ((OAProject)parentNode.GetAutomationObject()).ProjectItems;
+					}
+					else if(parentNode is FileNode && parentNode.FirstChild != null)
+					{
+						// The item has children
+						return ((OAProjectItem<FileNode>)parentNode.GetAutomationObject()).ProjectItems;
+					}
+					else if(parentNode is FolderNode)
+					{
+						return ((OAProjectItem<FolderNode>)parentNode.GetAutomationObject()).ProjectItems;
+					}
+					else
+					{
+						// Not supported. Override this method in derived classes to return appropriate collection object
+						throw new NotSupportedException();
+					}
+				});
 			}
 		}
 		/// <summary>
@@ -344,10 +350,13 @@ namespace Microsoft.VisualStudio.Project.Automation
 					throw new InvalidOperationException();
 				}
 
-				using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+				UIThread.DoOnUIThread(delegate()
 				{
-					this.node.SetEditLabel(value);
-				}
+					using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+					{
+						this.node.SetEditLabel(value);
+					}
+				});
 			}
 		}
 		/// <summary>
@@ -360,10 +369,13 @@ namespace Microsoft.VisualStudio.Project.Automation
 				throw new InvalidOperationException();
 			}
 
-			using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+			UIThread.DoOnUIThread(delegate()
 			{
-				this.node.Remove(false);
-			}
+				using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+				{
+					this.node.Remove(false);
+				}
+			});
 		}
 
 		/// <summary>
@@ -376,10 +388,13 @@ namespace Microsoft.VisualStudio.Project.Automation
 				throw new InvalidOperationException();
 			}
 
-			using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+			UIThread.DoOnUIThread(delegate()
 			{
-				this.node.Remove(true);
-			}
+				using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+				{
+					this.node.Remove(true);
+				}
+			});
 		}
 
 		/// <summary>
@@ -433,17 +448,20 @@ namespace Microsoft.VisualStudio.Project.Automation
 				throw new InvalidOperationException();
 			}
 
-			using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
+			UIThread.DoOnUIThread(delegate()
 			{
-				IVsUIHierarchyWindow uiHierarchy = UIHierarchyUtilities.GetUIHierarchyWindow(this.node.ProjectManager.Site, HierarchyNode.SolutionExplorer);
-				if(uiHierarchy == null)
+				using(AutomationScope scope = new AutomationScope(this.Node.ProjectManager.Site))
 				{
-					throw new InvalidOperationException();
+					IVsUIHierarchyWindow uiHierarchy = UIHierarchyUtilities.GetUIHierarchyWindow(this.node.ProjectManager.Site, HierarchyNode.SolutionExplorer);
+					if(uiHierarchy == null)
+					{
+						throw new InvalidOperationException();
+					}
+
+					ErrorHandler.ThrowOnFailure(uiHierarchy.ExpandItem(this.node.ProjectManager.InteropSafeIVsUIHierarchy, this.node.Id, EXPANDFLAGS.EXPF_ExpandFolder));
+
 				}
-
-				ErrorHandler.ThrowOnFailure(uiHierarchy.ExpandItem(this.node.ProjectManager, this.node.Id, EXPANDFLAGS.EXPF_ExpandFolder));
-
-			}
+			});
 		}
 
 		/// <summary>

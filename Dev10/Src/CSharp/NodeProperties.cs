@@ -155,7 +155,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				throw new InvalidOperationException();
 			}
-			hier = HierarchyNode.GetOuterHierarchy(this.node.ProjectManager);
+			hier = this.node.ProjectManager.InteropSafeIVsHierarchy;
 			itemid = this.node.Id;
 			return VSConstants.S_OK;
 		}
@@ -217,7 +217,7 @@ namespace Microsoft.VisualStudio.Project
 				// Retrieve the list of guids from hierarchy properties.
 				// Because a flavor could modify that list we must make sure we are calling the outer most implementation of IVsHierarchy
 				string guidsList = String.Empty;
-				IVsHierarchy hierarchy = HierarchyNode.GetOuterHierarchy(this.Node.ProjectManager);
+				IVsHierarchy hierarchy = this.Node.ProjectManager.InteropSafeIVsHierarchy;
 				object variant = null;
 				ErrorHandler.ThrowOnFailure(hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID2.VSHPROPID_PropertyPagesCLSIDList, out variant));
 				guidsList = (string)variant;
@@ -245,7 +245,7 @@ namespace Microsoft.VisualStudio.Project
 
 		bool EnvDTE80.IInternalExtenderProvider.CanExtend(string extenderCATID, string extenderName, object extendeeObject)
 		{
-			EnvDTE80.IInternalExtenderProvider outerHierarchy = HierarchyNode.GetOuterHierarchy(this.Node) as EnvDTE80.IInternalExtenderProvider;
+			EnvDTE80.IInternalExtenderProvider outerHierarchy = this.Node.ProjectManager.InteropSafeIVsHierarchy as EnvDTE80.IInternalExtenderProvider;
 
 
 			if(outerHierarchy != null)
@@ -257,7 +257,7 @@ namespace Microsoft.VisualStudio.Project
 
 		object EnvDTE80.IInternalExtenderProvider.GetExtender(string extenderCATID, string extenderName, object extendeeObject, EnvDTE.IExtenderSite extenderSite, int cookie)
 		{
-			EnvDTE80.IInternalExtenderProvider outerHierarchy = HierarchyNode.GetOuterHierarchy(this.Node) as EnvDTE80.IInternalExtenderProvider;
+			EnvDTE80.IInternalExtenderProvider outerHierarchy = this.Node.ProjectManager.InteropSafeIVsHierarchy as EnvDTE80.IInternalExtenderProvider;
 
 			if(outerHierarchy != null)
 			{
@@ -269,7 +269,7 @@ namespace Microsoft.VisualStudio.Project
 
 		object EnvDTE80.IInternalExtenderProvider.GetExtenderNames(string extenderCATID, object extendeeObject)
 		{
-			EnvDTE80.IInternalExtenderProvider outerHierarchy = HierarchyNode.GetOuterHierarchy(this.Node) as EnvDTE80.IInternalExtenderProvider;
+			EnvDTE80.IInternalExtenderProvider outerHierarchy = this.Node.ProjectManager.InteropSafeIVsHierarchy as EnvDTE80.IInternalExtenderProvider;
 
 			if(outerHierarchy != null)
 			{

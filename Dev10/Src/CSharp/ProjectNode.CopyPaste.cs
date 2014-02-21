@@ -504,7 +504,7 @@ namespace Microsoft.VisualStudio.Project
 					{
 						foreach (HierarchyNode node in this.ItemsDraggedOrCutOrCopied)
 						{
-							ErrorHandler.ThrowOnFailure(w.ExpandItem((IVsUIHierarchy)this, node.Id, first ? EXPANDFLAGS.EXPF_CutHighlightItem : EXPANDFLAGS.EXPF_AddCutHighlightItem));
+							ErrorHandler.ThrowOnFailure(w.ExpandItem(this.InteropSafeIVsUIHierarchy, node.Id, first ? EXPANDFLAGS.EXPF_CutHighlightItem : EXPANDFLAGS.EXPF_AddCutHighlightItem));
 							first = false;
 						}
 					}
@@ -569,7 +569,7 @@ namespace Microsoft.VisualStudio.Project
 			ErrorHandler.ThrowOnFailure(sourceHierarchy.ParseCanonicalName(folder, out itemID));
 
 			// Ensure we don't end up in an endless recursion
-			if(Utilities.IsSameComObject(this, sourceHierarchy))
+			if(Utilities.IsSameComObject(this.InteropSafeIVsHierarchy, sourceHierarchy))
 			{
 				HierarchyNode cursorNode = targetNode;
 				while(cursorNode != null)
@@ -872,7 +872,7 @@ namespace Microsoft.VisualStudio.Project
 			if(register && this.copyPasteCookie == 0)
 			{
 				// Register
-				ErrorHandler.ThrowOnFailure(clipboardHelper.AdviseClipboardHelperEvents(this, out this.copyPasteCookie));
+				ErrorHandler.ThrowOnFailure(clipboardHelper.AdviseClipboardHelperEvents(this.InteropSafeIVsUIHierWinClipboardHelperEvents, out this.copyPasteCookie));
 				Debug.Assert(this.copyPasteCookie != 0, "AdviseClipboardHelperEvents returned an invalid cookie");
 			}
 			else if(!register && this.copyPasteCookie != 0)
@@ -1070,7 +1070,7 @@ namespace Microsoft.VisualStudio.Project
 					}
 					else if(w != null)
 					{
-						ErrorHandler.ThrowOnFailure(w.ExpandItem((IVsUIHierarchy)this, node.Id, EXPANDFLAGS.EXPF_UnCutHighlightItem));
+						ErrorHandler.ThrowOnFailure(w.ExpandItem(this.InteropSafeIVsUIHierarchy, node.Id, EXPANDFLAGS.EXPF_UnCutHighlightItem));
 					}
 				}
 			}

@@ -765,7 +765,7 @@ namespace Microsoft.VisualStudio.Project
             // Retrive the list of guids from hierarchy properties.
             // Because a flavor could modify that list we must make sure we are calling the outer most implementation of IVsHierarchy
             string guidsList = String.Empty;
-            IVsHierarchy hierarchy = HierarchyNode.GetOuterHierarchy(this._project);
+            IVsHierarchy hierarchy = this._project.InteropSafeIVsHierarchy;
             object variant = null;
             ErrorHandler.ThrowOnFailure(hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID2.VSHPROPID_CfgPropertyPagesCLSIDList, out variant), new int[] { VSConstants.DISP_E_MEMBERNOTFOUND, VSConstants.E_NOTIMPL });
             guidsList = (string)variant;

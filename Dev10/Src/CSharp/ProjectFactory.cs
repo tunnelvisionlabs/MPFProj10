@@ -53,16 +53,22 @@ namespace Microsoft.VisualStudio.Project
 	using System.Runtime.InteropServices;
 	using Microsoft.VisualStudio.Shell.Interop;
 	using MSBuild = Microsoft.Build.Evaluation;
+#if DEV11
+	using Microsoft.VisualStudio.Shell;
+#endif
 
 	/// <summary>
 	/// Creates projects within the solution
 	/// </summary>
 	[CLSCompliant(false)]
-	public abstract class ProjectFactory : Microsoft.VisualStudio.Shell.Flavor.FlavoredProjectFactoryBase
+	public abstract class ProjectFactory : Microsoft.VisualStudio.Shell.Flavor.FlavoredProjectFactoryBase //, IVsAsynchronousProjectCreate
 	{
 		#region fields
 		private readonly Microsoft.VisualStudio.Shell.Package package;
 		private readonly System.IServiceProvider site;
+#if DEV11
+		private static readonly Lazy<IVsTaskSchedulerService> taskSchedulerService = new Lazy<IVsTaskSchedulerService>(() => Package.GetGlobalService(typeof(SVsTaskSchedulerService)) as IVsTaskSchedulerService);
+#endif
 
 		/// <summary>
 		/// The msbuild engine that we are going to use.
@@ -128,6 +134,38 @@ namespace Microsoft.VisualStudio.Project
 			// Please be aware that this methods needs that ServiceProvider is valid, thus the ordering of calls in the ctor matters.
 			this.buildEngine = Utilities.InitializeMsBuildEngine(this.buildEngine, this.site);
 		}
+		#endregion
+
+		#region methods
+
+#if DEV11 // IVsAsynchronousProjectCreate
+		public virtual bool CanCreateProjectAsynchronously(ref Guid rguidProjectID, string filename, uint flags)
+		{
+			return true;
+		}
+
+		public void OnBeforeCreateProjectAsync(ref Guid rguidProjectID, string filename, string location, string pszName, uint flags)
+		{
+		}
+
+		public virtual IVsTask CreateProjectAsync(ref Guid rguidProjectID, string filename, string location, string pszName, uint flags)
+		{
+			Guid iid = typeof(IVsHierarchy).GUID;
+			return VsTaskLibraryHelper.CreateAndStartTask(taskSchedulerService.Value, VsTaskRunContext.UIThreadBackgroundPriority, VsTaskLibraryHelper.CreateTaskBody(() =>
+			{
+				IntPtr project;
+				int cancelled;
+				CreateProject(filename, location, pszName, flags, ref iid, out project, out cancelled);
+				if (cancelled != 0)
+				{
+					throw new OperationCanceledException();
+				}
+
+				return Marshal.GetObjectForIUnknown(project);
+			}));
+		}
+#endif
+
 		#endregion
 
 		#region abstract methods

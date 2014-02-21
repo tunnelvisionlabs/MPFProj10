@@ -86,10 +86,19 @@ namespace Microsoft.VisualStudio.Project
 			{
 				throw new InvalidOperationException();
 			}
+
+			this.InteropSafeIVsSolutionEvents = Utilities.GetOuterAs<IVsSolutionEvents>(this);
 		}
 		#endregion
 
 		#region properties
+
+		public IVsSolutionEvents InteropSafeIVsSolutionEvents
+		{
+			get;
+			protected set;
+		}
+
 		protected uint EventsCookie
 		{
 			get
@@ -235,7 +244,7 @@ namespace Microsoft.VisualStudio.Project
 		{
 			if(this.solution != null)
 			{
-				ErrorHandler.ThrowOnFailure(this.solution.AdviseSolutionEvents(this, out this.eventsCookie));
+				ErrorHandler.ThrowOnFailure(this.solution.AdviseSolutionEvents(this.InteropSafeIVsSolutionEvents, out this.eventsCookie));
 			}
 		}
 

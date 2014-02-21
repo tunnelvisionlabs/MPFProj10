@@ -802,6 +802,32 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
+        /// Get the outer T implementation
+        /// </summary>
+        internal static T GetOuterAs<T>(object o)
+            where T : class
+        {
+            T hierarchy = null;
+
+            // The hierarchy of a node is its project node hierarchy.
+            IntPtr projectUnknown = Marshal.GetIUnknownForObject(o);
+
+            try
+            {
+                hierarchy = (T)Marshal.GetTypedObjectForIUnknown(projectUnknown, typeof(T));
+            }
+            finally
+            {
+                if (projectUnknown != IntPtr.Zero)
+                {
+                    Marshal.Release(projectUnknown);
+                }
+            }
+
+            return hierarchy;
+        }
+
+        /// <summary>
         /// Gets an instance of an EnumConverter for enums that have PropertyPageTypeConverter attribute
         /// </summary>
         /// <typeparam name="T">The type to search for the PropertyPageTypeConverter attribute.</typeparam>
@@ -976,7 +1002,9 @@ namespace Microsoft.VisualStudio.Project
         /// Retrives the configuration and the platform using the IVsSolutionBuildManager2 interface.
         /// </summary>
         /// <param name="serviceProvider">A service provider.</param>
-        /// <param name="hierarchy">The hierrachy whose configuration is requested.</param>
+        /// <param name="hierarchy">The hierarchy whose configuration is requested.  This method calls into 
+        /// native code and may be called on a background thread, so make sure the IVsHierarchy passed is 
+        /// safe to use for that sort of interop.</param>
         /// <param name="configuration">The name of the active configuration.</param>
         /// <param name="platform">The name of the platform.</param>
         /// <returns>true if successfull.</returns>

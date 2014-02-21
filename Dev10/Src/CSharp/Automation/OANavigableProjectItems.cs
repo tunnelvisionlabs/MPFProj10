@@ -309,17 +309,20 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <returns>A List of project items</returns>
 		protected IList<EnvDTE.ProjectItem> GetListOfProjectItems()
 		{
-			List<EnvDTE.ProjectItem> list = new List<EnvDTE.ProjectItem>();
-			for(HierarchyNode child = this.NodeWithItems.FirstChild; child != null; child = child.NextSibling)
+			return UIThread.DoOnUIThread(delegate()
 			{
-				EnvDTE.ProjectItem item = child.GetAutomationObject() as EnvDTE.ProjectItem;
-				if(null != item)
+				List<EnvDTE.ProjectItem> list = new List<EnvDTE.ProjectItem>();
+				for(HierarchyNode child = this.NodeWithItems.FirstChild; child != null; child = child.NextSibling)
 				{
-					list.Add(item);
+					EnvDTE.ProjectItem item = child.GetAutomationObject() as EnvDTE.ProjectItem;
+					if(null != item)
+					{
+						list.Add(item);
+					}
 				}
-			}
 
-			return list;
+				return list;
+			});
 		}
 		#endregion
 	}

@@ -53,6 +53,7 @@ namespace Microsoft.VisualStudio.Project
     using System.Globalization;
     using System.Threading;
     using System.Windows.Forms;
+    using Microsoft.VisualStudio.Shell;
 
     public sealed class UIThread : IDisposable
     {
@@ -210,6 +211,24 @@ namespace Microsoft.VisualStudio.Project
                 if (!exn.Data.Contains(WrappedStacktraceKey)) exn.Data[WrappedStacktraceKey] = exn.StackTrace;
                 throw exn;
             }
+        }
+
+        /// <summary>
+        /// Performs a callback on the UI thread, blocking until the action completes.  Uses the VS mechanism 
+        /// of marshalling back to the main STA thread via COM RPC.
+        /// </summary>
+        internal static T DoOnUIThread<T>(Func<T> callback)
+        {
+            return ThreadHelper.Generic.Invoke<T>(callback);
+        }
+
+        /// <summary>
+        /// Performs a callback on the UI thread, blocking until the action completes.  Uses the VS mechanism 
+        /// of marshalling back to the main STA thread via COM RPC.
+        /// </summary>
+        internal static void DoOnUIThread(Action callback)
+        {
+            ThreadHelper.Generic.Invoke(callback);
         }
 
         /// <summary>

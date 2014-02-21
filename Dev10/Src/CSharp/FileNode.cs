@@ -939,7 +939,7 @@ namespace Microsoft.VisualStudio.Project
 			// renamed node.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.Id, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager.InteropSafeIVsUIHierarchy, this.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
 
             //Update FirstChild
@@ -1306,7 +1306,7 @@ namespace Microsoft.VisualStudio.Project
                     this.ProjectManager.SuspendMSBuild();
                     ErrorHandler.ThrowOnFailure(pRDT.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_NoLock, oldName, out pIVsHierarchy, out itemId, out docData, out uiVsDocCookie));
 
-                    if(pIVsHierarchy != null && !Utilities.IsSameComObject(pIVsHierarchy, this.ProjectManager))
+                    if(pIVsHierarchy != null && !Utilities.IsSameComObject(pIVsHierarchy, this.ProjectManager.InteropSafeIVsHierarchy))
                     {
                         // Don't rename it if it wasn't opened by us.
                         return false;
@@ -1405,7 +1405,7 @@ namespace Microsoft.VisualStudio.Project
             // Since we are already in solution explorer, it is extremely unlikely that we get a null return.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager, this.Id, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager.InteropSafeIVsUIHierarchy, this.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
         }
 
