@@ -3,3 +3,6 @@
 *.suo
 obj/
 [Bb]in/
+
+# Ignore NuGet package output
+/Dev10/nuget/release/

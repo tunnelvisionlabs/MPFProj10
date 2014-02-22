@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.VisualStudio.Project</RootNamespace>
-    <AssemblyName>Microsoft.VisualStudio.Project</AssemblyName>
+    <AssemblyName>Microsoft.VisualStudio.Project.10.0</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -34,6 +34,7 @@
     <DefineConstants>TRACE;DEV10</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\dev10\Release\Microsoft.VisualStudio.Project.10.0.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

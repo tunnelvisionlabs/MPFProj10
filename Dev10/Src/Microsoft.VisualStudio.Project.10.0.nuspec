@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.VisualStudio.Project.10.0</id>
+    <version>0.0.0</version>
+    <authors>Sam Harwell et. al.</authors>
+    <owners>Sam Harwell</owners>
+    <description>The Managed Package Framework for Visual Studio Projects, for extensions targeting Visual Studio 2010 and newer.</description>
+    <language>en-us</language>
+    <projectUrl>https://raw.github.com/sharwell/MPFProj10</projectUrl>
+    <licenseUrl>https://raw.github.com/sharwell/MPFProj10/v$version$/LICENSE.txt</licenseUrl>
+    <!--<iconUrl></iconUrl>-->
+    <copyright>Copyright © Microsoft Corporation 2014</copyright>
+    <releaseNotes>https://github.com/sharwell/MPFProj10/releases/v$version$</releaseNotes>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <tags>mpfproj mpfproj10 mpfproj11 mpfproj12 vsix</tags>
+    <title>Managed Package Framework for Visual Studio 2010 and newer</title>
+    <summary>The Managed Package Framework for Visual Studio Projects</summary>
+  </metadata>
+  <files>
+    <!-- Runtime Libraries -->
+
+    <file src=".\CSharp\bin\dev10\$Configuration$\Microsoft.VisualStudio.Project.10.0.dll" target="lib\net40"/>
+    <file src=".\CSharp\bin\dev10\$Configuration$\Microsoft.VisualStudio.Project.10.0.pdb" target="lib\net40"/>
+    <file src=".\CSharp\bin\dev10\$Configuration$\Microsoft.VisualStudio.Project.10.0.xml" target="lib\net40"/>
+
+    <!-- Source Code -->
+
+    <file exclude=".\CSharp\obj\**\*.cs" src=".\CSharp\**\*.cs" target="src"/>
+  </files>
+</package>
