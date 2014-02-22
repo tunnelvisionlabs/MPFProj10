@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project", "Src\CSharp\Microsoft.VisualStudio.Project.csproj", "{CACB60A9-1E76-4F92-8831-B134A658C695}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.10.0", "Src\CSharp\Microsoft.VisualStudio.Project.10.0.csproj", "{CACB60A9-1E76-4F92-8831-B134A658C695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.11.0", "Src\CSharp\Microsoft.VisualStudio.Project.11.0.csproj", "{89677F07-52A5-4703-8AC1-D79E637CAE26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{CACB60A9-1E76-4F92-8831-B134A658C695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CACB60A9-1E76-4F92-8831-B134A658C695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CACB60A9-1E76-4F92-8831-B134A658C695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89677F07-52A5-4703-8AC1-D79E637CAE26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89677F07-52A5-4703-8AC1-D79E637CAE26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89677F07-52A5-4703-8AC1-D79E637CAE26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89677F07-52A5-4703-8AC1-D79E637CAE26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
