@@ -1167,7 +1167,7 @@ namespace Microsoft.VisualStudio.Project
 		/// items to let its parent accept the drop
 		/// </summary>
 		/// <returns>HierarchyNode that accept the drop handling</returns>
-		protected internal virtual HierarchyNode GetDragTargetHandlerNode()
+		public virtual HierarchyNode GetDragTargetHandlerNode()
 		{
 			return this;
 		}

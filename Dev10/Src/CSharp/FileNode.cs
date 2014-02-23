@@ -521,7 +521,7 @@ namespace Microsoft.VisualStudio.Project
         /// node delegate to the project and a folder/project node to itself.
         /// </summary>
         /// <returns></returns>
-        protected internal override HierarchyNode GetDragTargetHandlerNode()
+        public override HierarchyNode GetDragTargetHandlerNode()
         {
             Debug.Assert(this.ProjectManager != null, " The project manager is null for the filenode");
             HierarchyNode handlerNode = this;

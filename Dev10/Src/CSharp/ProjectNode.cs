@@ -3448,7 +3448,7 @@ namespace Microsoft.VisualStudio.Project
         /// Gets the list of selected HierarchyNode objects
         /// </summary>
         /// <returns>A list of HierarchyNode objects</returns>
-        protected internal virtual IList<HierarchyNode> GetSelectedNodes()
+        public virtual IList<HierarchyNode> GetSelectedNodes()
         {
             // Retrieve shell interface in order to get current selection
             IVsMonitorSelection monitorSelection = this.GetService(typeof(IVsMonitorSelection)) as IVsMonitorSelection;
@@ -3576,7 +3576,7 @@ namespace Microsoft.VisualStudio.Project
         /// Toggles the state of Show all files
         /// </summary>
         /// <returns>S_OK if it's possible to toggle the state, OLECMDERR_E_NOTSUPPORTED if not</returns>
-        internal int ToggleShowAllFiles()
+        public virtual int ToggleShowAllFiles()
         {
             if (this.ProjectManager == null || this.ProjectManager.IsClosed)
             {
@@ -4203,7 +4203,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="file">The file to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added file.</returns>
-        public ProjectElement AddFileToMSBuild(string file)
+        public virtual ProjectElement AddFileToMSBuild(string file)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -4262,7 +4262,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="folder">The folder to be added.</param>
         /// <returns>A non-null ProjectElement describing the newly added folder.</returns>
-        protected ProjectElement AddFolderToMSBuild(string folder)
+        protected virtual ProjectElement AddFolderToMSBuild(string folder)
         {
             if (folder == null)
                 throw new ArgumentNullException("folder");
