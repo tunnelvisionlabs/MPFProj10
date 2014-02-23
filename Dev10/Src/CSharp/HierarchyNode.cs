@@ -1016,10 +1016,11 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			// the project node has no parentNode
-			if(this.parentNode != null)
+			HierarchyNode parent = this.parentNode;
+			if(parent != null)
 			{
 				// Remove from the Hierarchy
-				this.parentNode.RemoveChild(this);
+				parent.RemoveChild(this);
 			}
 
 			// We save here the path to delete since this.Url might call the Include which will be deleted by the RemoveFromProjectFile call.
@@ -1047,11 +1048,14 @@ namespace Microsoft.VisualStudio.Project
 			Debug.Assert(removeFlags != null, "At least an empty array should be returned for the GetRemoveFileFlags");
 			this.ProjectManager.Tracker.OnItemRemoved(documentToRemove, removeFlags[0]);
 
-			// Notify hierarchy event listeners that we have removed the item
-			parentNode.OnChildRemoved(new HierarchyNodeEventArgs(this));
+			if (parent != null)
+			{
+				// Notify hierarchy event listeners that we have removed the item
+				parent.OnChildRemoved(new HierarchyNodeEventArgs(this));
 
-			// Notify hierarchy event listeners that items have been invalidated
-			OnInvalidateItems(this.parentNode);
+				// Notify hierarchy event listeners that items have been invalidated
+				OnInvalidateItems(parent);
+			}
 
 			// Dispose the node now that is deleted.
 			this.Dispose(true);
