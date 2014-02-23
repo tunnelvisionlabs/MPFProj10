@@ -2130,6 +2130,10 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands2K.EXCLUDEFROMPROJECT:
                         result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusInvisible;
                         return VSConstants.S_OK;
+
+                    case VsCommands2K.SLNREFRESH:
+                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
+                        return VSConstants.S_OK;
                 }
             }
             else
@@ -2173,6 +2177,10 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands2K.ADDWEBREFERENCE:
                     case VsCommands2K.ADDWEBREFERENCECTX:
                         return this.AddWebReference();
+
+                    case VsCommands2K.SLNREFRESH:
+                        RefreshProject();
+                        return VSConstants.S_OK;
 
                     case ProjectFileConstants.CommandExploreFolderInWindows:
                         ExploreFolderInWindows(this.ProjectFolder);
@@ -3556,6 +3564,12 @@ namespace Microsoft.VisualStudio.Project
         protected internal virtual int ShowAllFiles()
         {
             return this.ToggleShowAllFiles();
+        }
+
+        public virtual void RefreshProject()
+        {
+            ToggleShowAllFiles();
+            ToggleShowAllFiles();
         }
 
         /// <summary>

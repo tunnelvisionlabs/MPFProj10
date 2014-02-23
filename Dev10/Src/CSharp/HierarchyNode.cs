@@ -1486,6 +1486,9 @@ namespace Microsoft.VisualStudio.Project
 				{
 					case VsCommands2K.EXCLUDEFROMPROJECT:
 						return this.ExcludeFromProject();
+
+					case VsCommands2K.SLNREFRESH:
+						return ProjectManager.ExecCommandOnNode(cmdGroup, cmd, nCmdexecopt, pvaIn, pvaOut);
 				}
 			}
 
@@ -1814,6 +1817,10 @@ namespace Microsoft.VisualStudio.Project
 						result |= vsCommandStatus.vsCommandStatusLatched;
 
 					return VSConstants.S_OK;
+				}
+				else if((VsCommands2K)cmd == VsCommands2K.SLNREFRESH)
+				{
+					return ProjectManager.QueryStatusOnNode(cmdGroup, cmd, pCmdText, ref result);
 				}
 			}
 
