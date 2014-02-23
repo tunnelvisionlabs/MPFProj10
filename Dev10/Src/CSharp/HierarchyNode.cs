@@ -1611,7 +1611,7 @@ namespace Microsoft.VisualStudio.Project
 				{
 					case VsCommands2K.SHOWALLFILES:
 						handled = true;
-						return this.projectMgr.ShowAllFiles();
+						return this.projectMgr.ToggleShowAllFiles();
 					case VsCommands2K.ADDREFERENCE:
 						handled = true;
 						return this.projectMgr.AddProjectReference();

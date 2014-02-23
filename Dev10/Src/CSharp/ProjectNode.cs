@@ -3557,15 +3557,6 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        /// <summary>
-        /// Handles the shows all objects command.
-        /// </summary>
-        /// <returns></returns>
-        protected internal virtual int ShowAllFiles()
-        {
-            return this.ToggleShowAllFiles();
-        }
-
         public virtual void RefreshProject()
         {
             ToggleShowAllFiles();
