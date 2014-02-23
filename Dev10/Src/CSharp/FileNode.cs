@@ -54,6 +54,7 @@ namespace Microsoft.VisualStudio.Project
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
@@ -652,10 +653,15 @@ namespace Microsoft.VisualStudio.Project
                 }
                 if((VsCommands2K)cmd == VsCommands2K.RUNCUSTOMTOOL)
                 {
-                    if(string.IsNullOrEmpty(this.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon)) && (this.NodeProperties.Extender(SingleFileGeneratorNodeExtenderProvider.Name) != null))
+                    if(string.IsNullOrEmpty(this.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon)))
                     {
-                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
-                        return VSConstants.S_OK;
+                        IEnumerable<string> extenderNames = this.NodeProperties.ExtenderNames() as IEnumerable<string>;
+                        if (extenderNames != null && extenderNames.Contains(SingleFileGeneratorNodeExtenderProvider.Name)
+                            && this.NodeProperties.Extender(SingleFileGeneratorNodeExtenderProvider.Name) != null)
+                        {
+                            result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
+                            return VSConstants.S_OK;
+                        }
                     }
                 }
             }
