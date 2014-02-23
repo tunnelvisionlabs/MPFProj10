@@ -51,6 +51,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
+	using Interlocked = System.Threading.Interlocked;
 	using ObjectExtenders = EnvDTE.ObjectExtenders;
 
 	/// <summary>
@@ -66,8 +67,33 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		private List<SolutionListener> solutionListeners = new List<SolutionListener>();
 
-        private SingleFileGeneratorNodeExtenderProvider _singleFileGeneratorNodeExtenderProvider;
-        private int _singleFileGeneratorNodeExtenderCookie;
+		/// <summary>
+		/// This field is set to <see langword="true"/> when <see cref="Initialize"/> is called,
+		/// indicating that the reference count in <see cref="_singleFileGeneratorNodeExtenderReferenceCount"/>
+		/// has been incremented and needs to be decremented when <see cref="Dispose"/> is called.
+		/// </summary>
+		/// <remarks>
+		/// Once set to <see langword="true"/>, this field is never altered. The <see cref="_disposed"/>
+		/// field tracks whether a call to <see cref="Dispose(bool)"/> has occurred.
+		/// </remarks>
+		private bool _initialized;
+
+		/// <summary>
+		/// This field is set to <see langword="true"/> when <see cref="Dispose(bool)"/> is called,
+		/// indicating that the reference count in <see cref="_singleFileGeneratorNodeExtenderReferenceCount"/>
+		/// has been decremented (if required), and should not be decremented again if <see cref="Dispose(bool)"/>
+		/// is called multiple times.
+		/// </summary>
+		private bool _disposed;
+
+		/// <summary>
+		/// This field tracks the reference count for the number of <see cref="ProjectPackage"/> instances
+		/// which are initialized and need the <see cref="_singleFileGeneratorNodeExtenderProvider"/>
+		/// object to be registered with the <see cref="ObjectExtenders"/> service.
+		/// </summary>
+		private static int _singleFileGeneratorNodeExtenderReferenceCount;
+		private static SingleFileGeneratorNodeExtenderProvider _singleFileGeneratorNodeExtenderProvider;
+		private static int _singleFileGeneratorNodeExtenderCookie;
 
 		#endregion
 
@@ -103,12 +129,24 @@ namespace Microsoft.VisualStudio.Project
 				solutionListener.Init();
 			}
 
-            ObjectExtenders objectExtenders = (ObjectExtenders)GetService(typeof(ObjectExtenders));
-            _singleFileGeneratorNodeExtenderProvider = new SingleFileGeneratorNodeExtenderProvider();
-            string extenderCatId = typeof(FileNodeProperties).GUID.ToString("B");
-            string extenderName = SingleFileGeneratorNodeExtenderProvider.Name;
-            string localizedName = extenderName;
-            _singleFileGeneratorNodeExtenderCookie = objectExtenders.RegisterExtenderProvider(extenderCatId, extenderName, _singleFileGeneratorNodeExtenderProvider, localizedName);
+			try
+			{
+				// this block assumes that the ProjectPackage instances will all be initialized on the same thread,
+				// but doesn't assume that only one ProjectPackage instance exists at a time
+				if (Interlocked.Increment(ref _singleFileGeneratorNodeExtenderReferenceCount) == 1)
+				{
+					ObjectExtenders objectExtenders = (ObjectExtenders)GetService(typeof(ObjectExtenders));
+					_singleFileGeneratorNodeExtenderProvider = new SingleFileGeneratorNodeExtenderProvider();
+					string extenderCatId = typeof(FileNodeProperties).GUID.ToString("B");
+					string extenderName = SingleFileGeneratorNodeExtenderProvider.Name;
+					string localizedName = extenderName;
+					_singleFileGeneratorNodeExtenderCookie = objectExtenders.RegisterExtenderProvider(extenderCatId, extenderName, _singleFileGeneratorNodeExtenderProvider, localizedName);
+				}
+			}
+			finally
+			{
+				_initialized = true;
+			}
 		}
 
 		protected override void Dispose(bool disposing)
@@ -118,8 +156,13 @@ namespace Microsoft.VisualStudio.Project
 			{
 				if(disposing)
 				{
-                    ObjectExtenders objectExtenders = (ObjectExtenders)GetService(typeof(ObjectExtenders));
-                    objectExtenders.UnregisterExtenderProvider(_singleFileGeneratorNodeExtenderCookie);
+					// only decrement the reference count once, regardless of the number of times Dispose is called.
+					// Ignore if Initialize was never called.
+					if (_initialized && !_disposed && Interlocked.Decrement(ref _singleFileGeneratorNodeExtenderReferenceCount) == 0)
+					{
+						ObjectExtenders objectExtenders = (ObjectExtenders)GetService(typeof(ObjectExtenders));
+						objectExtenders.UnregisterExtenderProvider(_singleFileGeneratorNodeExtenderCookie);
+					}
 
 					foreach(SolutionListener solutionListener in this.solutionListeners)
 					{
@@ -132,7 +175,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 			finally
 			{
-
+				_disposed = true;
 				base.Dispose(disposing);
 			}
 		}
