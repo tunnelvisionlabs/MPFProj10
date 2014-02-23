@@ -887,7 +887,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Process dataobject from Drag/Drop/Cut/Copy/Paste operation
 		/// </summary>
 		/// <remarks>The targetNode is set if the method is called from a drop operation, otherwise it is null</remarks>
-		internal DropDataType ProcessSelectionDataObject(IOleDataObject dataObject, HierarchyNode targetNode)
+		protected virtual DropDataType ProcessSelectionDataObject(IOleDataObject dataObject, HierarchyNode targetNode)
 		{
 			DropDataType dropDataType = DropDataType.None;
 			bool isWindowsFormat = false;
@@ -944,7 +944,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="pDataObject">The dataobject to be analysed for its format</param>
 		/// <returns>dropdatatype or none if dataobject does not contain known format</returns>
-		internal static DropDataType QueryDropDataType(IOleDataObject pDataObject)
+		protected static DropDataType QueryDropDataType(IOleDataObject pDataObject)
 		{
 			if(pDataObject == null)
 			{
@@ -988,7 +988,7 @@ namespace Microsoft.VisualStudio.Project
 		///		CTRL DRAG - COPY
 		///		CTRL-SHIFT DRAG - NO DROP (used for reference based projects only)
 		/// </remarks>
-		internal DropEffects QueryDropEffect(DropDataType dropDataType, uint grfKeyState)
+		protected virtual DropEffects QueryDropEffect(DropDataType dropDataType, uint grfKeyState)
 		{
 			//Validate the dropdatatype
 			if((dropDataType != DropDataType.Shell) && (dropDataType != DropDataType.VSReference) && (dropDataType != DropDataType.VSStorage))
@@ -1100,7 +1100,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="targetNode">the targetHandler node</param>
 		/// <param name="projectReferences">List of projectref string</param>
 		/// <returns>true if succeeded</returns>
-		internal bool AddFilesFromProjectReferences(HierarchyNode targetNode, string[] projectReferences)
+		protected virtual bool AddFilesFromProjectReferences(HierarchyNode targetNode, string[] projectReferences)
 		{
 			//Validate input
 			if(projectReferences == null)

@@ -1167,7 +1167,7 @@ namespace Microsoft.VisualStudio.Project
 		/// items to let its parent accept the drop
 		/// </summary>
 		/// <returns>HierarchyNode that accept the drop handling</returns>
-		protected internal virtual HierarchyNode GetDragTargetHandlerNode()
+		public virtual HierarchyNode GetDragTargetHandlerNode()
 		{
 			return this;
 		}
@@ -1611,7 +1611,7 @@ namespace Microsoft.VisualStudio.Project
 				{
 					case VsCommands2K.SHOWALLFILES:
 						handled = true;
-						return this.projectMgr.ShowAllFiles();
+						return this.projectMgr.ToggleShowAllFiles();
 					case VsCommands2K.ADDREFERENCE:
 						handled = true;
 						return this.projectMgr.AddProjectReference();

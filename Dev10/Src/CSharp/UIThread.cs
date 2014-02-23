@@ -217,7 +217,7 @@ namespace Microsoft.VisualStudio.Project
         /// Performs a callback on the UI thread, blocking until the action completes.  Uses the VS mechanism 
         /// of marshalling back to the main STA thread via COM RPC.
         /// </summary>
-        internal static T DoOnUIThread<T>(Func<T> callback)
+        public static T DoOnUIThread<T>(Func<T> callback)
         {
             return ThreadHelper.Generic.Invoke<T>(callback);
         }
@@ -226,7 +226,7 @@ namespace Microsoft.VisualStudio.Project
         /// Performs a callback on the UI thread, blocking until the action completes.  Uses the VS mechanism 
         /// of marshalling back to the main STA thread via COM RPC.
         /// </summary>
-        internal static void DoOnUIThread(Action callback)
+        public static void DoOnUIThread(Action callback)
         {
             ThreadHelper.Generic.Invoke(callback);
         }
