@@ -68,10 +68,6 @@ namespace Microsoft.VisualStudio.Project
             if (fileNodeProperties == null)
                 return false;
 
-            Guid extenderGuid;
-            if (!Guid.TryParse(ExtenderCATID, out extenderGuid) || extenderGuid != typeof(FileNodeProperties).GUID)
-                return false;
-
             FileNode fileNode = fileNodeProperties.Node as FileNode;
             if (fileNode == null)
                 return false;
