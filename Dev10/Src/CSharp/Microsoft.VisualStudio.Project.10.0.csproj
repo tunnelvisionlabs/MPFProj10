@@ -223,8 +223,6 @@
     <Compile Include="SingleFileGeneratorFactory.GeneratorMetaData.cs" />
     <Compile Include="SingleFileGeneratorNodeExtenderProperties.cs" />
     <Compile Include="SingleFileGeneratorNodeExtenderProvider.cs" />
-    <Compile Include="tagDVASPECT.cs" />
-    <Compile Include="tagTYMED.cs" />
     <Compile Include="TokenReplaceType.cs" />
     <Compile Include="UIHierarchyElements.cs" />
     <Compile Include="UIThread.cs" />
