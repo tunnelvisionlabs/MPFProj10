@@ -495,7 +495,7 @@ namespace Microsoft.VisualStudio.Project
                     }
                     else
                     {
-                        result |= vsCommandStatus.vsCommandStatusUnsupported;
+                        result = vsCommandStatus.vsCommandStatusUnsupported;
                     }
 
                     return VSConstants.S_OK;
@@ -505,7 +505,7 @@ namespace Microsoft.VisualStudio.Project
                     // if it is a non member item node, then we don't support "Exclude From Project" command
                     if (IsNonmemberItem)
                     {
-                        result |= vsCommandStatus.vsCommandStatusUnsupported;
+                        result = vsCommandStatus.vsCommandStatusUnsupported;
                     }
                     else
                     {

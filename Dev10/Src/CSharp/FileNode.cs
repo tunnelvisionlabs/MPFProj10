@@ -601,12 +601,22 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands.Paste:
                     case VsCommands.Cut:
                     case VsCommands.Rename:
-                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
-                        return VSConstants.S_OK;
+                        string linkPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
+                        if (string.IsNullOrEmpty(linkPath))
+                        {
+                            result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
+                            return VSConstants.S_OK;
+                        }
+                        else
+                        {
+                            // disable these commands on linked items
+                            result = vsCommandStatus.vsCommandStatusUnsupported;
+                            return VSConstants.S_OK;
+                        }
 
                     case VsCommands.ViewCode:
                         if (this.IsNonmemberItem)
-                            result |= vsCommandStatus.vsCommandStatusUnsupported;
+                            result = vsCommandStatus.vsCommandStatusUnsupported;
                         else
                             result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 
@@ -635,7 +645,7 @@ namespace Microsoft.VisualStudio.Project
                     // if it is a non member item node, then we don't support "Exclude From Project" command
                     if (IsNonmemberItem)
                     {
-                        result |= vsCommandStatus.vsCommandStatusUnsupported;
+                        result = vsCommandStatus.vsCommandStatusUnsupported;
                         return VSConstants.S_OK;
                     }
 
@@ -647,7 +657,7 @@ namespace Microsoft.VisualStudio.Project
                     }
                     else
                     {
-                        result |= vsCommandStatus.vsCommandStatusUnsupported;
+                        result = vsCommandStatus.vsCommandStatusUnsupported;
                         return VSConstants.S_OK;
                     }
                 }
