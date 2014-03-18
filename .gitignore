@@ -6,3 +6,4 @@ obj/
 
 # Ignore NuGet package output
 /Dev10/nuget/release/
+/Dev10/packages/

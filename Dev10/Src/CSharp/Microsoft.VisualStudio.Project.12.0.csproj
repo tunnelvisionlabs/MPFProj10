@@ -5,17 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{89677F07-52A5-4703-8AC1-D79E637CAE26}</ProjectGuid>
+    <ProjectGuid>{327218DC-7524-4FBC-95EE-36FB933F67B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.VisualStudio.Project</RootNamespace>
-    <AssemblyName>Microsoft.VisualStudio.Project.11.0</AssemblyName>
+    <AssemblyName>Microsoft.VisualStudio.Project.12.0</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <AllowedAssemblyPrefix>$(AllowedAssemblyPrefix);Microsoft.Internal</AllowedAssemblyPrefix>
-    <BaseIntermediateOutputPath>obj\dev11\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\dev12\</BaseIntermediateOutputPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -23,21 +23,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\dev11\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;DEV11;DEV10PLUS;DEV11PLUS</DefineConstants>
+    <OutputPath>bin\dev12\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;DEV12;DEV10PLUS;DEV11PLUS;DEV12PLUS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\dev11\Debug\Microsoft.VisualStudio.Project.11.0.xml</DocumentationFile>
+    <DocumentationFile>bin\dev12\Debug\Microsoft.VisualStudio.Project.12.0.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\dev11\Release\</OutputPath>
-    <DefineConstants>TRACE;DEV11;DEV10PLUS;DEV11PLUS</DefineConstants>
+    <OutputPath>bin\dev12\Release\</OutputPath>
+    <DefineConstants>TRACE;DEV12;DEV10PLUS;DEV11PLUS;DEV12PLUS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\dev11\Release\Microsoft.VisualStudio.Project.11.0.xml</DocumentationFile>
+    <DocumentationFile>bin\dev12\Release\Microsoft.VisualStudio.Project.12.0.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -86,9 +86,9 @@
       <Private>False</Private>
       <HintPath>..\..\packages\VSSDK.OLE.Interop.10.10.0.0\lib\net20\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.VisualStudio.Shell.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
-      <HintPath>..\..\packages\VSSDK.Shell.11.11.0.0\lib\net45\Microsoft.VisualStudio.Shell.11.0.dll</HintPath>
+      <HintPath>..\..\packages\VSSDK.Shell.12.12.0.0\lib\net45\Microsoft.VisualStudio.Shell.12.0.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
@@ -97,6 +97,10 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
       <HintPath>..\..\packages\VSSDK.Shell.Immutable.11.11.0.0\lib\net45\Microsoft.VisualStudio.Shell.Immutable.11.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <HintPath>..\..\packages\VSSDK.Shell.Immutable.12.12.0.0\lib\net45\Microsoft.VisualStudio.Shell.Immutable.12.0.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>False</Private>
@@ -363,8 +367,8 @@
     <Compile Include="_DROPFILES.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Microsoft.VisualStudio.Project.11.0.nuspec">
-      <Link>Microsoft.VisualStudio.Project.11.0.nuspec</Link>
+    <None Include="..\Microsoft.VisualStudio.Project.12.0.nuspec">
+      <Link>Microsoft.VisualStudio.Project.12.0.nuspec</Link>
     </None>
     <None Include="Diagrams\AutomationClasses.cd" />
     <None Include="Diagrams\ConfigurationClasses.cd" />
@@ -373,7 +377,7 @@
     <None Include="Diagrams\PropertiesClasses.cd" />
     <None Include="Diagrams\ReferenceClasses.cd" />
     <None Include="Key.snk" />
-    <None Include="packages.Microsoft.VisualStudio.Project.11.0.config" />
+    <None Include="packages.Microsoft.VisualStudio.Project.12.0.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VisualStudio.Project.resx">

@@ -53,7 +53,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Runtime.InteropServices;
 	using Microsoft.VisualStudio.Shell.Interop;
 	using MSBuild = Microsoft.Build.Evaluation;
-#if DEV11
+#if DEV11PLUS
 	using Microsoft.VisualStudio.Shell;
 #endif
 
@@ -66,7 +66,7 @@ namespace Microsoft.VisualStudio.Project
 		#region fields
 		private readonly Microsoft.VisualStudio.Shell.Package package;
 		private readonly System.IServiceProvider site;
-#if DEV11
+#if DEV11PLUS
 		private static readonly Lazy<IVsTaskSchedulerService> taskSchedulerService = new Lazy<IVsTaskSchedulerService>(() => Package.GetGlobalService(typeof(SVsTaskSchedulerService)) as IVsTaskSchedulerService);
 #endif
 
@@ -138,7 +138,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region methods
 
-#if DEV11 // IVsAsynchronousProjectCreate
+#if DEV11PLUS // IVsAsynchronousProjectCreate
 		public virtual bool CanCreateProjectAsynchronously(ref Guid rguidProjectID, string filename, uint flags)
 		{
 			return true;
