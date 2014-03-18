@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\dev11\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;DEV11</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;DEV11;DEV10PLUS;DEV11PLUS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -34,7 +34,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\dev11\Release\</OutputPath>
-    <DefineConstants>TRACE;DEV11</DefineConstants>
+    <DefineConstants>TRACE;DEV11;DEV10PLUS;DEV11PLUS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\dev11\Release\Microsoft.VisualStudio.Project.11.0.xml</DocumentationFile>
