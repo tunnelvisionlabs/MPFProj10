@@ -601,8 +601,18 @@ namespace Microsoft.VisualStudio.Project
                     case VsCommands.Paste:
                     case VsCommands.Cut:
                     case VsCommands.Rename:
-                        result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
-                        return VSConstants.S_OK;
+                        string linkPath = this.ItemNode.GetMetadata(ProjectFileConstants.Link);
+                        if (string.IsNullOrEmpty(linkPath))
+                        {
+                            result |= vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
+                            return VSConstants.S_OK;
+                        }
+                        else
+                        {
+                            // disable these commands on linked items
+                            result = vsCommandStatus.vsCommandStatusUnsupported;
+                            return VSConstants.S_OK;
+                        }
 
                     case VsCommands.ViewCode:
                         if (this.IsNonmemberItem)
