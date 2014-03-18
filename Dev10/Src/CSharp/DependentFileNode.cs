@@ -128,7 +128,7 @@ namespace Microsoft.VisualStudio.Project
 					case VsCommands.Paste:
 					case VsCommands.Cut:
 					case VsCommands.Rename:
-						result |= vsCommandStatus.vsCommandStatusUnsupported;
+						result = vsCommandStatus.vsCommandStatusUnsupported;
 						return VSConstants.S_OK;
 
 					case VsCommands.ViewCode:
@@ -142,7 +142,7 @@ namespace Microsoft.VisualStudio.Project
 			{
 				if((VsCommands2K)cmd == VsCommands2K.EXCLUDEFROMPROJECT)
 				{
-					result |= vsCommandStatus.vsCommandStatusUnsupported;
+					result = vsCommandStatus.vsCommandStatusUnsupported;
 					return VSConstants.S_OK;
 				}
 			}
