@@ -4682,7 +4682,38 @@ namespace Microsoft.VisualStudio.Project
 
         /// <summary>
         /// Used to sort nodes in the hierarchy.
+        /// <note type="caller">
+        /// This method returns inverted values when compared to other compare operations such as <see cref="Comparer{T}.Compare"/>.
+        /// </note>
         /// </summary>
+        /// <param name="node1">The first hierarchy node.</param>
+        /// <param name="node2">The second hierarchy node.</param>
+        /// <returns>
+        /// A signed integer indicating the relative position of <paramref name="node1"/> and <paramref name="node2"/>, as shown in the following table.
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Value</term>
+        /// <term>Meaning</term>
+        /// </listheader>
+        /// <item>
+        /// <description>Less than zero</description>
+        /// <description><paramref name="node1"/> appears after <paramref name="node2"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description>Zero</description>
+        /// <description><paramref name="node1"/> is unordered with respect to <paramref name="node2"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description>Greater than zero</description>
+        /// <description><paramref name="node1"/> appears before <paramref name="node2"/>.</description>
+        /// </item>
+        /// </list>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="node1"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="node2"/> is <see langword="null"/>.</para>
+        /// </exception>
         protected internal virtual int CompareNodes(HierarchyNode node1, HierarchyNode node2)
         {
             Debug.Assert(node1 != null && node2 != null);
