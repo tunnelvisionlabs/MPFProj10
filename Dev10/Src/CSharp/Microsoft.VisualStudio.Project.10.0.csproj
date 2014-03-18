@@ -342,6 +342,9 @@
     <Compile Include="_DROPFILES.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Microsoft.VisualStudio.Project.10.0.nuspec">
+      <Link>Microsoft.VisualStudio.Project.10.0.nuspec</Link>
+    </None>
     <None Include="Diagrams\AutomationClasses.cd" />
     <None Include="Diagrams\ConfigurationClasses.cd" />
     <None Include="Diagrams\DocumentManagerClasses.cd" />

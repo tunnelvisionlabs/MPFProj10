@@ -16,6 +16,44 @@
     <tags>mpfproj mpfproj11 mpfproj12 vsix</tags>
     <title>Managed Package Framework for Visual Studio 2012 and newer</title>
     <summary>The Managed Package Framework for Visual Studio Projects</summary>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="System.Drawing" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="Microsoft.Build" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="Microsoft.Build.Framework" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="Microsoft.Build.Utilities.v4.0" targetFramework="net40"/>
+    </frameworkAssemblies>
+    <dependencies>
+      <!-- Visual Studio 2012 -->
+      <dependency id="VSSDK.IDE.11" version="[11.0.0,12.0.0)"/>
+      <!--
+      Exposed Dependencies (Microsoft.VisualStudio.Project.11.0.dll):
+        EnvDTE
+        Microsoft.Build
+        Microsoft.Build.Framework
+        Microsoft.Build.Utilities.v4.0
+        Microsoft.VisualStudio.Designer.Interfaces
+        Microsoft.VisualStudio.OLE.Interop
+        Microsoft.VisualStudio.Shell.11.0
+        Microsoft.VisualStudio.Shell.Interop
+        Microsoft.VisualStudio.Shell.Interop.10.0
+        Microsoft.VisualStudio.Shell.Interop.11.0
+        Microsoft.VisualStudio.Shell.Interop.8.0
+        System
+        System.Drawing
+        System.Windows.Forms
+        VSLangProj
+        VSLangProj80
+      -->
+      <dependency id="VSSDK.DTE.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.OLE.Interop.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.Designer.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.11" version="[11.0.0,12.0.0)"/>
+      <dependency id="VSSDK.VSLangProj.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.Shell.11" version="[11.0.0,12.0.0)"/>
+    </dependencies>
   </metadata>
   <files>
     <!-- Runtime Libraries -->
