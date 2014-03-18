@@ -609,10 +609,26 @@ namespace Microsoft.VisualStudio.Project
 			}
 
 			LinkedListNode<HierarchyNode> previous = null;
-			for(LinkedListNode<HierarchyNode> n = _children.First; n != null; n = n.Next)
+			if (_children.Last != null && this.ProjectManager.CompareNodes(node, _children.Last.Value) <= 0)
 			{
-				if(this.ProjectManager.CompareNodes(node, n.Value) > 0) break;
-				previous = n;
+				// frequently (especially during initial project load), when an item is added it belongs
+				// at the end. catch that case to prevent O(n²) performance.
+				for (LinkedListNode<HierarchyNode> n = _children.Last; n != null; n = n.Previous)
+				{
+					if (this.ProjectManager.CompareNodes(node, n.Value) < 0)
+						break;
+
+					previous = n;
+				}
+			}
+			else
+			{
+				for (LinkedListNode<HierarchyNode> n = _children.First; n != null; n = n.Next)
+				{
+					if (this.ProjectManager.CompareNodes(node, n.Value) > 0)
+						break;
+					previous = n;
+				}
 			}
 
 			// insert "node" after "previous".
