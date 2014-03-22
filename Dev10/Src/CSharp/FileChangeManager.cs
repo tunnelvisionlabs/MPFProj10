@@ -87,7 +87,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Overloaded ctor.
 		/// </summary>
 		/// <param name="nodeParam">An instance of a project item.</param>
-		internal FileChangeManager(IServiceProvider serviceProvider)
+		public FileChangeManager(IServiceProvider serviceProvider)
 		{
 			#region input validation
 			if(serviceProvider == null)
@@ -187,7 +187,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Observe when the given file is updated on disk. In this case we do not care about the item id that represents the file in the hierarchy.
 		/// </summary>
 		/// <param name="fileName">File to observe.</param>
-		internal void ObserveItem(string fileName)
+		public virtual void ObserveItem(string fileName)
 		{
 			this.ObserveItem(fileName, VSConstants.VSITEMID_NIL);
 		}
@@ -197,7 +197,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="fileName">File to observe.</param>
 		/// <param name="id">The item id of the item to observe.</param>
-		internal void ObserveItem(string fileName, uint id)
+		public virtual void ObserveItem(string fileName, uint id)
 		{
 			#region Input validation
 			if(String.IsNullOrEmpty(fileName))
@@ -227,7 +227,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="fileName">File to ignore observing.</param>
 		/// <param name="ignore">Flag indicating whether or not to ignore changes (1 to ignore, 0 to stop ignoring).</param>
-		internal void IgnoreItemChanges(string fileName, bool ignore)
+		public virtual void IgnoreItemChanges(string fileName, bool ignore)
 		{
 			#region Input validation
 			if(String.IsNullOrEmpty(fileName))
@@ -248,7 +248,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Stop observing when the file is updated on disk.
 		/// </summary>
 		/// <param name="fileName">File to stop observing.</param>
-		internal void StopObservingItem(string fileName)
+		public virtual void StopObservingItem(string fileName)
 		{
 			#region Input validation
 			if(String.IsNullOrEmpty(fileName))

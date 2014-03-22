@@ -69,7 +69,7 @@ namespace Microsoft.VisualStudio.Project
 			_connectionPoints = new List<IConnectionPoint>(connectionPoints).AsReadOnly();
 		}
 
-		private EnumConnectionPoints(ReadOnlyCollection<IConnectionPoint> connectionPoints, int currentIndex)
+		protected EnumConnectionPoints(ReadOnlyCollection<IConnectionPoint> connectionPoints, int currentIndex)
 		{
 			if (connectionPoints == null)
 				throw new ArgumentNullException("connectionPoints");
@@ -80,12 +80,12 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IEnumConnectionPoints Members
 
-		public void Clone(out IEnumConnectionPoints ppEnum)
+		public virtual void Clone(out IEnumConnectionPoints ppEnum)
 		{
 			ppEnum = new EnumConnectionPoints(_connectionPoints, _currentIndex);
 		}
 
-		public int Next(uint cConnections, IConnectionPoint[] ppCP, out uint pcFetched)
+		public virtual int Next(uint cConnections, IConnectionPoint[] ppCP, out uint pcFetched)
 		{
 			pcFetched = 0;
 
@@ -101,13 +101,13 @@ namespace Microsoft.VisualStudio.Project
 			return pcFetched == cConnections ? VSConstants.S_OK : VSConstants.S_FALSE;
 		}
 
-		public int Reset()
+		public virtual int Reset()
 		{
 			_currentIndex = 0;
 			return VSConstants.S_OK;
 		}
 
-		public int Skip(uint cConnections)
+		public virtual int Skip(uint cConnections)
 		{
 			int remaining = _connectionPoints.Count - _currentIndex;
 			if (remaining < cConnections)

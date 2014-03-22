@@ -299,7 +299,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <summary>
 		/// Removes .zip extensions from the components of a path.
 		/// </summary>
-		private static string GetTemplateNoZip(string fileName)
+		protected static string GetTemplateNoZip(string fileName)
 		{
 			char[] separators = { '\\' };
 			string[] components = fileName.Split(separators);

@@ -178,7 +178,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        private string ProjectRelativeFilePath
+        protected string ProjectRelativeFilePath
         {
             get
             {
@@ -296,7 +296,7 @@ namespace Microsoft.VisualStudio.Project
         /// Checks if a reference is already added. The method parses all references and compares the the FinalItemSpec and the Guid.
         /// </summary>
         /// <returns>true if the assembly has already been added.</returns>
-		protected internal override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
+		public override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
         {
             ReferenceContainerNode referencesFolder = this.ProjectManager.FindChild(ReferenceContainerNode.ReferencesNodeVirtualName) as ReferenceContainerNode;
             Debug.Assert(referencesFolder != null, "Could not find the References node");
@@ -337,7 +337,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <returns>ProjectElement corresponding to the COM component passed in</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        private ProjectElement GetProjectElementBasedOnInputFromComponentSelectorData()
+        protected virtual ProjectElement GetProjectElementBasedOnInputFromComponentSelectorData()
         {
             ProjectElement element = new ProjectElement(this.ProjectManager, this.typeName, ProjectFileConstants.COMReference);
 
@@ -366,7 +366,7 @@ namespace Microsoft.VisualStudio.Project
             return element;
         }
 
-        private void SetProjectItemsThatRelyOnReferencesToBeResolved(bool renameItemNode)
+        protected virtual void SetProjectItemsThatRelyOnReferencesToBeResolved(bool renameItemNode)
         {
             // Call MSBuild to build the target ResolveComReferences
             bool success;
@@ -406,7 +406,7 @@ namespace Microsoft.VisualStudio.Project
         /// Verify that the TypeLib is registered and set the the installed file path of the com reference.
         /// </summary>
         /// <returns></returns>
-        private void SetInstalledFilePath()
+        protected virtual void SetInstalledFilePath()
         {
             string registryPath = string.Format(CultureInfo.InvariantCulture, @"TYPELIB\{0:B}\{1:x}.{2:x}", this.typeGuid, this.MajorVersionNumber, this.MinorVersionNumber);
             using(RegistryKey typeLib = Registry.ClassesRoot.OpenSubKey(registryPath))

@@ -192,7 +192,7 @@ namespace Microsoft.VisualStudio.Project
         #region helpers
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private bool NotifyBuildBegin()
+        protected virtual bool NotifyBuildBegin()
         {
             int shouldContinue = 1;
             foreach (IVsBuildStatusCallback cb in callbacks)
@@ -216,7 +216,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private void NotifyBuildEnd(MSBuildResult result, string buildTarget)
+        protected virtual void NotifyBuildEnd(MSBuildResult result, string buildTarget)
         {
             int success = ((result == MSBuildResult.Successful) ? 1 : 0);
 
@@ -249,7 +249,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        private void Build(uint options, IVsOutputWindowPane output, string target)
+        protected virtual void Build(uint options, IVsOutputWindowPane output, string target)
         {
             if (!this.NotifyBuildBegin())
             {
@@ -276,7 +276,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Refreshes references and redraws them correctly.
         /// </summary>
-        private void RefreshReferences()
+        protected virtual void RefreshReferences()
         {
             // Refresh the reference container node for assemblies that could be resolved.
             IReferenceContainer referenceContainer = this.config.ProjectManager.GetReferenceContainer();

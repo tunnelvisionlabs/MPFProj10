@@ -52,14 +52,14 @@ namespace Microsoft.VisualStudio.Project
 
 	partial class SingleFileGeneratorFactory
 	{
-		private class GeneratorMetaData
+		protected class GeneratorMetaData
 		{
 			#region fields
 			private Guid generatorClsid = Guid.Empty;
 			private int generatesDesignTimeSource = -1;
 			private int generatesSharedDesignTimeSource = -1;
 			private int useDesignTimeCompilationFlag = -1;
-			object generator;
+			private object generator;
 			#endregion
 
 			#region ctor
@@ -75,7 +75,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// Generator instance
 			/// </summary>
-			public Object Generator
+			public virtual Object Generator
 			{
 				get
 				{
@@ -90,7 +90,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// GeneratesDesignTimeSource reg value name under HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\[VsVer]\Generators\[ProjFacGuid]\[GeneratorProgId]
 			/// </summary>
-			public int GeneratesDesignTimeSource
+			public virtual int GeneratesDesignTimeSource
 			{
 				get
 				{
@@ -105,7 +105,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// GeneratesSharedDesignTimeSource reg value name under HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\[VsVer]\Generators\[ProjFacGuid]\[GeneratorProgId]
 			/// </summary>
-			public int GeneratesSharedDesignTimeSource
+			public virtual int GeneratesSharedDesignTimeSource
 			{
 				get
 				{
@@ -120,7 +120,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// UseDesignTimeCompilationFlag reg value name under HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\[VsVer]\Generators\[ProjFacGuid]\[GeneratorProgId]
 			/// </summary>
-			public int UseDesignTimeCompilationFlag
+			public virtual int UseDesignTimeCompilationFlag
 			{
 				get
 				{
@@ -135,7 +135,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// Generator Class ID.
 			/// </summary>
-			public Guid GeneratorClsid
+			public virtual Guid GeneratorClsid
 			{
 				get
 				{

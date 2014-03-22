@@ -78,7 +78,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		}
 
 		#region Private Members
-		private Reference AddFromSelectorData(VSCOMPONENTSELECTORDATA selector, string wrapperTool = null)
+		protected virtual Reference AddFromSelectorData(VSCOMPONENTSELECTORDATA selector, string wrapperTool = null)
 		{
 			ReferenceNode refNode = _container.AddReferenceFromSelectorData(selector, wrapperTool);
 			if(null == refNode)
@@ -89,7 +89,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return refNode.Object as Reference;
 		}
 
-		private Reference FindByName(string stringIndex)
+		protected virtual Reference FindByName(string stringIndex)
 		{
 			foreach(Reference refNode in this)
 			{
@@ -104,7 +104,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		#region References Members
 
-		public Reference Add(string bstrPath)
+		public virtual Reference Add(string bstrPath)
 		{
 			if(string.IsNullOrEmpty(bstrPath))
 			{
@@ -117,7 +117,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return AddFromSelectorData(selector);
 		}
 
-		public Reference AddActiveX(string bstrTypeLibGuid, int lMajorVer, int lMinorVer, int lLocaleId, string bstrWrapperTool)
+		public virtual Reference AddActiveX(string bstrTypeLibGuid, int lMajorVer, int lMinorVer, int lLocaleId, string bstrWrapperTool)
 		{
 			VSCOMPONENTSELECTORDATA selector = new VSCOMPONENTSELECTORDATA();
 			selector.type = VSCOMPONENTTYPE.VSCOMPONENTTYPE_Com2;
@@ -129,7 +129,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return AddFromSelectorData(selector, bstrWrapperTool);
 		}
 
-		public Reference AddProject(EnvDTE.Project project)
+		public virtual Reference AddProject(EnvDTE.Project project)
 		{
 			if(null == project)
 			{
@@ -183,7 +183,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-		public Reference Find(string bstrIdentity)
+		public virtual Reference Find(string bstrIdentity)
 		{
 			if(string.IsNullOrEmpty(bstrIdentity))
 			{
@@ -202,7 +202,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return null;
 		}
 
-		public IEnumerator GetEnumerator()
+		public virtual IEnumerator GetEnumerator()
 		{
 			List<Reference> references = new List<Reference>();
 			IEnumerator baseEnum = _container.EnumReferences().GetEnumerator();
@@ -226,7 +226,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return references.GetEnumerator();
 		}
 
-		public Reference Item(object index)
+		public virtual Reference Item(object index)
 		{
 			string stringIndex = index as string;
 			if(null != stringIndex)
@@ -265,7 +265,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		#endregion
 
 		#region Callbacks for the HierarchyNode events
-		private void OnReferenceAdded(object sender, HierarchyNodeEventArgs args)
+		protected virtual void OnReferenceAdded(object sender, HierarchyNodeEventArgs args)
 		{
 			// Validate the parameters.
 			if((_container != sender as ReferenceContainerNode) ||
@@ -288,9 +288,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			}
 		}
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
-            Justification = "Support for this has not yet been added")]
-        private void OnReferenceChanged(object sender, HierarchyNodeEventArgs args)
+        protected virtual void OnReferenceChanged(object sender, HierarchyNodeEventArgs args)
         {
             // Validate the parameters.
             if ((_container != sender as ReferenceContainerNode) ||
@@ -313,7 +311,7 @@ namespace Microsoft.VisualStudio.Project.Automation
             }
         }
         
-        private void OnReferenceRemoved(object sender, HierarchyNodeEventArgs args)
+        protected virtual void OnReferenceRemoved(object sender, HierarchyNodeEventArgs args)
 		{
 			// Validate the parameters.
 			if((_container != sender as ReferenceContainerNode) ||

@@ -85,14 +85,14 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-        public int Clone(out IVsEnumDependencies enumDependencies)
+        public virtual int Clone(out IVsEnumDependencies enumDependencies)
 		{
 			enumDependencies = new EnumDependencies(this.dependencyList);
 			ErrorHandler.ThrowOnFailure(enumDependencies.Skip(this.nextIndex));
 			return VSConstants.S_OK;
 		}
 
-        public int Next(uint elements, IVsDependency[] dependencies, out uint elementsFetched)
+        public virtual int Next(uint elements, IVsDependency[] dependencies, out uint elementsFetched)
 		{
             elementsFetched = 0;
             if (dependencies == null)
@@ -118,13 +118,13 @@ namespace Microsoft.VisualStudio.Project
 			return (elements == 0 ? VSConstants.S_OK : VSConstants.S_FALSE);
 		}
 
-		public int Reset()
+		public virtual int Reset()
 		{
 			this.nextIndex = 0;
 			return VSConstants.S_OK;
 		}
 
-        public int Skip(uint elements)
+        public virtual int Skip(uint elements)
 		{
 			this.nextIndex += elements;
 			uint count = (uint)this.dependencyList.Count;

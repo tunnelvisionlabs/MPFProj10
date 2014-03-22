@@ -84,7 +84,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		#endregion
 
 		#region Helper methods
-		private List<EnvDTE.ProjectItem> GetListOfProjectItems()
+		protected virtual List<EnvDTE.ProjectItem> GetListOfProjectItems()
 		{
 			List<EnvDTE.ProjectItem> list = new List<EnvDTE.ProjectItem>();
 			for(HierarchyNode child = this.Node.FirstChild; child != null; child = child.NextSibling)

@@ -181,7 +181,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Get document properties from RDT
 		/// </summary>
-		internal void GetDocInfo(
+		public virtual void GetDocInfo(
 			out bool isOpen,     // true if the doc is opened
 			out bool isDirty,    // true if the doc is dirty
 			out bool isOpenedByUs, // true if opened by our project

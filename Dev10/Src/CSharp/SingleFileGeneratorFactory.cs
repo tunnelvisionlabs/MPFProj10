@@ -140,7 +140,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Returns the project generator key under [VS-ConfigurationRoot]]\Generators
 		/// </summary>
-		private RegistryKey BaseGeneratorsKey
+		protected RegistryKey BaseGeneratorsKey
 		{
 			get
 			{
@@ -163,7 +163,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Returns the local registry instance
 		/// </summary>
-		private ILocalRegistry LocalRegistry
+		protected ILocalRegistry LocalRegistry
 		{
 			get
 			{

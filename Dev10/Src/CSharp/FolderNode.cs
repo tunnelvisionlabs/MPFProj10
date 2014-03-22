@@ -160,7 +160,7 @@ namespace Microsoft.VisualStudio.Project
 			return new FolderNodeProperties(this);
 		}
 
-		protected internal override void DeleteFromStorage(string path)
+		public override void DeleteFromStorage(string path)
 		{
 			this.DeleteFolder(path);
 		}
@@ -263,7 +263,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Collapses the folder.
         /// </summary>
-        public void CollapseFolder()
+        public virtual void CollapseFolder()
         {
             this.SetExpanded(false);
         }
@@ -271,7 +271,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Expands the folder.
         /// </summary>
-        public void ExpandFolder()
+        public virtual void ExpandFolder()
         {
             this.SetExpanded(true);
         }
@@ -408,7 +408,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="files">The list of files to be placed under source control.</param>
 		/// <param name="flags">The flags that are associated to the files.</param>
-		protected internal override void GetSccFiles(System.Collections.Generic.IList<string> files, System.Collections.Generic.IList<tagVsSccFilesFlags> flags)
+		public override void GetSccFiles(System.Collections.Generic.IList<string> files, System.Collections.Generic.IList<tagVsSccFilesFlags> flags)
 		{
 			return;
 		}
@@ -421,7 +421,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="flags">The flags that are associated to the files.</param>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "scc")]
-		protected internal override void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
+		public override void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
 		{
 			if(this.ExcludeNodeFromScc)
 			{
@@ -456,7 +456,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Recursevily walks the folder nodes and redraws the state icons
 		/// </summary>
-		protected internal override void UpdateSccStateIcons()
+		public override void UpdateSccStateIcons()
 		{
 			for(HierarchyNode child = this.FirstChild; child != null; child = child.NextSibling)
 			{
@@ -574,7 +574,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="expanded">Flag that indicates the expanded state of the folder.
         /// This should be 'true' for expanded and 'false' for collapsed state.</param>
-        protected void SetExpanded(bool expanded)
+        protected virtual void SetExpanded(bool expanded)
         {
             if (this.IsExpanded == expanded)
                 return;
@@ -823,7 +823,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helper methods
-		private void RenameFolder(string newName)
+		protected virtual void RenameFolder(string newName)
 		{
 			// Do the rename (note that we only do the physical rename if the leaf name changed)
 			string newPath = Path.Combine(this.Parent.VirtualNodeName, newName);
@@ -869,7 +869,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="newPath">path of file or folder already existing on disk</param>
 		/// <returns>S_OK</returns>
-		private int ShowFileOrFolderAlreadExistsErrorMessage(string newPath)
+		protected virtual int ShowFileOrFolderAlreadExistsErrorMessage(string newPath)
 		{
 			//A file or folder with the name '{0}' already exists on disk at this location. Please choose another name.
 			//If this file or folder does not appear in the Solution Explorer, then it is not currently part of your project. To view files which exist on disk, but are not in the project, select Show All Files from the Project menu.

@@ -91,7 +91,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The IntPtr is data allocated that should be removed. It is allocated by the ProcessSelectionData method.
 		/// </summary>
-		internal DataCacheEntry(FORMATETC fmt, SafeGlobalAllocHandle data, DATADIR dir)
+		public DataCacheEntry(FORMATETC fmt, SafeGlobalAllocHandle data, DATADIR dir)
 		{
 			this.format = fmt;
 			this.data = data;

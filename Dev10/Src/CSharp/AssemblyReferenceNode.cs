@@ -88,7 +88,7 @@ namespace Microsoft.VisualStudio.Project
 		/// The name of the assembly this reference represents.
 		/// </summary>
 		/// <value></value>
-		internal System.Reflection.AssemblyName AssemblyName
+		public System.Reflection.AssemblyName AssemblyName
 		{
 			get
 			{
@@ -101,7 +101,7 @@ namespace Microsoft.VisualStudio.Project
 		/// machine. It can be different from the AssemblyName property because it can
 		/// be more specific.
 		/// </summary>
-		internal System.Reflection.AssemblyName ResolvedAssembly
+		public System.Reflection.AssemblyName ResolvedAssembly
 		{
 			get { return resolvedAssemblyName; }
 		}
@@ -144,7 +144,7 @@ namespace Microsoft.VisualStudio.Project
         }
 		#endregion
 
-        private string AssemblyPath
+        protected string AssemblyPath
         {
             get
             {
@@ -295,7 +295,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private void CreateFromAssemblyName(AssemblyName name)
+		protected virtual void CreateFromAssemblyName(AssemblyName name)
 		{
 			this.assemblyName = name;
 
@@ -322,7 +322,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Checks if an assembly is already added. The method parses all references and compares the full assemblynames, or the location of the assemblies to decide whether two assemblies are the same.
 		/// </summary>
 		/// <returns>true if the assembly has already been added.</returns>
-		protected internal override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
+		public override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
 		{
 			ReferenceContainerNode referencesFolder = this.ProjectManager.FindChild(ReferenceContainerNode.ReferencesNodeVirtualName) as ReferenceContainerNode;
 			Debug.Assert(referencesFolder != null, "Could not find the References node");
@@ -361,7 +361,7 @@ namespace Microsoft.VisualStudio.Project
 			return true;
 		}
 
-		private void GetPathNameFromProjectFile()
+		protected virtual void GetPathNameFromProjectFile()
 		{
 			string result = this.ItemNode.GetMetadata(ProjectFileConstants.HintPath);
 			if(String.IsNullOrEmpty(result))
@@ -383,7 +383,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private string GetFullPathFromPath(string path)
+		protected virtual string GetFullPathFromPath(string path)
 		{
 			if(Path.IsPathRooted(path))
 			{
@@ -407,7 +407,7 @@ namespace Microsoft.VisualStudio.Project
 			this.ResolveAssemblyReference();
 		}
 
-		private void SetHintPathAndPrivateValue()
+		protected virtual void SetHintPathAndPrivateValue()
 		{
 			// Remove the HintPath, we will re-add it below if it is needed
 			if(!String.IsNullOrEmpty(this.AssemblyPath))
@@ -437,7 +437,7 @@ namespace Microsoft.VisualStudio.Project
 		/// It also sets the private value to true if it has not been already provided through the associated project element.
 		/// </summary>
 		/// <param name="hintPath">The hint path to set.</param>
-		private void SetHintPathAndPrivateValue(string hintPath)
+		protected virtual void SetHintPathAndPrivateValue(string hintPath)
 		{
 			if (String.IsNullOrEmpty(hintPath))
 			{
@@ -464,7 +464,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// This function ensures that some properties of the reference are set.
 		/// </summary>
-		private void SetReferenceProperties()
+		protected virtual void SetReferenceProperties()
 		{
 			// If there is an assembly path then just set the hint path
 			if (!string.IsNullOrEmpty(this.assemblyPath))
@@ -494,7 +494,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Does the actual job of resolving an assembly reference. We need a private method that does not violate 
 		/// calling virtual method from the constructor.
 		/// </summary>
-        private void ResolveAssemblyReference()
+        protected virtual void ResolveAssemblyReference()
         {
             if (this.ProjectManager == null || this.ProjectManager.IsClosed)
             {
@@ -531,7 +531,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Registers with File change events
 		/// </summary>
-		private void InitializeFileChangeEvents()
+		protected virtual void InitializeFileChangeEvents()
 		{
 			this.fileChangeListener = new FileChangeManager(this.ProjectManager.Site);
 			this.fileChangeListener.FileChangedOnDisk += this.OnAssemblyReferenceChangedOnDisk;
@@ -540,7 +540,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Unregisters this node from file change notifications.
 		/// </summary>
-		private void UnregisterFromFileChangeService()
+		protected virtual void UnregisterFromFileChangeService()
 		{
 			this.fileChangeListener.FileChangedOnDisk -= this.OnAssemblyReferenceChangedOnDisk;
 			this.fileChangeListener.Dispose();
@@ -551,7 +551,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="sender">The FileChangeManager object.</param>
 		/// <param name="e">Event args containing the file name that was updated.</param>
-		private void OnAssemblyReferenceChangedOnDisk(object sender, FileChangedOnDiskEventArgs e)
+		protected virtual void OnAssemblyReferenceChangedOnDisk(object sender, FileChangedOnDiskEventArgs e)
 		{
 			Debug.Assert(e != null, "No event args specified for the FileChangedOnDisk event");
 

@@ -79,7 +79,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         private static volatile UIThread instance = new UIThread();
 
-        internal UIThread()
+        private UIThread()
         {
             this.Initialize();
         }

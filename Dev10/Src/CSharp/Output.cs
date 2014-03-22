@@ -77,7 +77,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IVsOutput2 Members
 
-		public int get_CanonicalName(out string pbstrCanonicalName)
+		public virtual int get_CanonicalName(out string pbstrCanonicalName)
 		{
 			// Get the output assembly path (including the name)
 			pbstrCanonicalName = output.GetMetadataValue(ProjectFileConstants.FinalOutputPath);
@@ -110,7 +110,7 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.S_OK;
 		}
 
-		public int get_DisplayName(out string pbstrDisplayName)
+		public virtual int get_DisplayName(out string pbstrDisplayName)
 		{
 			return this.get_CanonicalName(out pbstrDisplayName);
 		}
@@ -146,7 +146,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
 		}
 
-		public int get_RootRelativeURL(out string pbstrRelativePath)
+		public virtual int get_RootRelativeURL(out string pbstrRelativePath)
 		{
 			pbstrRelativePath = String.Empty;
 			object variant;

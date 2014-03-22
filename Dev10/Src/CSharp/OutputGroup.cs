@@ -176,7 +176,7 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region event handlers
-        private void OnProjectPropertyChanged(object sender, ProjectPropertyChangedArgs args)
+        protected virtual void OnProjectPropertyChanged(object sender, ProjectPropertyChangedArgs args)
         {
             // In theory here we should decide if we have to invalidate the group according with the kind of property
             // that is changed.

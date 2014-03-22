@@ -64,7 +64,7 @@ namespace Microsoft.VisualStudio.Project
 		private readonly IEventSource<TSink> source;
 		private uint nextCookie;
 
-		internal ConnectionPoint(ConnectionPointContainer container, IEventSource<TSink> source)
+		public ConnectionPoint(ConnectionPointContainer container, IEventSource<TSink> source)
 		{
 			if(null == container)
 			{
@@ -82,7 +82,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		#region IConnectionPoint Members
-		public void Advise(object pUnkSink, out uint pdwCookie)
+		public virtual void Advise(object pUnkSink, out uint pdwCookie)
 		{
 			TSink sink = pUnkSink as TSink;
 			if (sink == null)
@@ -94,22 +94,22 @@ namespace Microsoft.VisualStudio.Project
 			nextCookie += 1;
 		}
 
-		public void EnumConnections(out IEnumConnections ppEnum)
+		public virtual void EnumConnections(out IEnumConnections ppEnum)
 		{
 			ppEnum = new ConnectionEnumerator(sinks);
 		}
 
-		public void GetConnectionInterface(out Guid pIID)
+		public virtual void GetConnectionInterface(out Guid pIID)
 		{
 			pIID = typeof(TSink).GUID;
 		}
 
-		public void GetConnectionPointContainer(out IConnectionPointContainer ppCPC)
+		public virtual void GetConnectionPointContainer(out IConnectionPointContainer ppCPC)
 		{
 			ppCPC = this.container;
 		}
 
-		public void Unadvise(uint dwCookie)
+		public virtual void Unadvise(uint dwCookie)
 		{
 			// This will throw if the cookie is not in the list.
 			TSink sink = sinks[dwCookie];
@@ -119,12 +119,12 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		[ComVisible(true)]
-		private class ConnectionEnumerator : IEnumConnections
+		protected class ConnectionEnumerator : IEnumConnections
 		{
 			private readonly ReadOnlyCollection<KeyValuePair<uint, TSink>> _connections;
 			private int _currentIndex;
 
-			internal ConnectionEnumerator(IEnumerable<KeyValuePair<uint, TSink>> connections)
+			public ConnectionEnumerator(IEnumerable<KeyValuePair<uint, TSink>> connections)
 			{
 				if (connections == null)
 					throw new ArgumentNullException("connections");
@@ -132,7 +132,7 @@ namespace Microsoft.VisualStudio.Project
 				_connections = new List<KeyValuePair<uint, TSink>>(connections).AsReadOnly();
 			}
 
-			private ConnectionEnumerator(ReadOnlyCollection<KeyValuePair<uint, TSink>> connections, int currentIndex)
+			protected ConnectionEnumerator(ReadOnlyCollection<KeyValuePair<uint, TSink>> connections, int currentIndex)
 			{
 				if (connections == null)
 					throw new ArgumentNullException("connections");
@@ -143,12 +143,12 @@ namespace Microsoft.VisualStudio.Project
 
 			#region IEnumConnections Members
 
-			public void Clone(out IEnumConnections ppEnum)
+			public virtual void Clone(out IEnumConnections ppEnum)
 			{
 				ppEnum = new ConnectionEnumerator(_connections, _currentIndex);
 			}
 
-			public int Next(uint cConnections, CONNECTDATA[] rgcd, out uint pcFetched)
+			public virtual int Next(uint cConnections, CONNECTDATA[] rgcd, out uint pcFetched)
 			{
 				pcFetched = 0;
 
@@ -167,13 +167,13 @@ namespace Microsoft.VisualStudio.Project
 				return pcFetched == cConnections ? VSConstants.S_OK : VSConstants.S_FALSE;
 			}
 
-			public int Reset()
+			public virtual int Reset()
 			{
 				_currentIndex = 0;
 				return VSConstants.S_OK;
 			}
 
-			public int Skip(uint cConnections)
+			public virtual int Skip(uint cConnections)
 			{
 				int remaining = _connections.Count - _currentIndex;
 				if (remaining < cConnections)

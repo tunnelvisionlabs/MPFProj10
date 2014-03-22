@@ -204,7 +204,7 @@ namespace Microsoft.VisualStudio.Project
         /// References node cannot be dragged.
         /// </summary>
         /// <returns>A stringbuilder.</returns>
-        protected internal override StringBuilder PrepareSelectedNodesForClipboard()
+        public override StringBuilder PrepareSelectedNodesForClipboard()
         {
             return null;
         }
@@ -281,7 +281,7 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region IReferenceContainer
-        public IList<ReferenceNode> EnumReferences()
+        public virtual IList<ReferenceNode> EnumReferences()
         {
             List<ReferenceNode> refs = new List<ReferenceNode>();
             for(HierarchyNode node = this.FirstChild; node != null; node = node.NextSibling)
@@ -298,7 +298,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds references to this container from a MSBuild project.
         /// </summary>
-        public void LoadReferencesFromBuildProject(MSBuild.Project buildProject)
+        public virtual void LoadReferencesFromBuildProject(MSBuild.Project buildProject)
         {
             foreach(string referenceType in SupportedReferenceTypes)
             {
@@ -347,7 +347,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="selectorData">data describing selected component</param>
         /// <returns>Reference in case of a valid reference node has been created. Otherwise null</returns>
-        public ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData)
+        public virtual ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData)
         {
             return AddReferenceFromSelectorData(selectorData, null);
         }
@@ -357,7 +357,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="selectorData">data describing selected component</param>
         /// <returns>Reference in case of a valid reference node has been created. Otherwise null</returns>
-        public ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
+        public virtual ReferenceNode AddReferenceFromSelectorData(VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
         {
             //Make sure we can edit the project file
             if(!this.ProjectManager.QueryEditProjectFile(false))
@@ -467,7 +467,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Creates an assemby or com reference node given a selector data.
         /// </summary>
-        protected ReferenceNode CreateFileComponent(VSCOMPONENTSELECTORDATA selectorData)
+        protected virtual ReferenceNode CreateFileComponent(VSCOMPONENTSELECTORDATA selectorData)
         {
             return CreateFileComponent(selectorData, null);
         }
@@ -614,7 +614,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Creates a com reference node from a selector data.
         /// </summary>
-        protected ComReferenceNode CreateComReferenceNode(Microsoft.VisualStudio.Shell.Interop.VSCOMPONENTSELECTORDATA selectorData)
+        protected virtual ComReferenceNode CreateComReferenceNode(Microsoft.VisualStudio.Shell.Interop.VSCOMPONENTSELECTORDATA selectorData)
         {
             return CreateComReferenceNode(selectorData, null);
         }

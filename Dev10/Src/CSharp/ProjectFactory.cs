@@ -253,7 +253,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helpers
-		private IProjectEvents GetProjectEventsProvider()
+		protected virtual IProjectEvents GetProjectEventsProvider()
 		{
 			ProjectPackage projectPackage = this.package as ProjectPackage;
 			Debug.Assert(projectPackage != null, "Package not inherited from framework");

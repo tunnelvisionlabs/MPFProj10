@@ -116,7 +116,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Update dependency list
 		/// </summary>
 		/// <param name="projectNode">Project node to be updated. If null then all ProjectContainer nodes are updated</param>
-		private void UpdateDependencyListWithSubProjects(IBuildDependencyOnProjectContainer projectNode)
+		protected virtual void UpdateDependencyListWithSubProjects(IBuildDependencyOnProjectContainer projectNode)
 		{
 			if(projectNode != null)
 			{
@@ -149,7 +149,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Enum all projects in the solution and collect all that derives from ProjectContainerNode
 		/// </summary>
 		/// <returns>List of ProjectContainerNode nodes</returns>
-		private List<IBuildDependencyOnProjectContainer> GetListOfProjectContainerNodes()
+		protected virtual List<IBuildDependencyOnProjectContainer> GetListOfProjectContainerNodes()
 		{
 			List<IBuildDependencyOnProjectContainer> projectList = new List<IBuildDependencyOnProjectContainer>();
 
@@ -190,7 +190,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="projectContainer">Project Container where we should add the build dependency</param>
 		/// <param name="nestedProject">Nested project to set a build dependency against</param>
-		private static void AddBuildDependenyToNestedProject(IBuildDependencyUpdate projectContainer, IVsHierarchy nestedProject)
+		protected static void AddBuildDependenyToNestedProject(IBuildDependencyUpdate projectContainer, IVsHierarchy nestedProject)
 		{
 			// Validate input
 			Debug.Assert(projectContainer != null, "Project Container must not be null");

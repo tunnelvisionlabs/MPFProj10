@@ -71,7 +71,7 @@ namespace Microsoft.VisualStudio.Project
         #region static fiels
         // Build the dictionary with the mapping between some well known extensions
         // and the index of the icons inside the standard image list.
-        private static Dictionary<string, int> extensionIcons = new Dictionary<string, int>()
+        protected static Dictionary<string, int> extensionIcons = new Dictionary<string, int>()
             {
                 { ".aspx", (int)ImageName.WebForm },
                 { ".asax", (int)ImageName.GlobalApplicationClass },
@@ -418,7 +418,7 @@ namespace Microsoft.VisualStudio.Project
         /// Delete the item corresponding to the specified path from storage.
         /// </summary>
         /// <param name="path"></param>
-        protected internal override void DeleteFromStorage(string path)
+        public override void DeleteFromStorage(string path)
         {
             if(File.Exists(path))
             {
@@ -430,7 +430,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Rename the underlying document based on the change the user just made to the edit label.
         /// </summary>
-        protected internal override int SetEditLabel(string label, string relativePath)
+        public override int SetEditLabel(string label, string relativePath)
         {
             int returnValue = VSConstants.S_OK;
             uint oldId = this.Id;
@@ -507,7 +507,7 @@ namespace Microsoft.VisualStudio.Project
         /// Returns a specific Document manager to handle files
         /// </summary>
         /// <returns>Document manager object</returns>
-        protected internal override DocumentManager GetDocumentManager()
+        public override DocumentManager GetDocumentManager()
         {
             return new FileDocumentManager(this);
         }
@@ -838,7 +838,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="showMessage">true if user should be presented for UI in case the file is not present</param>
         /// <returns>true if file is on disk</returns>
-        internal protected virtual bool IsFileOnDisk(bool showMessage)
+        public virtual bool IsFileOnDisk(bool showMessage)
         {
             bool fileExist = IsFileOnDisk(this.Url);
 
@@ -861,7 +861,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="path">Url representing the file</param>
         /// <returns>True if the file exist</returns>
-        internal protected virtual bool IsFileOnDisk(string path)
+        public virtual bool IsFileOnDisk(string path)
         {
             return File.Exists(path);
         }
@@ -1064,7 +1064,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="files">The list of files to be placed under source control.</param>
         /// <param name="flags">The flags that are associated to the files.</param>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
-        protected internal override void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
+        public override void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
         {
             if (files == null)
                 throw new ArgumentNullException("files");
@@ -1294,7 +1294,7 @@ namespace Microsoft.VisualStudio.Project
         /// Get's called to rename the eventually running document this hierarchyitem points to
         /// </summary>
         /// returns FALSE if the doc can not be renamed
-        internal bool RenameDocument(string oldName, string newName)
+        public virtual bool RenameDocument(string oldName, string newName)
         {
             IVsRunningDocumentTable pRDT = this.GetService(typeof(IVsRunningDocumentTable)) as IVsRunningDocumentTable;
             if(pRDT == null) return false;
@@ -1377,7 +1377,7 @@ namespace Microsoft.VisualStudio.Project
             return true;
         }
 
-        private FileNode RenameFileNode(string oldFileName, string newFileName)
+        protected virtual FileNode RenameFileNode(string oldFileName, string newFileName)
         {
             return this.RenameFileNode(oldFileName, newFileName, null, this.Parent);
         }
@@ -1386,7 +1386,7 @@ namespace Microsoft.VisualStudio.Project
         /// Renames the file node for a case only change.
         /// </summary>
         /// <param name="newFileName">The new file name.</param>
-        private void RenameCaseOnlyChange(string newFileName)
+        protected virtual void RenameCaseOnlyChange(string newFileName)
         {
             //Update the include for this item.
             string include = this.ItemNode.Item.EvaluatedInclude;
@@ -1433,7 +1433,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="sender">FileNode sending it</param>
         /// <param name="e">Node event args</param>
-        internal virtual void OnCustomToolChanged(object sender, HierarchyNodeEventArgs e)
+        public virtual void OnCustomToolChanged(object sender, HierarchyNodeEventArgs e)
         {
             this.RunGenerator();
         }
@@ -1443,7 +1443,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="sender">FileNode sending it</param>
         /// <param name="e">Node event args</param>
-        internal virtual void OnCustomToolNameSpaceChanged(object sender, HierarchyNodeEventArgs e)
+        public virtual void OnCustomToolNameSpaceChanged(object sender, HierarchyNodeEventArgs e)
         {
             this.RunGenerator();
         }
@@ -1454,7 +1454,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Runs a generator.
         /// </summary>
-        internal void RunGenerator()
+        public virtual void RunGenerator()
         {
             ISingleFileGenerator generator = this.CreateSingleFileGenerator();
             if(generator != null)

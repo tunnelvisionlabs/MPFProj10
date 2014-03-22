@@ -110,7 +110,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <param name="index3">The index of the item to display. Reserved for future use.</param>
 		/// <param name="index4">The index of the item to display. Reserved for future use.</param>
 		/// <returns>The value of a property</returns>
-		public object get_IndexedValue(object index1, object index2, object index3, object index4)
+		public virtual object get_IndexedValue(object index1, object index2, object index3, object index4)
 		{
 			ParameterInfo[] par = pi.GetIndexParameters();
 			int len = Math.Min(par.Length, 4);
@@ -124,7 +124,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Setter function to set properties values. 
 		/// </summary>
 		/// <param name="value"></param>
-		public void let_Value(object value)
+		public virtual void let_Value(object value)
 		{
 			this.Value = value;
 		}
@@ -178,7 +178,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <param name="index3">Reserved for future use.</param>
 		/// <param name="index4">Reserved for future use.</param>
 		/// <param name="value">The value to set.</param>
-		public void set_IndexedValue(object index1, object index2, object index3, object index4, object value)
+		public virtual void set_IndexedValue(object index1, object index2, object index3, object index4, object value)
 		{
 			ParameterInfo[] par = pi.GetIndexParameters();
 			int len = Math.Min(par.Length, 4);

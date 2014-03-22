@@ -58,7 +58,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Engine required by RAR, primarily for collecting logs
 		/// </summary>
-		private class MockEngine : IBuildEngine
+		protected class MockEngine : IBuildEngine
 		{
 			private int messages = 0;
 			private int warnings = 0;
@@ -66,19 +66,19 @@ namespace Microsoft.VisualStudio.Project
 			private readonly StringBuilder log = new StringBuilder();
 			private readonly bool enableLog = false;
 
-			internal MockEngine(bool enableLog)
+			public MockEngine(bool enableLog)
 			{
 				this.enableLog = enableLog;
 			}
 
-			public void RecordRARExecutionException(Exception ex)
+			public virtual void RecordRARExecutionException(Exception ex)
 			{
 				if (!enableLog) return;
 
 				log.Append(String.Format(CultureInfo.InvariantCulture, "{0}", ex.ToString()));
 			}
 
-			public void LogErrorEvent(BuildErrorEventArgs eventArgs)
+			public virtual void LogErrorEvent(BuildErrorEventArgs eventArgs)
 			{
 				if (eventArgs == null)
 				{
@@ -100,7 +100,7 @@ namespace Microsoft.VisualStudio.Project
 				log.AppendLine(eventArgs.Message);
 			}
 
-			public void LogWarningEvent(BuildWarningEventArgs eventArgs)
+			public virtual void LogWarningEvent(BuildWarningEventArgs eventArgs)
 			{
 				if (eventArgs == null)
 				{
@@ -122,7 +122,7 @@ namespace Microsoft.VisualStudio.Project
 				log.AppendLine(eventArgs.Message);
 			}
 
-			public void LogCustomEvent(CustomBuildEventArgs eventArgs)
+			public virtual void LogCustomEvent(CustomBuildEventArgs eventArgs)
 			{
 				if (eventArgs == null)
 				{
@@ -135,7 +135,7 @@ namespace Microsoft.VisualStudio.Project
 				log.Append("\n");
 			}
 
-			public void LogMessageEvent(BuildMessageEventArgs eventArgs)
+			public virtual void LogMessageEvent(BuildMessageEventArgs eventArgs)
 			{
 				if (eventArgs == null)
 				{
@@ -168,12 +168,12 @@ namespace Microsoft.VisualStudio.Project
 				get { return 0; }
 			}
 
-			internal string Log
+			public string Log
 			{
 				get { return log.ToString(); }
 			}
 
-			public bool BuildProjectFile(string projectFileName, string[] targetNames, System.Collections.IDictionary globalProperties, System.Collections.IDictionary targetOutputs)
+			public virtual bool BuildProjectFile(string projectFileName, string[] targetNames, System.Collections.IDictionary globalProperties, System.Collections.IDictionary targetOutputs)
 			{
 				throw new NotImplementedException();
 			}

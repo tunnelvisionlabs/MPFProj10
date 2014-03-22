@@ -52,7 +52,7 @@ namespace Microsoft.VisualStudio.Project
 
 	partial class OleServiceProvider
 	{
-		private class ServiceData : IDisposable
+		protected sealed class ServiceData : IDisposable
 		{
 			private readonly Type serviceType;
 			private readonly bool shouldDispose;

@@ -73,7 +73,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IOleServiceProvider Members
 
-		public int QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject)
+		public virtual int QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject)
 		{
 			ppvObject = (IntPtr)0;
 			int hr = VSConstants.S_OK;
@@ -140,7 +140,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="shouldDisposeServiceInstance">true if the Dipose of the service provider is allowed to dispose the sevice instance.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
             Justification = "The services created here will be disposed in the Dispose method of this type.")]
-        public void AddService(Type serviceType, object serviceInstance, bool shouldDisposeServiceInstance)
+        public virtual void AddService(Type serviceType, object serviceInstance, bool shouldDisposeServiceInstance)
 		{
 			// Create the description of this service. Note that we don't do any validation
 			// of the parameter here because the constructor of ServiceData will do it for us.
@@ -152,7 +152,7 @@ namespace Microsoft.VisualStudio.Project
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
             Justification="The services created here will be disposed in the Dispose method of this type.")]
-        public void AddService(Type serviceType, Func<Type, object> serviceFactory, bool shouldDisposeServiceInstance)
+        public virtual void AddService(Type serviceType, Func<Type, object> serviceFactory, bool shouldDisposeServiceInstance)
 		{
 			// Create the description of this service. Note that we don't do any validation
 			// of the parameter here because the constructor of ServiceData will do it for us.
@@ -162,7 +162,7 @@ namespace Microsoft.VisualStudio.Project
 			AddService(service);
 		}
 
-		private void AddService(ServiceData data)
+		protected virtual void AddService(ServiceData data)
 		{
 			// Make sure that the collection of services is created.
 			if(null == services)
@@ -182,7 +182,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <devdoc>
 		/// Removes the given service type from the service container.
 		/// </devdoc>
-		public void RemoveService(Type serviceType)
+		public virtual void RemoveService(Type serviceType)
 		{
 			if(serviceType == null)
 			{

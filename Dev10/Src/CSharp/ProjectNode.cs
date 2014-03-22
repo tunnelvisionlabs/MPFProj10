@@ -459,7 +459,7 @@ namespace Microsoft.VisualStudio.Project
         /// Example: The language projrcts are triggering a build with the Compile target whenever 
         /// the project system changes.
         /// </summary>
-        protected internal virtual string ReevaluateProjectFileTargetName
+        public virtual string ReevaluateProjectFileTargetName
         {
             get
             {
@@ -470,7 +470,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// This is the object that will be returned by EnvDTE.Project.Object for this project
         /// </summary>
-        protected internal virtual object ProjectObject
+        public virtual object ProjectObject
         {
             get
             {
@@ -543,7 +543,7 @@ namespace Microsoft.VisualStudio.Project
         /// Gets or sets the ability of a project filenode to have child nodes (sub items).
         /// Example would be C#/VB forms having resx and designer files.
         /// </summary>
-        protected internal bool CanFileNodesHaveChilds
+        public bool CanFileNodesHaveChilds
         {
             get
             {
@@ -842,7 +842,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Get the helper object that track document changes.
         /// </summary>
-        internal TrackDocumentsHelper Tracker
+        public TrackDocumentsHelper Tracker
         {
             get
             {
@@ -968,7 +968,7 @@ namespace Microsoft.VisualStudio.Project
         /// Gets or set whether items can be deleted for this project.
         /// Enabling this feature can have the potential destructive behavior such as deleting files from disk.
         /// </summary>
-        protected internal virtual bool CanProjectDeleteItems
+        public virtual bool CanProjectDeleteItems
         {
             get
             {
@@ -984,7 +984,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Determines whether the project was fully opened. This is set when the OnAfterOpenProject has triggered.
         /// </summary>
-        protected internal bool HasProjectOpened
+        public bool HasProjectOpened
         {
             get
             {
@@ -995,7 +995,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Gets or sets event triggering flags.
         /// </summary>
-        internal SuppressEvents EventTriggeringFlag
+        public SuppressEvents EventTriggeringFlag
         {
             get
             {
@@ -1039,7 +1039,7 @@ namespace Microsoft.VisualStudio.Project
         /// Gets the current config.
         /// </summary>
         /// <value>The current config.</value>
-        protected internal Microsoft.Build.Execution.ProjectInstance CurrentConfig
+        public Microsoft.Build.Execution.ProjectInstance CurrentConfig
         {
             get { return this.currentConfig; }
         }
@@ -1165,7 +1165,7 @@ namespace Microsoft.VisualStudio.Project
                 OnItemAdded(node.Parent, node);
         }
 
-        private List<HierarchyNode> GetVisibleNonMemberItems()
+        protected virtual List<HierarchyNode> GetVisibleNonMemberItems()
         {
             List<HierarchyNode> result = new List<HierarchyNode>();
             Queue<HierarchyNode> workList = new Queue<HierarchyNode>();
@@ -1232,7 +1232,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="filter">Filter to be used. default is "*"</param>
         /// <param name="fileList">Files list containing the relative file paths.</param>
         /// <param name="folderList">Folders list containing the relative folder paths.</param>
-        private static void GetRelativeFileSystemEntries(string baseFolder, string filter, IList<string> fileList, IList<string> folderList)
+        protected static void GetRelativeFileSystemEntries(string baseFolder, string filter, IList<string> fileList, IList<string> folderList)
         {
             if (baseFolder == null)
             {
@@ -1461,7 +1461,7 @@ namespace Microsoft.VisualStudio.Project
         /// Walks up in the hierarchy and ensures that all parent folder nodes of 'node' are included in the project.
         /// </summary>
         /// <param name="node">Start hierarchy node.</param>
-        internal static void EnsureParentFolderIncluded(HierarchyNode node)
+        public static void EnsureParentFolderIncluded(HierarchyNode node)
         {
             if (node == null)
             {
@@ -1589,7 +1589,7 @@ namespace Microsoft.VisualStudio.Project
             return url.MakeRelative(new Url(subpath));
         }
 
-        internal static void RefreshPropertyBrowser()
+        public static void RefreshPropertyBrowser()
         {
             IVsUIShell vsuiShell = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
 
@@ -1603,7 +1603,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        internal static void ExploreFolderInWindows(string folderPath)
+        public static void ExploreFolderInWindows(string folderPath)
         {
             if (folderPath == null)
                 throw new ArgumentNullException("folderPath");
@@ -2209,7 +2209,7 @@ namespace Microsoft.VisualStudio.Project
         /// Returns a specific Document manager to handle opening and closing of the Project(Application) Designer if projectdesigner is supported.
         /// </summary>
         /// <returns>Document manager object</returns>
-        protected internal override DocumentManager GetDocumentManager()
+        public override DocumentManager GetDocumentManager()
         {
             if (this.SupportsProjectDesigner)
             {
@@ -2222,7 +2222,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region virtual methods
 
-        public MSBuild.Project GetOrCreateUserBuildProject()
+        public virtual MSBuild.Project GetOrCreateUserBuildProject()
         {
             var userBuildProject = UserBuildProject;
             if (userBuildProject == null)
@@ -2797,7 +2797,7 @@ namespace Microsoft.VisualStudio.Project
         /// Do the build by invoking msbuild
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "vsopts")]
-        internal virtual void BuildAsync(uint vsopts, string config, string platform, IVsOutputWindowPane output, string target, Action<MSBuildResult, string> uiThreadCallback)
+        public virtual void BuildAsync(uint vsopts, string config, string platform, IVsOutputWindowPane output, string target, Action<MSBuildResult, string> uiThreadCallback)
         {
             this.BuildPrelude(output);
             this.SetBuildConfigurationProperties(config, platform);
@@ -2923,7 +2923,7 @@ namespace Microsoft.VisualStudio.Project
             destinationGroup.AddProperty(propertyName, propertyValue);
         }
 
-        public ProjectOptions GetProjectOptions()
+        public virtual ProjectOptions GetProjectOptions()
         {
             return GetProjectOptions(null, null);
         }
@@ -3435,7 +3435,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="path">Path to store for this folder</param>
         /// <param name="element">Element corresponding to the folder</param>
         /// <returns>A FolderNode that can then be added to the hierarchy</returns>
-        protected internal virtual FolderNode CreateFolderNode(string path, ProjectElement element)
+        public virtual FolderNode CreateFolderNode(string path, ProjectElement element)
         {
             if (element == null)
                 throw new ArgumentNullException("element");
@@ -3544,7 +3544,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Recursevily walks the hierarchy nodes and redraws the state icons
         /// </summary>
-        protected internal override void UpdateSccStateIcons()
+        public override void UpdateSccStateIcons()
         {
             if (this.FirstChild == null)
             {
@@ -3595,7 +3595,7 @@ namespace Microsoft.VisualStudio.Project
         /// Handles the Add web reference command.
         /// </summary>
         /// <returns></returns>
-        protected internal virtual int AddWebReference()
+        public virtual int AddWebReference()
         {
             return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
         }
@@ -3604,7 +3604,7 @@ namespace Microsoft.VisualStudio.Project
         /// Unloads the project.
         /// </summary>
         /// <returns></returns>
-        protected internal virtual int UnloadProject()
+        public virtual int UnloadProject()
         {
             return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
         }
@@ -4387,7 +4387,7 @@ namespace Microsoft.VisualStudio.Project
         /// Defines whther the current mode of the project is in a supress command mode.
         /// </summary>
         /// <returns></returns>
-        protected internal virtual bool IsCurrentStateASuppressCommandsMode()
+        public virtual bool IsCurrentStateASuppressCommandsMode()
         {
             if (VsShellUtilities.IsSolutionBuilding(this.Site))
             {
@@ -4418,7 +4418,7 @@ namespace Microsoft.VisualStudio.Project
         ///        - GetOutputGroupDescription
         /// </summary>
         /// <returns>List of output group name and corresponding MSBuild target</returns>
-        protected internal virtual IList<KeyValuePair<string, string>> GetOutputGroupNames()
+        public virtual IList<KeyValuePair<string, string>> GetOutputGroupNames()
         {
             return new List<KeyValuePair<string, string>>(outputGroupNames);
         }
@@ -4428,7 +4428,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="canonicalName">Canonical name of the output group</param>
         /// <returns>Display name</returns>
-        protected internal virtual string GetOutputGroupDisplayName(string canonicalName)
+        public virtual string GetOutputGroupDisplayName(string canonicalName)
         {
             string result = SR.GetString(String.Format(CultureInfo.InvariantCulture, "Output{0}", canonicalName), CultureInfo.CurrentUICulture);
             if (String.IsNullOrEmpty(result))
@@ -4441,7 +4441,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="canonicalName">Canonical name of the output group</param>
         /// <returns>Description</returns>
-        protected internal virtual string GetOutputGroupDescription(string canonicalName)
+        public virtual string GetOutputGroupDescription(string canonicalName)
         {
             string result = SR.GetString(String.Format(CultureInfo.InvariantCulture, "Output{0}Description", canonicalName), CultureInfo.CurrentUICulture);
             if (String.IsNullOrEmpty(result))
@@ -4552,7 +4552,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Loads reference items from the project file into the hierarchy.
         /// </summary>
-        protected internal virtual void ProcessReferences()
+        public virtual void ProcessReferences()
         {
             IReferenceContainer container = GetReferenceContainer();
             if (null == container)
@@ -4577,7 +4577,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Loads folders from the project file into the hierarchy.
         /// </summary>
-        protected internal virtual void ProcessFolders(IDictionary<string, HierarchyNode> nodeCache)
+        public virtual void ProcessFolders(IDictionary<string, HierarchyNode> nodeCache)
         {
             // Process Folders (useful to persist empty folder)
             foreach (MSBuild.ProjectItem folder in this.buildProject.Items.Where(IsFolderItem).ToArray())
@@ -4593,7 +4593,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Loads file items from the project file into the hierarchy.
         /// </summary>
-        protected internal virtual void ProcessFiles(IDictionary<string, HierarchyNode> nodeCache)
+        public virtual void ProcessFiles(IDictionary<string, HierarchyNode> nodeCache)
         {
             List<String> subitemsKeys = new List<String>();
             Dictionary<String, MSBuild.ProjectItem> subitems = new Dictionary<String, MSBuild.ProjectItem>();
@@ -4651,7 +4651,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="subitemsKeys">List of sub item keys </param>
         /// <param name="subitems"></param>
-        protected internal virtual void ProcessDependentFileNodes(IList<String> subitemsKeys, Dictionary<String, MSBuild.ProjectItem> subitems, IDictionary<string, HierarchyNode> nodeCache)
+        public virtual void ProcessDependentFileNodes(IList<String> subitemsKeys, Dictionary<String, MSBuild.ProjectItem> subitems, IDictionary<string, HierarchyNode> nodeCache)
         {
             if (subitemsKeys == null || subitems == null)
             {
@@ -4671,7 +4671,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// For flavored projects which implement IPersistXMLFragment, load the information now
         /// </summary>
-        protected internal virtual void LoadNonBuildInformation()
+        public virtual void LoadNonBuildInformation()
         {
             IPersistXMLFragment outerHierarchy = this.InteropSafeIVsHierarchy as IPersistXMLFragment;
             if (outerHierarchy != null)
@@ -4714,7 +4714,7 @@ namespace Microsoft.VisualStudio.Project
         /// <para>-or-</para>
         /// <para>If <paramref name="node2"/> is <see langword="null"/>.</para>
         /// </exception>
-        protected internal virtual int CompareNodes(HierarchyNode node1, HierarchyNode node2)
+        public virtual int CompareNodes(HierarchyNode node1, HierarchyNode node2)
         {
             Debug.Assert(node1 != null && node2 != null);
             if (node1 == null)
@@ -4791,7 +4791,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Suspends MSBuild
         /// </summary>
-        public void SuspendMSBuild()
+        public virtual void SuspendMSBuild()
         {
             this.suspendMSBuildCounter++;
         }
@@ -4799,7 +4799,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Resumes MSBuild.
         /// </summary>
-        public void ResumeMSBuild(string config, string platform, IVsOutputWindowPane output, string target)
+        public virtual void ResumeMSBuild(string config, string platform, IVsOutputWindowPane output, string target)
         {
             this.suspendMSBuildCounter--;
 
@@ -4819,7 +4819,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Resumes MSBuild.
         /// </summary>
-        public void ResumeMSBuild(string config, string platform, string target)
+        public virtual void ResumeMSBuild(string config, string platform, string target)
         {
             this.ResumeMSBuild(config, platform, null, target);
         }
@@ -4827,7 +4827,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Resumes MSBuild.
         /// </summary>
-        public void ResumeMSBuild(string target)
+        public virtual void ResumeMSBuild(string target)
         {
             this.ResumeMSBuild(string.Empty, string.Empty, null, target);
         }
@@ -4835,7 +4835,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Calls MSBuild if it is not suspended. If it is suspended then it will remember to call when msbuild is resumed.
         /// </summary>
-        public MSBuildResult CallMSBuild(string config, string platform, IVsOutputWindowPane output, string target)
+        public virtual MSBuildResult CallMSBuild(string config, string platform, IVsOutputWindowPane output, string target)
         {
             if (this.suspendMSBuildCounter > 0)
             {
@@ -4852,7 +4852,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Overloaded method. Calls MSBuild if it is not suspended. Does not log on the outputwindow. If it is suspended then it will remeber to call when msbuild is resumed.
         /// </summary>
-        public MSBuildResult CallMSBuild(string config, string platform, string target)
+        public virtual MSBuildResult CallMSBuild(string config, string platform, string target)
         {
             return this.CallMSBuild(config, platform, null, target);
         }
@@ -4860,7 +4860,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Calls MSBuild if it is not suspended. Does not log and uses current configuration. If it is suspended then it will remeber to call when msbuild is resumed.
         /// </summary>
-        public MSBuildResult CallMSBuild(string target)
+        public virtual MSBuildResult CallMSBuild(string target)
         {
             return this.CallMSBuild(string.Empty, string.Empty, null, target);
         }
@@ -4868,7 +4868,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Calls MSBuild if it is not suspended. Uses current configuration. If it is suspended then it will remeber to call when msbuild is resumed.
         /// </summary>
-        public MSBuildResult CallMSBuild(string target, IVsOutputWindowPane output)
+        public virtual MSBuildResult CallMSBuild(string target, IVsOutputWindowPane output)
         {
             return this.CallMSBuild(string.Empty, string.Empty, output, target);
         }
@@ -4876,7 +4876,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Overloaded method to invoke MSBuild
         /// </summary>
-        public MSBuildResult Build(string config, string platform, IVsOutputWindowPane output, string target)
+        public virtual MSBuildResult Build(string config, string platform, IVsOutputWindowPane output, string target)
         {
             return this.Build(0, config, platform, output, target);
         }
@@ -4884,7 +4884,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Overloaded method to invoke MSBuild. Does not log build results to the output window pane.
         /// </summary>
-        public MSBuildResult Build(string config, string platform, string target)
+        public virtual MSBuildResult Build(string config, string platform, string target)
         {
             return this.Build(0, config, platform, null, target);
         }
@@ -4892,7 +4892,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Overloaded method. Invokes MSBuild using the default configuration and does without logging on the output window pane.
         /// </summary>
-        public MSBuildResult Build(string target)
+        public virtual MSBuildResult Build(string target)
         {
             return this.Build(0, string.Empty, string.Empty, null, target);
         }
@@ -4900,7 +4900,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Overloaded method. Invokes MSBuild using the default configuration.
         /// </summary>
-        public MSBuildResult Build(string target, IVsOutputWindowPane output)
+        public virtual MSBuildResult Build(string target, IVsOutputWindowPane output)
         {
             return this.Build(0, string.Empty, string.Empty, output, target);
         }
@@ -4910,7 +4910,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="config">name of configuration</param>
         /// <returns>Output path</returns>
-        public string GetOutputPath(string config, string platform)
+        public virtual string GetOutputPath(string config, string platform)
         {
             this.SetConfiguration(config, platform);
             return GetOutputPath(this.currentConfig);
@@ -4921,7 +4921,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="propertyName">Name of Property to retrieve</param>
         /// <returns>Evaluated value of property.</returns>
-        public string GetProjectProperty(string propertyName, _PersistStorageType storageType)
+        public virtual string GetProjectProperty(string propertyName, _PersistStorageType storageType)
         {
             return this.GetProjectProperty(propertyName, storageType, true);
         }
@@ -4931,7 +4931,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="propertyName">The name of the property to retrieve.</param>
 		/// <returns>Unevaluated value of the property.</returns>
-		public string GetProjectPropertyUnevaluated(string propertyName)
+		public virtual string GetProjectPropertyUnevaluated(string propertyName)
 		{
 			return this.buildProject.GetProperty(propertyName).UnevaluatedValue;
 		}
@@ -4940,7 +4940,7 @@ namespace Microsoft.VisualStudio.Project
         /// Set dirty state of project
         /// </summary>
         /// <param name="value">boolean value indicating dirty state</param>
-        public void SetProjectFileDirty(bool value)
+        public virtual void SetProjectFileDirty(bool value)
         {
             this._isDirty = value;
             if (this._isDirty)
@@ -4955,7 +4955,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="config">Name of configuration</param>
         /// <returns>Name of output assembly</returns>
-        public string GetOutputAssembly(string config, string platform)
+        public virtual string GetOutputAssembly(string config, string platform)
         {
             ProjectOptions options = this.GetProjectOptions(config, platform);
 
@@ -4967,7 +4967,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="itemId">ItemID for the requested node</param>
         /// <returns>Node if found</returns>
-        public HierarchyNode NodeFromItemId(uint itemId)
+        public virtual HierarchyNode NodeFromItemId(uint itemId)
         {
             if (VSConstants.VSITEMID_ROOT == itemId)
             {
@@ -4991,7 +4991,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="file">file name</param>
         /// <param name="itemType">MSBuild item type</param>
         /// <returns>new project element</returns>
-        public ProjectElement CreateMSBuildFileItem(string file, string itemType)
+        public virtual ProjectElement CreateMSBuildFileItem(string file, string itemType)
         {
             return new ProjectElement(this, file, itemType);
         }
@@ -5001,7 +5001,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="item">MSBuild item instance</param>
         /// <returns>wrapping project element</returns>
-        public ProjectElement GetProjectElement(MSBuild.ProjectItem item)
+        public virtual ProjectElement GetProjectElement(MSBuild.ProjectItem item)
         {
             return new ProjectElement(this, item, false);
         }
@@ -5011,7 +5011,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="path">Path to folder</param>
         /// <returns>FolderNode created that can be added to the hierarchy</returns>
-        protected internal FolderNode CreateFolderNode(string path)
+        public virtual FolderNode CreateFolderNode(string path)
         {
             ProjectElement item = this.AddFolderToMSBuild(path);
             FolderNode folderNode = CreateFolderNode(path, item);
@@ -5025,7 +5025,7 @@ namespace Microsoft.VisualStudio.Project
         /// Note that exact behavior can also be affected based on the SCC
         /// settings under Tools->Options.
         /// </summary>
-        public bool QueryEditProjectFile(bool suppressUI)
+        public virtual bool QueryEditProjectFile(bool suppressUI)
         {
             bool result = true;
             if (this._site == null)
@@ -5092,7 +5092,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="hierarchy"></param>
         /// <returns></returns>
-        internal NestedProjectNode GetNestedProjectForHierarchy(IVsHierarchy hierarchy)
+        public virtual NestedProjectNode GetNestedProjectForHierarchy(IVsHierarchy hierarchy)
         {
             IVsProject3 project = hierarchy as IVsProject3;
 
@@ -5118,7 +5118,7 @@ namespace Microsoft.VisualStudio.Project
         /// If the node is a ProjectNode it is the project folder.
         /// Otherwise (such as FileNode subitem) it delegate the resolution to the parent node.
         /// </summary>
-        internal string GetBaseDirectoryForAddingFiles(HierarchyNode nodeToAddFile)
+        public virtual string GetBaseDirectoryForAddingFiles(HierarchyNode nodeToAddFile)
         {
             string baseDir = String.Empty;
 
@@ -5142,7 +5142,7 @@ namespace Microsoft.VisualStudio.Project
         /// Get the project extensions
         /// </summary>
         /// <returns></returns>
-        internal MSBuildConstruction.ProjectExtensionsElement GetProjectExtensions()
+        public virtual MSBuildConstruction.ProjectExtensionsElement GetProjectExtensions()
         {
             var extensionsElement = this.buildProject.Xml.ChildrenReversed.OfType<MSBuildConstruction.ProjectExtensionsElement>().FirstOrDefault();
 
@@ -5160,7 +5160,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="id">The id of the project extension element.</param>
         /// <param name="xmlText">The value to set for a project extension.</param>
-        internal void SetProjectExtensions(string id, string xmlText)
+        public virtual void SetProjectExtensions(string id, string xmlText)
         {
             MSBuildConstruction.ProjectExtensionsElement element = this.GetProjectExtensions();
 
@@ -5184,7 +5184,7 @@ namespace Microsoft.VisualStudio.Project
         /// Register the project with the Scc manager.
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
-        protected void RegisterSccProject()
+        protected virtual void RegisterSccProject()
         {
 
             if (this.IsSccDisabled || this.isRegisteredWithScc || String.IsNullOrEmpty(this._sccProjectName))
@@ -5205,7 +5205,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         ///  Unregisters us from the SCC manager
         /// </summary>
-        protected void UnregisterProject()
+        protected virtual void UnregisterProject()
         {
             if (this.IsSccDisabled || !this.isRegisteredWithScc)
             {
@@ -5226,7 +5226,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="type">Type of the object for which you want the CATID</param>
         /// <returns>CATID</returns>
-        protected internal Guid GetCatIdForType(Type type)
+        public virtual Guid GetCatIdForType(Type type)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -5245,7 +5245,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="type">Type of the extensible object</param>
         /// <param name="catId">GUID that extender can use to uniquely identify your object type</param>
-        protected void AddCatIdMapping(Type type, Guid catId)
+        protected virtual void AddCatIdMapping(Type type, Guid catId)
         {
             catidMapping.Add(type, catId);
         }
@@ -5255,7 +5255,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="iPersistXMLFragment">Object that support being initialized with an XML fragment</param>
         /// <param name="configName">Name of the configuration being initialized, null if it is the project</param>
-        protected internal void LoadXmlFragment(IPersistXMLFragment persistXmlFragment, string configName)
+        public virtual void LoadXmlFragment(IPersistXMLFragment persistXmlFragment, string configName)
         {
             if (persistXmlFragment == null)
             {
@@ -5328,7 +5328,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Retrieve all XML fragments that need to be saved from the flavors and store the information in msbuild.
         /// </summary>
-        protected void PersistXmlFragments()
+        protected virtual void PersistXmlFragments()
         {
             if (this.IsFlavorDirty() != 0)
             {
@@ -5417,7 +5417,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region IPersist Members
 
-        public int GetClassID(out Guid clsid)
+        public virtual int GetClassID(out Guid clsid)
         {
             clsid = this.ProjectGuid;
             return VSConstants.S_OK;
@@ -5464,7 +5464,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        protected int IsFlavorDirty()
+        protected virtual int IsFlavorDirty()
         {
             int isDirty = 0;
             // See if one of our flavor consider us dirty
@@ -6188,7 +6188,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        public int BuildTarget(string targetName, out bool success)
+        public virtual int BuildTarget(string targetName, out bool success)
         {
             success = false;
 
@@ -6276,13 +6276,13 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region IVsDependencyProvider Members
-        public int EnumDependencies(out IVsEnumDependencies enumDependencies)
+        public virtual int EnumDependencies(out IVsEnumDependencies enumDependencies)
         {
             enumDependencies = new EnumDependencies(this.buildDependencyList);
             return VSConstants.S_OK;
         }
 
-        public int OpenDependency(string szDependencyCanonicalName, out IVsDependency dependency)
+        public virtual int OpenDependency(string szDependencyCanonicalName, out IVsDependency dependency)
         {
             dependency = null;
             return VSConstants.S_OK;
@@ -6535,7 +6535,7 @@ namespace Microsoft.VisualStudio.Project
         /// Returns the reference container node.
         /// </summary>
         /// <returns></returns>
-        public IReferenceContainer GetReferenceContainer()
+        public virtual IReferenceContainer GetReferenceContainer()
         {
             return this.FindChild(ReferenceContainerNode.ReferencesNodeVirtualName) as IReferenceContainer;
         }
@@ -6543,7 +6543,7 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region IProjectEventsListener Members
-        public bool IsProjectEventsListener
+        public virtual bool IsProjectEventsListener
         {
             get { return this.isProjectEventsListener; }
             set { this.isProjectEventsListener = value; }
@@ -6584,7 +6584,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="projectTypeGuids">Semi colon separated list of Guids. Typically, the last GUID would be the GUID of the base project factory</param>
         /// <returns>HResult</returns>
-        public int GetAggregateProjectTypeGuids(out string projectTypeGuids)
+        public virtual int GetAggregateProjectTypeGuids(out string projectTypeGuids)
         {
             projectTypeGuids = this.GetProjectProperty(ProjectFileConstants.ProjectTypeGuids, _PersistStorageType.PST_PROJECT_FILE);
             // In case someone manually removed this from our project file, default to our project without flavors
@@ -6637,7 +6637,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="projectTypeGuids">Semi-colon separated list of GUIDs, the last one is usually the project factory of the base project factory</param>
         /// <returns>HResult</returns>
-        public int SetAggregateProjectTypeGuids(string projectTypeGuids)
+        public virtual int SetAggregateProjectTypeGuids(string projectTypeGuids)
         {
             this.SetProjectProperty(ProjectFileConstants.ProjectTypeGuids, _PersistStorageType.PST_PROJECT_FILE, projectTypeGuids);
             return VSConstants.S_OK;
@@ -6647,7 +6647,7 @@ namespace Microsoft.VisualStudio.Project
         /// We are always the inner most part of the aggregation
         /// and as such we don't support setting an inner project
         /// </summary>
-        public int SetInnerProject(object innerProject)
+        public virtual int SetInnerProject(object innerProject)
         {
             return VSConstants.E_NOTIMPL;
         }
@@ -6775,13 +6775,13 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IVsDesignTimeAssemblyResolution methods
 
-		public int GetTargetFramework(out string ppTargetFramework)
+		public virtual int GetTargetFramework(out string ppTargetFramework)
 		{
 			ppTargetFramework = this.ProjectManager.TargetFrameworkMoniker.FullName;
 			return VSConstants.S_OK;
 		}
 
-		public int ResolveAssemblyPathInTargetFx(string[] prgAssemblySpecs, uint cAssembliesToResolve, VsResolvedAssemblyPath[] prgResolvedAssemblyPaths, out uint pcResolvedAssemblyPaths)
+		public virtual int ResolveAssemblyPathInTargetFx(string[] prgAssemblySpecs, uint cAssembliesToResolve, VsResolvedAssemblyPath[] prgResolvedAssemblyPaths, out uint pcResolvedAssemblyPaths)
 		{
 			if (prgAssemblySpecs == null || cAssembliesToResolve == 0 || prgResolvedAssemblyPaths == null)
 			{
@@ -6816,7 +6816,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="item">Item to add</param>
         /// <returns>Added node</returns>
-        private HierarchyNode AddIndependentFileNode(MSBuild.ProjectItem item, IDictionary<string, HierarchyNode> parentNodeCache)
+        protected virtual HierarchyNode AddIndependentFileNode(MSBuild.ProjectItem item, IDictionary<string, HierarchyNode> parentNodeCache)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
@@ -6847,7 +6847,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="item">msbuild item to add</param>
         /// <param name="parentNode">Parent Node</param>
         /// <returns>Added node</returns>
-        private HierarchyNode AddDependentFileNodeToNode(MSBuild.ProjectItem item, HierarchyNode parentNode)
+        protected virtual HierarchyNode AddDependentFileNodeToNode(MSBuild.ProjectItem item, HierarchyNode parentNode)
         {
             FileNode node = this.CreateDependentFileNode(new ProjectElement(this, item, false));
             parentNode.AddChild(node);
@@ -6867,7 +6867,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="item">msbuild item to add</param>
         /// <param name="parentNode">Parent Node</param>
         /// <returns>Added node</returns>
-        private HierarchyNode AddFileNodeToNode(MSBuild.ProjectItem item, HierarchyNode parentNode)
+        protected virtual HierarchyNode AddFileNodeToNode(MSBuild.ProjectItem item, HierarchyNode parentNode)
         {
             FileNode node = this.CreateFileNode(new ProjectElement(this, item, false));
             parentNode.AddChild(node);
@@ -6879,7 +6879,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="item">msbuild item</param>
         /// <returns>parent node</returns>
-        private HierarchyNode GetItemParentNode(MSBuild.ProjectItem item, IDictionary<string, HierarchyNode> nodeCache)
+        protected virtual HierarchyNode GetItemParentNode(MSBuild.ProjectItem item, IDictionary<string, HierarchyNode> nodeCache)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
@@ -6907,7 +6907,7 @@ namespace Microsoft.VisualStudio.Project
             return currentParent;
         }
 
-        private MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
+        protected virtual MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
         {
             ProjectInstance projectInstance = this.currentConfig;
             if (resetCache || this.currentConfig == null || storageType == _PersistStorageType.PST_USER_FILE)
@@ -6933,12 +6933,12 @@ namespace Microsoft.VisualStudio.Project
             return GetMsBuildProperty(projectInstance, propertyName);
         }
 
-        private static ProjectPropertyInstance GetMsBuildProperty(ProjectInstance projectInstance, string propertyName)
+        protected static ProjectPropertyInstance GetMsBuildProperty(ProjectInstance projectInstance, string propertyName)
         {
             return projectInstance.GetProperty(propertyName);
         }
 
-        private static string GetOutputPath(MSBuildExecution.ProjectInstance properties)
+        protected static string GetOutputPath(MSBuildExecution.ProjectInstance properties)
         {
             ProjectPropertyInstance property = GetMsBuildProperty(properties, "OutputPath");
             string outputPath = property != null ? property.EvaluatedValue : null;
@@ -6953,7 +6953,7 @@ namespace Microsoft.VisualStudio.Project
             return outputPath;
         }
 
-        private static bool GetBoolAttr(MSBuildExecution.ProjectInstance properties, string name)
+        protected static bool GetBoolAttr(MSBuildExecution.ProjectInstance properties, string name)
         {
             ProjectPropertyInstance property = GetMsBuildProperty(properties, name);
             string stringValue = property != null ? property.EvaluatedValue : null;
@@ -6961,7 +6961,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        private string GetAssemblyFileName(MSBuildExecution.ProjectInstance properties)
+        protected virtual string GetAssemblyFileName(MSBuildExecution.ProjectInstance properties)
         {
             this.currentConfig = properties;
             string name = null;
@@ -6999,7 +6999,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="sccAuxPath">String, opaque to the project, that identifies the local path to the project. Persist this string in the project file.</param>
         /// <param name="sccProvider">String, opaque to the project, that identifies the source control package. Persist this string in the project file.</param>
         /// <returns>Returns true if something changed.</returns>
-        private bool SetSccSettings(string sccProjectName, string sccLocalPath, string sccAuxPath, string sccProvider)
+        protected virtual bool SetSccSettings(string sccProjectName, string sccLocalPath, string sccAuxPath, string sccProvider)
         {
             bool changed = false;
             Debug.Assert(sccProjectName != null && sccLocalPath != null && sccAuxPath != null && sccProvider != null);
@@ -7022,7 +7022,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Sets the scc info from the project file.
         /// </summary>
-        private void InitSccInfo()
+        protected virtual void InitSccInfo()
         {
             this._sccProjectName = this.GetProjectProperty(ProjectFileConstants.SccProjectName, _PersistStorageType.PST_PROJECT_FILE);
             this._sccLocalPath = this.GetProjectProperty(ProjectFileConstants.SccLocalPath, _PersistStorageType.PST_PROJECT_FILE);
@@ -7030,12 +7030,12 @@ namespace Microsoft.VisualStudio.Project
             this._sccAuxPath = this.GetProjectProperty(ProjectFileConstants.SccAuxPath, _PersistStorageType.PST_PROJECT_FILE);
         }
 
-        private void OnAfterProjectOpen(object sender, ProjectFileOpenedEventArgs e)
+        protected virtual void OnAfterProjectOpen(object sender, ProjectFileOpenedEventArgs e)
         {
             this.projectOpened = true;
         }
 
-        private static XmlElement WrapXmlFragment(XmlDocument document, XmlElement root, Guid flavor, string configuration, string fragment)
+        protected static XmlElement WrapXmlFragment(XmlDocument document, XmlElement root, Guid flavor, string configuration, string fragment)
         {
             XmlElement node = document.CreateElement(ProjectFileConstants.FlavorProperties);
             XmlAttribute attribute = document.CreateAttribute(ProjectFileConstants.Guid);
@@ -7055,7 +7055,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Sets the project guid from the project file. If no guid is found a new one is created and assigne for the instance project guid.
         /// </summary>
-        private void SetProjectGuidFromProjectFile()
+        protected virtual void SetProjectGuidFromProjectFile()
         {
             string projectGuid = this.GetProjectProperty(ProjectFileConstants.ProjectGuid, _PersistStorageType.PST_PROJECT_FILE);
             if (String.IsNullOrEmpty(projectGuid))
@@ -7077,7 +7077,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="output"></param>
         /// <returns></returns>
-        private bool BuildPrelude(IVsOutputWindowPane output)
+        protected virtual bool BuildPrelude(IVsOutputWindowPane output)
         {
             bool engineLogOnlyCritical = false;
             // If there is some output, then we can ask the build engine to log more than
@@ -7096,7 +7096,7 @@ namespace Microsoft.VisualStudio.Project
         /// Recusively parses the tree and closes all nodes.
         /// </summary>
         /// <param name="node">The subtree to close.</param>
-        private static void CloseAllNodes(HierarchyNode node)
+        protected static void CloseAllNodes(HierarchyNode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -7116,7 +7116,7 @@ namespace Microsoft.VisualStudio.Project
         /// Set the build project with the new project instance value
         /// </summary>
         /// <param name="project">The new build project instance</param>
-        private void SetBuildProject(MSBuild.Project project)
+        protected virtual void SetBuildProject(MSBuild.Project project)
         {
             this.buildProject = project;
             this.baseUri = null;
@@ -7141,7 +7141,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Setup the global properties for project instance.
         /// </summary>
-        private void SetupProjectGlobalPropertiesThatAllProjectSystemsMustSet()
+        protected virtual void SetupProjectGlobalPropertiesThatAllProjectSystemsMustSet()
         {
             string solutionDirectory = null;
             string solutionFile = null;
@@ -7238,7 +7238,7 @@ namespace Microsoft.VisualStudio.Project
         /// <remarks>
         /// This method must be called on the UI thread.
         /// </remarks>
-        private bool TryBeginBuild(bool designTime, bool requiresUIThread = false)
+        protected virtual bool TryBeginBuild(bool designTime, bool requiresUIThread = false)
         {
             IVsBuildManagerAccessor accessor = null;
 
@@ -7309,7 +7309,7 @@ namespace Microsoft.VisualStudio.Project
         /// <remarks>
         /// This method must be called on the UI thread.
         /// </remarks>
-        private void EndBuild(BuildSubmission submission, bool designTime, bool requiresUIThread = false)
+        protected virtual void EndBuild(BuildSubmission submission, bool designTime, bool requiresUIThread = false)
         {
             IVsBuildManagerAccessor accessor = null;
 

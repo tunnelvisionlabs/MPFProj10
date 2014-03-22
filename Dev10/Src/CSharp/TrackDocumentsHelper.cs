@@ -66,7 +66,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region ctors
-		internal TrackDocumentsHelper(ProjectNode project)
+		public TrackDocumentsHelper(ProjectNode project)
 		{
 			this.projectMgr = project;
 		}
@@ -77,7 +77,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Gets the IVsTrackProjectDocuments2 object by asking the service provider for it.
 		/// </summary>
 		/// <returns>the IVsTrackProjectDocuments2 object</returns>
-		private IVsTrackProjectDocuments2 GetIVsTrackProjectDocuments2()
+		protected virtual IVsTrackProjectDocuments2 GetIVsTrackProjectDocuments2()
 		{
 			Debug.Assert(this.projectMgr != null && !this.projectMgr.IsClosed && this.projectMgr.Site != null);
 
@@ -96,7 +96,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="files">The files to add.</param>
 		/// <param name="flags">The VSQUERYADDFILEFLAGS flags associated to the files added</param>
 		/// <returns>true if the file can be added, false if not.</returns>
-		internal bool CanAddItems(string[] files, VSQUERYADDFILEFLAGS[] flags)
+		public virtual bool CanAddItems(string[] files, VSQUERYADDFILEFLAGS[] flags)
 		{
 			// If we are silent then we assume that the file can be added, since we do not want to trigger this event.
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) != 0)
@@ -123,7 +123,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Notify the environment about a file just added
 		/// </summary>
-		internal void OnItemAdded(string file, VSADDFILEFLAGS flag)
+		public virtual void OnItemAdded(string file, VSADDFILEFLAGS flag)
 		{
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) == 0)
 			{
@@ -137,7 +137,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="files">an array of files to remove</param>
 		/// <param name="flags">The VSQUERYREMOVEFILEFLAGS associated to the files to be removed.</param>
 		/// <returns>true if the files can be removed, false if not.</returns>
-		internal bool CanRemoveItems(string[] files, VSQUERYREMOVEFILEFLAGS[] flags)
+		public virtual bool CanRemoveItems(string[] files, VSQUERYREMOVEFILEFLAGS[] flags)
 		{
 			// If we are silent then we assume that the file can be removed, since we do not want to trigger this event.
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) != 0)
@@ -165,7 +165,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Notify the environment about a file just removed
 		/// </summary>
-		internal void OnItemRemoved(string file, VSREMOVEFILEFLAGS flag)
+		public virtual void OnItemRemoved(string file, VSREMOVEFILEFLAGS flag)
 		{
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) == 0)
 			{
@@ -180,7 +180,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="newFileName">Path to the new file.</param>
 		/// <param name="flag">The VSRENAMEFILEFLAGS associated with the file to be renamed.</param>
 		/// <returns>true if the file can be renamed. Otherwise false.</returns>
-		internal bool CanRenameItem(string oldFileName, string newFileName, VSRENAMEFILEFLAGS flag)
+		public virtual bool CanRenameItem(string oldFileName, string newFileName, VSRENAMEFILEFLAGS flag)
 		{
 			// If we are silent then we assume that the file can be renamed, since we do not want to trigger this event.
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) != 0)
@@ -197,7 +197,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Get's called to tell the env that a file was renamed
 		/// </summary>
 		/// 
-		internal void OnItemRenamed(string strOldName, string strNewName, VSRENAMEFILEFLAGS flag)
+		public virtual void OnItemRenamed(string strOldName, string strNewName, VSRENAMEFILEFLAGS flag)
 		{
 			if((this.projectMgr.EventTriggeringFlag & SuppressEvents.Tracker) == 0)
 			{

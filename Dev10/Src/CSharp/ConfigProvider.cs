@@ -152,7 +152,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="configName">The name of the configuration</param>
         /// <returns>An instance of a ProjectConfig object.</returns>
-        protected ProjectConfig GetProjectConfiguration(string configName, string platform)
+        protected virtual ProjectConfig GetProjectConfiguration(string configName, string platform)
         {
             if (configName == null)
                 throw new ArgumentNullException("configName");
@@ -619,7 +619,7 @@ namespace Microsoft.VisualStudio.Project
         }
         #endregion
 
-        protected IEnumerable<MSBuild.Project> GetBuildProjects()
+        protected virtual IEnumerable<MSBuild.Project> GetBuildProjects()
         {
             return GetBuildProjects(true);
         }
@@ -1128,7 +1128,7 @@ namespace Microsoft.VisualStudio.Project
         /// Called when a new configuration name was added.
         /// </summary>
         /// <param name="name">The name of configuration just added.</param>
-        private void NotifyOnCfgNameAdded(string name)
+        protected virtual void NotifyOnCfgNameAdded(string name)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)
             {
@@ -1140,7 +1140,7 @@ namespace Microsoft.VisualStudio.Project
         /// Called when a config name was deleted.
         /// </summary>
         /// <param name="name">The name of the configuration.</param>
-        private void NotifyOnCfgNameDeleted(string name)
+        protected virtual void NotifyOnCfgNameDeleted(string name)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)
             {
@@ -1153,7 +1153,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="oldName">Old configuration name</param>
         /// <param name="newName">New configuration name</param>
-        private void NotifyOnCfgNameRenamed(string oldName, string newName)
+        protected virtual void NotifyOnCfgNameRenamed(string oldName, string newName)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)
             {
@@ -1165,7 +1165,7 @@ namespace Microsoft.VisualStudio.Project
         /// Called when a platform name was added
         /// </summary>
         /// <param name="platformName">The name of the platform.</param>
-        private void NotifyOnPlatformNameAdded(string platformName)
+        protected virtual void NotifyOnPlatformNameAdded(string platformName)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)
             {
@@ -1177,7 +1177,7 @@ namespace Microsoft.VisualStudio.Project
         /// Called when a platform name was deleted
         /// </summary>
         /// <param name="platformName">The name of the platform.</param>
-        private void NotifyOnPlatformNameDeleted(string platformName)
+        protected virtual void NotifyOnPlatformNameDeleted(string platformName)
         {
             foreach(IVsCfgProviderEvents sink in this.cfgEventSinks)
             {
@@ -1272,7 +1272,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="platforms">An array of available platform names</param>
         /// <returns>A count of the actual number of platform names returned.</returns>
         /// <devremark>The platforms array is never null. It is assured by the callers.</devremark>
-        private static int GetPlatforms(uint celt, string[] names, uint[] actual, string[] platforms)
+        protected static int GetPlatforms(uint celt, string[] names, uint[] actual, string[] platforms)
         {
             Debug.Assert(platforms != null, "The plaforms array should never be null");
             if(names == null)

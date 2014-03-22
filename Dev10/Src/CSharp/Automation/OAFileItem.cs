@@ -326,7 +326,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// </summary>
 		/// <param name="isCalledFromSaveAs">Flag determining which Save method called , the SaveAs or the Save.</param>
 		/// <param name="fileName">The name of the project file.</param>        
-		private void DoSave(bool isCalledFromSaveAs, string fileName)
+		protected virtual void DoSave(bool isCalledFromSaveAs, string fileName)
 		{
 			UIThread.DoOnUIThread(delegate()
 			{

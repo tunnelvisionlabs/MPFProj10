@@ -58,12 +58,12 @@ namespace Microsoft.VisualStudio.Project
 	{
 		private readonly Dictionary<Guid, IConnectionPoint> connectionPoints;
 
-		protected internal ConnectionPointContainer()
+		public ConnectionPointContainer()
 		{
 			connectionPoints = new Dictionary<Guid, IConnectionPoint>();
 		}
 
-		protected internal void AddEventSource<TSink>(IEventSource<TSink> source)
+		public virtual void AddEventSource<TSink>(IEventSource<TSink> source)
 			where TSink : class
 		{
 			if(null == source)

@@ -95,7 +95,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Returns teh object that handles listening to file changes on the nested project files.
 		/// </summary>
-		internal FileChangeManager NestedProjectNodeReloader
+		public FileChangeManager NestedProjectNodeReloader
 		{
 			get
 			{
@@ -388,7 +388,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region helper methods
 
-		internal protected void RemoveNestedProjectNodes()
+		public virtual void RemoveNestedProjectNodes()
 		{
 			for(HierarchyNode n = this.FirstChild; n != null; n = n.NextSibling)
 			{
@@ -409,7 +409,7 @@ namespace Microsoft.VisualStudio.Project
 		/// and for each SubProject it finds, it create the project and a node
 		/// in our Hierarchy to hold the project.
 		/// </summary>
-		internal protected void CreateNestedProjectNodes()
+		public virtual void CreateNestedProjectNodes()
 		{
 			// 1. Create a ProjectElement with the found item and then Instantiate a new Nested project with this ProjectElement.
 			// 2. Link into the hierarchy.			
@@ -459,7 +459,7 @@ namespace Microsoft.VisualStudio.Project
 		/// This is used while loading the project and can also be used
 		/// to add an existing project to our hierarchy.
 		/// </summary>
-		protected internal virtual NestedProjectNode AddExistingNestedProject(ProjectElement element, __VSCREATEPROJFLAGS creationFlags)
+		public virtual NestedProjectNode AddExistingNestedProject(ProjectElement element, __VSCREATEPROJFLAGS creationFlags)
 		{
 			ProjectElement elementToUse = (element == null) ? this.nestedProjectElement : element;
 
@@ -485,7 +485,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="element">The project item to use as the base of the nested project.</param>
 		/// <param name="silent">true if the wizard should run silently, otherwise false.</param>
-		protected internal void RunVSTemplateWizard(ProjectElement element, bool silent)
+		public void RunVSTemplateWizard(ProjectElement element, bool silent)
 		{
 			ProjectElement elementToUse = (element == null) ? this.nestedProjectElement : element;
 
@@ -547,7 +547,7 @@ namespace Microsoft.VisualStudio.Project
 		/// If you want to create a project for which there exist a
 		/// vstemplate, consider using RunVsTemplateWizard instead.
 		/// </summary>
-		protected internal virtual NestedProjectNode AddNestedProjectFromTemplate(ProjectElement element, __VSCREATEPROJFLAGS creationFlags)
+		public virtual NestedProjectNode AddNestedProjectFromTemplate(ProjectElement element, __VSCREATEPROJFLAGS creationFlags)
 		{
 			ProjectElement elementToUse = (element == null) ? this.nestedProjectElement : element;
 
@@ -568,7 +568,7 @@ namespace Microsoft.VisualStudio.Project
 		/// If you want to create a project for which there exist a
 		/// vstemplate, consider using RunVsTemplateWizard instead.
 		/// </summary>
-		protected internal virtual NestedProjectNode AddNestedProjectFromTemplate(string fileName, string destination, string projectName, ProjectElement element, __VSCREATEPROJFLAGS creationFlags)
+		public virtual NestedProjectNode AddNestedProjectFromTemplate(string fileName, string destination, string projectName, ProjectElement element, __VSCREATEPROJFLAGS creationFlags)
 		{
 			// If this is project creation and the template specified a subproject in its project file, this.nestedProjectElement will be used 
 			ProjectElement elementToUse = (element == null) ? this.nestedProjectElement : element;
@@ -673,7 +673,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Get information from the registry based for the project 
 		/// factory corresponding to the TypeGuid of the element
 		/// </summary>
-		private RegisteredProjectType GetRegisteredProject(ProjectElement element)
+		protected virtual RegisteredProjectType GetRegisteredProject(ProjectElement element)
 		{
 			ProjectElement elementToUse = (element == null) ? this.nestedProjectElement : element;
 
@@ -802,7 +802,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="sender">The FileChangeManager object.</param>
 		/// <param name="e">Event args containing the file name that was updated.</param>
-		private void OnNestedProjectFileChangedOnDisk(object sender, FileChangedOnDiskEventArgs e)
+		protected virtual void OnNestedProjectFileChangedOnDisk(object sender, FileChangedOnDiskEventArgs e)
 		{
 			#region Pre-condition validation
 			Debug.Assert(e != null, "No event args specified for the FileChangedOnDisk event");

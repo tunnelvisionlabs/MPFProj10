@@ -64,12 +64,12 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public bool Equals(T x, T y)
+        public virtual bool Equals(T x, T y)
         {
             return object.ReferenceEquals(x, y);
         }
 
-        public int GetHashCode(T obj)
+        public virtual int GetHashCode(T obj)
         {
             return RuntimeHelpers.GetHashCode(obj);
         }

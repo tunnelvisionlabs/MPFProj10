@@ -89,7 +89,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Ends the scope of the automation function. This function is also called by the
 		/// Dispose method.
 		/// </summary>
-		public void ExitAutomation()
+		public virtual void ExitAutomation()
 		{
 			if(inAutomation)
 			{
@@ -119,7 +119,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		}
 
 		#region IDisposable Members
-		private void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 			if(disposing && !this.isDisposed)
 			{

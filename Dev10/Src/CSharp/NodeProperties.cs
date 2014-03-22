@@ -106,7 +106,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 		#endregion
 
-		private static ProjectNode GetProjectManager(HierarchyNode node)
+		protected static ProjectNode GetProjectManager(HierarchyNode node)
 		{
 			if (node == null)
 				throw new ArgumentNullException("node");
@@ -181,13 +181,13 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helper methods
-		protected string GetProperty(string name, string def)
+		protected virtual string GetProperty(string name, string def)
 		{
 			string a = this.Node.ItemNode.GetMetadata(name);
 			return (a == null) ? def : a;
 		}
 
-		protected void SetProperty(string name, string value)
+		protected virtual void SetProperty(string name, string value)
 		{
 			this.Node.ItemNode.SetMetadata(name, value);
 		}
@@ -197,7 +197,7 @@ namespace Microsoft.VisualStudio.Project
 		/// configuration independent properties.
 		/// </summary>
 		/// <param name="pages">The pages to return.</param>
-		private void GetCommonPropertyPages(CAUUID[] pages)
+		protected virtual void GetCommonPropertyPages(CAUUID[] pages)
 		{
 			// We do not check whether the supportsProjectDesigner is set to false on the ProjectNode.
 			// We rely that the caller knows what to call on us.
@@ -298,7 +298,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		[Browsable(false)]
-		public object ExtenderNames()
+		public virtual object ExtenderNames()
 		{
 			EnvDTE.ObjectExtenders extenderService = (EnvDTE.ObjectExtenders)this.Node.GetService(typeof(EnvDTE.ObjectExtenders));
 			Debug.Assert(extenderService != null, "Could not get the ObjectExtenders object from the services exposed by this property object");
@@ -309,7 +309,7 @@ namespace Microsoft.VisualStudio.Project
 			return extenderService.GetExtenderNames(this.ExtenderCATID, this);
 		}
 
-		public object Extender(string extenderName)
+		public virtual object Extender(string extenderName)
 		{
 			EnvDTE.ObjectExtenders extenderService = (EnvDTE.ObjectExtenders)this.Node.GetService(typeof(EnvDTE.ObjectExtenders));
 			Debug.Assert(extenderService != null, "Could not get the ObjectExtenders object from the services exposed by this property object");

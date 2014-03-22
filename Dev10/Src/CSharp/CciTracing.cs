@@ -55,7 +55,7 @@ namespace Microsoft.VisualStudio.Project
 	public static class CciTracing
 	{
 		[ConditionalAttribute("Enable_CCIDiagnostics")]
-		static void InternalTraceCall(int levels)
+		private static void InternalTraceCall(int levels)
 		{
 			System.Diagnostics.StackFrame stack;
 			stack = new System.Diagnostics.StackFrame(levels);
@@ -68,21 +68,21 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		[ConditionalAttribute("CCI_TRACING")]
-		static public void TraceCall()
+		public static void TraceCall()
 		{
 			// skip this one as well
 			CciTracing.InternalTraceCall(2);
 		}
 
 		[ConditionalAttribute("CCI_TRACING")]
-		static public void TraceCall(string parameters)
+		public static void TraceCall(string parameters)
 		{
 			CciTracing.InternalTraceCall(2);
 			System.Diagnostics.Trace.WriteLine("\tParameters: \t" + parameters);
 		}
 
 		[ConditionalAttribute("CCI_TRACING")]
-		static public void Trace(System.Exception exception)
+		public static void Trace(System.Exception exception)
 		{
 			if (exception == null)
 				throw new ArgumentNullException("exception");
@@ -92,20 +92,20 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		[ConditionalAttribute("CCI_TRACING")]
-		static public void Trace(string output)
+		public static void Trace(string output)
 		{
 			System.Diagnostics.Trace.WriteLine(output);
 		}
 
 		[ConditionalAttribute("CCI_TRACING")]
-		static public void TraceData(string output)
+		public static void TraceData(string output)
 		{
 			System.Diagnostics.Trace.WriteLine("Data Trace: \t" + output);
 		}
 
 		[ConditionalAttribute("Enable_CCIFileOutput")]
 		[ConditionalAttribute("CCI_TRACING")]
-		static public void AddTraceLog(string fileName)
+		public static void AddTraceLog(string fileName)
 		{
 			TextWriterTraceListener tw = new TextWriterTraceListener("c:\\mytrace.log");
 			System.Diagnostics.Trace.Listeners.Add(tw);

@@ -263,7 +263,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="value">Guid to be generated</param>
 		/// <returns>The guid as string</returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		public string GuidToForm1(Guid value)
+		public virtual string GuidToForm1(Guid value)
 		{
 			byte[] GuidBytes = value.ToByteArray();
 			StringBuilder ResultingStr = new StringBuilder(80);
@@ -365,7 +365,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="fileFullPath">Full path to the new file</param>
 		/// <returns>Namespace to use for the new file</returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		public string GetFileNamespace(string fileFullPath, ProjectNode node)
+		public virtual string GetFileNamespace(string fileFullPath, ProjectNode node)
 		{
             if (node == null)
             {
