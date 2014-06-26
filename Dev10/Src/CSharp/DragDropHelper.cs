@@ -195,7 +195,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="dropHandle"></param>
 		/// <returns></returns>
-		internal static string GetData(SafeGlobalAllocHandle dropHandle)
+		public static string GetData(SafeGlobalAllocHandle dropHandle)
 		{
 			IntPtr data = UnsafeNativeMethods.GlobalLock(dropHandle);
 			try
@@ -218,7 +218,7 @@ namespace Microsoft.VisualStudio.Project
 			return null;
 		}
 
-		internal static SafeGlobalAllocHandle CopyHGlobal(SafeGlobalAllocHandle data)
+		public static SafeGlobalAllocHandle CopyHGlobal(SafeGlobalAllocHandle data)
 		{
 			IntPtr src = UnsafeNativeMethods.GlobalLock(data);
 			UIntPtr size = UnsafeNativeMethods.GlobalSize(data);

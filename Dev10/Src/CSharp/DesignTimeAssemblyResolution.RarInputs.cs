@@ -62,37 +62,37 @@ namespace Microsoft.VisualStudio.Project
 		/// Accesssor for RAR related properties in the projectInstance.
 		/// See ResolveAssemblyReferennce task msdn docs for member descriptions
 		/// </summary>
-		private class RarInputs
+		protected class RarInputs
 		{
 			#region private fields
 
 			// RAR related property/item names etc
-			private const string TargetFrameworkDirectory = "TargetFrameworkDirectory";
-			private const string RegistrySearchPathFormat = "Registry:{0},{1},{2}{3}";
-			private const string FrameworkRegistryBase = "FrameworkRegistryBase";
-			private const string TargetFrameworkVersionName = "TargetFrameworkVersion";
-			private const string AssemblyFoldersSuffix = "AssemblyFoldersSuffix";
-			private const string AssemblyFoldersExConditions = "AssemblyFoldersExConditions";
-			private const string AllowedReferenceAssemblyFileExtensions = "AllowedReferenceAssemblyFileExtensions";
-			private const string ProcessorArchitecture = "ProcessorArchitecture";
-			private const string TargetFrameworkMonikerName = "TargetFrameworkMoniker";
-			private const string TargetFrameworkMonikerDisplayNameName = "TargetFrameworkMonikerDisplayName";
-			private const string TargetedRuntimeVersionName = "TargetedRuntimeVersion";
-			private const string FullFrameworkReferenceAssemblyPaths = "_FullFrameworkReferenceAssemblyPaths";
-			private const string TargetFrameworkProfile = "TargetFrameworkProfile";
+			protected const string TargetFrameworkDirectory = "TargetFrameworkDirectory";
+			protected const string RegistrySearchPathFormat = "Registry:{0},{1},{2}{3}";
+			protected const string FrameworkRegistryBase = "FrameworkRegistryBase";
+			protected const string TargetFrameworkVersionName = "TargetFrameworkVersion";
+			protected const string AssemblyFoldersSuffix = "AssemblyFoldersSuffix";
+			protected const string AssemblyFoldersExConditions = "AssemblyFoldersExConditions";
+			protected const string AllowedReferenceAssemblyFileExtensions = "AllowedReferenceAssemblyFileExtensions";
+			protected const string ProcessorArchitecture = "ProcessorArchitecture";
+			protected const string TargetFrameworkMonikerName = "TargetFrameworkMoniker";
+			protected const string TargetFrameworkMonikerDisplayNameName = "TargetFrameworkMonikerDisplayName";
+			protected const string TargetedRuntimeVersionName = "TargetedRuntimeVersion";
+			protected const string FullFrameworkReferenceAssemblyPaths = "_FullFrameworkReferenceAssemblyPaths";
+			protected const string TargetFrameworkProfile = "TargetFrameworkProfile";
 
-			private const string ProjectDesignTimeAssemblyResolutionSearchPaths = "ProjectDesignTimeAssemblyResolutionSearchPaths";
-			private const string Content = "Content";
-			private const string None = "None";
-			private const string RARResolvedReferencePath = "ReferencePath";
-			private const string IntermediateOutputPath = "IntermediateOutputPath";
-			private const string InstalledAssemblySubsetTablesName = "InstalledAssemblySubsetTables";
-			private const string IgnoreInstalledAssemblySubsetTables = "IgnoreInstalledAssemblySubsetTables";
-			private const string ReferenceInstalledAssemblySubsets = "_ReferenceInstalledAssemblySubsets";
-			private const string FullReferenceAssemblyNames = "FullReferenceAssemblyNames";
-			private const string LatestTargetFrameworkDirectoriesName = "LatestTargetFrameworkDirectories";
-			private const string FullFrameworkAssemblyTablesName = "FullFrameworkAssemblyTables";
-			private const string MSBuildProjectDirectory = "MSBuildProjectDirectory";
+			protected const string ProjectDesignTimeAssemblyResolutionSearchPaths = "ProjectDesignTimeAssemblyResolutionSearchPaths";
+			protected const string Content = "Content";
+			protected const string None = "None";
+			protected const string RARResolvedReferencePath = "ReferencePath";
+			protected const string IntermediateOutputPath = "IntermediateOutputPath";
+			protected const string InstalledAssemblySubsetTablesName = "InstalledAssemblySubsetTables";
+			protected const string IgnoreInstalledAssemblySubsetTables = "IgnoreInstalledAssemblySubsetTables";
+			protected const string ReferenceInstalledAssemblySubsets = "_ReferenceInstalledAssemblySubsets";
+			protected const string FullReferenceAssemblyNames = "FullReferenceAssemblyNames";
+			protected const string LatestTargetFrameworkDirectoriesName = "LatestTargetFrameworkDirectories";
+			protected const string FullFrameworkAssemblyTablesName = "FullFrameworkAssemblyTables";
+			protected const string MSBuildProjectDirectory = "MSBuildProjectDirectory";
 
 			#endregion //private fields
 
@@ -155,7 +155,7 @@ namespace Microsoft.VisualStudio.Project
 
 			#region common properties/items
 
-			private string[] GetTargetFrameworkDirectories(ProjectInstance projectInstance)
+			protected virtual string[] GetTargetFrameworkDirectories(ProjectInstance projectInstance)
 			{
 				if (TargetFrameworkDirectories == null)
 				{
@@ -170,7 +170,7 @@ namespace Microsoft.VisualStudio.Project
 				return TargetFrameworkDirectories;
 			}
 
-			private static string[] GetAllowedAssemblyExtensions(ProjectInstance projectInstance)
+			protected static string[] GetAllowedAssemblyExtensions(ProjectInstance projectInstance)
 			{
 				string[] allowedAssemblyExtensions;
 
@@ -181,42 +181,42 @@ namespace Microsoft.VisualStudio.Project
 				return allowedAssemblyExtensions;
 			}
 
-			private static string GetTargetProcessorArchitecture(ProjectInstance projectInstance)
+			protected static string GetTargetProcessorArchitecture(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(ProcessorArchitecture).Trim();
 
 				return val;
 			}
 
-			private static string GetTargetFrameworkVersion(ProjectInstance projectInstance)
+			protected static string GetTargetFrameworkVersion(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(TargetFrameworkVersionName).Trim();
 
 				return val;
 			}
 
-			private static string GetTargetFrameworkMoniker(ProjectInstance projectInstance)
+			protected static string GetTargetFrameworkMoniker(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(TargetFrameworkMonikerName).Trim();
 
 				return val;
 			}
 
-			private static string GetTargetFrameworkMonikerDisplayName(ProjectInstance projectInstance)
+			protected static string GetTargetFrameworkMonikerDisplayName(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(TargetFrameworkMonikerDisplayNameName).Trim();
 
 				return val;
 			}
 
-			private static string GetTargetedRuntimeVersion(ProjectInstance projectInstance)
+			protected static string GetTargetedRuntimeVersion(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(TargetedRuntimeVersionName).Trim();
 
 				return val;
 			}
 
-			private static string[] GetFullFrameworkFolders(ProjectInstance projectInstance)
+			protected static string[] GetFullFrameworkFolders(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(FullFrameworkReferenceAssemblyPaths).Trim();
 
@@ -225,7 +225,7 @@ namespace Microsoft.VisualStudio.Project
 				return _fullFrameworkFolders;
 			}
 
-			private static string[] GetLatestTargetFrameworkDirectories(ProjectInstance projectInstance)
+			protected static string[] GetLatestTargetFrameworkDirectories(ProjectInstance projectInstance)
 			{
 				IEnumerable<ITaskItem> taskItems = projectInstance.GetItems(LatestTargetFrameworkDirectoriesName);
 
@@ -234,7 +234,7 @@ namespace Microsoft.VisualStudio.Project
 				return latestTargetFrameworkDirectory;
 			}
 
-			private static string GetProfileName(ProjectInstance projectInstance)
+			protected static string GetProfileName(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(TargetFrameworkProfile).Trim();
 
@@ -244,7 +244,7 @@ namespace Microsoft.VisualStudio.Project
 
 			#region project dtar specific properties/items
 
-			private static string[] GetPdtarSearchPaths(ProjectInstance projectInstance)
+			protected static string[] GetPdtarSearchPaths(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(ProjectDesignTimeAssemblyResolutionSearchPaths).Trim();
 
@@ -253,7 +253,7 @@ namespace Microsoft.VisualStudio.Project
 				return _pdtarSearchPaths;
 			}
 
-			private static string[] GetCandidateAssemblyFiles(ProjectInstance projectInstance)
+			protected static string[] GetCandidateAssemblyFiles(ProjectInstance projectInstance)
 			{
 				var candidateAssemblyFilesList = new List<ProjectItemInstance>();
 
@@ -266,7 +266,7 @@ namespace Microsoft.VisualStudio.Project
 				return candidateAssemblyFiles;
 			}
 
-			private static string GetStateFile(ProjectInstance projectInstance)
+			protected static string GetStateFile(ProjectInstance projectInstance)
 			{
 				string intermediatePath = projectInstance.GetPropertyValue(IntermediateOutputPath).Trim();
 
@@ -277,12 +277,12 @@ namespace Microsoft.VisualStudio.Project
 				return stateFile;
 			}
 
-			private static ITaskItem[] GetInstalledAssemblySubsetTables(ProjectInstance projectInstance)
+			protected static ITaskItem[] GetInstalledAssemblySubsetTables(ProjectInstance projectInstance)
 			{
 				return projectInstance.GetItems(InstalledAssemblySubsetTablesName).ToArray();
 			}
 
-			private static bool GetIgnoreDefaultInstalledAssemblySubsetTables(ProjectInstance projectInstance)
+			protected static bool GetIgnoreDefaultInstalledAssemblySubsetTables(ProjectInstance projectInstance)
 			{
 				bool ignoreDefaultInstalledAssemblySubsetTables = false;
 
@@ -299,7 +299,7 @@ namespace Microsoft.VisualStudio.Project
 				return ignoreDefaultInstalledAssemblySubsetTables;
 			}
 
-			private static string[] GetTargetFrameworkSubsets(ProjectInstance projectInstance)
+			protected static string[] GetTargetFrameworkSubsets(ProjectInstance projectInstance)
 			{
 				IEnumerable<ITaskItem> taskItems = projectInstance.GetItems(ReferenceInstalledAssemblySubsets);
 
@@ -308,7 +308,7 @@ namespace Microsoft.VisualStudio.Project
 				return targetFrameworkSubsets;
 			}
 
-			private static string[] GetFullTargetFrameworkSubsetNames(ProjectInstance projectInstance)
+			protected static string[] GetFullTargetFrameworkSubsetNames(ProjectInstance projectInstance)
 			{
 				string val = projectInstance.GetPropertyValue(FullReferenceAssemblyNames).Trim();
 
@@ -317,7 +317,7 @@ namespace Microsoft.VisualStudio.Project
 				return fullTargetFrameworkSubsetNames;
 			}
 
-			private static ITaskItem[] GetFullFrameworkAssemblyTables(ProjectInstance projectInstance)
+			protected static ITaskItem[] GetFullFrameworkAssemblyTables(ProjectInstance projectInstance)
 			{
 				return projectInstance.GetItems(FullFrameworkAssemblyTablesName).ToArray();
 			}
@@ -327,7 +327,7 @@ namespace Microsoft.VisualStudio.Project
 			#endregion // public properties
 
 			#region private methods
-			static string GetFullPathInProjectContext(ProjectInstance projectInstance, string path)
+			protected static string GetFullPathInProjectContext(ProjectInstance projectInstance, string path)
 			{
 				string fullPath = path;
 

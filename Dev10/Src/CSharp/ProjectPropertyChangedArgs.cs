@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudio.Project
 		private readonly string oldValue;
 		private readonly string newValue;
 
-		internal ProjectPropertyChangedArgs(string propertyName, string oldValue, string newValue)
+		public ProjectPropertyChangedArgs(string propertyName, string oldValue, string newValue)
 		{
 			this.propertyName = propertyName;
 			this.oldValue = oldValue;

@@ -170,7 +170,7 @@ namespace Microsoft.VisualStudio.Project
 			return results.ToArray();
 		}
 
-		private static IEnumerable<KeyValuePair<string, string>> FilterResults(IEnumerable<ITaskItem> resolvedFiles)
+		protected static IEnumerable<KeyValuePair<string, string>> FilterResults(IEnumerable<ITaskItem> resolvedFiles)
 		{
 			foreach (ITaskItem resolvedFile in resolvedFiles)
 			{
@@ -212,7 +212,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private static void WriteLogFile(MockEngine engine, bool projectDtar, IEnumerable<string> assemblies)
+		protected static void WriteLogFile(MockEngine engine, bool projectDtar, IEnumerable<string> assemblies)
 		{
 			string logFilePrefix = projectDtar ? "P" : "G";
 

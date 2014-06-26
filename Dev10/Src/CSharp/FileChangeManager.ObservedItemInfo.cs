@@ -56,7 +56,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Defines a data structure that can link a item moniker to the item and its file change cookie.
 		/// </summary>
-		private struct ObservedItemInfo
+		protected struct ObservedItemInfo
 		{
 			/// <summary>
 			/// Defines the id of the item that is to be reloaded.
@@ -71,7 +71,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// Defines the nested project item that is to be reloaded.
 			/// </summary>
-			internal uint ItemID
+			public uint ItemID
 			{
 				get
 				{
@@ -87,7 +87,7 @@ namespace Microsoft.VisualStudio.Project
 			/// <summary>
 			/// Defines the file change cookie that is returned when listenning on file changes on the nested project item.
 			/// </summary>
-			internal uint FileChangeCookie
+			public uint FileChangeCookie
 			{
 				get
 				{

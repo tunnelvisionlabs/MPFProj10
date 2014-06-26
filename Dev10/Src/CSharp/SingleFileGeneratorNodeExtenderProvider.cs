@@ -59,7 +59,7 @@ namespace Microsoft.VisualStudio.Project
     {
         public static readonly string Name = "Single File Generator Node Extender";
 
-        public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
+        public virtual bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
             if (ExtenderName != Name)
                 return false;
@@ -78,7 +78,7 @@ namespace Microsoft.VisualStudio.Project
             return true;
         }
 
-        public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
+        public virtual object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
         {
             SingleFileGeneratorNodeExtenderProperties extender = null;
 
@@ -92,7 +92,7 @@ namespace Microsoft.VisualStudio.Project
             return extender;
         }
 
-        public object GetExtenderNames(string ExtenderCATID, object ExtendeeObject)
+        public virtual object GetExtenderNames(string ExtenderCATID, object ExtendeeObject)
         {
             return new string[] { Name };
         }

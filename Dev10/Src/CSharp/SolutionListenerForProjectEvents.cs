@@ -69,7 +69,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region ctor
-		internal SolutionListenerForProjectEvents(IServiceProvider serviceProvider)
+		public SolutionListenerForProjectEvents(IServiceProvider serviceProvider)
 			: base(serviceProvider)
 		{
 		}
@@ -104,7 +104,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Raises after project file opened event.
 		/// </summary>
 		/// <param name="added">True if the project is added to the solution after the solution is opened. false if the project is added to the solution while the solution is being opened.</param>
-		private void RaiseAfterProjectFileOpened(bool added)
+		protected virtual void RaiseAfterProjectFileOpened(bool added)
 		{
 			// Save event in temporary variable to avoid race condition.
 			EventHandler<ProjectFileOpenedEventArgs> tempEvent = this.ProjectFileOpened;
@@ -121,7 +121,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Raises the before  project file closed event.
 		/// </summary>
 		/// <param name="added">true if the project was removed from the solution before the solution was closed. false if the project was removed from the solution while the solution was being closed.</param>
-		private void RaiseBeforeProjectFileClosed(bool removed)
+		protected virtual void RaiseBeforeProjectFileClosed(bool removed)
 		{
 			// Save event in temporary variable to avoid race condition.
 			EventHandler<ProjectFileClosingEventArgs> tempEvent = this.ProjectFileClosing;

@@ -1100,7 +1100,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Close open document frame for a specific node.
 		/// </summary> 
-		protected void CloseDocumentWindow(HierarchyNode node)
+		protected virtual void CloseDocumentWindow(HierarchyNode node)
 		{
             if (node == null)
             {
@@ -1159,7 +1159,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Redraws the state icon if the node is not excluded from source control.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
-		protected internal virtual void UpdateSccStateIcons()
+		public virtual void UpdateSccStateIcons()
 		{
 			if(!this.ExcludeNodeFromScc)
 			{
@@ -1170,7 +1170,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// To be overwritten by descendants.
 		/// </summary>
-		protected internal virtual int SetEditLabel(string label, string relativePath)
+		public virtual int SetEditLabel(string label, string relativePath)
 		{
 			throw new NotImplementedException();
 		}
@@ -1313,7 +1313,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <returns>A stringbuilder.</returns>
 		/// <devremark>This method has to be public since seleceted nodes will call it.</devremark>
-		protected internal virtual StringBuilder PrepareSelectedNodesForClipboard()
+		public virtual StringBuilder PrepareSelectedNodesForClipboard()
 		{
 			Debug.Assert(this.ProjectManager != null, " No project mananager available for this node " + ToString());
 			Debug.Assert(this.ProjectManager.ItemsDraggedOrCutOrCopied != null, " The itemsdragged list should have been initialized prior calling this method");
@@ -1369,7 +1369,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <returns>null object, since a hierarchy node does not know its kind of document</returns>
 		/// <remarks>Must be overriden by derived node classes if a document manager is needed</remarks>
-		protected internal virtual DocumentManager GetDocumentManager()
+		public virtual DocumentManager GetDocumentManager()
 		{
 			return null;
 		}
@@ -2140,7 +2140,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="files">The files to which an array of VSADDFILEFLAGS has to be specified.</param>
 		/// <returns></returns>
-		protected internal virtual VSADDFILEFLAGS[] GetAddFileFlags(string[] files)
+		public virtual VSADDFILEFLAGS[] GetAddFileFlags(string[] files)
 		{
 			if(files == null || files.Length == 0)
 			{
@@ -2162,7 +2162,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="files">The files to which an array of VSADDFILEFLAGS has to be specified.</param>
 		/// <returns></returns>
-		protected internal virtual VSQUERYADDFILEFLAGS[] GetQueryAddFileFlags(string[] files)
+		public virtual VSQUERYADDFILEFLAGS[] GetQueryAddFileFlags(string[] files)
 		{
 			if(files == null || files.Length == 0)
 			{
@@ -2184,7 +2184,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="files">The files to which an array of VSREMOVEFILEFLAGS has to be specified.</param>
 		/// <returns></returns>
-		protected internal virtual VSREMOVEFILEFLAGS[] GetRemoveFileFlags(string[] files)
+		public virtual VSREMOVEFILEFLAGS[] GetRemoveFileFlags(string[] files)
 		{
 			if(files == null || files.Length == 0)
 			{
@@ -2206,7 +2206,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="files">The files to which an array of VSQUERYREMOVEFILEFLAGS has to be specified.</param>
 		/// <returns></returns>
-		protected internal virtual VSQUERYREMOVEFILEFLAGS[] GetQueryRemoveFileFlags(string[] files)
+		public virtual VSQUERYREMOVEFILEFLAGS[] GetQueryRemoveFileFlags(string[] files)
 		{
 			if(files == null || files.Length == 0)
 			{
@@ -2229,7 +2229,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="files">The list of files to be placed under source control.</param>
 		/// <param name="flags">The flags that are associated to the files.</param>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
-		protected internal virtual void GetSccFiles(IList<string> files, IList<tagVsSccFilesFlags> flags)
+		public virtual void GetSccFiles(IList<string> files, IList<tagVsSccFilesFlags> flags)
 		{
 			if(files == null)
 			{
@@ -2261,7 +2261,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="flags">The flags that are associated to the files.</param>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scc")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "scc")]
-		protected internal virtual void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
+		public virtual void GetSccSpecialFiles(string sccFile, IList<string> files, IList<tagVsSccFilesFlags> flags)
 		{
 			if(files == null)
 			{
@@ -2283,7 +2283,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Delete the item corresponding to the specified path from storage.
 		/// </summary>
 		/// <param name="path">Url of the item to delete</param>
-		internal protected virtual void DeleteFromStorage(string path)
+		public virtual void DeleteFromStorage(string path)
 		{
 		}
 
@@ -2291,7 +2291,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Determines whether a file change should be ignored or not.
 		/// </summary>
 		/// <param name="ignoreFlag">Flag indicating whether or not to ignore changes (true to ignore changes).</param>
-		protected internal virtual void IgnoreItemFileChanges(bool ignoreFlag)
+		public virtual void IgnoreItemFileChanges(bool ignoreFlag)
 		{
 		}
 
@@ -2300,7 +2300,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <returns>True if the project item is reloadable.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reloadable")]
-		protected internal virtual bool IsItemReloadable()
+		public virtual bool IsItemReloadable()
 		{
 			return true;
 		}
@@ -2309,7 +2309,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Reloads an item.
 		/// </summary>
 		/// <param name="reserved">Reserved parameter defined at the IVsPersistHierarchyItem2::ReloadItem parameter.</param>
-		protected internal virtual void ReloadItem(uint reserved)
+		public virtual void ReloadItem(uint reserved)
 		{
 
 		}
@@ -2318,7 +2318,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Handle the Copy operation to the clipboard
 		/// This method is typically overriden on the project node
 		/// </summary>
-		protected internal virtual int CopyToClipboard()
+		public virtual int CopyToClipboard()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -2327,7 +2327,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Handle the Cut operation to the clipboard
 		/// This method is typically overriden on the project node
 		/// </summary>
-		protected internal virtual int CutToClipboard()
+		public virtual int CutToClipboard()
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -2336,7 +2336,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Handle the paste from Clipboard command.
 		/// This method is typically overriden on the project node
 		/// </summary>
-		protected internal virtual int PasteFromClipboard(HierarchyNode targetNode)
+		public virtual int PasteFromClipboard(HierarchyNode targetNode)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -2345,7 +2345,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Determines if the paste command should be allowed.
 		/// This method is typically overriden on the project node
 		/// </summary>
-		protected internal virtual bool AllowPasteCommand()
+		public virtual bool AllowPasteCommand()
 		{
 			return false; ;
 		}
@@ -2355,7 +2355,7 @@ namespace Microsoft.VisualStudio.Project
 		/// This method is typically overriden on the project node
 		/// </summary>
 		/// <param name="value">true for register, false for unregister</param>
-		protected internal virtual void RegisterClipboardNotifications(bool value)
+		public virtual void RegisterClipboardNotifications(bool value)
 		{
 			return;
 		}
@@ -2363,7 +2363,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region public methods
 
-		public void OnItemAdded(HierarchyNode parent, HierarchyNode child)
+		public virtual void OnItemAdded(HierarchyNode parent, HierarchyNode child)
 		{
             if (parent == null)
             { 
@@ -2431,7 +2431,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		public void OnItemsAppended(HierarchyNode parent)
+		public virtual void OnItemsAppended(HierarchyNode parent)
 		{
 			if(parent == null)
 			{
@@ -2462,7 +2462,7 @@ namespace Microsoft.VisualStudio.Project
 
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "propid")]
-		public void OnPropertyChanged(HierarchyNode node, int propid, uint flags)
+		public virtual void OnPropertyChanged(HierarchyNode node, int propid, uint flags)
 		{
 			if(node == null)
 			{
@@ -2491,7 +2491,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 
-		public void OnInvalidateItems(HierarchyNode parent)
+		public virtual void OnInvalidateItems(HierarchyNode parent)
 		{
 			if(parent == null)
 			{
@@ -2554,7 +2554,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="node">The Project element to find</param>
 		/// <returns>The node found</returns>
-		public HierarchyNode FindChildByProjectElement(ProjectElement node)
+		public virtual HierarchyNode FindChildByProjectElement(ProjectElement node)
 		{
 			if(node == null)
 			{
@@ -2572,7 +2572,7 @@ namespace Microsoft.VisualStudio.Project
 			return null;
 		}
 
-		public object GetService(Type type)
+		public virtual object GetService(Type type)
 		{
 			if(type == null)
 			{
@@ -2706,7 +2706,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="itemId"></param>
-		public int ParseCanonicalName(string name, out uint itemId)
+		public virtual int ParseCanonicalName(string name, out uint itemId)
 		{
             List<HierarchyNode> nodes = ProjectManager.ItemIdMap.GetNodesByName(name).ToList();
 
@@ -2742,7 +2742,7 @@ namespace Microsoft.VisualStudio.Project
 			return VSConstants.S_OK;
 		}
 
-        private bool IsDescendentOf(HierarchyNode node)
+        protected virtual bool IsDescendentOf(HierarchyNode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -3307,12 +3307,12 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helper methods
-		public HierarchyNode FindChild(string name)
+		public virtual HierarchyNode FindChild(string name)
 		{
 			return FindChild(name, true);
 		}
 
-		public HierarchyNode FindChild(string name, bool recursive)
+		public virtual HierarchyNode FindChild(string name, bool recursive)
 		{
 			if(String.IsNullOrEmpty(name))
 			{
@@ -3349,7 +3349,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <typeparam name="T">The type of hierachy node being serched for</typeparam>
 		/// <param name="nodes">A list of nodes of type T</param>
-		public void FindNodesOfType<T>(ICollection<T> nodes)
+		public virtual void FindNodesOfType<T>(ICollection<T> nodes)
 			where T : HierarchyNode
 		{
             if (nodes == null)
@@ -3372,7 +3372,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="projectRef"></param>
 		/// <param name="targetNode"></param>
-		internal bool AddFileToNodeFromProjectReference(string projectRef, HierarchyNode targetNode)
+		public virtual bool AddFileToNodeFromProjectReference(string projectRef, HierarchyNode targetNode)
 		{
 			if(String.IsNullOrEmpty(projectRef))
 			{
@@ -3417,7 +3417,7 @@ namespace Microsoft.VisualStudio.Project
 			return (vsaddresult[0] == VSADDRESULT.ADDRESULT_Success);
 		}
 
-		internal void InstantiateItemsDraggedOrCutOrCopiedList()
+		public virtual void InstantiateItemsDraggedOrCutOrCopiedList()
 		{
 			this.itemsDraggedOrCutOrCopied = new List<HierarchyNode>();
 		}

@@ -137,7 +137,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public uint Add(HierarchyNode node)
+        public virtual uint Add(HierarchyNode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -158,7 +158,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public void Remove(HierarchyNode node)
+        public virtual void Remove(HierarchyNode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -197,7 +197,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public ReadOnlyCollection<HierarchyNode> GetNodesByName(string canonicalName)
+        public virtual ReadOnlyCollection<HierarchyNode> GetNodesByName(string canonicalName)
         {
             List<HierarchyNode> nodes = new List<HierarchyNode>();
 
@@ -218,7 +218,7 @@ namespace Microsoft.VisualStudio.Project
             return nodes.AsReadOnly();
         }
 
-        public void UpdateAllCanonicalNames()
+        public virtual void UpdateAllCanonicalNames()
         {
             KeyValuePair<HierarchyNode, string>[] itemsToCheck = _nodeToCanonicalNameMap.ToArray();
             foreach (var item in itemsToCheck)
@@ -228,7 +228,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public void UpdateCanonicalName(HierarchyNode node)
+        public virtual void UpdateCanonicalName(HierarchyNode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -306,7 +306,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        public IEnumerator<KeyValuePair<uint, HierarchyNode>> GetEnumerator()
+        public virtual IEnumerator<KeyValuePair<uint, HierarchyNode>> GetEnumerator()
         {
             _syncObject.EnterReadLock();
             try

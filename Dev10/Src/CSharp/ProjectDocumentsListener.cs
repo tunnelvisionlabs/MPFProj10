@@ -196,7 +196,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region methods
-		public void Init()
+		public virtual void Init()
 		{
 			if(this.ProjectDocumentTracker2 != null)
 			{

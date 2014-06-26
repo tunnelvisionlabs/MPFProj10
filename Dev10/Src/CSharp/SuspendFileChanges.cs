@@ -75,7 +75,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 
-		public void Suspend()
+		public virtual void Suspend()
 		{
 			if(this.isSuspending)
 				return;
@@ -130,7 +130,7 @@ namespace Microsoft.VisualStudio.Project
 			return;
 		}
 
-		public void Resume()
+		public virtual void Resume()
 		{
 			if(!this.isSuspending)
 				return;

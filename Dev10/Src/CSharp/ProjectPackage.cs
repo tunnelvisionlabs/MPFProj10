@@ -101,7 +101,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Add your listener to this list. They should be added in the overridden Initialize befaore calling the base.
 		/// </summary>
-		protected internal IList<SolutionListener> SolutionListeners
+		public IList<SolutionListener> SolutionListeners
 		{
 			get
 			{

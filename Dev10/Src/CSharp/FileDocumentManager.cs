@@ -114,7 +114,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="openWith">Use a dialog box to determine which editor to use</param>
 		/// <param name="windowFrameAction">Determine the UI action on the document window</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public int Open(bool newFile, bool openWith, WindowFrameShowAction windowFrameAction)
+		public virtual int Open(bool newFile, bool openWith, WindowFrameShowAction windowFrameAction)
 		{
 			Guid logicalView = Guid.Empty;
 			IVsWindowFrame windowFrame = null;
@@ -130,7 +130,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="frame">A reference to the window frame that is mapped to the file</param>
 		/// <param name="windowFrameAction">Determine the UI action on the document window</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public int Open(bool newFile, bool openWith, Guid logicalView, out IVsWindowFrame frame, WindowFrameShowAction windowFrameAction)
+		public virtual int Open(bool newFile, bool openWith, Guid logicalView, out IVsWindowFrame frame, WindowFrameShowAction windowFrameAction)
 		{
 			frame = null;
 			IVsRunningDocumentTable rdt = this.Node.ProjectManager.Site.GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
@@ -194,7 +194,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region helper methods
 
-		private int Open(bool newFile, bool openWith, uint editorFlags, ref Guid editorType, string physicalView, ref Guid logicalView, IntPtr docDataExisting, out IVsWindowFrame windowFrame, WindowFrameShowAction windowFrameAction)
+		protected virtual int Open(bool newFile, bool openWith, uint editorFlags, ref Guid editorType, string physicalView, ref Guid logicalView, IntPtr docDataExisting, out IVsWindowFrame windowFrame, WindowFrameShowAction windowFrameAction)
 		{
 			windowFrame = null;
 			if(this.Node == null || this.Node.ProjectManager == null || this.Node.ProjectManager.IsClosed)

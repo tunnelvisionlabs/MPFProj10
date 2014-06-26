@@ -68,7 +68,7 @@ namespace Microsoft.VisualStudio.Project
             _projectManager = projectNode;
         }
 
-        private ProjectNode ProjectManager
+        protected ProjectNode ProjectManager
         {
             get
             {

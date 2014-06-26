@@ -192,7 +192,7 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region helper methods
-		private List<ProjectReferenceNode> GetProjectReferencesContainingThisProject(IVsHierarchy inputHierarchy)
+		protected virtual List<ProjectReferenceNode> GetProjectReferencesContainingThisProject(IVsHierarchy inputHierarchy)
 		{
 			List<ProjectReferenceNode> projectReferences = new List<ProjectReferenceNode>();
 			if(this.Solution == null || inputHierarchy == null)
@@ -237,7 +237,7 @@ namespace Microsoft.VisualStudio.Project
 			return projectReferences;
 		}
 
-		private static ProjectReferenceNode GetProjectReferenceOnNodeForHierarchy(IList<ReferenceNode> references, IVsHierarchy inputHierarchy)
+		protected static ProjectReferenceNode GetProjectReferenceOnNodeForHierarchy(IList<ReferenceNode> references, IVsHierarchy inputHierarchy)
 		{
 			if(references == null)
 			{

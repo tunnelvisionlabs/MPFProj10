@@ -88,7 +88,7 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region properties
-        internal IVsHierarchy NestedHierarchy
+        public IVsHierarchy NestedHierarchy
         {
             get
             {
@@ -96,7 +96,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        private string ProjectPath
+        protected string ProjectPath
         {
             get
             {
@@ -477,7 +477,7 @@ namespace Microsoft.VisualStudio.Project
         /// Delegates the call to the inner hierarchy.
         /// </summary>
         /// <param name="reserved">Reserved parameter defined at the IVsPersistHierarchyItem2::ReloadItem parameter.</param>
-        protected internal override void ReloadItem(uint reserved)
+        public override void ReloadItem(uint reserved)
         {
             #region precondition
             if (this.isDisposed || this.ProjectManager == null || this.ProjectManager.IsClosed)
@@ -504,7 +504,7 @@ namespace Microsoft.VisualStudio.Project
         /// Flag indicating that changes to a file can be ignored when item is saved or reloaded. 
         /// </summary>
         /// <param name="ignoreFlag">Flag indicating whether or not to ignore changes (1 to ignore, 0 to stop ignoring).</param>
-        protected internal override void IgnoreItemFileChanges(bool ignoreFlag)
+        public override void IgnoreItemFileChanges(bool ignoreFlag)
         {
             #region precondition
             if (this.isDisposed || this.ProjectManager == null || this.ProjectManager.IsClosed)
@@ -533,7 +533,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="files">The files to which an array of VSADDFILEFLAGS has to be specified.</param>
         /// <returns></returns>
-        protected internal override VSADDFILEFLAGS[] GetAddFileFlags(string[] files)
+        public override VSADDFILEFLAGS[] GetAddFileFlags(string[] files)
         {
             if (files == null || files.Length == 0)
             {
@@ -555,7 +555,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="files">The files to which an array of VSADDFILEFLAGS has to be specified.</param>
         /// <returns></returns>
-        protected internal override VSQUERYADDFILEFLAGS[] GetQueryAddFileFlags(string[] files)
+        public override VSQUERYADDFILEFLAGS[] GetQueryAddFileFlags(string[] files)
         {
             if (files == null || files.Length == 0)
             {
@@ -577,7 +577,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="files">The files to which an array of VSREMOVEFILEFLAGS has to be specified.</param>
         /// <returns></returns>
-        protected internal override VSREMOVEFILEFLAGS[] GetRemoveFileFlags(string[] files)
+        public override VSREMOVEFILEFLAGS[] GetRemoveFileFlags(string[] files)
         {
             if (files == null || files.Length == 0)
             {
@@ -599,7 +599,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="files">The files to which an array of VSQUERYREMOVEFILEFLAGS has to be specified.</param>
         /// <returns></returns>
-        protected internal override VSQUERYREMOVEFILEFLAGS[] GetQueryRemoveFileFlags(string[] files)
+        public override VSQUERYREMOVEFILEFLAGS[] GetQueryRemoveFileFlags(string[] files)
         {
             if (files == null || files.Length == 0)
             {
@@ -706,7 +706,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Links a nested project as a virtual project to the solution.
         /// </summary>
-        protected internal virtual void AddVirtualProject()
+        public virtual void AddVirtualProject()
         {
             // This is the second step in creating and adding a nested project. The inner hierarchy must have been
             // already initialized at this point. 
@@ -940,7 +940,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Closes a nested project and releases the nested hierrachy pointer.
         /// </summary>
-        internal void CloseNestedProjectNode()
+        public virtual void CloseNestedProjectNode()
         {
             if (this.isDisposed || this.ProjectManager == null || this.ProjectManager.IsClosed)
             {
@@ -986,7 +986,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        private void InitializeInstanceGuid()
+        protected virtual void InitializeInstanceGuid()
         {
             if (this.projectInstanceGuid != Guid.Empty)
             {
@@ -1043,7 +1043,7 @@ namespace Microsoft.VisualStudio.Project
             this.projectInstanceGuid = instanceGuid;
         }
 
-        private void SetDocCookieOnNestedHier(uint itemDocCookie)
+        protected virtual void SetDocCookieOnNestedHier(uint itemDocCookie)
         {
             object docCookie = (int)itemDocCookie;
 
@@ -1057,7 +1057,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        private void InitImageHandler()
+        protected virtual void InitImageHandler()
         {
             Debug.Assert(this.nestedHierarchy != null, "The nested hierarchy object must be created before calling this method");
 
@@ -1078,7 +1078,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="propID">The property to delegate.</param>
         /// <returns>The return of the GetProperty from nested.</returns>
-        private object DelegateGetPropertyToNested(int propID)
+        protected virtual object DelegateGetPropertyToNested(int propID)
         {
             if (!this.ProjectManager.IsClosed)
             {
@@ -1103,7 +1103,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="propID">The property to delegate.</param>
         /// <param name="value">The property to set.</param>
         /// <returns>The return of the SetProperty from nested.</returns>
-        private int DelegateSetPropertyToNested(int propID, object value)
+        protected virtual int DelegateSetPropertyToNested(int propID, object value)
         {
             if (this.ProjectManager.IsClosed)
             {
@@ -1119,7 +1119,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Starts observing changes on this file.
         /// </summary>
-        private void ObserveNestedProjectFile()
+        protected virtual void ObserveNestedProjectFile()
         {
             ProjectContainerNode parent = this.ProjectManager as ProjectContainerNode;
             Debug.Assert(parent != null, "The parent project for nested projects should be subclassed from ProjectContainerNode");
@@ -1129,7 +1129,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Stops observing changes on this file.
         /// </summary>
-        private void StopObservingNestedProjectFile()
+        protected virtual void StopObservingNestedProjectFile()
         {
             ProjectContainerNode parent = this.ProjectManager as ProjectContainerNode;
             Debug.Assert(parent != null, "The parent project for nested projects should be subclassed from ProjectContainerNode");
@@ -1140,7 +1140,7 @@ namespace Microsoft.VisualStudio.Project
         /// Ignores observing changes on this file depending on the boolean flag.
         /// </summary>
         /// <param name="ignoreFlag">Flag indicating whether or not to ignore changes (1 to ignore, 0 to stop ignoring).</param>
-        private void IgnoreNestedProjectFile(bool ignoreFlag)
+        protected virtual void IgnoreNestedProjectFile(bool ignoreFlag)
         {
             ProjectContainerNode parent = this.ProjectManager as ProjectContainerNode;
             Debug.Assert(parent != null, "The parent project for nested projects should be subclassed from ProjectContainerNode");
@@ -1151,7 +1151,7 @@ namespace Microsoft.VisualStudio.Project
         /// We need to advise property notify sink on project properties so that
         /// we know when the project file is renamed through a property. 
         /// </summary>
-        private void ConnectPropertyNotifySink()
+        protected virtual void ConnectPropertyNotifySink()
         {
             if (this.projectPropertyNotifySinkCookie != (uint)ShellConstants.VSCOOKIE_NIL)
             {
@@ -1168,7 +1168,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Disconnects the propertynotify sink
         /// </summary>
-        private void DisconnectPropertyNotifySink()
+        protected virtual void DisconnectPropertyNotifySink()
         {
             if (this.projectPropertyNotifySinkCookie == (uint)ShellConstants.VSCOOKIE_NIL)
             {
@@ -1187,7 +1187,7 @@ namespace Microsoft.VisualStudio.Project
         /// Gets a ConnectionPoint for the IPropertyNotifySink interface.
         /// </summary>
         /// <returns></returns>
-        private IConnectionPoint GetConnectionPointFromPropertySink()
+        protected virtual IConnectionPoint GetConnectionPointFromPropertySink()
         {
             IConnectionPoint connectionPoint = null;
             object browseObject = this.GetProperty((int)__VSHPROPID.VSHPROPID_BrowseObject);

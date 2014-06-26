@@ -72,9 +72,9 @@ namespace Microsoft.VisualStudio.Project
         IVsCfgBrowseObject
     {
         #region constants
-        internal const string Debug = "Debug";
-        internal const string Release = "Release";
-        internal const string AnyCPU = "AnyCPU";
+        public const string Debug = "Debug";
+        public const string Release = "Release";
+        public const string AnyCPU = "AnyCPU";
         #endregion
 
         #region fields
@@ -219,7 +219,7 @@ namespace Microsoft.VisualStudio.Project
             return outputGroup;
         }
 
-        public void PrepareBuild(bool clean)
+        public virtual void PrepareBuild(bool clean)
         {
             _project.PrepareBuild(this.ConfigName, this.Platform, clean);
         }
@@ -267,7 +267,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="storageType">Project file or user file</param>
         /// <returns>0 = not dirty</returns>
-        internal int IsFlavorDirty(_PersistStorageType storageType)
+        public virtual int IsFlavorDirty(_PersistStorageType storageType)
         {
             int isDirty = 0;
             if(this.flavoredCfg != null && this.flavoredCfg is IPersistXMLFragment)
@@ -284,7 +284,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="storageType">Project file or user file</param>
         /// <param name="fragment">Fragment that the flavor wants to save</param>
         /// <returns>HRESULT</returns>
-        internal int GetXmlFragment(Guid flavor, _PersistStorageType storageType, out string fragment)
+        public virtual int GetXmlFragment(Guid flavor, _PersistStorageType storageType, out string fragment)
         {
             fragment = null;
             int hr = VSConstants.S_OK;
@@ -298,7 +298,7 @@ namespace Microsoft.VisualStudio.Project
         #endregion
 
         #region IVsSpecifyPropertyPages
-        public void GetPages(CAUUID[] pages)
+        public virtual void GetPages(CAUUID[] pages)
         {
             this.GetCfgPropertyPages(pages);
         }
@@ -328,7 +328,7 @@ namespace Microsoft.VisualStudio.Project
             return VSConstants.S_OK;
         }
 
-        private string DisplayName
+        protected string DisplayName
         {
             get
             {
@@ -683,7 +683,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="configName">The name of the configuration.</param>
         /// <param name="platformName">The name of the platform.</param>
         /// <returns>true if successfull.</returns>
-        internal static bool TrySplitConfigurationCanonicalName(string canonicalName, out string configName, out string platformName)
+        public static bool TrySplitConfigurationCanonicalName(string canonicalName, out string configName, out string platformName)
         {
             configName = String.Empty;
             platformName = String.Empty;
@@ -709,7 +709,7 @@ namespace Microsoft.VisualStudio.Project
             return true;
         }
 
-        private MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
+        protected virtual MSBuildExecution.ProjectPropertyInstance GetMsBuildProperty(string propertyName, _PersistStorageType storageType, bool resetCache)
         {
             MSBuildExecution.ProjectInstance requestedConfig = storageType == _PersistStorageType.PST_PROJECT_FILE ? currentConfig : currentUserConfig;
             if (resetCache || requestedConfig == null)
@@ -748,7 +748,7 @@ namespace Microsoft.VisualStudio.Project
         /// Retrieves the configuration dependent property pages.
         /// </summary>
         /// <param name="pages">The pages to return.</param>
-        private void GetCfgPropertyPages(CAUUID[] pages)
+        protected virtual void GetCfgPropertyPages(CAUUID[] pages)
         {
             // We do not check whether the supportsProjectDesigner is set to true on the ProjectNode.
             // We rely that the caller knows what to call on us.

@@ -160,7 +160,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Gets an enumeration for items in a collection. 
 		/// </summary>
 		/// <returns>An enumerator. </returns>
-		public IEnumerator GetEnumerator()
+		public virtual IEnumerator GetEnumerator()
 		{
 			if(this.properties == null)
 			{
@@ -230,7 +230,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Add properties to the collection of properties filtering only those properties which are com-visible and AutomationBrowsable
 		/// </summary>
 		/// <param name="targetType">The type of NodeProperties the we should filter on</param>
-		protected void AddPropertiesFromType(Type targetType)
+		protected virtual void AddPropertiesFromType(Type targetType)
 		{
 			Debug.Assert(targetType != null);
 
@@ -273,12 +273,12 @@ namespace Microsoft.VisualStudio.Project.Automation
 
 		#region helper methods
 
-		private bool IsInMap(PropertyInfo propertyInfo)
+		protected virtual bool IsInMap(PropertyInfo propertyInfo)
 		{
 			return this.properties.ContainsKey(propertyInfo.Name);
 		}
 
-		private static bool IsAutomationVisible(PropertyInfo propertyInfo)
+		protected static bool IsAutomationVisible(PropertyInfo propertyInfo)
 		{
 			object[] customAttributesOnProperty = propertyInfo.GetCustomAttributes(typeof(AutomationBrowsableAttribute), true);
 
@@ -292,7 +292,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return true;
 		}
 
-		private static bool IsComVisible(Type targetType)
+		protected static bool IsComVisible(Type targetType)
 		{
 			object[] customAttributesOnProperty = targetType.GetCustomAttributes(typeof(ComVisibleAttribute), true);
 
@@ -306,7 +306,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 			return true;
 		}
 
-		private static bool IsComVisible(PropertyInfo propertyInfo)
+		protected static bool IsComVisible(PropertyInfo propertyInfo)
 		{
 			object[] customAttributesOnProperty = propertyInfo.GetCustomAttributes(typeof(ComVisibleAttribute), true);
 

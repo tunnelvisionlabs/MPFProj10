@@ -97,7 +97,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Closes the ImageHandler object freeing its resources.
 		/// </summary>
-		public void Close()
+		public virtual void Close()
 		{
 			if(null != iconHandles)
 			{
@@ -122,7 +122,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Add an image to the ImageHandler.
 		/// </summary>
 		/// <param name="image">the image object to be added.</param>
-		public void AddImage(Image image)
+		public virtual void AddImage(Image image)
 		{
 			if(null == image)
 			{
@@ -156,7 +156,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Returns the handle to an icon build from the image of index
 		/// iconIndex in the image list.
 		/// </summary>
-		public IntPtr GetIconHandle(int iconIndex)
+		public virtual IntPtr GetIconHandle(int iconIndex)
 		{
 			// Verify that the object is in a consistent state.
 			if((null == imageList))
@@ -192,7 +192,7 @@ namespace Microsoft.VisualStudio.Project
 			return iconHandles[iconIndex];
 		}
 
-		private void InitHandlesList()
+		protected virtual void InitHandlesList()
 		{
 			iconHandles = new List<IntPtr>(imageList.Images.Count);
 			for(int i = 0; i < imageList.Images.Count; ++i)
@@ -213,7 +213,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 		#endregion
 
-		private void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 			if(!this.isDisposed)
 			{

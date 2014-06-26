@@ -4,6 +4,9 @@
 obj/
 [Bb]in/
 
+# Ignore Roslyn IDE cache
+*.sln.ide
+
 # Ignore NuGet package output
 /Dev10/nuget/release/
 /Dev10/packages/

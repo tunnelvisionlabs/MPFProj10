@@ -50,6 +50,6 @@ namespace Microsoft.VisualStudio.Project
 {
 	public static class ProjectFileValues
 	{
-		internal const string AnyCPU = "AnyCPU";
+		public const string AnyCPU = "AnyCPU";
 	}
 }

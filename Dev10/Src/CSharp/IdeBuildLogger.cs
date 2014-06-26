@@ -128,7 +128,7 @@ namespace Microsoft.VisualStudio.Project
         /// enable the logger to retrive the verbosity from
         /// the correct registry hive.
         /// </summary>
-        internal string BuildVerbosityRegistryRoot
+        public string BuildVerbosityRegistryRoot
         {
             get { return this.buildVerbosityRegistryRoot; }
             set 
@@ -140,7 +140,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Set to null to avoid writing to the output window
         /// </summary>
-        internal IVsOutputWindowPane OutputWindowPane
+        public IVsOutputWindowPane OutputWindowPane
         {
             get { return this.outputWindowPane; }
             set { this.outputWindowPane = value; }
@@ -367,7 +367,7 @@ namespace Microsoft.VisualStudio.Project
             QueueOutputEvent(messageEvent.Importance, messageEvent);
         }
 
-        private void NavigateTo(object sender, EventArgs arguments)
+        protected virtual void NavigateTo(object sender, EventArgs arguments)
         {
             Microsoft.VisualStudio.Shell.Task task = sender as Microsoft.VisualStudio.Shell.Task;
             if (task == null)
@@ -422,7 +422,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region output queue
 
-        protected void QueueOutputEvent(MessageImportance importance, BuildEventArgs buildEvent)
+        protected virtual void QueueOutputEvent(MessageImportance importance, BuildEventArgs buildEvent)
         {
             if (buildEvent == null)
                 throw new ArgumentNullException("buildEvent");
@@ -441,7 +441,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        protected void QueueOutputText(MessageImportance importance, string text)
+        protected virtual void QueueOutputText(MessageImportance importance, string text)
         {
             // NOTE: This may run on a background thread!
             if (LogAtImportance(importance))
@@ -450,7 +450,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        protected void QueueOutputText(string text)
+        protected virtual void QueueOutputText(string text)
         {
             // NOTE: This may run on a background thread!
             if (this.OutputWindowPane != null)
@@ -468,19 +468,19 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-        private void IndentOutput()
+        protected virtual void IndentOutput()
         {
             // NOTE: This may run on a background thread!
             this.currentIndent++;
         }
 
-        private void UnindentOutput()
+        protected virtual void UnindentOutput()
         {
             // NOTE: This may run on a background thread!
             this.currentIndent--;
         }
 
-        private void ReportQueuedOutput()
+        protected virtual void ReportQueuedOutput()
         {
             // NOTE: This may run on a background thread!
             // We need to output this on the main thread. We must use BeginInvoke because the main thread may not be pumping events yet.
@@ -498,7 +498,7 @@ namespace Microsoft.VisualStudio.Project
             });
         }
 
-        private void ClearQueuedOutput()
+        protected virtual void ClearQueuedOutput()
         {
             // NOTE: This may run on a background thread!
             this.outputQueue = new ConcurrentQueue<string>();
@@ -508,7 +508,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region task queue
 
-        protected void QueueTaskEvent(BuildEventArgs errorEvent)
+        protected virtual void QueueTaskEvent(BuildEventArgs errorEvent)
         {
             this.taskQueue.Enqueue(() =>
             {
@@ -545,7 +545,7 @@ namespace Microsoft.VisualStudio.Project
             // call ReportQueuedTasks here. We do this when the build finishes.
         }
 
-        private void ReportQueuedTasks()
+        protected virtual void ReportQueuedTasks()
         {
             // NOTE: This may run on a background thread!
             // We need to output this on the main thread. We must use BeginInvoke because the main thread may not be pumping events yet.
@@ -572,7 +572,7 @@ namespace Microsoft.VisualStudio.Project
             });
         }
 
-        private void ClearQueuedTasks()
+        protected virtual void ClearQueuedTasks()
         {
             // NOTE: This may run on a background thread!
             this.taskQueue = new ConcurrentQueue<Func<ErrorTask>>();
@@ -595,7 +595,7 @@ namespace Microsoft.VisualStudio.Project
         /// This method takes a MessageImportance and returns true if messages
         /// at importance i should be loggeed.  Otherwise return false.
         /// </summary>
-        private bool LogAtImportance(MessageImportance importance)
+        protected virtual bool LogAtImportance(MessageImportance importance)
         {
             // If importance is too low for current settings, ignore the event
             bool logIt = false;
@@ -629,7 +629,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Format error messages for the task list
         /// </summary>
-        private string GetFormattedErrorMessage(
+        protected virtual string GetFormattedErrorMessage(
             string fileName,
             int line,
             int column,
@@ -653,7 +653,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Sets the verbosity level.
         /// </summary>
-        private void SetVerbosity()
+        protected virtual void SetVerbosity()
         {
             // TODO: This should be replaced when we have a version that supports automation.
             if (!this.haveCachedVerbosity)
@@ -678,7 +678,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Clear the cached verbosity, so that it will be re-evaluated from the build verbosity registry key.
         /// </summary>
-        private void ClearCachedVerbosity()
+        protected virtual void ClearCachedVerbosity()
         {
             this.haveCachedVerbosity = false;
         }
@@ -693,7 +693,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="serviceProvider">service provider</param>
         /// <param name="dispatcher">dispatcher</param>
         /// <param name="action">action to invoke</param>
-        private static void BeginInvokeWithErrorMessage(IServiceProvider serviceProvider, Dispatcher dispatcher, Action action)
+        protected static void BeginInvokeWithErrorMessage(IServiceProvider serviceProvider, Dispatcher dispatcher, Action action)
         {
             dispatcher.BeginInvoke(new Action(() => CallWithErrorMessage(serviceProvider, action)));
         }
@@ -703,7 +703,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="serviceProvider">service provider</param>
         /// <param name="action">action to invoke</param>
-        private static void CallWithErrorMessage(IServiceProvider serviceProvider, Action action)
+        protected static void CallWithErrorMessage(IServiceProvider serviceProvider, Action action)
         {
             try
             {
@@ -725,7 +725,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="serviceProvider">service provider</param>
         /// <param name="exception">exception</param>
-        private static void ShowErrorMessage(IServiceProvider serviceProvider, Exception exception)
+        protected static void ShowErrorMessage(IServiceProvider serviceProvider, Exception exception)
         {
             IUIService UIservice = (IUIService)serviceProvider.GetService(typeof(IUIService));
             if (UIservice != null && exception != null)

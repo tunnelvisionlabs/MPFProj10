@@ -139,7 +139,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region public methods
 
-		public object GetTypedConfigProperty(string name, Type type, _PersistStorageType storageType)
+		public virtual object GetTypedConfigProperty(string name, Type type, _PersistStorageType storageType)
 		{
 			string value = GetConfigProperty(name, storageType);
 			if(string.IsNullOrEmpty(value)) return null;
@@ -148,7 +148,7 @@ namespace Microsoft.VisualStudio.Project
 			return tc.ConvertFromInvariantString(value);
 		}
 
-		public object GetTypedProperty(string name, Type type, _PersistStorageType storageType)
+		public virtual object GetTypedProperty(string name, Type type, _PersistStorageType storageType)
 		{
 			string value = GetProperty(name, storageType);
 			if(string.IsNullOrEmpty(value)) return null;
@@ -157,7 +157,7 @@ namespace Microsoft.VisualStudio.Project
 			return tc.ConvertFromInvariantString(value);
 		}
 
-		public string GetProperty(string propertyName, _PersistStorageType storageType)
+		public virtual string GetProperty(string propertyName, _PersistStorageType storageType)
 		{
 			if(this.ProjectManager != null)
 			{
@@ -174,7 +174,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		// relative to active configuration.
-		public string GetConfigProperty(string propertyName, _PersistStorageType storageType)
+		public virtual string GetConfigProperty(string propertyName, _PersistStorageType storageType)
 		{
 			if(this.ProjectManager != null)
 			{
@@ -211,7 +211,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="name">property name.</param>
 		/// <param name="value">value of property</param>
-		public void SetConfigProperty(string name, _PersistStorageType storageType, string value)
+		public virtual void SetConfigProperty(string name, _PersistStorageType storageType, string value)
 		{
 			CciTracing.TraceCall();
 			if(value == null)
@@ -450,12 +450,12 @@ namespace Microsoft.VisualStudio.Project
 
 		#region helper methods
 
-		protected ProjectConfig[] GetProjectConfigurations()
+		protected virtual ProjectConfig[] GetProjectConfigurations()
 		{
 			return this.projectConfigs;
 		}
 
-		protected void UpdateObjects()
+		protected virtual void UpdateObjects()
 		{
 			if(this.projectConfigs != null && this.ProjectManager != null)
 			{
@@ -500,7 +500,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#endregion
 
-		private void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 			if(!this.isDisposed)
 			{

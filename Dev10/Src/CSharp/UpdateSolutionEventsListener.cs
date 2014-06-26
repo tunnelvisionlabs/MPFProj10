@@ -206,7 +206,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="cancel">A flag indicating cancel.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
 		/// <remarks>The values for the action are defined in the enum _SLNUPDACTION env\msenv\core\slnupd2.h</remarks>
-		public int UpdateProjectCfg_Begin(IVsHierarchy hierarchy, IVsCfg configProject, IVsCfg configSolution, uint action, ref int cancel)
+		public virtual int UpdateProjectCfg_Begin(IVsHierarchy hierarchy, IVsCfg configProject, IVsCfg configSolution, uint action, ref int cancel)
 		{
 			return VSConstants.E_NOTIMPL;
 		}

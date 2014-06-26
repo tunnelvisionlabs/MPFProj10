@@ -423,7 +423,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="automationObject">The automation object.</param>
         /// <returns>The name of the active configuartion.</returns>		
-        internal static string GetActiveConfigurationName(EnvDTE.Project automationObject)
+        public static string GetActiveConfigurationName(EnvDTE.Project automationObject)
         {
             if(automationObject == null)
             {
@@ -448,7 +448,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="automationObject">The automation object.</param>
         /// <returns>The name of the active configuartion.</returns>		
-        internal static string GetActivePlatformName(EnvDTE.Project automationObject)
+        public static string GetActivePlatformName(EnvDTE.Project automationObject)
         {
             if (automationObject == null)
                 throw new ArgumentNullException("automationObject");
@@ -514,7 +514,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="objToQuery">Managed or COM object.</param>
         /// <returns>Pointer to the IUnknown interface of the object.</returns>
-        internal static IntPtr QueryInterfaceIUnknown(object objToQuery)
+        public static IntPtr QueryInterfaceIUnknown(object objToQuery)
         {
             bool releaseIt = false;
             IntPtr unknown = IntPtr.Zero;
@@ -730,7 +730,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="engine">The build engine to use to create a build project.</param>
         /// <param name="fullProjectPath">The full path of the project.</param>
         /// <returns>A loaded msbuild project.</returns>
-        internal static MSBuild.Project InitializeMsBuildProject(MSBuild.ProjectCollection buildEngine, string fullProjectPath)
+        public static MSBuild.Project InitializeMsBuildProject(MSBuild.ProjectCollection buildEngine, string fullProjectPath)
         {
             if(String.IsNullOrEmpty(fullProjectPath))
             {
@@ -760,7 +760,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="fullProjectPath">The full path of the project.</param>
         /// <param name="exitingBuildProject">An Existing build project that will be reloaded.</param>
         /// <returns>A loaded msbuild project.</returns>
-        internal static MSBuild.Project ReinitializeMsBuildProject(MSBuild.ProjectCollection buildEngine, string fullProjectPath, MSBuild.Project exitingBuildProject)
+        public static MSBuild.Project ReinitializeMsBuildProject(MSBuild.ProjectCollection buildEngine, string fullProjectPath, MSBuild.Project exitingBuildProject)
         {
             // If we have a build project that has been loaded with another file unload it.
             try
@@ -785,7 +785,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="engine">An instance of MSBuild.ProjectCollection build engine, that will be checked if initialized.</param>
         /// <param name="engine">The service provider.</param>
         /// <returns>The buildengine to use.</returns>
-        internal static MSBuild.ProjectCollection InitializeMsBuildEngine(MSBuild.ProjectCollection existingEngine, IServiceProvider serviceProvider)
+        public static MSBuild.ProjectCollection InitializeMsBuildEngine(MSBuild.ProjectCollection existingEngine, IServiceProvider serviceProvider)
         {
             if(serviceProvider == null)
             {
@@ -804,7 +804,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Get the outer T implementation
         /// </summary>
-        internal static T GetOuterAs<T>(object o)
+        public static T GetOuterAs<T>(object o)
             where T : class
         {
             T hierarchy = null;
@@ -968,7 +968,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="anyFileName">A file name, which can be relative/absolute and contain lower-case/upper-case characters.</param>
         /// <returns>Canonicalized file name.</returns>
-        internal static string CanonicalizeFileName(string anyFileName)
+        public static string CanonicalizeFileName(string anyFileName)
         {
             // Get absolute path
             // Note: this will not handle UNC paths
@@ -987,7 +987,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="fileName">The file to check whether it is a template file</param>
         /// <returns>true if the file is a template file</returns>
-        internal static bool IsTemplateFile(string fileName)
+        public static bool IsTemplateFile(string fileName)
         {
             if(String.IsNullOrEmpty(fileName))
             {
@@ -1008,7 +1008,7 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="configuration">The name of the active configuration.</param>
         /// <param name="platform">The name of the platform.</param>
         /// <returns>true if successfull.</returns>
-        internal static bool TryGetActiveConfigurationAndPlatform(System.IServiceProvider serviceProvider, IVsHierarchy hierarchy, out string configuration, out string platform)
+        public static bool TryGetActiveConfigurationAndPlatform(System.IServiceProvider serviceProvider, IVsHierarchy hierarchy, out string configuration, out string platform)
         {
             if(serviceProvider == null)
             {

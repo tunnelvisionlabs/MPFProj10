@@ -60,7 +60,7 @@ namespace Microsoft.VisualStudio.Project
 	public sealed class DataObject : IDataObject
 	{
 		#region fields
-		internal const int DATA_S_SAMEFORMATETC = 0x00040130;
+		public const int DATA_S_SAMEFORMATETC = 0x00040130;
 		private readonly EventSinkCollection map;
 		private readonly ArrayList entries;
 		#endregion

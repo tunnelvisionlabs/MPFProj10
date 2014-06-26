@@ -72,7 +72,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <summary>
 		/// Defines an internal list of project items
 		/// </summary>
-		internal IList<EnvDTE.ProjectItem> Items
+		public IList<EnvDTE.ProjectItem> Items
 		{
 			get
 			{
@@ -83,7 +83,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <summary>
 		/// Defines a relationship to the associated project.
 		/// </summary>
-		internal OAProject Project
+		public OAProject Project
 		{
 			get
 			{
@@ -94,7 +94,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <summary>
 		/// Defines the node that contains the items
 		/// </summary>
-		internal HierarchyNode NodeWithItems
+		public HierarchyNode NodeWithItems
 		{
 			get
 			{
@@ -307,7 +307,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Retrives a list of items associated with the current node.
 		/// </summary>
 		/// <returns>A List of project items</returns>
-		protected IList<EnvDTE.ProjectItem> GetListOfProjectItems()
+		protected virtual IList<EnvDTE.ProjectItem> GetListOfProjectItems()
 		{
 			return UIThread.DoOnUIThread(delegate()
 			{

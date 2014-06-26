@@ -60,7 +60,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	{
 		#region fields
 		private readonly ProjectNode project;
-		EnvDTE.ConfigurationManager configurationManager;
+		private EnvDTE.ConfigurationManager configurationManager;
 		#endregion
 
 		#region properties
@@ -419,7 +419,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// </summary>
 		/// <param name="isCalledFromSaveAs">Flag determining which Save method called , the SaveAs or the Save.</param>
 		/// <param name="fileName">The name of the project file.</param>        
-		private void DoSave(bool isCalledFromSaveAs, string fileName)
+		protected virtual void DoSave(bool isCalledFromSaveAs, string fileName)
 		{
 			if(fileName == null)
 			{

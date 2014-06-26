@@ -74,7 +74,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Overloadde ctor.
 		/// </summary>
 		/// <param name="ProjectNode">The associated project</param>
-		internal SingleFileGenerator(ProjectNode projectMgr)
+		public SingleFileGenerator(ProjectNode projectMgr)
 		{
 			this.projectMgr = projectMgr;
 		}
@@ -128,7 +128,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Invokes the specified generator
 		/// </summary>
 		/// <param name="fileNode">The node on which to invoke the generator.</param>
-		protected internal virtual void InvokeGenerator(FileNode fileNode)
+		public virtual void InvokeGenerator(FileNode fileNode)
 		{
 			if(fileNode == null)
 			{
@@ -345,7 +345,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Returns the buffer contents for a moniker.
 		/// </summary>
 		/// <returns>Buffer contents</returns>
-		private string GetBufferContents(string fileName, out IVsTextStream srpStream)
+		protected virtual string GetBufferContents(string fileName, out IVsTextStream srpStream)
 		{
 			Guid CLSID_VsTextBuffer = new Guid("{8E7B96A8-E33D-11d0-A6D5-00C04FB67F6A}");
 			string bufferContents = "";
@@ -455,7 +455,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="ppDocData">doc data associated with document</param>
 		/// <param name="cookie">item cookie</param>
 		/// <returns>True if FIle is dirty</returns>
-		private bool VerifyFileDirtyInRdt(string document, out IVsHierarchy pHier, out IVsPersistDocData ppDocData, out uint cookie)
+		protected virtual bool VerifyFileDirtyInRdt(string document, out IVsHierarchy pHier, out IVsPersistDocData ppDocData, out uint cookie)
 		{
 			int ret = 0;
 			pHier = null;
@@ -504,7 +504,7 @@ namespace Microsoft.VisualStudio.Project
 		/// This function asks to the QueryEditQuerySave service if it is possible to
 		/// edit the file.
 		/// </summary>
-		private bool CanEditFile(string documentMoniker)
+		protected virtual bool CanEditFile(string documentMoniker)
 		{
 			Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "\t**** CanEditFile called ****"));
 

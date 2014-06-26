@@ -66,10 +66,10 @@ namespace Microsoft.VisualStudio.Project
 
 		private Guid packageGuid;
 
-		internal const string DefaultProjectExtension = "DefaultProjectExtension";
-		internal const string WizardsTemplatesDir = "WizardsTemplatesDir";
-		internal const string ProjectTemplatesDir = "ProjectTemplatesDir";
-		internal const string Package = "Package";
+		public const string DefaultProjectExtension = "DefaultProjectExtension";
+		public const string WizardsTemplatesDir = "WizardsTemplatesDir";
+		public const string ProjectTemplatesDir = "ProjectTemplatesDir";
+		public const string Package = "Package";
 
 
 
@@ -85,8 +85,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		internal string ProjectTemplatesDirValue
+		public string ProjectTemplatesDirValue
 		{
 			get
 			{
@@ -110,8 +109,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		internal Guid PackageGuidValue
+		public Guid PackageGuidValue
 		{
 			get
 			{
@@ -129,7 +127,7 @@ namespace Microsoft.VisualStudio.Project
 		/// 
 		/// You can pass in a string such as: "Windows\Console Application"
 		/// </summary>
-		public string GetVSTemplateFile(string templateFile)
+		public virtual string GetVSTemplateFile(string templateFile)
 		{
 			// First see if this use the vstemplate model
 			if(!String.IsNullOrEmpty(DefaultProjectExtensionValue))

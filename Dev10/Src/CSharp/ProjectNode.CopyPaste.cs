@@ -416,7 +416,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="itemid">The id of the node.</param>
 		/// <returns>true if the node acceots drag operation.</returns>
-		protected internal virtual bool CanTargetNodeAcceptDrop(uint itemId)
+		public virtual bool CanTargetNodeAcceptDrop(uint itemId)
 		{
 			HierarchyNode targetNode = NodeFromItemId(itemId);
 			if(targetNode is ReferenceContainerNode || targetNode is ReferenceNode)
@@ -434,7 +434,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="cutHighlightItems">boolean that defines if the selected items must be cut</param>
 		/// <returns>data object for selected items</returns>
-		internal virtual DataObject PackageSelectionDataObject(bool cutHighlightItems)
+		public virtual DataObject PackageSelectionDataObject(bool cutHighlightItems)
 		{
 			this.CleanupSelectionDataObject(false, false, false);
 			StringBuilder sb = new StringBuilder();
@@ -528,7 +528,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="folderToAdd">Project reference (from data object) using the format: {Guid}|project|folderPath</param>
 		/// <param name="targetNode">Node to add the new folder to</param>
-		protected internal virtual void AddFolderFromOtherProject(string folderToAdd, HierarchyNode targetNode)
+		public virtual void AddFolderFromOtherProject(string folderToAdd, HierarchyNode targetNode)
 		{
 			if(String.IsNullOrEmpty(folderToAdd))
 				throw new ArgumentNullException("folderToAdd");
@@ -681,7 +681,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Handle the Cut operation to the clipboard
 		/// </summary>
-		protected internal override int CutToClipboard()
+		public override int CutToClipboard()
 		{
 			int returnValue = (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
 			try
@@ -719,7 +719,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Handle the Copy operation to the clipboard
 		/// </summary>
-		protected internal override int CopyToClipboard()
+		public override int CopyToClipboard()
 		{
 			int returnValue = (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
 			try
@@ -761,7 +761,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Handle the Paste operation to a targetNode
 		/// </summary>
-		protected internal override int PasteFromClipboard(HierarchyNode targetNode)
+		public override int PasteFromClipboard(HierarchyNode targetNode)
 		{
 			int returnValue = (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
             
@@ -825,7 +825,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Determines if the paste command should be allowed.
 		/// </summary>
 		/// <returns></returns>
-		protected internal override bool AllowPasteCommand()
+		public override bool AllowPasteCommand()
 		{
 			IOleDataObject dataObject = null;
 			try
@@ -860,7 +860,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Register/Unregister for Clipboard events for the UiHierarchyWindow (solution explorer)
 		/// </summary>
 		/// <param name="register">true for register, false for unregister</param>
-		protected internal override void RegisterClipboardNotifications(bool register)
+		public override void RegisterClipboardNotifications(bool register)
 		{
 			// Get the UiHierarchy window clipboard helper service
 			IVsUIHierWinClipboardHelper clipboardHelper = (IVsUIHierWinClipboardHelper)GetService(typeof(SVsUIHierWinClipboardHelper));
@@ -1022,7 +1022,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		internal void CleanupSelectionDataObject(bool dropped, bool cut, bool moved)
+		public virtual void CleanupSelectionDataObject(bool dropped, bool cut, bool moved)
 		{
 			this.CleanupSelectionDataObject(dropped, cut, moved, false);
 		}
@@ -1032,7 +1032,7 @@ namespace Microsoft.VisualStudio.Project
 		///  to determine whether we need to clean up the source nodes or not. If
 		///  justCleanup is set, it only does the cleanup work.
 		/// </summary>
-		internal void CleanupSelectionDataObject(bool dropped, bool cut, bool moved, bool justCleanup)
+		public virtual void CleanupSelectionDataObject(bool dropped, bool cut, bool moved, bool justCleanup)
 		{
 			if(this.ItemsDraggedOrCutOrCopied == null || this.ItemsDraggedOrCutOrCopied.Count == 0)
 			{
@@ -1139,7 +1139,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Empties all the data structures added to the clipboard and flushes the clipboard.
 		/// </summary>
-		private void CleanAndFlushClipboard()
+		protected virtual void CleanAndFlushClipboard()
 		{
 			IOleDataObject oleDataObject = null;
 			ErrorHandler.ThrowOnFailure(UnsafeNativeMethods.OleGetClipboard(out oleDataObject));
@@ -1170,7 +1170,7 @@ namespace Microsoft.VisualStudio.Project
 			}
 		}
 
-		private SafeGlobalAllocHandle PackageSelectionData(StringBuilder sb, bool addEndFormatDelimiter)
+		protected virtual SafeGlobalAllocHandle PackageSelectionData(StringBuilder sb, bool addEndFormatDelimiter)
 		{
 			if(sb == null || sb.ToString().Length == 0 || this.ItemsDraggedOrCutOrCopied.Count == 0)
 			{

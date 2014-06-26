@@ -156,7 +156,7 @@ namespace Microsoft.VisualStudio.Project
 		/// References node cannot be dragged.
 		/// </summary>
 		/// <returns>A stringbuilder.</returns>
-		protected internal override StringBuilder PrepareSelectedNodesForClipboard()
+		public override StringBuilder PrepareSelectedNodesForClipboard()
 		{
 			return null;
 		}
@@ -229,7 +229,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Refreshes a reference by re-resolving it and redrawing the icon.
 		/// </summary>
-		internal virtual void RefreshReference()
+		public virtual void RefreshReference()
 		{
 			this.ResolveReference();
 			this.Redraw(UIHierarchyElements.Icon);
@@ -264,7 +264,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Checks if a reference is already added. The method parses all references and compares the Url.
 		/// </summary>
 		/// <returns>true if the assembly has already been added.</returns>
-		protected bool IsAlreadyAdded()
+		protected virtual bool IsAlreadyAdded()
 		{
 			ReferenceNode existingReference;
 			return IsAlreadyAdded(out existingReference);
@@ -275,7 +275,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="existingEquivalentNode">The existing reference, if one is found.</param>
 		/// <returns>true if the assembly has already been added.</returns>
-		protected internal virtual bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
+		public virtual bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
 		{
 			ReferenceContainerNode referencesFolder = this.ProjectManager.FindChild(ReferenceContainerNode.ReferencesNodeVirtualName) as ReferenceContainerNode;
 			Debug.Assert(referencesFolder != null, "Could not find the References node");
