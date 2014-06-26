@@ -26,7 +26,7 @@
     </frameworkAssemblies>
     <dependencies>
       <!-- Visual Studio 2010 -->
-      <dependency id="VSSDK.IDE.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.IDE.10" version="[10.0.2,11.0.0)"/>
       <!--
       Exposed Dependencies (Microsoft.VisualStudio.Project.10.0.dll):
         EnvDTE
@@ -45,12 +45,15 @@
         VSLangProj
         VSLangProj80
       -->
-      <dependency id="VSSDK.DTE.10" version="[10.0.0,11.0.0)"/>
-      <dependency id="VSSDK.OLE.Interop.10" version="[10.0.0,11.0.0)"/>
-      <dependency id="VSSDK.Designer.10" version="[10.0.0,11.0.0)"/>
-      <dependency id="VSSDK.Shell.Interop.10" version="[10.0.0,11.0.0)"/>
-      <dependency id="VSSDK.VSLangProj.10" version="[10.0.0,11.0.0)"/>
-      <dependency id="VSSDK.Shell.10" version="[10.0.0,11.0.0)"/>
+      <dependency id="VSSDK.DTE" version="[7.0.2,8.0.0)"/>
+      <dependency id="VSSDK.OLE.Interop" version="[7.0.2,8.0.0)"/>
+      <dependency id="VSSDK.Designer" version="[7.0.2,8.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.7" version="[7.0.2,8.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.8" version="[8.0.2,9.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.10" version="[10.0.2,11.0.0)"/>
+      <dependency id="VSSDK.VSLangProj" version="[7.0.2,8.0.0)"/>
+      <dependency id="VSSDK.VSLangProj.8" version="[8.0.2,9.0.0)"/>
+      <dependency id="VSSDK.Shell.10" version="[10.0.2,11.0.0)"/>
     </dependencies>
   </metadata>
   <files>
