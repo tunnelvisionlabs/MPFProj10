@@ -20,6 +20,8 @@
       <frameworkAssembly assemblyName="System" targetFramework="net40"/>
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="net40"/>
       <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net40"/>
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework="net40"/>
       <frameworkAssembly assemblyName="Microsoft.Build" targetFramework="net40"/>
       <frameworkAssembly assemblyName="Microsoft.Build.Framework" targetFramework="net40"/>
       <frameworkAssembly assemblyName="Microsoft.Build.Utilities.v4.0" targetFramework="net40"/>
@@ -40,11 +42,14 @@
         Microsoft.VisualStudio.Shell.Interop.10.0
         Microsoft.VisualStudio.Shell.Interop.11.0
         Microsoft.VisualStudio.Shell.Interop.8.0
+        Microsoft.VisualStudio.TextManager.Interop
         System
         System.Drawing
         System.Windows.Forms
+        System.Xml
         VSLangProj
         VSLangProj80
+        WindowsBase
       -->
       <dependency id="VSSDK.DTE" version="[7.0.2,8.0.0)"/>
       <dependency id="VSSDK.OLE.Interop" version="[7.0.2,8.0.0)"/>
@@ -53,6 +58,7 @@
       <dependency id="VSSDK.Shell.Interop.8" version="[8.0.2,9.0.0)"/>
       <dependency id="VSSDK.Shell.Interop.10" version="[10.0.2,11.0.0)"/>
       <dependency id="VSSDK.Shell.Interop.11" version="[11.0.2,12.0.0)"/>
+      <dependency id="VSSDK.TextManager.Interop" version="[7.0.2,8.0.0)"/>
       <dependency id="VSSDK.VSLangProj" version="[7.0.2,8.0.0)"/>
       <dependency id="VSSDK.VSLangProj.8" version="[8.0.2,9.0.0)"/>
       <dependency id="VSSDK.Shell.12" version="[12.0.2,13.0.0)"/>
