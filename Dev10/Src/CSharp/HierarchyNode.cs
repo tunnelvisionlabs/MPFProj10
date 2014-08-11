@@ -1,4 +1,4 @@
-/********************************************************************************************
+﻿/********************************************************************************************
 
 Copyright (c) Microsoft Corporation 
 All rights reserved. 
@@ -611,15 +611,11 @@ namespace Microsoft.VisualStudio.Project
 			LinkedListNode<HierarchyNode> previous = null;
 			if (_children.Last != null && this.ProjectManager.CompareNodes(node, _children.Last.Value) <= 0)
 			{
-				// frequently (especially during initial project load), when an item is added it belongs
-				// at the end. catch that case to prevent O(n�) performance.
-				for (LinkedListNode<HierarchyNode> n = _children.Last; n != null; n = n.Previous)
-				{
-					if (this.ProjectManager.CompareNodes(node, n.Value) < 0)
-						break;
+				// `node` is after, or unordered with respect to `_children.Last`
 
-					previous = n;
-				}
+				// frequently (especially during initial project load), when an item is added it belongs
+				// at the end. catch that case to prevent O(n²) performance.
+				previous = _children.Last;
 			}
 			else
 			{
