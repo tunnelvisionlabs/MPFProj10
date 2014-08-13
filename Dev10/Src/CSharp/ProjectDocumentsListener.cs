@@ -69,7 +69,7 @@ namespace Microsoft.VisualStudio.Project
 		private static volatile object Mutex = new object();
 		#endregion
 
-		#region ctors
+		#region constructors
 		protected ProjectDocumentsListener(ServiceProvider serviceProviderParameter)
 		{
             if (serviceProviderParameter == null)
@@ -186,7 +186,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region IDisposable Members
 		/// <summary>
-		/// The IDispose interface Dispose method for disposing the object determinastically.
+		/// The IDispose interface Dispose method for disposing the object deterministically.
 		/// </summary>
 		public void Dispose()
 		{

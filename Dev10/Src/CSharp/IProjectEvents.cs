@@ -53,7 +53,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Runtime.InteropServices;
 
 	/// <summary>
-	/// Defines the events that are internally defined for communication with other subsytems.
+	/// Defines the events that are internally defined for communication with other subsystems.
 	/// </summary>
 	[ComVisible(true)]
 	public interface IProjectEvents

@@ -744,7 +744,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 try
                 {
-                    // Synchronize calls to the Dispose simulteniously.
+                    // Synchronize calls to the Dispose simultaneously.
                     lock (Mutex)
                     {
                         if (disposing)
@@ -785,7 +785,7 @@ namespace Microsoft.VisualStudio.Project
 
         /// <summary>
         /// Lock the RDT Entry for the nested project.
-        /// By default this document is marked as "Dont Save as". That means the menu File->SaveAs is disabled for the
+        /// By default this document is marked as "Don't Save as". That means the menu File->SaveAs is disabled for the
         /// nested project node.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rdt")]
@@ -838,7 +838,7 @@ namespace Microsoft.VisualStudio.Project
             }
             finally
             {
-                // Release all Inptr's that that were given as out pointers
+                // Release all IntPtr's that were given as out pointers
                 if (docData != IntPtr.Zero)
                 {
                     Marshal.Release(docData);
@@ -938,7 +938,7 @@ namespace Microsoft.VisualStudio.Project
 
         #region helper methods
         /// <summary>
-        /// Closes a nested project and releases the nested hierrachy pointer.
+        /// Closes a nested project and releases the nested hierarchy pointer.
         /// </summary>
         public virtual void CloseNestedProjectNode()
         {
@@ -1006,7 +1006,7 @@ namespace Microsoft.VisualStudio.Project
             }
             else
             {
-                // Get a guid from the nested hiererachy.
+                // Get a guid from the nested hierarchy.
                 Guid nestedHiererachyInstanceGuid;
                 ErrorHandler.ThrowOnFailure(this.nestedHierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectIDGuid, out nestedHiererachyInstanceGuid));
 
@@ -1074,7 +1074,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Delegates Getproperty calls to the inner nested.
+        /// Delegates GetProperty calls to the inner nested.
         /// </summary>
         /// <param name="propID">The property to delegate.</param>
         /// <returns>The return of the GetProperty from nested.</returns>
@@ -1098,7 +1098,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Delegates Setproperty calls to the inner nested.
+        /// Delegates SetProperty calls to the inner nested.
         /// </summary>
         /// <param name="propID">The property to delegate.</param>
         /// <param name="value">The property to set.</param>
@@ -1166,7 +1166,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Disconnects the propertynotify sink
+        /// Disconnects the PropertyNotify sink
         /// </summary>
         protected virtual void DisconnectPropertyNotifySink()
         {

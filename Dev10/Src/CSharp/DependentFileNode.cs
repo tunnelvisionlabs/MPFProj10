@@ -68,7 +68,7 @@ namespace Microsoft.VisualStudio.Project
 		#region fields
 		/// <summary>
 		/// Defines if the node has a name relation to its parent node
-		/// e.g. Form1.ext and Form1.resx are name related (until first occurence of extention separator)
+		/// e.g. Form1.ext and Form1.resx are name related (until first occurrence of extension separator)
 		/// </summary>
 		#endregion
 
@@ -79,12 +79,12 @@ namespace Microsoft.VisualStudio.Project
 		}
 		#endregion
 
-		#region ctor
+		#region constructor
 		/// <summary>
 		/// Constructor for the DependentFileNode
 		/// </summary>
 		/// <param name="root">Root of the hierarchy</param>
-		/// <param name="e">Associated project element</param>
+		/// <param name="element">Associated project element</param>
 		public DependentFileNode(ProjectNode root, ProjectElement element)
 			: base(root, element)
 		{

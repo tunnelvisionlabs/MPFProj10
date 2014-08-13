@@ -63,9 +63,9 @@ namespace Microsoft.VisualStudio.Project
 	[ComVisible(true)]
 	public class AssemblyReferenceNode : ReferenceNode
 	{
-		#region fieds
+		#region fields
 		/// <summary>
-		/// The name of the assembly this refernce represents
+		/// The name of the assembly this reference represents
 		/// </summary>
 		private System.Reflection.AssemblyName assemblyName;
 		private AssemblyName resolvedAssemblyName;
@@ -166,7 +166,7 @@ namespace Microsoft.VisualStudio.Project
             }
         }
 
-		#region ctors
+		#region constructors
 		/// <summary>
 		/// Constructor for the ReferenceNode
 		/// </summary>
@@ -212,7 +212,7 @@ namespace Microsoft.VisualStudio.Project
 				this.assemblyName = System.Reflection.AssemblyName.GetAssemblyName(assemblyPath);
 				this.AssemblyPath = assemblyPath;
 
-				// We register with listeningto chnages onteh path here. The rest of teh cases will call into resolving the assembly and registration is done there.
+				// We register with listening to changes on the path here. The rest of the cases will call into resolving the assembly and registration is done there.
 				this.fileChangeListener.ObserveItem(this.assemblyPath);
 			}
 			else
@@ -299,12 +299,12 @@ namespace Microsoft.VisualStudio.Project
 		{
 			this.assemblyName = name;
 
-			// Use MsBuild to resolve the assemblyname 
+			// Use MsBuild to resolve the assembly name 
 			this.ResolveAssemblyReference();
 
 			if(String.IsNullOrEmpty(this.AssemblyPath) && (null != this.ItemNode.Item))
 			{
-				// Try to get the assembly name from the hintpath.
+				// Try to get the assembly name from the hint path.
 				this.GetPathNameFromProjectFile();
 				if(this.AssemblyPath == null)
 				{
@@ -319,7 +319,7 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		/// <summary>
-		/// Checks if an assembly is already added. The method parses all references and compares the full assemblynames, or the location of the assemblies to decide whether two assemblies are the same.
+		/// Checks if an assembly is already added. The method parses all references and compares the full assembly names, or the location of the assemblies to decide whether two assemblies are the same.
 		/// </summary>
 		/// <returns>true if the assembly has already been added.</returns>
 		public override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
@@ -333,7 +333,7 @@ namespace Microsoft.VisualStudio.Project
 				AssemblyReferenceNode assemblyReferenceNode = n as AssemblyReferenceNode;
 				if(null != assemblyReferenceNode)
 				{
-					// We will check if the full assemblynames are the same or if the Url of the assemblies is the same.
+					// We will check if the full assembly names are the same or if the URL of the assemblies is the same.
 					if(String.Equals(assemblyReferenceNode.AssemblyName.FullName, this.assemblyName.FullName, StringComparison.OrdinalIgnoreCase) ||
 						(shouldCheckPath && NativeMethods.IsSamePath(assemblyReferenceNode.Url, this.Url)))
 					{
@@ -473,10 +473,10 @@ namespace Microsoft.VisualStudio.Project
 				return;
 			}
 
-			// Set a default HintPath for msbuild to be able to resolve the reference.
+			// Set a default HintPath for MSBuild to be able to resolve the reference.
 			this.ItemNode.SetMetadata(ProjectFileConstants.HintPath, this.AssemblyPath);
 
-			// Resolve assembly referernces. This is needed to make sure that properties like the full path
+			// Resolve assembly references. This is needed to make sure that properties like the full path
 			// to the assembly or the hint path are set.
 			if(this.ProjectManager.Build(MSBuildTarget.ResolveAssemblyReferences) != MSBuildResult.Successful)
 			{
@@ -550,10 +550,10 @@ namespace Microsoft.VisualStudio.Project
 		/// Event callback. Called when one of the assembly file is changed.
 		/// </summary>
 		/// <param name="sender">The FileChangeManager object.</param>
-		/// <param name="e">Event args containing the file name that was updated.</param>
+		/// <param name="e">Event arguments containing the file name that was updated.</param>
 		protected virtual void OnAssemblyReferenceChangedOnDisk(object sender, FileChangedOnDiskEventArgs e)
 		{
-			Debug.Assert(e != null, "No event args specified for the FileChangedOnDisk event");
+			Debug.Assert(e != null, "No event arguments specified for the FileChangedOnDisk event");
 
 			// We only care about file deletes, so check for one before enumerating references.			
 			if((e.FileChangeFlag & _VSFILECHANGEFLAGS.VSFILECHG_Del) == 0)

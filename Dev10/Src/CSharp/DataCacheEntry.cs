@@ -100,7 +100,7 @@ namespace Microsoft.VisualStudio.Project
 
 		#region Dispose
 		/// <summary>
-		/// The IDispose interface Dispose method for disposing the object determinastically.
+		/// The IDispose interface Dispose method for disposing the object deterministically.
 		/// </summary>
 		public void Dispose()
 		{

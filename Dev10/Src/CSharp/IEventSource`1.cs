@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Runtime.InteropServices;
 
 	/// <summary>
-	/// Class used to identify a source of events of type SinkType.
+	/// Class used to identify a source of events of type <typeparamref name="TSink"/>.
 	/// </summary>
 	public interface IEventSource<TSink>
 		where TSink : class

@@ -52,7 +52,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Runtime.InteropServices;
 
 	/// <summary>
-	/// Defines the config dependent properties exposed through automation
+	/// Defines the configuration-dependent properties exposed through automation.
 	/// </summary>
 	[ComVisible(true)]
 	[Guid("21f73a8f-91d7-4085-9d4f-c48ee235ee5b")]

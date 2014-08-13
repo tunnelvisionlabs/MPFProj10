@@ -46,9 +46,9 @@ a particular purpose and non-infringement.
 
 ********************************************************************************************/
 
-/* This file provides a basefunctionallity for IVsCfgProvider2.
+/* This file provides a base functionality for IVsCfgProvider2.
    Instead of using the IVsProjectCfgEventsHelper object we have our own little sink and call our own helper methods
-   similiar to the interface. But there is no real benefit in inheriting from the interface in the first place. 
+   similar to the interface. But there is no real benefit in inheriting from the interface in the first place. 
    Using the helper object seems to be:  
     a) undocumented
     b) not really wise in the managed world
@@ -111,7 +111,7 @@ namespace Microsoft.VisualStudio.Project
 
         #endregion
 
-        #region ctors
+        #region constructors
         public ConfigProvider(ProjectNode manager)
         {
             if (manager == null)
@@ -148,7 +148,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Creates new Project Configuartion objects based on the configuration name.
+        /// Creates new Project Configuration objects based on the configuration name.
         /// </summary>
         /// <param name="configName">The name of the configuration</param>
         /// <returns>An instance of a ProjectConfig object.</returns>
@@ -319,7 +319,7 @@ namespace Microsoft.VisualStudio.Project
                 throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
             }
 
-            // Verify that this config exist
+            // Verify that this configuration exists
             string[] configs = GetPropertiesConditionedOn(ProjectFileConstants.Configuration);
             if (!configs.Contains(name, StringComparer.OrdinalIgnoreCase))
                 return VSConstants.S_OK;
@@ -353,7 +353,7 @@ namespace Microsoft.VisualStudio.Project
                 throw Marshal.GetExceptionForHR(VSConstants.OLE_E_PROMPTSAVECANCELLED);
             }
 
-            // Verify that this config exist
+            // Verify that this configuration exists
             string[] platforms = GetPlatformsFromProject();
             if (!platforms.Contains(platName, StringComparer.OrdinalIgnoreCase))
                 return VSConstants.S_OK;
@@ -372,8 +372,8 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Returns the existing configurations stored in the project file.
         /// </summary>
-        /// <param name="celt">Specifies the requested number of property names. If this number is unknown, celt can be zero.</param>
-        /// <param name="names">On input, an allocated array to hold the number of configuration property names specified by celt. This parameter can also be a null reference if the celt parameter is zero. 
+        /// <param name="celt">Specifies the requested number of property names. If this number is unknown, <paramref name="celt"/> can be zero.</param>
+        /// <param name="names">On input, an allocated array to hold the number of configuration property names specified by <paramref name="celt"/>. This parameter can also be a <see langword="null"/> reference if the <paramref name="celt"/> parameter is zero. 
         /// On output, names contains configuration property names.</param>
         /// <param name="actual">The actual number of property names returned.</param>
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
@@ -422,7 +422,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Returns a specified configuration property. 
         /// </summary>
-        /// <param name="propid">Specifies the property identifier for the property to return. For valid propid values, see __VSCFGPROPID.</param>
+        /// <param name="propid">Specifies the property identifier for the property to return. For valid values, see <see cref="__VSCFGPROPID"/> and <see cref="__VSCFGPROPID2"/>.</param>
         /// <param name="var">The value of the property.</param>
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
         public virtual int GetCfgProviderProperty(int propid, out object var)
@@ -520,8 +520,8 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Returns one or more platform names. 
         /// </summary>
-        /// <param name="celt">Specifies the requested number of platform names. If this number is unknown, celt can be zero.</param>
-        /// <param name="names">On input, an allocated array to hold the number of platform names specified by celt. This parameter can also be a null reference if the celt parameter is zero. On output, names contains platform names.</param>
+        /// <param name="celt">Specifies the requested number of platform names. If this number is unknown, <paramref name="celt"/> can be zero.</param>
+        /// <param name="names">On input, an allocated array to hold the number of platform names specified by <paramref name="celt"/>. This parameter can also be <see langword="null"/> if the <paramref name="celt"/> parameter is zero. On output, <paramref name="names"/> contains platform names.</param>
         /// <param name="actual">The actual number of platform names returned.</param>
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
         public virtual int GetPlatformNames(uint celt, string[] names, uint[] actual)
@@ -533,8 +533,8 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Returns the set of platforms that are installed on the user's machine. 
         /// </summary>
-        /// <param name="celt">Specifies the requested number of supported platform names. If this number is unknown, celt can be zero.</param>
-        /// <param name="names">On input, an allocated array to hold the number of names specified by celt. This parameter can also be a null reference (Nothing in Visual Basic)if the celt parameter is zero. On output, names contains the names of supported platforms</param>
+        /// <param name="celt">Specifies the requested number of supported platform names. If this number is unknown, <paramref name="celt"/> can be zero.</param>
+        /// <param name="names">On input, an allocated array to hold the number of names specified by <paramref name="celt"/>. This parameter can also be <see langword="null"/> if the <paramref name="celt"/> parameter is zero. On output, <paramref name="names"/> contains the names of supported platforms</param>
         /// <param name="actual">The actual number of platform names returned.</param>
         /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
         public virtual int GetSupportedPlatformNames(uint celt, string[] names, uint[] actual)
@@ -579,7 +579,7 @@ namespace Microsoft.VisualStudio.Project
                 string oldKey = string.Format("{0}|{1}", old, platform);
                 string newKey = string.Format("{0}|{1}", newname, platform);
 
-                // Update the name in our config list
+                // Update the name in our configuration list
                 ProjectConfig configuration;
                 if (configurationsList.TryGetValue(oldKey, out configuration))
                 {
@@ -685,7 +685,7 @@ namespace Microsoft.VisualStudio.Project
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            // Verify that this config exist
+            // Verify that this configuration exists
             string[] configs = GetPropertiesConditionedOn(ProjectFileConstants.Configuration);
             if (!configs.Contains(configurationName, StringComparer.OrdinalIgnoreCase))
                 return VSConstants.S_OK;
@@ -699,7 +699,7 @@ namespace Microsoft.VisualStudio.Project
 
                 foreach (string platform in platforms)
                 {
-                    // Create condition of config to remove
+                    // Create condition of configuration to remove
                     string configCondition = GetConfigurationCondition(config).Trim();
                     string configPlatformCondition = GetConfigurationPlatformCondition(config, platform).Trim();
 
@@ -737,7 +737,7 @@ namespace Microsoft.VisualStudio.Project
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            // Verify that this config exist
+            // Verify that this configuration exists
             string[] platforms = GetPlatformsFromProject();
             if (!platforms.Contains(platformName, StringComparer.OrdinalIgnoreCase))
                 return VSConstants.S_OK;
@@ -751,7 +751,7 @@ namespace Microsoft.VisualStudio.Project
 
                 foreach (string config in configs)
                 {
-                    // Create condition of config to remove
+                    // Create condition of configuration to remove
                     string platformCondition = GetPlatformCondition(platform).Trim();
                     string configPlatformCondition = GetConfigurationPlatformCondition(config, platform).Trim();
 

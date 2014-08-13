@@ -60,7 +60,7 @@ namespace Microsoft.VisualStudio.Project
 		private readonly string name;
 		#endregion
 
-		#region ctors
+		#region constructors
 		public LocDisplayNameAttribute(string name)
 		{
 			this.name = name;

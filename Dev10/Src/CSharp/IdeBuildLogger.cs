@@ -125,7 +125,7 @@ namespace Microsoft.VisualStudio.Project
 
         /// <summary>
         /// When building from within VS, setting this will
-        /// enable the logger to retrive the verbosity from
+        /// enable the logger to retrieve the verbosity from
         /// the correct registry hive.
         /// </summary>
         public string BuildVerbosityRegistryRoot
@@ -148,10 +148,10 @@ namespace Microsoft.VisualStudio.Project
 
         #endregion
 
-        #region ctors
+        #region constructors
 
         /// <summary>
-        /// Constructor.  Inititialize member data.
+        /// Constructor.  Initialize member data.
         /// </summary>
         public IdeBuildLogger(IVsOutputWindowPane output, TaskProvider taskProvider, IVsHierarchy hierarchy)
         {
@@ -458,7 +458,7 @@ namespace Microsoft.VisualStudio.Project
                 // Enqueue the output text
                 this.outputQueue.Enqueue(text);
 
-                // We want to interactively report the output. But we dont want to dispatch
+                // We want to interactively report the output. But we don't want to dispatch
                 // more than one at a time, otherwise we might overflow the main thread's
                 // message queue. So, we only report the output if the queue was empty.
                 if (this.outputQueue.Count == 1)
@@ -541,7 +541,7 @@ namespace Microsoft.VisualStudio.Project
                 return task;
             });
 
-            // NOTE: Unlike output we dont want to interactively report the tasks. So we never queue
+            // NOTE: Unlike output we don't want to interactively report the tasks. So we never queue
             // call ReportQueuedTasks here. We do this when the build finishes.
         }
 
@@ -592,8 +592,8 @@ namespace Microsoft.VisualStudio.Project
         #region helpers
 
         /// <summary>
-        /// This method takes a MessageImportance and returns true if messages
-        /// at importance i should be loggeed.  Otherwise return false.
+        /// This method takes a <see cref="MessageImportance"/> and returns <see langword="true"/> if messages
+        /// at importance <paramref name="importance"/> should be logged.  Otherwise return <see langword="false"/>.
         /// </summary>
         protected virtual bool LogAtImportance(MessageImportance importance)
         {

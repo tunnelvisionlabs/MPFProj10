@@ -62,12 +62,12 @@ namespace Microsoft.VisualStudio.Project
 	{
 		#region fields
 		/// <summary>
-		/// The cookie associated to the the events based IVsUpdateSolutionEvents2.
+		/// The cookie associated to the events based <see cref="IVsUpdateSolutionEvents2"/>.
 		/// </summary>
 		private uint solutionEvents2Cookie;
 
 		/// <summary>
-		/// The cookie associated to the theIVsUpdateSolutionEvents3 events.
+		/// The cookie associated to the <see cref="IVsUpdateSolutionEvents3"/> events.
 		/// </summary>
 		private uint solutionEvents3Cookie;
 
@@ -93,7 +93,7 @@ namespace Microsoft.VisualStudio.Project
 		private static volatile object Mutex = new object();
 		#endregion
 
-		#region ctors
+		#region constructors
 		/// <summary>
 		/// Overloaded constructor.
 		/// </summary>
@@ -161,22 +161,22 @@ namespace Microsoft.VisualStudio.Project
 		#region IVsUpdateSolutionEvents3 Members
 
 		/// <summary>
-		/// Fired after the active solution config is changed (pOldActiveSlnCfg can be NULL).
+		/// Fired after the active solution configuration is changed (<paramref name="oldActiveSlnCfg"/> can be <see langword="null"/>).
 		/// </summary>
 		/// <param name="oldActiveSlnCfg">Old configuration.</param>
 		/// <param name="newActiveSlnCfg">New configuration.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		public virtual int OnAfterActiveSolutionCfgChange(IVsCfg oldActiveSlnCfg, IVsCfg newActiveSlnCfg)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
 		/// <summary>
-		/// Fired before the active solution config is changed (pOldActiveSlnCfg can be NULL
+		/// Fired before the active solution configuration is changed (<paramref name="oldActiveSlnCfg"/> can be <see langword="null"/>).
 		/// </summary>
 		/// <param name="oldActiveSlnCfg">Old configuration.</param>
 		/// <param name="newActiveSlnCfg">New configuration.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		public virtual int OnBeforeActiveSolutionCfgChange(IVsCfg oldActiveSlnCfg, IVsCfg newActiveSlnCfg)
 		{
 			return VSConstants.E_NOTIMPL;
@@ -190,7 +190,7 @@ namespace Microsoft.VisualStudio.Project
 		/// Called when the active project configuration for a project in the solution has changed. 
 		/// </summary>
 		/// <param name="hierarchy">The project whose configuration has changed.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		public virtual int OnActiveProjectCfgChange(IVsHierarchy hierarchy)
 		{
 			return VSConstants.E_NOTIMPL;
@@ -204,7 +204,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="configSolution">A configuration solution object.</param>
 		/// <param name="action">The action taken.</param>
 		/// <param name="cancel">A flag indicating cancel.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		/// <remarks>The values for the action are defined in the enum _SLNUPDACTION env\msenv\core\slnupd2.h</remarks>
 		public virtual int UpdateProjectCfg_Begin(IVsHierarchy hierarchy, IVsCfg configProject, IVsCfg configSolution, uint action, ref int cancel)
 		{
@@ -220,7 +220,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="action">The action taken.</param>
 		/// <param name="success">Flag indicating success.</param>
 		/// <param name="cancel">Flag indicating cancel.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		/// <remarks>The values for the action are defined in the enum _SLNUPDACTION env\msenv\core\slnupd2.h</remarks>
 		public virtual int UpdateProjectCfg_Done(IVsHierarchy hierarchy, IVsCfg configProject, IVsCfg configSolution, uint action, int success, int cancel)
 		{
@@ -231,16 +231,16 @@ namespace Microsoft.VisualStudio.Project
 		/// Called before any build actions have begun. This is the last chance to cancel the build before any building begins. 
 		/// </summary>
 		/// <param name="cancelUpdate">Flag indicating cancel update.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		public virtual int UpdateSolution_Begin(ref int cancelUpdate)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
 
 		/// <summary>
-		/// Called when a build is being cancelled. 
+		/// Called when a build is being canceled. 
 		/// </summary>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		public virtual int UpdateSolution_Cancel()
 		{
 			return VSConstants.E_NOTIMPL;
@@ -249,10 +249,10 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Called when a build is completed. 
 		/// </summary>
-		/// <param name="succeeded">true if no update actions failed.</param>
-		/// <param name="modified">true if any update action succeeded.</param>
-		/// <param name="cancelCommand">true if update actions were canceled.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
+		/// <param name="fSucceeded">Non-zero if no update actions failed.</param>
+		/// <param name="fModified">Non-zero if any update action succeeded.</param>
+		/// <param name="fCancelCommand">Non-Zero if update actions were canceled.</param>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
 		public virtual int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
 		{
 			return VSConstants.E_NOTIMPL;
@@ -261,9 +261,9 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Called before the first project configuration is about to be built. 
 		/// </summary>
-		/// <param name="cancelUpdate">A flag indicating cancel update.</param>
-		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
-		public virtual int UpdateSolution_StartUpdate(ref int cancelUpdate)
+		/// <param name="pfCancelUpdate">A flag indicating cancel update.</param>
+		/// <returns>If the method succeeds, it returns <see cref="VSConstants.S_OK"/>. If it fails, it returns an error code.</returns>
+		public virtual int UpdateSolution_StartUpdate(ref int pfCancelUpdate)
 		{
 			return VSConstants.E_NOTIMPL;
 		}
@@ -274,7 +274,7 @@ namespace Microsoft.VisualStudio.Project
 		#region IDisposable Members
 
 		/// <summary>
-		/// The IDispose interface Dispose method for disposing the object determinastically.
+		/// The IDispose interface Dispose method for disposing the object deterministically.
 		/// </summary>
 		public void Dispose()
 		{
