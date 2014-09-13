@@ -6741,6 +6741,7 @@ namespace Microsoft.VisualStudio.Project
             if (node == null)
                 throw new ArgumentException("Invalid item id", "item");
 
+            attributeValue = ProjectCollection.Escape(attributeValue);
             node.ItemNode.SetMetadata(attributeName, attributeValue);
             return VSConstants.S_OK;
         }
