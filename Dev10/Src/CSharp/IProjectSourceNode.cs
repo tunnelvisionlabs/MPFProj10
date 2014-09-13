@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.Project
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// This interface provides the ability to identify the items which have the cability of including / excluding
+    /// This interface provides the ability to identify the items which have the capability of including / excluding
     /// themselves to / from the project system. It also tells if the item is a member of the project or not.
     /// </summary>
     public interface IProjectSourceNode

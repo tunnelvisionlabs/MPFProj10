@@ -91,7 +91,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Returns the Guid of the COM object.
+        /// Returns the GUID of the COM object.
         /// </summary>
         public Guid TypeGuid
         {
@@ -196,7 +196,7 @@ namespace Microsoft.VisualStudio.Project
         }
         #endregion
 
-        #region ctors
+        #region constructors
         /// <summary>
         /// Constructor for the ComReferenceNode. 
         /// </summary>
@@ -221,7 +221,7 @@ namespace Microsoft.VisualStudio.Project
         /// Overloaded constructor for creating a ComReferenceNode from selector data
         /// </summary>
         /// <param name="root">The Project node</param>
-        /// <param name="selectorData">The component selctor data.</param>
+        /// <param name="selectorData">The component selector data.</param>
         public ComReferenceNode(ProjectNode root, VSCOMPONENTSELECTORDATA selectorData)
             : this(root, selectorData, null)
         {
@@ -231,7 +231,7 @@ namespace Microsoft.VisualStudio.Project
         /// Overloaded constructor for creating a ComReferenceNode from selector data
         /// </summary>
         /// <param name="root">The Project node</param>
-        /// <param name="selectorData">The component selctor data.</param>
+        /// <param name="selectorData">The component selector data.</param>
         public ComReferenceNode(ProjectNode root, VSCOMPONENTSELECTORDATA selectorData, string wrapperTool)
             : base(root)
         {
@@ -293,7 +293,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Checks if a reference is already added. The method parses all references and compares the the FinalItemSpec and the Guid.
+        /// Checks if a reference is already added. The method parses all references and compares the FinalItemSpec and the GUID.
         /// </summary>
         /// <returns>true if the assembly has already been added.</returns>
 		public override bool IsAlreadyAdded(out ReferenceNode existingEquivalentNode)
@@ -307,7 +307,7 @@ namespace Microsoft.VisualStudio.Project
 
                 if(referenceNode != null)
                 {
-                    // We check if the name and guids are the same
+                    // We check if the name and GUIDs are the same
                     if(referenceNode.TypeGuid == this.TypeGuid && String.Equals(referenceNode.Caption, this.Caption, StringComparison.OrdinalIgnoreCase))
                     {
 						existingEquivalentNode = referenceNode;
@@ -330,7 +330,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// This is an helper method to convert the VSCOMPONENTSELECTORDATA recieved by the
+        /// This is an helper method to convert the VSCOMPONENTSELECTORDATA received by the
         /// implementer of IVsComponentUser into a ProjectElement that can be used to create
         /// an instance of this class.
         /// This should not be called for project reference or reference to managed assemblies.
@@ -403,7 +403,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Verify that the TypeLib is registered and set the the installed file path of the com reference.
+        /// Verify that the TypeLib is registered and set the installed file path of the com reference.
         /// </summary>
         /// <returns></returns>
         protected virtual void SetInstalledFilePath()

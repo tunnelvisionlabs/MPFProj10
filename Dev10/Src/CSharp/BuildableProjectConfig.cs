@@ -57,7 +57,7 @@ namespace Microsoft.VisualStudio.Project
     using Microsoft.VisualStudio.Shell.Interop;
 
     //=============================================================================
-    // NOTE: advises on out of proc build execution to maximize
+    // NOTE: advises on out-of-process build execution to maximize
     // future cross-platform targeting capabilities of the VS tools.
 
     [CLSCompliant(false)]
@@ -70,7 +70,7 @@ namespace Microsoft.VisualStudio.Project
         private readonly EventSinkCollection callbacks = new EventSinkCollection();
         #endregion
 
-        #region ctors
+        #region constructors
         public BuildableProjectConfig(ProjectConfig config)
         {
             this.config = config;
@@ -238,8 +238,8 @@ namespace Microsoft.VisualStudio.Project
 
                     // Now repaint references if that is needed. 
                     // We hardly rely here on the fact the ResolveAssemblyReferences target has been run as part of the build.
-                    // One scenario to think at is when an assembly reference is renamed on disk thus becomming unresolvable, 
-                    // but msbuild can actually resolve it.
+                    // One scenario to think at is when an assembly reference is renamed on disk thus becoming unresolvable, 
+                    // but MSBuild can actually resolve it.
                     // Another one if the project was opened only for browsing and now the user chooses to build or rebuild.
                     if (shouldRepaintReferences && (result == MSBuildResult.Successful))
                     {

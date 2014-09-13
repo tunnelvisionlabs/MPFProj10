@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.Project
 	using System.Runtime.InteropServices;
 
 	/// <summary>
-	/// Defines the interface that will specify ehethrr the object is a project events listener.
+	/// Defines the interface that will specify whether the object is a project events listener.
 	/// </summary>
 	[ComVisible(true)]
 	public interface IProjectEventsListener

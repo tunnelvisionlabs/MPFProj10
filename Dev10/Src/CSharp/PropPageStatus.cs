@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 
 	/// <summary>
-	/// Defines the currect state of a property page.
+	/// Defines the current state of a property page.
 	/// </summary>
 	[Flags]
 	public enum PropPageStatus

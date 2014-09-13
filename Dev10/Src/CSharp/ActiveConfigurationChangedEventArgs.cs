@@ -52,7 +52,7 @@ namespace Microsoft.VisualStudio.Project
 	using Microsoft.VisualStudio.Shell.Interop;
 
 	/// <summary>
-	/// Defines the event args for the active configuration chnage event.
+	/// Defines the event args for the active configuration change event.
 	/// </summary>
 	public class ActiveConfigurationChangedEventArgs : EventArgs
 	{

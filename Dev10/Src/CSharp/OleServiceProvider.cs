@@ -65,7 +65,7 @@ namespace Microsoft.VisualStudio.Project
 		private static volatile object Mutex = new object();
 		#endregion
 
-		#region ctors
+		#region constructors
 		public OleServiceProvider()
 		{
 		}
@@ -122,7 +122,7 @@ namespace Microsoft.VisualStudio.Project
 		#region Dispose
 
 		/// <summary>
-		/// The IDispose interface Dispose method for disposing the object determinastically.
+		/// The IDispose interface Dispose method for disposing the object deterministically.
 		/// </summary>
 		public void Dispose()
 		{
@@ -137,7 +137,7 @@ namespace Microsoft.VisualStudio.Project
 		/// </summary>
 		/// <param name="serviceType">The type of the service to add.</param>
 		/// <param name="serviceInstance">An instance of the service.</param>
-		/// <param name="shouldDisposeServiceInstance">true if the Dipose of the service provider is allowed to dispose the sevice instance.</param>
+		/// <param name="shouldDisposeServiceInstance">true if the Dispose of the service provider is allowed to dispose the service instance.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
             Justification = "The services created here will be disposed in the Dispose method of this type.")]
         public virtual void AddService(Type serviceType, object serviceInstance, bool shouldDisposeServiceInstance)
@@ -146,7 +146,7 @@ namespace Microsoft.VisualStudio.Project
 			// of the parameter here because the constructor of ServiceData will do it for us.
 			ServiceData service = new ServiceData(serviceType, serviceInstance, null, shouldDisposeServiceInstance);
 
-			// Now add the service desctription to the dictionary.
+			// Now add the service description to the dictionary.
 			AddService(service);
 		}
 
@@ -158,7 +158,7 @@ namespace Microsoft.VisualStudio.Project
 			// of the parameter here because the constructor of ServiceData will do it for us.
 			ServiceData service = new ServiceData(serviceType, null, serviceFactory, shouldDisposeServiceInstance);
 
-			// Now add the service desctription to the dictionary.
+			// Now add the service description to the dictionary.
 			AddService(service);
 		}
 
@@ -205,7 +205,7 @@ namespace Microsoft.VisualStudio.Project
 			// Everybody can go here.
 			if(!this.isDisposed)
 			{
-				// Synchronize calls to the Dispose simulteniously.
+				// Synchronize calls to the Dispose simultaneously.
 				lock(Mutex)
 				{
 					if(disposing)
