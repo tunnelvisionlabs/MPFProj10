@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveConfigurationChangedEventArgs.cs" />
+    <Compile Include="FilterBrowsableState.cs" />
     <Compile Include="ProjectFileOpenedEventArgs.cs" />
     <Compile Include="AssemblyReferenceNode.cs" />
     <Compile Include="AutomationBrowsableAttribute.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="OutputTypeConverter.cs" />
     <Compile Include="ProjectFileAttributeValue.cs" />
     <Compile Include="ProjectFileValues.cs" />
+    <Compile Include="ProvideFilterAttribute.cs" />
     <Compile Include="SuppressEvents.cs" />
     <Compile Include="ImageName.cs" />
     <Compile Include="ProjectNodeProperties.cs" />
