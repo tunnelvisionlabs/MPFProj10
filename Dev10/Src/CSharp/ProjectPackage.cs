@@ -51,15 +51,18 @@ namespace Microsoft.VisualStudio.Project
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
+	using Microsoft.VisualStudio.Project.PropertyPages;
 	using Interlocked = System.Threading.Interlocked;
+	using IVsComponentSelectorProvider = Microsoft.VisualStudio.Shell.Interop.IVsComponentSelectorProvider;
 	using ObjectExtenders = EnvDTE.ObjectExtenders;
+	using VSPROPSHEETPAGE = Microsoft.VisualStudio.Shell.Interop.VSPROPSHEETPAGE;
 
 	/// <summary>
 	/// Defines abstract package.
 	/// </summary>
 	[ComVisible(true)]
 	[CLSCompliant(false)]
-	public abstract class ProjectPackage : Microsoft.VisualStudio.Shell.Package
+	public abstract class ProjectPackage : Microsoft.VisualStudio.Shell.Package, IVsComponentSelectorProvider
 	{
 		#region fields
 		/// <summary>
@@ -176,6 +179,67 @@ namespace Microsoft.VisualStudio.Project
 				base.Dispose(disposing);
 			}
 		}
+		#endregion
+
+		#region IVsComponentSelectorProvider Members
+
+		/// <inheritdoc/>
+		int IVsComponentSelectorProvider.GetComponentSelectorPage(ref Guid rguidPage, VSPROPSHEETPAGE[] ppage)
+		{
+			if (ppage == null || ppage.Length == 0)
+				return VSConstants.E_INVALIDARG;
+
+			ComponentSelectorControl page;
+			PropertySheetPageFlags flags;
+			int result = GetComponentSelectorPage(rguidPage, out page, out flags);
+			if (ErrorHandler.Failed(result))
+				return result;
+
+			const PropertySheetPageFlags supportedFlags = PropertySheetPageFlags.PSP_HASHELP | PropertySheetPageFlags.PSP_HIDEHEADER;
+			if (page == null)
+				throw new NotSupportedException();
+			if ((flags & ~supportedFlags) != 0)
+				throw new NotSupportedException();
+
+			ppage[0] = new VSPROPSHEETPAGE()
+			{
+				dwFlags = (uint)flags,
+				dwReserved = 0,
+				dwSize = (uint)Marshal.SizeOf(typeof(VSPROPSHEETPAGE)),
+				dwTemplateSize = 0,
+				HINSTANCE = 0,
+				hwndDlg = page.Handle,
+				lParam = IntPtr.Zero,
+				pcRefParent = IntPtr.Zero,
+				pfnCallback = IntPtr.Zero,
+				pfnDlgProc = IntPtr.Zero,
+				pTemplate = IntPtr.Zero,
+				wTemplateId = 0,
+			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Create a component selector page.
+		/// </summary>
+		/// <param name="page">The ID of the component selector page. For custom pages, this will be the GUID of the type
+		/// specified in the <see cref="ProvideComponentSelectorTabAttribute"/> attribute.</param>
+		/// <param name="control">The component selector control to display.</param>
+		/// <param name="flags">A combination of flags from the <see cref="PropertySheetPageFlags"/> enumeration specifying
+		/// the behavior of the component selector.</param>
+		/// <returns>
+		/// <para><see cref="VSConstants.S_OK"/> if a control is provided for the specified <paramref name="page"/>.</para>
+		/// <para>-or-</para>
+		/// <para>An error code if the requested control could not be created.</para>
+		/// </returns>
+		protected virtual int GetComponentSelectorPage(Guid page, out ComponentSelectorControl control, out PropertySheetPageFlags flags)
+		{
+			control = null;
+			flags = default(PropertySheetPageFlags);
+			return VSConstants.E_INVALIDARG;
+		}
+
 		#endregion
 	}
 }
