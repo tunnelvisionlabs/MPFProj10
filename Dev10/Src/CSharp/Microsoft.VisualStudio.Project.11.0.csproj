@@ -210,6 +210,12 @@
     <Compile Include="OutputTypeConverter.cs" />
     <Compile Include="ProjectFileAttributeValue.cs" />
     <Compile Include="ProjectFileValues.cs" />
+    <Compile Include="PropertyPages\ComponentSelectorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyPages\ComponentSelectorData.cs" />
+    <Compile Include="PropertyPages\PropertySheetPageFlags.cs" />
+    <Compile Include="ProvideComponentSelectorTabAttribute.cs" />
     <Compile Include="SuppressEvents.cs" />
     <Compile Include="ImageName.cs" />
     <Compile Include="ProjectNodeProperties.cs" />
