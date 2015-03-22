@@ -105,9 +105,9 @@
     <Compile Include="VSCodeGenAccessors.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Src\CSharp\Microsoft.VisualStudio.Project.csproj">
+    <ProjectReference Include="..\..\..\..\Src\CSharp\Microsoft.VisualStudio.Project.10.0.csproj">
       <Project>{CACB60A9-1E76-4F92-8831-B134A658C695}</Project>
-      <Name>Microsoft.VisualStudio.Project</Name>
+      <Name>Microsoft.VisualStudio.Project.10.0</Name>
     </ProjectReference>
     <ProjectReference Include="..\Src\NestedProject.csproj">
       <Project>{E9B43C9E-60AA-4387-A955-CAFB7EFA8C27}</Project>
