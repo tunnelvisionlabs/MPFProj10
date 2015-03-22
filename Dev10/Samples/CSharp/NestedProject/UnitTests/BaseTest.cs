@@ -55,7 +55,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
         {
         }
 
-        protected override void ProcessReferences()
+        public override void ProcessReferences()
         {
             return;
         }

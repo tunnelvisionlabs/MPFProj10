@@ -124,8 +124,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				EnvDTE.Properties nesteditemsProps = nestedProjectItem.Properties;
 				EnvDTE.Property nestedItemProperty = nesteditemsProps.Item("BuildAction");
 				Assert.IsNotNull(nestedItemProperty, "Could not retrieve the BuildAction property from the nested project item");
-				nestedItemProperty.Value = BuildAction.Content;
-				Assert.AreEqual((BuildAction)nestedItemProperty.Value, BuildAction.Content);
+				nestedItemProperty.Value = ProjectFileConstants.Content;
+				Assert.AreEqual(nestedItemProperty.Value, ProjectFileConstants.Content);
 
 				// Now try the properties on the top project item
 				EnvDTE.Properties props = item.Properties;
@@ -134,8 +134,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				EnvDTE.Property itemProperty = props.Item("BuildAction");
 				Assert.IsNotNull(itemProperty, "Could not retrieve the BuildAction property from the nested project item");
 				Assert.IsFalse(itemProperty is OANullProperty, "Could not retrieve the BuildAction property from the nested project item");
-				itemProperty.Value = BuildAction.Content;
-				Assert.AreEqual(itemProperty.Value, BuildAction.Content);
+				itemProperty.Value = ProjectFileConstants.Content;
+				Assert.AreEqual(itemProperty.Value, ProjectFileConstants.Content);
 
 				// Now save as
 				Assert.IsTrue(item.SaveAs("AssemblyInfo1.cs"), "The file AssemblyInfo.cs could not be reanmed to AssemblyInfo1.cs");
