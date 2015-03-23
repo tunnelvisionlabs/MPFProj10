@@ -31,7 +31,6 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 	/// <para>ProvideProjectItem: Declares that a package provides a project item.</para> 
 	/// </remarks>  
 	[PackageRegistration(UseManagedResourcesOnly = true)]
-	[DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\10.0")]
 	[ProvideObject(typeof(GeneralPropertyPage))]
 	[ProvideProjectFactory(typeof(MyCustomProjectFactory), "My Custom Project", "My Custom Project Files (*.myproj);*.myproj", "myproj", "myproj", @"Templates\Projects\MyCustomProject", LanguageVsTemplate = "MyCustomProject", NewProjectRequireNewFolderVsTemplate = false)]
 	[ProvideProjectItem(typeof(MyCustomProjectFactory), "My Items", @"Templates\ProjectItems\MyCustomProject", 500)]

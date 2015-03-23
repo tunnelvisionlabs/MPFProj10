@@ -177,7 +177,6 @@
     <Compile Include="Resources.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="extension.vsixmanifest" />
     <Content Include="Templates\Projects\Application.nestedproj">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

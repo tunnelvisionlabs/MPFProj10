@@ -165,9 +165,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="CustomProjectPackage.cs" />
     <Compile Include="Resources.cs" />
-    <None Include="extension.vsixmanifest">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Templates\ProjectItems\MyCustomProject\Class.cs">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
