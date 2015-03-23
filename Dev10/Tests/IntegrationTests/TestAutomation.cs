@@ -35,6 +35,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Tests the interface methods on ENVDTE.Property
 		/// </summary>
 		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProject()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -80,7 +82,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Tests on the EnvDTE.ProjectItem implementation.
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProjectItem()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -167,7 +171,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			});
 		}
 
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProjectItems()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -254,7 +260,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Tests on the EnvDTE.ProjectItem implementation.
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestMoreAutomationOnProjectItems()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -283,7 +291,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test configuration independent Project Properties
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProjectProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -315,7 +325,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Tests the interface methods on ENVDTE.Property
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestInterfaceMethodsOnProperty()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -415,7 +427,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Project Item Properties for hierarchy nodes of type FileNode
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestFileNodeRelatedItemProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -445,7 +459,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Project Item Properties for hierarchy nodes of type ReferenceNode
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestReferenceNodeRelatedItemProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -475,7 +491,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Project Item Properties for hierarchy nodes of type FolderNode
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestFolderNodeRelatedProjectItemProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -512,9 +530,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Configuration dependent properties for ProjectNode object
-		//[TestMethod()]
-		// This test is failing because of a bug in VS 2008 RTM. 
-		//TODO: Enable after VS 2008 SP1
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnConfigDependentProperties()
 		{
 			const int expectedConfigs = 2;

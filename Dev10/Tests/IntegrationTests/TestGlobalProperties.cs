@@ -25,7 +25,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 	[TestClass]
 	public class TestGlobalProperties : BaseTest
 	{
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestConfigChange()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()

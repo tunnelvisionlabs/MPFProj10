@@ -44,6 +44,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Add new file to the nestedProject
 		/// </summary>
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestProjectCreationWithDTE()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -96,6 +99,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Verify the created project
 		/// </summary>
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestProjectCreationInSolutionExplorer()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -120,6 +126,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Create project and check if the hasProjectOpened flag is set.
 		/// </summary>
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestHasProjectOpened()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -143,6 +152,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Verify the object
 		/// </summary>
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestGetAutomationObject()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -161,6 +173,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestAddChild()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -184,6 +199,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestBuild()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -200,6 +218,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestDesignTimeAssemblyResolution()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -225,6 +246,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestDeletingAProjectItem()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -261,6 +285,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Tests default action on a FileNode.
 		/// </summary>
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestDoDefaultActionOnFileNode()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -314,6 +341,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestSaveAsOnProjectFile()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -353,6 +383,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestRenameOfProjectFile()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -397,6 +430,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestRenameOfRenamedProjectFile()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -425,6 +461,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestBuildEngineAndProject()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -457,6 +496,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestUnloadReloadOfProject()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -500,6 +542,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestLoadingOfProjectWithDuplicateItems()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -543,6 +588,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		}
 
 		[TestMethod()]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestRenameOfNestedProject()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
