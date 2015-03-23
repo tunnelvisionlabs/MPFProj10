@@ -13,8 +13,6 @@
     <AssemblyName>Microsoft.VisualStudio.Project.UnitTests</AssemblyName>
     <TestedProject>Project</TestedProject>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <AllowedGlobalAssemblyNamePrefix>$(AllowedGlobalAssemblyNamePrefix);Microsoft.Internal;Microsoft.VisualStudio</AllowedGlobalAssemblyNamePrefix>
   </PropertyGroup>
@@ -99,9 +97,7 @@
       <HintPath>..\..\packages\VSSDK.DTE.7.0.4\lib\net20\stdole.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -148,5 +144,5 @@
       <Name>Microsoft.VisualStudio.Project.10.0</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" Condition="'$(_NTDRIVE)' == ''" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
