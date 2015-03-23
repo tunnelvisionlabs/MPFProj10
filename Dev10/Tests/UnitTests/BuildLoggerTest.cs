@@ -24,44 +24,11 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 {
 	internal class IDELoggerProxy
 	{
-		// Static members.
-		private static Type buildLoggerType;
-		private static Type IDEBuildLoggerType
-		{
-			get
-			{
-				if(null == buildLoggerType)
-				{
-					Assembly asm = typeof(VisualStudio.Project.ProjectNode).Assembly;
-					buildLoggerType = asm.GetType("Microsoft.VisualStudio.Project.IDEBuildLogger");
-				}
-				return buildLoggerType;
-			}
-		}
+		private IdeBuildLogger loggerInstance;
 
-		private static ConstructorInfo loggerConstructor;
-		private static ConstructorInfo LoggerConstructor
-		{
-			get
-			{
-				if(null == loggerConstructor)
-				{
-					Type[] constructorParams = new Type[] {
-                        typeof(IVsOutputWindowPane),
-                        typeof(TaskProvider),
-                        typeof(IVsHierarchy)
-                    };
-					loggerConstructor = IDEBuildLoggerType.GetConstructor(constructorParams);
-				}
-				return loggerConstructor;
-			}
-		}
-
-		private Logger loggerInstance;
 		internal IDELoggerProxy(IVsOutputWindowPane pane, TaskProvider taskProvider, IVsHierarchy hierarchy)
 		{
-			loggerInstance = (Logger)LoggerConstructor.Invoke(new object[] { pane, taskProvider, hierarchy });
-			Assert.IsNotNull(loggerInstance);
+			loggerInstance = new IdeBuildLogger(pane, taskProvider, hierarchy);
 		}
 
 		public void Initialize(IEventSource eventSource)
@@ -69,14 +36,9 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 			loggerInstance.Initialize(eventSource);
 		}
 
-        private static MethodInfo setVerbosityRoot;
 		public void SetBuildVerbosityRegistryRoot(string root)
 		{
-			if(null == setVerbosityRoot)
-			{
-				setVerbosityRoot = IDEBuildLoggerType.GetMethod("set_BuildVerbosityRegistryRoot", BindingFlags.NonPublic | BindingFlags.Instance);
-			}
-			setVerbosityRoot.Invoke(loggerInstance, new object[] { root });
+			loggerInstance.BuildVerbosityRegistryRoot = root;
 		}
 
 		public LoggerVerbosity Verbosity
@@ -87,7 +49,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 
         public void ClearVerbosityCache()
         {
-            IDEBuildLoggerType.InvokeMember("ClearCachedVerbosity", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, loggerInstance, null);
+            typeof(IdeBuildLogger).InvokeMember("ClearCachedVerbosity", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, loggerInstance, null);
         }
 	}
 

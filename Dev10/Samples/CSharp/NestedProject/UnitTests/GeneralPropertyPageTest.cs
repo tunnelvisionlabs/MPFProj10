@@ -82,7 +82,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 			// sets indirectly projectMgr to null
 			target.SetObjects(0, null);
 			int actual = gppAccessor.ApplyChanges();
-			Assert.IsNull(target.ProjectManager, "ProjectManager instance was not initialized to null as it expected.");
+			Assert.IsNotNull(target.ProjectManager, "ProjectManager should never be null.");
 			Assert.AreEqual(VSConstants.E_INVALIDARG, actual, "Method ApplyChanges() was returned unexpected value in case of uninitialized project instance.");
 		}
 		/// <summary>

@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VsSDK.UnitTestLibrary;
+using ObjectExtenders = EnvDTE.ObjectExtenders;
 
 namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 {
@@ -31,6 +32,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 		private static GenericMockFactory localRegistryFactory;
 		private static GenericMockFactory registerProjectFactory;
         private static GenericMockFactory fileChangeEx;
+		private static GenericMockFactory objectExtenders;
 
 		#region SolutionBuildManager Getters
 		/// <summary>
@@ -284,6 +286,14 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
             return mock;
         }
         #endregion
+
+		internal static BaseMock GetObjectExtenders()
+		{
+			if (objectExtenders == null)
+				objectExtenders = new GenericMockFactory("MockObjectExtenders", new[] { typeof(ObjectExtenders) });
+
+			return objectExtenders.GetInstance();
+		}
 
 		#region Callbacks
 		private static void AdviseUpdateSolutionEventsCallBack(object caller, CallbackArgs arguments)

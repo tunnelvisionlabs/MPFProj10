@@ -22,6 +22,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VsSDK.UnitTestLibrary;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using MSBuild = Microsoft.Build.BuildEngine;
+using ObjectExtenders = EnvDTE.ObjectExtenders;
 using OleServiceProvider = Microsoft.VsSDK.UnitTestLibrary.OleServiceProvider;
 
 namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
@@ -154,6 +155,8 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
             // SVsFileChangeEx support
             BaseMock fileChangeEx = MockServicesProvider.GetIVsFileChangeEx();
             serviceProvider.AddService(typeof(SVsFileChangeEx), fileChangeEx, false);
+
+            serviceProvider.AddService(typeof(ObjectExtenders), MockServicesProvider.GetObjectExtenders(), false);
         }
         
         protected virtual void LoadProject()

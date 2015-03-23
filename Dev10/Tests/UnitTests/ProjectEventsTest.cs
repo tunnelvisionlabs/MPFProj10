@@ -10,33 +10,20 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
-using System.Reflection;
-using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.VisualStudio.Project.UnitTests
 {
 	public static class ProjectEventsUtilities
 	{
-		private static ConstructorInfo afterProjectFileOpenedEventArgsCtr;
 		public static ProjectFileOpenedEventArgs CreateAfterProjectFileOpenedEventArgs(bool added)
 		{
-			if(null == afterProjectFileOpenedEventArgsCtr)
-			{
-				//afterProjectFileOpenedEventArgsCtr = typeof(AfterProjectFileOpenedEventArgs).GetConstructor(new Type[] { typeof(bool) });
-				afterProjectFileOpenedEventArgsCtr = typeof(ProjectFileOpenedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
-			}
-			return afterProjectFileOpenedEventArgsCtr.Invoke(new object[] { added }) as ProjectFileOpenedEventArgs;
+			return new ProjectFileOpenedEventArgs(added);
 		}
 
-		private static ConstructorInfo beforeProjectFileClosedEventArgsCtr;
 		public static ProjectFileClosingEventArgs CreateBeforeProjectFileClosedEventArgs(bool removed)
 		{
-			if(null == beforeProjectFileClosedEventArgsCtr)
-			{
-				beforeProjectFileClosedEventArgsCtr = typeof(ProjectFileClosingEventArgs).GetConstructor(new Type[] { typeof(bool) });
-			}
-			return beforeProjectFileClosedEventArgsCtr.Invoke(new object[] { removed }) as ProjectFileClosingEventArgs;
+			return new ProjectFileClosingEventArgs(removed);
 		}
 	}
 
@@ -91,14 +78,9 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 			}
 		}
 
-		private static FieldInfo projectOpened;
 		private static bool IsProjectOpened(ProjectNode project)
 		{
-			if(null == projectOpened)
-			{
-				projectOpened = typeof(VisualStudio.Project.ProjectNode).GetField("projectOpened", BindingFlags.Instance | BindingFlags.NonPublic);
-			}
-			return (bool)projectOpened.GetValue(project);
+			return project.HasProjectOpened;
 		}
 
 		[TestMethod]
