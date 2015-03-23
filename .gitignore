@@ -3,6 +3,7 @@
 *.suo
 obj/
 [Bb]in/
+TestResults/
 
 # Ignore Roslyn IDE cache
 .vs/
