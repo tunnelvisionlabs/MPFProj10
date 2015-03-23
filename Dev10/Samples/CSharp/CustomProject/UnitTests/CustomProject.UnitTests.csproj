@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mocks\MockIVsFileChangeEx.cs" />
+    <Compile Include="Mocks\MockObjectExtenders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseTest.cs" />
     <Compile Include="MyCustomFileNodeTest.cs" />
