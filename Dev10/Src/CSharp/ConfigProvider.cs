@@ -158,10 +158,6 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentNullException("configName");
             if (platform == null)
                 throw new ArgumentNullException("platform");
-            if (string.IsNullOrEmpty(configName))
-                throw new ArgumentException("configName cannot be null or empty");
-            if (string.IsNullOrEmpty(platform))
-                throw new ArgumentException("platform cannot be null or empty");
 
             string key = string.Format("{0}|{1}", configName, platform);
 
@@ -181,10 +177,6 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentNullException("configName");
             if (platform == null)
                 throw new ArgumentNullException("platform");
-            if (string.IsNullOrEmpty(configName))
-                throw new ArgumentException("configName cannot be null or empty");
-            if (string.IsNullOrEmpty(platform))
-                throw new ArgumentException("platform cannot be null or empty");
 
             return new ProjectConfig(this._project, configName, platform);
         }
