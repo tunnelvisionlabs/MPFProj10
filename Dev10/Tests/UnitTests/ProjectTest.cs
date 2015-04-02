@@ -75,7 +75,13 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 				localRegistry.RegistryRoot = @"Software\Microsoft\VisualStudio\9.0";
 				services.AddService(typeof(SLocalRegistry), localRegistry, true);
 
+				BaseMock mockConfiguration = new GenericMockFactory("MockConfiguration", new[] { typeof(Configuration) }).GetInstance();
+				mockConfiguration.AddMethodReturnValues(string.Format("{0}.{1}", typeof(Configuration).FullName, "ConfigurationName"), new[] { "Debug" });
+				mockConfiguration.AddMethodReturnValues(string.Format("{0}.{1}", typeof(Configuration).FullName, "PlatformName"), new[] { "AnyCPU" });
+
 				BaseMock mockConfigMgr = ConfigurationManagerFactory.GetInstance();
+				mockConfigMgr.AddMethodReturnValues(string.Format("{0}.{1}", typeof(ConfigurationManager).FullName, ""), new[] { mockConfiguration });
+
 				BaseMock extensibility = ExtensibilityFactory.GetInstance();
 				extensibility.AddMethodReturnValues(
 					string.Format("{0}.{1}", typeof(IVsExtensibility3).FullName, "GetConfigMgr"),
