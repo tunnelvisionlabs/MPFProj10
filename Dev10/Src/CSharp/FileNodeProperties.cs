@@ -81,7 +81,11 @@ namespace Microsoft.VisualStudio.Project
 
 			set
 			{
-				this.Node.ItemNode.ItemName = value.ToString();
+				KeyValuePair<string, prjBuildAction> pair = Node.ProjectManager.AvailableFileBuildActions.FirstOrDefault(i => i.Value == value);
+				if (!string.IsNullOrEmpty(pair.Key))
+					this.Node.ItemNode.ItemName = pair.Key;
+				else
+					this.Node.ItemNode.ItemName = value.ToString();
 			}
 		}
 
