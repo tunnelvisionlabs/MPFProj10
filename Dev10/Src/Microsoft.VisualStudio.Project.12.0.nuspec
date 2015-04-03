@@ -28,7 +28,7 @@
     </frameworkAssemblies>
     <dependencies>
       <!-- Visual Studio 2013 -->
-      <dependency id="VSSDK.IDE.12" version="[12.0.2,13.0.0)"/>
+      <dependency id="VSSDK.IDE.12" version="[12.0.4,13.0.0)"/>
       <!--
       Exposed Dependencies (Microsoft.VisualStudio.Project.12.0.dll):
         EnvDTE
@@ -51,17 +51,17 @@
         VSLangProj80
         WindowsBase
       -->
-      <dependency id="VSSDK.DTE" version="[7.0.2,8.0.0)"/>
-      <dependency id="VSSDK.OLE.Interop" version="[7.0.2,8.0.0)"/>
-      <dependency id="VSSDK.Designer" version="[7.0.2,8.0.0)"/>
-      <dependency id="VSSDK.Shell.Interop" version="[7.0.2,8.0.0)"/>
-      <dependency id="VSSDK.Shell.Interop.8" version="[8.0.2,9.0.0)"/>
-      <dependency id="VSSDK.Shell.Interop.10" version="[10.0.2,11.0.0)"/>
-      <dependency id="VSSDK.Shell.Interop.11" version="[11.0.2,12.0.0)"/>
-      <dependency id="VSSDK.TextManager.Interop" version="[7.0.2,8.0.0)"/>
-      <dependency id="VSSDK.VSLangProj" version="[7.0.2,8.0.0)"/>
-      <dependency id="VSSDK.VSLangProj.8" version="[8.0.2,9.0.0)"/>
-      <dependency id="VSSDK.Shell.12" version="[12.0.2,13.0.0)"/>
+      <dependency id="VSSDK.DTE" version="[7.0.4,8.0.0)"/>
+      <dependency id="VSSDK.OLE.Interop" version="[7.0.4,8.0.0)"/>
+      <dependency id="VSSDK.Designer" version="[7.0.4,8.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop" version="[7.0.4,8.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.8" version="[8.0.4,9.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.10" version="[10.0.4,11.0.0)"/>
+      <dependency id="VSSDK.Shell.Interop.11" version="[11.0.4,12.0.0)"/>
+      <dependency id="VSSDK.TextManager.Interop" version="[7.0.4,8.0.0)"/>
+      <dependency id="VSSDK.VSLangProj" version="[7.0.4,8.0.0)"/>
+      <dependency id="VSSDK.VSLangProj.8" version="[8.0.4,9.0.0)"/>
+      <dependency id="VSSDK.Shell.12" version="[12.0.4,13.0.0)"/>
     </dependencies>
   </metadata>
   <files>
