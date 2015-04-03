@@ -58,6 +58,7 @@ namespace Microsoft.VisualStudio.Project
 	public class SolutionListenerForProjectEvents : SolutionListener, IProjectEvents
 	{
 		#region events
+		/// <summary>
 		/// Event raised just after the project file opened.
 		/// </summary>
 		public event EventHandler<ProjectFileOpenedEventArgs> ProjectFileOpened;

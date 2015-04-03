@@ -99,7 +99,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// If the project system wants to add custom properties to the property group then 
         /// they provide us with this data.
-        /// Returns/sets the [(<propName, propCondition>) <propValue>] collection
+        /// Returns/sets the [(&lt;propName, propCondition&gt;) &lt;propValue&gt;] collection
         /// </summary>
         public virtual ReadOnlyCollection<KeyValuePair<KeyValuePair<string, string>, string>> NewConfigProperties
         {

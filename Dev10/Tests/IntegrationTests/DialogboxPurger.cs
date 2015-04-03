@@ -125,7 +125,6 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			this.buttonAction = buttonAction;
 		}
 
-		/// <summary>
 		#region IDisposable Members
 
 		void IDisposable.Dispose()

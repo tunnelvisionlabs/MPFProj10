@@ -586,7 +586,7 @@ namespace Microsoft.VisualStudio.Project
 
 		/// <summary>
 		/// Recursive method that walk a hierarchy and add items it find to our project.
-		/// Note that this is meant as an helper to the Copy&Paste/Drag&Drop functionality.
+		/// Note that this is meant as an helper to the Copy&amp;Paste/Drag&amp;Drop functionality.
 		/// </summary>
 		/// <param name="sourceHierarchy">Hierarchy to walk</param>
 		/// <param name="itemId">Item ID where to start walking the hierarchy</param>

@@ -616,6 +616,7 @@ namespace Microsoft.VisualStudio.Project
             return false;
         }
 
+        /// <devdoc>
         /// Cehcks if a file name is valid.
         /// </devdoc>
         /// <param name="fileName">The name of the file</param>

@@ -322,7 +322,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="label">The new name.</param>
         /// <returns>An errorcode for failure or S_OK.</returns>
-        /// <exception cref="InvalidOperationException" if the file cannot be validated>
+        /// <exception cref="InvalidOperationException">if the file cannot be validated</exception>
         /// <devremark> 
         /// We are going to throw instaed of showing messageboxes, since this method is called from various places where a dialog box does not make sense.
         /// For example the FileNodeProperties are also calling this method. That should not show directly a messagebox.
@@ -513,7 +513,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Called by the drag&drop implementation to ask the node
+        /// Called by the drag&amp;drop implementation to ask the node
         /// which is being dragged/droped over which nodes should
         /// process the operation.
         /// This allows for dragging to a node that cannot contain
