@@ -142,7 +142,7 @@ namespace Microsoft.VisualStudio.Project
             return active != 0;
         }
 
-        /// <include file='doc\VsShellUtilities.uex' path='docs/doc[@for="Utilities.IsInAutomationFunction"]/*' />
+        // <include file='doc\VsShellUtilities.uex' path='docs/doc[@for="Utilities.IsInAutomationFunction"]/*' />
         /// <devdoc>
         /// Is an extensibility object executing an automation function.
         /// </devdoc>
