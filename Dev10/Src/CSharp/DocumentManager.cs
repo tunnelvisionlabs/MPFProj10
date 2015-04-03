@@ -314,7 +314,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Rename document in the running document table from oldName to newName.
 		/// </summary>
-		/// <param name="provider">The service provider.</param>
+		/// <param name="site">The service provider.</param>
 		/// <param name="oldName">Full path to the old name of the document.</param>		
 		/// <param name="newName">Full path to the new name of the document.</param>		
 		/// <param name="newItemId">The new item id of the document</param>		

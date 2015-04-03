@@ -254,7 +254,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Notifies clients that the dragged item was dropped. 
 		/// </summary>
-		/// <param name="fDropped">If true, then the dragged item was dropped on the target. If false, then the drop did not occur.</param>
+		/// <param name="dropped">If true, then the dragged item was dropped on the target. If false, then the drop did not occur.</param>
 		/// <param name="effect">Visual effects associated with the drag-and-drop operation, such as cursors, bitmaps, and so on. 
 		/// The value of dwEffects passed to the source object via OnDropNotify method is the value of pdwEffects returned by Drop method.</param>
 		/// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code. </returns>
@@ -414,7 +414,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Determines if a node can accept drop opertaion.
 		/// </summary>
-		/// <param name="itemid">The id of the node.</param>
+		/// <param name="itemId">The id of the node.</param>
 		/// <returns>true if the node acceots drag operation.</returns>
 		public virtual bool CanTargetNodeAcceptDrop(uint itemId)
 		{
@@ -591,7 +591,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="sourceHierarchy">Hierarchy to walk</param>
 		/// <param name="itemId">Item ID where to start walking the hierarchy</param>
 		/// <param name="targetNode">Node to start adding to</param>
-		/// <param name="addSibblings">Typically false on first call and true after that</param>
+		/// <param name="addSiblings">Typically false on first call and true after that</param>
 		protected virtual void WalkSourceProjectAndAdd(IVsHierarchy sourceHierarchy, uint itemId, HierarchyNode targetNode, bool addSiblings)
 		{
             if (sourceHierarchy == null)

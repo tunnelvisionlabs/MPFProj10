@@ -3289,7 +3289,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Walks the subpaths of a project relative path and checks if the folder nodes hierarchy is already there, if not creates it.
         /// </summary>
-        /// <param name="strPath">Path of the folder, can be relative to project or absolute</param>
+        /// <param name="path">Path of the folder, can be relative to project or absolute</param>
         public virtual HierarchyNode CreateFolderNodes(string path)
         {
             return CreateFolderNodes(path, null);
@@ -5249,7 +5249,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Initialize an object with an XML fragment.
         /// </summary>
-        /// <param name="iPersistXMLFragment">Object that support being initialized with an XML fragment</param>
+        /// <param name="persistXmlFragment">Object that support being initialized with an XML fragment</param>
         /// <param name="configName">Name of the configuration being initialized, null if it is the project</param>
         public virtual void LoadXmlFragment(IPersistXMLFragment persistXmlFragment, string configName)
         {

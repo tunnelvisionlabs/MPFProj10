@@ -162,7 +162,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <summary>
 		/// Opens the file item in the specified view.
 		/// </summary>
-		/// <param name="ViewKind">Specifies the view kind in which to open the item (file)</param>
+		/// <param name="viewKind">Specifies the view kind in which to open the item (file)</param>
 		/// <returns>Window object</returns>
 		public override EnvDTE.Window Open(string viewKind)
 		{

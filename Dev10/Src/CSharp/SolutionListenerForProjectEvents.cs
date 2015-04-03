@@ -121,7 +121,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Raises the before  project file closed event.
 		/// </summary>
-		/// <param name="added">true if the project was removed from the solution before the solution was closed. false if the project was removed from the solution while the solution was being closed.</param>
+		/// <param name="removed">true if the project was removed from the solution before the solution was closed. false if the project was removed from the solution while the solution was being closed.</param>
 		protected virtual void RaiseBeforeProjectFileClosed(bool removed)
 		{
 			// Save event in temporary variable to avoid race condition.

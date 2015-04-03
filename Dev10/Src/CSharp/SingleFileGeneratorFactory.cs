@@ -107,7 +107,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Constructor for SingleFileGeneratorFactory
 		/// </summary>
-		/// <param name="projectGuid">The project type guid of the associated project.</param>
+		/// <param name="projectType">The project type guid of the associated project.</param>
 		/// <param name="serviceProvider">A service provider.</param>
 		public SingleFileGeneratorFactory(Guid projectType, System.IServiceProvider serviceProvider)
 		{
@@ -240,7 +240,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <param name="generatesDesignTimeSource">GeneratesDesignTimeSource key value</param>
 		/// <param name="generatesSharedDesignTimeSource">GeneratesSharedDesignTimeSource key value</param>
 		/// <param name="useTempPEFlag">UseDesignTimeCompilationFlag key value</param>
-		/// <param name="guiddGenerator">CLSID key value</param>
+		/// <param name="guidGenerator">CLSID key value</param>
 		/// <returns>S_OK if succesful</returns>
 		public virtual int GetGeneratorInformation(string progId, out int generatesDesignTimeSource, out int generatesSharedDesignTimeSource, out int useTempPEFlag, out Guid guidGenerator)
 		{
