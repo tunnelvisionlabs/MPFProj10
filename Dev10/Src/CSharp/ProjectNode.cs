@@ -3359,7 +3359,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// An ordered list of guids of the prefered property pages. See <see cref="__VSHPROPID.VSHPROPID_PriorityPropertyPagesCLSIDList"/>
+        /// An ordered list of guids of the prefered property pages. See <see cref="__VSHPROPID2.VSHPROPID_PriorityPropertyPagesCLSIDList"/>
         /// </summary>
         /// <returns>An array of guids.</returns>
         protected virtual Guid[] GetPriorityProjectDesignerPages()

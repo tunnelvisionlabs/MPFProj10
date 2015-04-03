@@ -77,7 +77,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Returns the dirty state of the document.
 		/// </summary>
 		/// <exception cref="InvalidOperationException">Is thrown if the project is closed or it the service provider attached to the project is invalid.</exception>
-		/// <exception cref="ComException">Is thrown if the dirty state cannot be retrived.</exception>
+		/// <exception cref="COMException">Is thrown if the dirty state cannot be retrived.</exception>
 		public override bool IsDirty
 		{
 			get
