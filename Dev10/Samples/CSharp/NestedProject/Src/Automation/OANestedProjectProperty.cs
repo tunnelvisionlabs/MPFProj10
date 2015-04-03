@@ -144,7 +144,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <param name="Index2">Reserved for future use.</param>
 		/// <param name="Index3">Reserved for future use.</param>
 		/// <param name="Index4">Reserved for future use.</param>
-		/// <param name="value">The value to set.</param>
+		/// <param name="Val">The value to set.</param>
 		public void set_IndexedValue(object Index1, object Index2, object Index3, object Index4, object Val)
 		{
 		}

@@ -124,7 +124,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Is Visual Studio in design mode.
         /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="site">The service provider.</param>
         /// <returns>true if visual studio is in design mode</returns>
         public static bool IsVisualStudioInDesignMode(IServiceProvider site)
         {
@@ -142,7 +142,7 @@ namespace Microsoft.VisualStudio.Project
             return active != 0;
         }
 
-        /// <include file='doc\VsShellUtilities.uex' path='docs/doc[@for="Utilities.IsInAutomationFunction"]/*' />
+        // <include file='doc\VsShellUtilities.uex' path='docs/doc[@for="Utilities.IsInAutomationFunction"]/*' />
         /// <devdoc>
         /// Is an extensibility object executing an automation function.
         /// </devdoc>
@@ -281,7 +281,7 @@ namespace Microsoft.VisualStudio.Project
         /// Creates a CALPOLESTR from a list of strings 
         /// It is the responsability of the caller to release this memory.
         /// </summary>
-        /// <param name="guids"></param>
+        /// <param name="strings"></param>
         /// <returns>A CALPOLESTR that was created from the the list of strings.</returns>
         [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CALPOLESTR")]
@@ -317,7 +317,7 @@ namespace Microsoft.VisualStudio.Project
         /// Creates a CADWORD from a list of tagVsSccFilesFlags. Memory is allocated for the elems. 
         /// It is the responsability of the caller to release this memory.
         /// </summary>
-        /// <param name="guids"></param>
+        /// <param name="flags"></param>
         /// <returns>A CADWORD created from the list of tagVsSccFilesFlags.</returns>
         [CLSCompliant(false)]
         [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CADWORD")]
@@ -616,6 +616,7 @@ namespace Microsoft.VisualStudio.Project
             return false;
         }
 
+        /// <devdoc>
         /// Cehcks if a file name is valid.
         /// </devdoc>
         /// <param name="fileName">The name of the file</param>
@@ -641,7 +642,6 @@ namespace Microsoft.VisualStudio.Project
         /// Helper method to call a converter explicitely to convert to an enum type
         /// </summary>
         /// <typeparam name="T">THe enum to convert to</typeparam>
-        /// <typeparam name="V">The converter that will be created</typeparam>
         /// <param name="value">The enum value to be converted to</param>
         /// <param name="typeToConvert">The type to convert</param>
         /// <param name="culture">The culture to use to read the localized strings</param>
@@ -727,7 +727,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Initializes the in memory project. Sets BuildEnabled on the project to true.
         /// </summary>
-        /// <param name="engine">The build engine to use to create a build project.</param>
+        /// <param name="buildEngine">The build engine to use to create a build project.</param>
         /// <param name="fullProjectPath">The full path of the project.</param>
         /// <returns>A loaded msbuild project.</returns>
         public static MSBuild.Project InitializeMsBuildProject(MSBuild.ProjectCollection buildEngine, string fullProjectPath)
@@ -756,7 +756,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Loads a project file for the file. If the build project exists and it was loaded with a different file then it is unloaded first. 
         /// </summary>
-        /// <param name="engine">The build engine to use to create a build project.</param>
+        /// <param name="buildEngine">The build engine to use to create a build project.</param>
         /// <param name="fullProjectPath">The full path of the project.</param>
         /// <param name="exitingBuildProject">An Existing build project that will be reloaded.</param>
         /// <returns>A loaded msbuild project.</returns>
@@ -782,8 +782,8 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Initialize the build engine. Sets the build enabled property to true. The engine is initialzed if the passed in engine is null or does not have its bin path set.
         /// </summary>
-        /// <param name="engine">An instance of MSBuild.ProjectCollection build engine, that will be checked if initialized.</param>
-        /// <param name="engine">The service provider.</param>
+        /// <param name="existingEngine">An instance of MSBuild.ProjectCollection build engine, that will be checked if initialized.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <returns>The buildengine to use.</returns>
         public static MSBuild.ProjectCollection InitializeMsBuildEngine(MSBuild.ProjectCollection existingEngine, IServiceProvider serviceProvider)
         {

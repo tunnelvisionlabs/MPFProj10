@@ -59,7 +59,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 	/// <summary>
 	/// Represents the automation equivalent of ReferenceNode
 	/// </summary>
-	/// <typeparam name="RefType"></typeparam>
+	/// <typeparam name="TReferenceNode"></typeparam>
 	[ComVisible(true)]
 	public abstract class OAReferenceBase<TReferenceNode> : Reference, Reference2, Reference3
 		where TReferenceNode : ReferenceNode

@@ -47,102 +47,102 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 		#endregion
 
 		#region Properties
-		[ResourcesCategoryAttribute(Resources.AssemblyName)]
-		[LocDisplayName(Resources.AssemblyName)]
-		[ResourcesDescriptionAttribute(Resources.AssemblyNameDescription)]
 		/// <summary>
 		/// Gets or sets Assembly Name.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.AssemblyName)]
+		[LocDisplayName(Resources.AssemblyName)]
+		[ResourcesDescriptionAttribute(Resources.AssemblyNameDescription)]
 		public string AssemblyName
 		{
 			get { return this.assemblyName; }
 			set { this.assemblyName = value; this.IsDirty = true; }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Application)]
-		[LocDisplayName(Resources.OutputType)]
-		[ResourcesDescriptionAttribute(Resources.OutputTypeDescription)]
 		/// <summary>
 		/// Gets or sets OutputType.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Application)]
+		[LocDisplayName(Resources.OutputType)]
+		[ResourcesDescriptionAttribute(Resources.OutputTypeDescription)]
 		public OutputType OutputType
 		{
 			get { return this.outputType; }
 			set { this.outputType = value; this.IsDirty = true; }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Application)]
-		[LocDisplayName(Resources.DefaultNamespace)]
-		[ResourcesDescriptionAttribute(Resources.DefaultNamespaceDescription)]
 		/// <summary>
 		/// Gets or sets Default Namespace.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Application)]
+		[LocDisplayName(Resources.DefaultNamespace)]
+		[ResourcesDescriptionAttribute(Resources.DefaultNamespaceDescription)]
 		public string DefaultNamespace
 		{
 			get { return this.defaultNamespace; }
 			set { this.defaultNamespace = value; this.IsDirty = true; }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Application)]
-		[LocDisplayName(Resources.StartupObject)]
-		[ResourcesDescriptionAttribute(Resources.StartupObjectDescription)]
 		/// <summary>
 		/// Gets or sets Startup Object.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Application)]
+		[LocDisplayName(Resources.StartupObject)]
+		[ResourcesDescriptionAttribute(Resources.StartupObjectDescription)]
 		public string StartupObject
 		{
 			get { return this.startupObject; }
 			set { this.startupObject = value; this.IsDirty = true; }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Application)]
-		[LocDisplayName(Resources.ApplicationIcon)]
-		[ResourcesDescriptionAttribute(Resources.ApplicationIconDescription)]
 		/// <summary>
 		/// Gets or sets Application Icon.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Application)]
+		[LocDisplayName(Resources.ApplicationIcon)]
+		[ResourcesDescriptionAttribute(Resources.ApplicationIconDescription)]
 		public string ApplicationIcon
 		{
 			get { return this.applicationIcon; }
 			set { this.applicationIcon = value; this.IsDirty = true; }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Project)]
-		[LocDisplayName(Resources.ProjectFile)]
-		[ResourcesDescriptionAttribute(Resources.ProjectFileDescription)]
 		/// <summary>
 		/// Gets the path to the project file.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Project)]
+		[LocDisplayName(Resources.ProjectFile)]
+		[ResourcesDescriptionAttribute(Resources.ProjectFileDescription)]
 		public string ProjectFile
 		{
 			get { return Path.GetFileName(this.ProjectManager.ProjectFile); }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Project)]
-		[LocDisplayName(Resources.ProjectFolder)]
-		[ResourcesDescriptionAttribute(Resources.ProjectFolderDescription)]
 		/// <summary>
 		/// Gets the path to the project folder.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Project)]
+		[LocDisplayName(Resources.ProjectFolder)]
+		[ResourcesDescriptionAttribute(Resources.ProjectFolderDescription)]
 		public string ProjectFolder
 		{
 			get { return Path.GetDirectoryName(this.ProjectManager.ProjectFolder); }
 		}
 
-		[ResourcesCategoryAttribute(Resources.Project)]
-		[LocDisplayName(Resources.OutputFile)]
-		[ResourcesDescriptionAttribute(Resources.OutputFileDescription)]
 		/// <summary>
 		/// Gets the output file name depending on current OutputType.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Project)]
+		[LocDisplayName(Resources.OutputFile)]
+		[ResourcesDescriptionAttribute(Resources.OutputFileDescription)]
 		public string OutputFile
 		{
 			get
@@ -163,14 +163,14 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject
 			}
 		}
 
-		[ResourcesCategoryAttribute(Resources.Project)]
-		[LocDisplayName(Resources.TargetFrameworkMoniker)]
-		[ResourcesDescriptionAttribute(Resources.TargetFrameworkMonikerDescription)]
-		[PropertyPageTypeConverter(typeof(FrameworkNameConverter))]
 		/// <summary>
 		/// Gets or sets Target Platform PlatformType.
 		/// </summary>
 		/// <remarks>IsDirty flag was switched to true.</remarks>
+		[ResourcesCategoryAttribute(Resources.Project)]
+		[LocDisplayName(Resources.TargetFrameworkMoniker)]
+		[ResourcesDescriptionAttribute(Resources.TargetFrameworkMonikerDescription)]
+		[PropertyPageTypeConverter(typeof(FrameworkNameConverter))]
 		public FrameworkName TargetFrameworkMoniker
 		{
 			get { return this.targetFrameworkMoniker; }

@@ -223,7 +223,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// Adds an item to the project.
 		/// </summary>
 		/// <param name="path">The full path of the item to add.</param>
-		/// <param name="op">The <paramref name="VSADDITEMOPERATION"/> to use when adding the item.</param>
+		/// <param name="op">The <see cref="VSADDITEMOPERATION"/> to use when adding the item.</param>
 		/// <returns>A ProjectItem object. </returns>
 		protected virtual EnvDTE.ProjectItem AddItem(string path, VSADDITEMOPERATION op)
 		{
@@ -256,7 +256,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		/// <summary>
 		/// Evaluates the result of an add operation.
 		/// </summary>
-		/// <param name="result">The <paramref name="VSADDRESULT"/> returned by the Add methods</param>
+		/// <param name="result">The <see cref="VSADDRESULT"/> returned by the Add methods</param>
 		/// <param name="path">The full path of the item added.</param>
 		/// <returns>A ProjectItem object.</returns>
 		protected virtual EnvDTE.ProjectItem EvaluateAddResult(VSADDRESULT result, string path)

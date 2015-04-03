@@ -1135,7 +1135,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds non member items to the hierarchy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         public virtual void AddNonmemberItems()
         {
             IList<string> files = new List<string>();
@@ -1191,7 +1190,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Removes non member item nodes from hierarchy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         public virtual void RemoveNonmemberItems()
         {
             IList<HierarchyNode> nodeList = new List<HierarchyNode>();
@@ -1355,7 +1353,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds non member folder items to the hierarcy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         /// <param name="folderList">Folders list containing the folder names.</param>
         protected virtual void AddNonmemberFolderItems(IList<string> folderList)
         {
@@ -1403,7 +1400,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds non member file items to the hierarcy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         /// <param name="fileList">Files containing the information about the non member file items.</param>
         protected virtual void AddNonmemberFileItems(IList<string> fileList)
         {
@@ -3289,7 +3285,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Walks the subpaths of a project relative path and checks if the folder nodes hierarchy is already there, if not creates it.
         /// </summary>
-        /// <param name="strPath">Path of the folder, can be relative to project or absolute</param>
+        /// <param name="path">Path of the folder, can be relative to project or absolute</param>
         public virtual HierarchyNode CreateFolderNodes(string path)
         {
             return CreateFolderNodes(path, null);
@@ -3359,7 +3355,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// An ordered list of guids of the prefered property pages. See <see cref="__VSHPROPID.VSHPROPID_PriorityPropertyPagesCLSIDList"/>
+        /// An ordered list of guids of the prefered property pages. See <see cref="__VSHPROPID2.VSHPROPID_PriorityPropertyPagesCLSIDList"/>
         /// </summary>
         /// <returns>An array of guids.</returns>
         protected virtual Guid[] GetPriorityProjectDesignerPages()
@@ -3904,7 +3900,6 @@ namespace Microsoft.VisualStudio.Project
         /// if buildKind is Sync, this method executes the submission and runs uiThreadCallback
         /// <param name="buildKind">Is it a Sync or ASync build</param>
         /// <param name="target">target to build</param>
-        /// <param name="projectInstance">project instance to build; if null, this.BuildProject.CreateProjectInstance() is used to populate</param>
         /// <param name="uiThreadCallback">callback to be run UI thread </param>
         /// <returns>A Build submission instance.</returns>
         protected virtual BuildSubmission DoMSBuildSubmission(BuildKind buildKind, string target, Action<MSBuildResult, string> uiThreadCallback)
@@ -5249,7 +5244,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Initialize an object with an XML fragment.
         /// </summary>
-        /// <param name="iPersistXMLFragment">Object that support being initialized with an XML fragment</param>
+        /// <param name="persistXmlFragment">Object that support being initialized with an XML fragment</param>
         /// <param name="configName">Name of the configuration being initialized, null if it is the project</param>
         public virtual void LoadXmlFragment(IPersistXMLFragment persistXmlFragment, string configName)
         {

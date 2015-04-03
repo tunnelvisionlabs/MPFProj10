@@ -226,7 +226,6 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="parent"></param>
-		/// <param name="T"></param>
 		/// <returns></returns>
 		internal static List<T> GetNodesOfType<T>(HierarchyNode parent)
 			where T : HierarchyNode
@@ -299,7 +298,6 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Retrives the nested hierarchy.
 		/// </summary>
-		/// <param name="project"></param>
 		/// <returns></returns>
 		internal static IVsHierarchy GetNestedHierarchy(ProjectNode node, string nestedProjectName)
 		{
@@ -392,7 +390,6 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Returns the full path of the assembly a project builds.
 		/// </summary>
-		/// <param name="project">The project whose build asembly to retrive.</param>
 		/// <returns>The full path of the assembly this project builds.</returns>
 		internal static string GetOutputPath(EnvDTE.Project automationProjectObject)
 		{
@@ -573,8 +570,6 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// 
 		/// </summary>
 		/// <param name="embeddedResourceName"></param>
-		/// <param name="baseFileName"></param>
-		/// <param name="fileExtension"></param>
 		/// <returns></returns>
 		public static void WriteEmbeddedResourceToFile(Assembly assembly, string embeddedResourceName, string fileName)
 		{

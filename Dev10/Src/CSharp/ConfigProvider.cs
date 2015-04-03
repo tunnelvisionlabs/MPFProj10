@@ -99,7 +99,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// If the project system wants to add custom properties to the property group then 
         /// they provide us with this data.
-        /// Returns/sets the [(<propName, propCondition>) <propValue>] collection
+        /// Returns/sets the [(&lt;propName, propCondition&gt;) &lt;propValue&gt;] collection
         /// </summary>
         public virtual ReadOnlyCollection<KeyValuePair<KeyValuePair<string, string>, string>> NewConfigProperties
         {
@@ -1228,8 +1228,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Helper function to convert AnyCPU to Any CPU.
         /// </summary>
-        /// <param name="oldName">The oldname.</param>
-        /// <returns>The new name.</returns>
         public virtual string GetPlatformNameFromPlatformProperty(string platformProperty)
         {
             if(String.Equals(platformProperty, ProjectFileValues.AnyCPU, StringComparison.OrdinalIgnoreCase))
@@ -1243,8 +1241,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Helper function to convert Any CPU to AnyCPU.
         /// </summary>
-        /// <param name="oldName">The oldname.</param>
-        /// <returns>The new name.</returns>
         public virtual string GetPlatformPropertyFromPlatformName(string platformName)
         {
             if (String.Equals(platformName, AnyCpuPlatform, StringComparison.OrdinalIgnoreCase))

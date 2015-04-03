@@ -73,7 +73,7 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Overloadde ctor.
 		/// </summary>
-		/// <param name="ProjectNode">The associated project</param>
+		/// <param name="projectMgr">The associated project</param>
 		public SingleFileGenerator(ProjectNode projectMgr)
 		{
 			this.projectMgr = projectMgr;

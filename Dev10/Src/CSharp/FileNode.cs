@@ -246,7 +246,7 @@ namespace Microsoft.VisualStudio.Project
         /// Constructor for the FileNode
         /// </summary>
         /// <param name="root">Root of the hierarchy</param>
-        /// <param name="e">Associated project element</param>
+        /// <param name="element">Associated project element</param>
         public FileNode(ProjectNode root, ProjectElement element)
             : base(root, element)
         {
@@ -322,7 +322,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="label">The new name.</param>
         /// <returns>An errorcode for failure or S_OK.</returns>
-        /// <exception cref="InvalidOperationException" if the file cannot be validated>
+        /// <exception cref="InvalidOperationException">if the file cannot be validated</exception>
         /// <devremark> 
         /// We are going to throw instaed of showing messageboxes, since this method is called from various places where a dialog box does not make sense.
         /// For example the FileNodeProperties are also calling this method. That should not show directly a messagebox.
@@ -513,7 +513,7 @@ namespace Microsoft.VisualStudio.Project
         }
 
         /// <summary>
-        /// Called by the drag&drop implementation to ask the node
+        /// Called by the drag&amp;drop implementation to ask the node
         /// which is being dragged/droped over which nodes should
         /// process the operation.
         /// This allows for dragging to a node that cannot contain
@@ -871,7 +871,7 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         /// <param name="oldFileName">The old file name.</param>
         /// <param name="newFileName">The new file name</param>
-        /// <param name="newParentId">The new parent id of the item.</param>
+        /// <param name="newParent">The new parent of the item.</param>
         /// <returns>The newly added FileNode.</returns>
         /// <remarks>While a new node will be used to represent the item, the underlying MSBuild item will be the same and as a result file properties saved in the project file will not be lost.</remarks>
         protected virtual FileNode RenameFileNode(string oldFileName, string newFileName, string linkPath, HierarchyNode newParent)
@@ -974,7 +974,7 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Rename all childnodes
         /// </summary>
-        /// <param name="newFileNode">The newly added Parent node.</param>
+        /// <param name="parentNode">The newly added Parent node.</param>
         protected virtual void RenameChildNodes(FileNode parentNode)
         {
             foreach(HierarchyNode child in Children)
