@@ -16,7 +16,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
-using MSBuild = Microsoft.Build.Evaluation;
+using MSBuildExecution = Microsoft.Build.Execution;
 namespace Microsoft.VisualStudio.Project.IntegrationTests
 {
 	/// <summary>
@@ -25,7 +25,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 	[TestClass]
 	public class TestGlobalProperties : BaseTest
 	{
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestConfigChange()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -40,9 +42,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				EnvDTE.Property property = dte.Solution.Properties.Item("ActiveConfig");
 
 				// Now change the active config that should trigger a project config change event and the global property should be thus updated.
-				property.Value = "Release|x86";
+				property.Value = "Release|Any CPU";
 
-                MSBuild.Project buildProject = typeof(ProjectNode).GetProperty("BuildProject", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(project, new object[] { }) as MSBuild.Project;
+                MSBuildExecution.ProjectInstance buildProject = project.CurrentConfig;
                 string activeConfig = null;
                 buildProject.GlobalProperties.TryGetValue(GlobalProperty.Configuration.ToString(), out activeConfig);
 

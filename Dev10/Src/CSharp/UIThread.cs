@@ -219,6 +219,9 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public static T DoOnUIThread<T>(Func<T> callback)
         {
+            if (IsUnitTest)
+                return callback();
+
             return ThreadHelper.Generic.Invoke<T>(callback);
         }
 
@@ -228,6 +231,12 @@ namespace Microsoft.VisualStudio.Project
         /// </summary>
         public static void DoOnUIThread(Action callback)
         {
+            if (IsUnitTest)
+            {
+                callback();
+                return;
+            }
+
             ThreadHelper.Generic.Invoke(callback);
         }
 

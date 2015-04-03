@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="VSIXProject1.Microsoft IT.5ffd2748-a251-44dc-bda5-54c6bcbd926d">
-    <Name>VSIXProject1</Name>
+  <Identifier Id="da0eb39c-13bc-41b4-8c29-889d52713634">
+    <Name>NestedProj - da0eb39c-13bc-41b4-8c29-889d52713634</Name>
     <Author>Microsoft IT</Author>
     <Version>1.0</Version>
     <Description>Empty VSIX Project.</Description>
@@ -20,7 +20,7 @@
   </References>
 
   <Content>
-    <!--Add Content here-->
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
   </Content>
 
 </Vsix>

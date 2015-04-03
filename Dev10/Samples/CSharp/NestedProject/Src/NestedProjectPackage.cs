@@ -32,9 +32,9 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 	/// <para>ProvideProjectItem: Declares that a package provides a project item.</para> 
 	/// <para>ProvideObject: Declares that a package provides creatable objects of specified type.</para> 
 	/// </remarks>
-	[DefaultRegistryRoot(@"Software\Microsoft\VisualStudio\9.0Exp")]
-    [ProvideProjectFactory(typeof(NestedProjectFactory), "MyNestedProject", "MyNestedProject Files (*.nestedproj);*.nestedproj", "nestedproj", "nestedproj", @"Templates\Projects\MyNestedProject")]
-    [ProvideProjectItem(typeof(NestedProjectFactory), "Nested Project Items", @"Templates\ProjectItems\MyNestedProject", 500)]
+	[PackageRegistration(UseManagedResourcesOnly = true)]
+    [ProvideProjectFactory(typeof(NestedProjectFactory), "MyNestedProject", "MyNestedProject Files (*.nestedproj);*.nestedproj", "nestedproj", "nestedproj", @"Templates\Projects")]
+    [ProvideProjectItem(typeof(NestedProjectFactory), "Nested Project Items", @"Templates\ProjectItems", 500)]
 	[ProvideObject(typeof(GeneralPropertyPage))]
 	[ProvideObject(typeof(NestedProjectBuildPropertyPage))]
 	[GuidAttribute(GuidStrings.GuidNestedProjectPackage)]

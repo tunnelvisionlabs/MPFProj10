@@ -30,6 +30,16 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
     [TestClass]
     public abstract class BaseTest
     {
+#if TEST_IN_VS2010
+        protected const string RegistryHiveName = "10.0Exp";
+#elif TEST_IN_VS2012
+        protected const string RegistryHiveName = "11.0Exp";
+#elif TEST_IN_VS2013
+        protected const string RegistryHiveName = "12.0Exp";
+#elif TEST_IN_VS2015
+        protected const string RegistryHiveName = "14.0Exp";
+#endif
+
         private TestContext testContextInstance;
 
         protected delegate void ThreadInvoker();

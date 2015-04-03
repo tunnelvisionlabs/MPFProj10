@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="VSIXProject1.Microsoft IT.5ffd2748-a251-44dc-bda5-54c6bcbd926d">
-    <Name>VSIXProject1</Name>
+  <Identifier Id="AC4F6611-3817-478E-A1A4-ADF38CDBF1DB">
+    <Name>CustomProj - AC4F6611-3817-478E-A1A4-ADF38CDBF1DB</Name>
     <Author>Microsoft IT</Author>
     <Version>1.0</Version>
     <Description>Empty VSIX Project.</Description>
@@ -20,7 +20,7 @@
   </References>
 
   <Content>
-    <!--Add Content here-->
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
   </Content>
 
 </Vsix>

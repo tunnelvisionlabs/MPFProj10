@@ -15,10 +15,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using EnvDTE;
-using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Project.Automation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
-using Microsoft.VisualStudio.Project.Automation;
 using prjBuildAction = VSLangProj.prjBuildAction;
 
 namespace Microsoft.VisualStudio.Project.IntegrationTests
@@ -29,7 +28,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 	[TestClass]
 	public class TestNode : BaseTest
 	{
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestCreatingFileNode()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -51,7 +53,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Verify the NodeProperties
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestNodeProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -70,17 +75,20 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				Assert.IsNotNull(props);
 
 				// Test the build action.
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionContent, "The BuildAction build action should be set to compile model");
+				Assert.AreEqual(prjBuildAction.prjBuildActionContent, props.BuildAction, "The BuildAction build action should be set to compile model");
 				props.BuildAction = prjBuildAction.prjBuildActionCompile;
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionCompile, "BuildAction has not been set correctly in the project file");
+				Assert.AreEqual(prjBuildAction.prjBuildActionCompile, props.BuildAction, "BuildAction has not been set correctly in the project file");
 				props.BuildAction = prjBuildAction.prjBuildActionEmbeddedResource;
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionEmbeddedResource, "BuildAction has not been set correctly in the project file");
+				Assert.AreEqual(prjBuildAction.prjBuildActionEmbeddedResource, props.BuildAction, "BuildAction has not been set correctly in the project file");
 				props.BuildAction = prjBuildAction.prjBuildActionNone;
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionNone, "BuildAction has not been set correctly in the project file");
+				Assert.AreEqual(prjBuildAction.prjBuildActionNone, props.BuildAction, "BuildAction has not been set correctly in the project file");
 			});
 		}
 
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestRenameOfFileNode()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -110,7 +118,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			});
 		}
 
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestSingleFileGeneratorOnNodes()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -123,12 +134,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				string destination = Path.Combine(TestContext.TestDir, TestContext.TestName);
 				ProjectNode project = Utilities.CreateMyNestedProject(sp, dte, TestContext.TestName, destination, true);
 
-				MethodInfo mi = typeof(FileNode).GetMethod("CreateSingleFileGenerator", BindingFlags.Instance | BindingFlags.NonPublic);
-
 				List<FileNode> nodes = Utilities.GetNodesOfType<FileNode>(project);
 				foreach(FileNode node in nodes)
 				{
-					ISingleFileGenerator generator = mi.Invoke(node, new object[] { }) as ISingleFileGenerator;
+					ISingleFileGenerator generator = node.CreateSingleFileGenerator();
 					string extension = Path.GetExtension(node.GetMKDocument());
 					if(String.Compare(extension, ".moxl", StringComparison.OrdinalIgnoreCase) == 0)
 					{
@@ -147,7 +156,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Verify that certain rename condition are not allowed with bad filename
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestRenameWithBadFileName()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -192,7 +204,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Test SaveAs moving document into different location
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestSaveAsDifferentLocation()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -239,7 +254,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Test SaveAs leaving document in same location
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestSaveAsSameLocation()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -277,7 +295,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Test SaveAs - document saved in existing folder (part of the project)
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestSaveAsInExistingSubFolder()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -319,7 +340,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Test SaveAs - document saved in new sub folder (not part of the project)
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RestartOptions, VsIdeTestHostContants.HostRestartOptions.Both)]
+		[HostType("VS IDE")]
 		public void TestSaveAsInNewDirectory()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()

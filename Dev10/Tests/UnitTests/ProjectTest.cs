@@ -32,8 +32,6 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 		/// </summary>
 		private class PackageTestEnvironment : IDisposable
 		{
-			private static MethodInfo initEngine;
-			private static MethodInfo initProject;
 			private static FieldInfo projectOpened;
 			private static string projectXml;
 
@@ -77,7 +75,13 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 				localRegistry.RegistryRoot = @"Software\Microsoft\VisualStudio\9.0";
 				services.AddService(typeof(SLocalRegistry), localRegistry, true);
 
+				BaseMock mockConfiguration = new GenericMockFactory("MockConfiguration", new[] { typeof(Configuration) }).GetInstance();
+				mockConfiguration.AddMethodReturnValues(string.Format("{0}.{1}", typeof(Configuration).FullName, "ConfigurationName"), new[] { "Debug" });
+				mockConfiguration.AddMethodReturnValues(string.Format("{0}.{1}", typeof(Configuration).FullName, "PlatformName"), new[] { "AnyCPU" });
+
 				BaseMock mockConfigMgr = ConfigurationManagerFactory.GetInstance();
+				mockConfigMgr.AddMethodReturnValues(string.Format("{0}.{1}", typeof(ConfigurationManager).FullName, ""), new[] { mockConfiguration });
+
 				BaseMock extensibility = ExtensibilityFactory.GetInstance();
 				extensibility.AddMethodReturnValues(
 					string.Format("{0}.{1}", typeof(IVsExtensibility3).FullName, "GetConfigMgr"),
@@ -87,11 +91,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 				project.SetSite(services);
 
 				// Init the msbuild engine
-				if(null == initEngine)
-				{
-					initEngine = typeof(VisualStudio.Project.Utilities).GetMethod("InitializeMsBuildEngine", BindingFlags.NonPublic | BindingFlags.Static);
-				}
-                Microsoft.Build.Evaluation.ProjectCollection engine = initEngine.Invoke(null, new object[2] { null, services }) as Microsoft.Build.Evaluation.ProjectCollection;
+				Microsoft.Build.Evaluation.ProjectCollection engine = VisualStudio.Project.Utilities.InitializeMsBuildEngine(null, services);
 				Assert.IsNotNull(engine, "MSBuild Engine could not be initialized");
 
 				// Retrieve the project file content, load it and save it
@@ -106,17 +106,11 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 				}
 
 				// Init the msbuild project
-				if(null == initProject)
-				{
-					initProject = typeof(VisualStudio.Project.Utilities).GetMethod("InitializeMsBuildProject", BindingFlags.NonPublic | BindingFlags.Static);
-				}
-
-                Microsoft.Build.Evaluation.Project buildProject = initProject.Invoke(null, new object[2] { engine, fullpath }) as Microsoft.Build.Evaluation.Project;
+				Microsoft.Build.Evaluation.Project buildProject = VisualStudio.Project.Utilities.InitializeMsBuildProject(engine, fullpath);
 				Assert.IsNotNull(buildProject, "MSBuild project not initialized correctly in InitializeMsBuildProject");
 
                 //Verify that we can set the build project on the projectnode
-                PropertyInfo buildProjectInfo = typeof(VisualStudio.Project.ProjectNode).GetProperty("BuildProject", BindingFlags.Instance | BindingFlags.NonPublic);
-                buildProjectInfo.SetValue(project, buildProject, new object[0]);
+                project.BuildProject = buildProject;
 
 		    	// Now the project is opened, so we can update its internal variable.
 				if(null == projectOpened)
@@ -213,8 +207,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 		{
 			using(PackageTestEnvironment testEnv = new PackageTestEnvironment())
 			{
-                PropertyInfo buildProjectInfo = typeof(VisualStudio.Project.ProjectNode).GetProperty("BuildProject", BindingFlags.Instance | BindingFlags.NonPublic);
-                Microsoft.Build.Evaluation.Project buildProject = buildProjectInfo.GetValue(testEnv.Project, new object[0]) as Microsoft.Build.Evaluation.Project;
+				Microsoft.Build.Evaluation.Project buildProject = testEnv.Project.BuildProject;
 
 				// Add a node to the project map so it can be resolved
 				IEnumerable<Microsoft.Build.Evaluation.ProjectItem> itemGroup = buildProject.GetItems("Compile");
@@ -228,9 +221,7 @@ namespace Microsoft.VisualStudio.Project.UnitTests
 					}
 				}
 				VisualStudio.Project.FileNode node = new VisualStudio.Project.FileNode(testEnv.Project, testEnv.Project.GetProjectElement(item));
-				MethodInfo itemMapGetter = typeof(VisualStudio.Project.ProjectNode).GetProperty("ItemIdMap", BindingFlags.Instance | BindingFlags.NonPublic).GetGetMethod(true);
-				Microsoft.VisualStudio.Shell.EventSinkCollection itemMap = (Microsoft.VisualStudio.Shell.EventSinkCollection)itemMapGetter.Invoke(testEnv.Project, new object[0]);
-				uint itemID = itemMap.Add(node);
+				uint itemID = node.Id;
 
 				IVsBuildPropertyStorage buildProperty = testEnv.Project as IVsBuildPropertyStorage;
 				Assert.IsNotNull(buildProperty, "Project does not implements IVsBuildPropertyStorage.");

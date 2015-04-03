@@ -35,6 +35,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// Tests the interface methods on ENVDTE.Property
 		/// </summary>
 		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProject()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -80,7 +82,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Tests on the EnvDTE.ProjectItem implementation.
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProjectItem()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -124,8 +128,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				EnvDTE.Properties nesteditemsProps = nestedProjectItem.Properties;
 				EnvDTE.Property nestedItemProperty = nesteditemsProps.Item("BuildAction");
 				Assert.IsNotNull(nestedItemProperty, "Could not retrieve the BuildAction property from the nested project item");
-				nestedItemProperty.Value = BuildAction.Content;
-				Assert.AreEqual((BuildAction)nestedItemProperty.Value, BuildAction.Content);
+				nestedItemProperty.Value = ProjectFileConstants.Content;
+				Assert.AreEqual(nestedItemProperty.Value, ProjectFileConstants.Content);
 
 				// Now try the properties on the top project item
 				EnvDTE.Properties props = item.Properties;
@@ -134,8 +138,8 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				EnvDTE.Property itemProperty = props.Item("BuildAction");
 				Assert.IsNotNull(itemProperty, "Could not retrieve the BuildAction property from the nested project item");
 				Assert.IsFalse(itemProperty is OANullProperty, "Could not retrieve the BuildAction property from the nested project item");
-				itemProperty.Value = BuildAction.Content;
-				Assert.AreEqual(itemProperty.Value, BuildAction.Content);
+				itemProperty.Value = ProjectFileConstants.Content;
+				Assert.AreEqual(itemProperty.Value, ProjectFileConstants.Content);
 
 				// Now save as
 				Assert.IsTrue(item.SaveAs("AssemblyInfo1.cs"), "The file AssemblyInfo.cs could not be reanmed to AssemblyInfo1.cs");
@@ -156,8 +160,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 
 				// Check that actually it was expanded.
 				IVsUIHierarchyWindow uiHierarchy = VsShellUtilities.GetUIHierarchyWindow(project.Site, HierarchyNode.SolutionExplorer);
-				System.Reflection.MethodInfo mi = typeof(ProjectNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-				ReferenceContainerNode containerNode = (ReferenceContainerNode)mi.Invoke(project, new object[] { "References" });
+				ReferenceContainerNode containerNode = (ReferenceContainerNode)project.FindChild("References");
 
 				__VSHIERARCHYITEMSTATE state;
 				uint stateAsInt;
@@ -167,7 +170,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			});
 		}
 
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProjectItems()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -254,7 +259,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Tests on the EnvDTE.ProjectItem implementation.
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestMoreAutomationOnProjectItems()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -283,7 +290,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test configuration independent Project Properties
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnProjectProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -315,7 +324,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <summary>
 		/// Tests the interface methods on ENVDTE.Property
 		/// </summary>
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestInterfaceMethodsOnProperty()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -415,7 +426,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Project Item Properties for hierarchy nodes of type FileNode
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestFileNodeRelatedItemProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -445,7 +458,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Project Item Properties for hierarchy nodes of type ReferenceNode
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestReferenceNodeRelatedItemProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -475,7 +490,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Project Item Properties for hierarchy nodes of type FolderNode
-		[TestMethod()]
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestFolderNodeRelatedProjectItemProperties()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
@@ -495,8 +512,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				mi.Invoke(projectNode, null);
 
 				//Get the new foldernode object
-				mi = typeof(ProjectNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-				FolderNode folderNode = (FolderNode)mi.Invoke(projectNode, new object[] { "NewFolder1" });
+				FolderNode folderNode = (FolderNode)projectNode.FindChild("NewFolder1");
 				Assert.IsNotNull(folderNode, "Could not find a folder node in the projec");
 
 				//get automation object from FolderNode
@@ -512,9 +528,9 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		#endregion
 
 		#region test Configuration dependent properties for ProjectNode object
-		//[TestMethod()]
-		// This test is failing because of a bug in VS 2008 RTM. 
-		//TODO: Enable after VS 2008 SP1
+		[TestMethod]
+		[TestProperty(VsIdeTestHostContants.TestPropertyName.RegistryHiveName, RegistryHiveName)]
+		[HostType("VS IDE")]
 		public void TestAutomationOnConfigDependentProperties()
 		{
 			const int expectedConfigs = 2;
@@ -656,8 +672,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		public static string BuildAction = "BuildAction";
 		public static string FileName = "Filename";
 		public static string FullPath = "FullPath";
-		public static string CustomTool = "CustomTool";
-		public static string CustomToolNamespace = "CustomToolNamespace";
+		public static string CopyToOutputDirectory = "CopyToOutputDirectory";
 		public static string Extension = "Extension";
 		public static string ExtenderCATID = "ExtenderCATID";
 	}

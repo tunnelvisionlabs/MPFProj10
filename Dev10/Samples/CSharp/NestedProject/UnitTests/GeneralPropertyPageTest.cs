@@ -73,19 +73,6 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 				"IsDirty status was unexpected after changing of the property of the tested object.");
 		}
 		/// <summary>
-		/// The test for ApplyChanges() in scenario when ProjectMgr is uninitialized.
-		///</summary>
-		[TestMethod()]
-		public void ApplyChangesNullableProjectMgrTest()
-		{
-			GeneralPropertyPage target = generalPropertyPage;
-			// sets indirectly projectMgr to null
-			target.SetObjects(0, null);
-			int actual = gppAccessor.ApplyChanges();
-			Assert.IsNull(target.ProjectManager, "ProjectManager instance was not initialized to null as it expected.");
-			Assert.AreEqual(VSConstants.E_INVALIDARG, actual, "Method ApplyChanges() was returned unexpected value in case of uninitialized project instance.");
-		}
-		/// <summary>
 		/// The test for AssemblyName property.
 		///</summary>
 		[TestMethod()]
@@ -242,18 +229,7 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject.UnitTests
 			gppAccessor.BindProperties();
 			Assert.IsNotNull(gppAccessor.assemblyName, "The AssemblyName was not properly initialized.");
 		}
-		/// <summary>
-		/// The test for BindProperties() method in scenario when ProjectMgr is not initialized.
-		///</summary>
 
-		[TestMethod()]
-		public void BindPropertiesWithNullableProjectMgrTest()
-		{
-			gppAccessor.BindProperties();
-
-			Assert.IsNull(gppAccessor.assemblyName,
-				"The AssemblyName was initialized in scenario when ProjectMgr is invalid.");
-		}
 		/// <summary>
 		/// The test for ProjectFile property.
 		///</summary>

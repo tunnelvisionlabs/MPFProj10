@@ -19,9 +19,11 @@ using Microsoft.VsSDK.UnitTestLibrary;
 using System.Xml;
 using System.IO;
 using System.Text;
+using ObjectExtenders = EnvDTE.ObjectExtenders;
 
 namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 {
+	[TestClass]
 	public abstract class BaseTest
 	{
 		protected Microsoft.VsSDK.UnitTestLibrary.OleServiceProvider serviceProvider;
@@ -61,6 +63,8 @@ namespace Microsoft.VisualStudio.Project.Samples.CustomProject.UnitTests
 
             // SVsFileChangeEx support
             serviceProvider.AddService(typeof(SVsFileChangeEx), MockIVsFileChangeEx.GetInstance(), false);
+
+            serviceProvider.AddService(typeof(ObjectExtenders), MockObjectExtenders.GetInstance(), false);
         }
 
 		protected virtual void SetMsbuildEngine(ProjectFactory factory)
