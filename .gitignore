@@ -3,9 +3,10 @@
 *.suo
 obj/
 [Bb]in/
+TestResults/
 
 # Ignore Roslyn IDE cache
-*.sln.ide
+.vs/
 
 # Ignore NuGet package output
 /Dev10/nuget/release/
