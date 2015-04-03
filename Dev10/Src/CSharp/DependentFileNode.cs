@@ -98,7 +98,6 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Disable rename
 		/// </summary>
-		/// <param name="label">new label</param>
 		/// <returns>E_NOTIMPLE in order to tell the call that we do not support rename</returns>
 		public override string GetEditLabel()
 		{

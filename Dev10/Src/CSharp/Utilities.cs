@@ -642,7 +642,6 @@ namespace Microsoft.VisualStudio.Project
         /// Helper method to call a converter explicitely to convert to an enum type
         /// </summary>
         /// <typeparam name="T">THe enum to convert to</typeparam>
-        /// <typeparam name="V">The converter that will be created</typeparam>
         /// <param name="value">The enum value to be converted to</param>
         /// <param name="typeToConvert">The type to convert</param>
         /// <param name="culture">The culture to use to read the localized strings</param>

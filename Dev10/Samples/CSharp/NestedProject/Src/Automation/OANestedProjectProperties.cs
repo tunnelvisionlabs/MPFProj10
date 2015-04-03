@@ -26,7 +26,6 @@ namespace Microsoft.VisualStudio.Project.Samples.NestedProject
 		/// <summary>
 		/// Initializes new instance of OANestedProjectProperties object based on specified ProjectNode.
 		/// </summary>
-		/// <param name="project">The Project Node.</param>
 		internal OANestedProjectProperties(NodeProperties nodeProperties)
 			: base(nodeProperties)
 		{

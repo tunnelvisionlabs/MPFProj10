@@ -1135,7 +1135,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds non member items to the hierarchy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         public virtual void AddNonmemberItems()
         {
             IList<string> files = new List<string>();
@@ -1191,7 +1190,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Removes non member item nodes from hierarchy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         public virtual void RemoveNonmemberItems()
         {
             IList<HierarchyNode> nodeList = new List<HierarchyNode>();
@@ -1355,7 +1353,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds non member folder items to the hierarcy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         /// <param name="folderList">Folders list containing the folder names.</param>
         protected virtual void AddNonmemberFolderItems(IList<string> folderList)
         {
@@ -1403,7 +1400,6 @@ namespace Microsoft.VisualStudio.Project
         /// <summary>
         /// Adds non member file items to the hierarcy.
         /// </summary>
-        /// <param name="project">The project to modify.</param>
         /// <param name="fileList">Files containing the information about the non member file items.</param>
         protected virtual void AddNonmemberFileItems(IList<string> fileList)
         {
@@ -3904,7 +3900,6 @@ namespace Microsoft.VisualStudio.Project
         /// if buildKind is Sync, this method executes the submission and runs uiThreadCallback
         /// <param name="buildKind">Is it a Sync or ASync build</param>
         /// <param name="target">target to build</param>
-        /// <param name="projectInstance">project instance to build; if null, this.BuildProject.CreateProjectInstance() is used to populate</param>
         /// <param name="uiThreadCallback">callback to be run UI thread </param>
         /// <returns>A Build submission instance.</returns>
         protected virtual BuildSubmission DoMSBuildSubmission(BuildKind buildKind, string target, Action<MSBuildResult, string> uiThreadCallback)

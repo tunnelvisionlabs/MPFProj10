@@ -86,7 +86,6 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// Overloaded ctor.
 		/// </summary>
-		/// <param name="nodeParam">An instance of a project item.</param>
 		public FileChangeManager(IServiceProvider serviceProvider)
 		{
 			#region input validation
