@@ -4483,10 +4483,6 @@ namespace Microsoft.VisualStudio.Project
                 throw new ArgumentNullException("config");
             if (platform == null)
                 throw new ArgumentNullException("platform");
-            if (string.IsNullOrEmpty(config))
-                throw new ArgumentException("config cannot be null or empty");
-            if (string.IsNullOrEmpty(platform))
-                throw new ArgumentException("platform cannot be null or empty");
 
             // Can't ask for the active config until the project is opened, so do nothing in that scenario
             if (!projectOpened)
