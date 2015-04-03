@@ -1,0 +1,11 @@
+version: 1.0.{build}
+configuration: Debug
+platform: Any CPU
+init:
+- git config --global core.autocrlf true
+before_build:
+- nuget restore Dev10\Microsoft.VisualStudio.Project.sln
+build:
+  project: Dev10\Microsoft.VisualStudio.Project.sln
+  verbosity: minimal
+test: off
