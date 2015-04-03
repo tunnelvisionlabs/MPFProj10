@@ -134,12 +134,10 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				string destination = Path.Combine(TestContext.TestDir, TestContext.TestName);
 				ProjectNode project = Utilities.CreateMyNestedProject(sp, dte, TestContext.TestName, destination, true);
 
-				MethodInfo mi = typeof(FileNode).GetMethod("CreateSingleFileGenerator", BindingFlags.Instance | BindingFlags.NonPublic);
-
 				List<FileNode> nodes = Utilities.GetNodesOfType<FileNode>(project);
 				foreach(FileNode node in nodes)
 				{
-					ISingleFileGenerator generator = mi.Invoke(node, new object[] { }) as ISingleFileGenerator;
+					ISingleFileGenerator generator = node.CreateSingleFileGenerator();
 					string extension = Path.GetExtension(node.GetMKDocument());
 					if(String.Compare(extension, ".moxl", StringComparison.OrdinalIgnoreCase) == 0)
 					{

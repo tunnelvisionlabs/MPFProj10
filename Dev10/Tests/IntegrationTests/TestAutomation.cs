@@ -160,8 +160,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 
 				// Check that actually it was expanded.
 				IVsUIHierarchyWindow uiHierarchy = VsShellUtilities.GetUIHierarchyWindow(project.Site, HierarchyNode.SolutionExplorer);
-				System.Reflection.MethodInfo mi = typeof(ProjectNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-				ReferenceContainerNode containerNode = (ReferenceContainerNode)mi.Invoke(project, new object[] { "References" });
+				ReferenceContainerNode containerNode = (ReferenceContainerNode)project.FindChild("References");
 
 				__VSHIERARCHYITEMSTATE state;
 				uint stateAsInt;
@@ -513,8 +512,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				mi.Invoke(projectNode, null);
 
 				//Get the new foldernode object
-				mi = typeof(ProjectNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-				FolderNode folderNode = (FolderNode)mi.Invoke(projectNode, new object[] { "NewFolder1" });
+				FolderNode folderNode = (FolderNode)projectNode.FindChild("NewFolder1");
 				Assert.IsNotNull(folderNode, "Could not find a folder node in the projec");
 
 				//get automation object from FolderNode

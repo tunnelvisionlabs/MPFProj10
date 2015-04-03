@@ -52,12 +52,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 
 		public static HierarchyNode GetChildItem(ProjectNode project, string url)
 		{
-			HierarchyNode node = null;
-			MethodInfo findChildMethod = project.GetType().GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-			node = (HierarchyNode)findChildMethod.Invoke(project, new object[] { url });
-
-			return node;
-
+			return project.FindChild(url);
 		}
 
 		public static ProjectNode CreateMyNestedProject(IServiceProvider sp, DTE dte, string projectName, string destination, bool exclusive)
@@ -257,9 +252,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			IReferenceContainer container = project.GetReferenceContainer();
 			container.AddReferenceFromSelectorData(selectorData);
 
-			MethodInfo mi = typeof(ReferenceContainerNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-
-			return mi.Invoke(container, new object[] { projectReference.GetMKDocument() }) as ProjectReferenceNode;
+			return (ProjectReferenceNode)((ReferenceContainerNode)container).FindChild(projectReference.GetMKDocument());
 		}
 
 		internal static AssemblyReferenceNode AddAssemblyReference(ProjectNode project, string assemblyReference)
@@ -274,9 +267,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 			IReferenceContainer container = project.GetReferenceContainer();
 			container.AddReferenceFromSelectorData(selectorData);
 
-			MethodInfo mi = typeof(ReferenceContainerNode).GetMethod("FindChild", BindingFlags.NonPublic | BindingFlags.Instance);
-
-			return mi.Invoke(container, new object[] { assemblyReference }) as AssemblyReferenceNode;
+			return (AssemblyReferenceNode)((ReferenceContainerNode)container).FindChild(assemblyReference);
 		}
 
 		internal static ComReferenceNode AddComReference(ProjectNode project, VSCOMPONENTSELECTORDATA selectorData)
@@ -390,8 +381,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		/// <returns></returns>
 		internal static FolderNode CreateFolder(ProjectNode project, string folderPath, HierarchyNode containerNode)
 		{
-			MethodInfo createFolder = typeof(ProjectNode).GetMethod("CreateFolderNode", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(string) }, null);
-			FolderNode folderNode = createFolder.Invoke(project, new object[] { folderPath }) as FolderNode;
+			FolderNode folderNode = project.CreateFolderNode(folderPath);
 			containerNode.AddChild(folderNode);
 			//Create Directory associated to this FolderNode
 			folderNode.CreateDirectory();
