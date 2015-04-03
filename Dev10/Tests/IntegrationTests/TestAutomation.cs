@@ -672,8 +672,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 		public static string BuildAction = "BuildAction";
 		public static string FileName = "Filename";
 		public static string FullPath = "FullPath";
-		public static string CustomTool = "CustomTool";
-		public static string CustomToolNamespace = "CustomToolNamespace";
+		public static string CopyToOutputDirectory = "CopyToOutputDirectory";
 		public static string Extension = "Extension";
 		public static string ExtenderCATID = "ExtenderCATID";
 	}
