@@ -42,7 +42,7 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				EnvDTE.Property property = dte.Solution.Properties.Item("ActiveConfig");
 
 				// Now change the active config that should trigger a project config change event and the global property should be thus updated.
-				property.Value = "Release|x86";
+				property.Value = "Release|Any CPU";
 
                 MSBuildExecution.ProjectInstance buildProject = project.CurrentConfig;
                 string activeConfig = null;
