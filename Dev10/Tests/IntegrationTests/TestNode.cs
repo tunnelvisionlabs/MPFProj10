@@ -75,13 +75,13 @@ namespace Microsoft.VisualStudio.Project.IntegrationTests
 				Assert.IsNotNull(props);
 
 				// Test the build action.
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionContent, "The BuildAction build action should be set to compile model");
+				Assert.AreEqual(prjBuildAction.prjBuildActionContent, props.BuildAction, "The BuildAction build action should be set to compile model");
 				props.BuildAction = prjBuildAction.prjBuildActionCompile;
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionCompile, "BuildAction has not been set correctly in the project file");
+				Assert.AreEqual(prjBuildAction.prjBuildActionCompile, props.BuildAction, "BuildAction has not been set correctly in the project file");
 				props.BuildAction = prjBuildAction.prjBuildActionEmbeddedResource;
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionEmbeddedResource, "BuildAction has not been set correctly in the project file");
+				Assert.AreEqual(prjBuildAction.prjBuildActionEmbeddedResource, props.BuildAction, "BuildAction has not been set correctly in the project file");
 				props.BuildAction = prjBuildAction.prjBuildActionNone;
-				Assert.IsTrue(props.BuildAction == prjBuildAction.prjBuildActionNone, "BuildAction has not been set correctly in the project file");
+				Assert.AreEqual(prjBuildAction.prjBuildActionNone, props.BuildAction, "BuildAction has not been set correctly in the project file");
 			});
 		}
 
